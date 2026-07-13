@@ -1,0 +1,19 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
+    "root": true,
+    "extends": [
+        "./../sources/https---github-com-sinemacula-coding-standards/v1.1.3/js/biome.json"
+    ],
+    "files": {
+        "ignoreUnknown": true,
+        "includes": [
+            "**",
+            "!**/node_modules/**",
+            "!**/.qlty/**",
+            "!**/dist/**",
+            "!**/build/**",
+            "!**/coverage/**",
+            "!**/*.vue"
+        ]
+    }
+}

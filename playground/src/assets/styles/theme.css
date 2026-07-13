@@ -1,0 +1,100 @@
+/**
+ * Sine Macula design tokens.
+ *
+ * The single source of truth for colour, typography, spacing, shape and
+ * depth across every Sine Macula frontend. Plain CSS custom properties - no
+ * utility framework. Components consume tokens; nothing hard-codes a value.
+ */
+
+:root {
+    /* Typography */
+    --sm-font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --sm-text-xs: 0.75rem;
+    --sm-text-sm: 0.875rem;
+    --sm-text-base: 1rem;
+    --sm-text-lg: 1.125rem;
+    --sm-text-xl: 1.375rem;
+
+    /* Brand - primary */
+    --sm-primary-50: #e8ecf5;
+    --sm-primary-100: #c5ceea;
+    --sm-primary-200: #9faede;
+    --sm-primary-300: #788ed1;
+    --sm-primary-400: #5b75c7;
+    --sm-primary-500: #3e5dbe;
+    --sm-primary-600: #3550a3;
+    --sm-primary-700: #2a4083;
+    --sm-primary-800: #1f3064;
+    --sm-primary-900: #00061f;
+
+    /* Brand - secondary */
+    --sm-secondary-50: #e6fff5;
+    --sm-secondary-100: #b3ffe5;
+    --sm-secondary-200: #80fad3;
+    --sm-secondary-300: #4df0c0;
+    --sm-secondary-400: #26e3ae;
+    --sm-secondary-500: #0cd29c;
+    --sm-secondary-600: #06b285;
+    --sm-secondary-700: #03926e;
+    --sm-secondary-800: #017a5c;
+    --sm-secondary-900: #006543;
+
+    /* Neutrals */
+    --sm-neutral-0: #ffffff;
+    --sm-neutral-50: #f8fafc;
+    --sm-neutral-100: #f1f5f9;
+    --sm-neutral-200: #e2e8f0;
+    --sm-neutral-300: #cbd5e1;
+    --sm-neutral-400: #94a3b8;
+    --sm-neutral-500: #64748b;
+    --sm-neutral-600: #475569;
+    --sm-neutral-700: #334155;
+    --sm-neutral-900: #0f172a;
+
+    /* Semantic */
+    --sm-error: #dc2626;
+    --sm-error-strong: #ef4444;
+    --sm-error-soft: #fac1c1;
+    --sm-error-subtle: #fef2f2;
+    --sm-warning: #d97706;
+    --sm-warning-strong: #f59e0b;
+    --sm-warning-soft: #fcdfae;
+    --sm-warning-subtle: #fffbeb;
+    --sm-information: #2563eb;
+    --sm-information-strong: #3b82f6;
+    --sm-information-soft: #bed5fc;
+    --sm-information-subtle: #eff6ff;
+    --sm-success: #059669;
+    --sm-success-strong: #10b981;
+    --sm-success-soft: #afe8d5;
+    --sm-success-subtle: #ecfdf5;
+
+    /* Surface and text roles */
+    --sm-surface-page: var(--sm-neutral-50);
+    --sm-surface-raised: var(--sm-neutral-0);
+    --sm-border: var(--sm-neutral-200);
+    --sm-text-strong: var(--sm-primary-900);
+    --sm-text-body: var(--sm-neutral-700);
+    --sm-text-muted: var(--sm-neutral-500);
+
+    /* Spacing scale */
+    --sm-space-1: 0.25rem;
+    --sm-space-2: 0.5rem;
+    --sm-space-3: 0.75rem;
+    --sm-space-4: 1rem;
+    --sm-space-5: 1.25rem;
+    --sm-space-6: 1.5rem;
+    --sm-space-8: 2rem;
+
+    /* Shape and depth */
+    --sm-radius-sm: 0.375rem;
+    --sm-radius-md: 0.5rem;
+    --sm-radius-lg: 0.75rem;
+    --sm-shadow-sm: 0 1px 2px rgb(15 23 42 / 6%);
+    --sm-shadow-md: 0 4px 12px rgb(15 23 42 / 8%);
+
+    /* Interaction */
+    --sm-focus-ring: 2px solid var(--sm-primary-500);
+    --sm-focus-offset: 2px;
+    --sm-transition: 150ms ease;
+}

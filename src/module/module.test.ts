@@ -1,0 +1,113 @@
+/**
+ * Unit tests for module.
+ *
+ * @author Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright 2026 Sine Macula Limited
+ */
+
+import { describe, expect, it } from 'vitest';
+import { defineComponent } from 'vue';
+
+import type { ModuleDefinition } from './module';
+import { collectModuleMessages, collectModuleRoutes, createLocaleLoader } from './module';
+
+const EmptyComponent = defineComponent({ render: () => null });
+
+describe('createLocaleLoader', () => {
+    it('returns the messages when the locale is present in the map', async () => {
+        const messages = { greeting: 'Hello' };
+        const loader = createLocaleLoader({
+            'en-GB': async () => messages,
+        });
+
+        const result = await loader('en-GB');
+
+        expect(result).toStrictEqual(messages);
+    });
+
+    it('returns null when the locale is absent from the map', async () => {
+        const loader = createLocaleLoader({
+            'en-GB': async () => ({ greeting: 'Hello' }),
+        });
+
+        const result = await loader('fr-FR');
+
+        expect(result).toBeNull();
+    });
+});
+
+describe('collectModuleRoutes', () => {
+    it('returns an empty array when no modules are given', () => {
+        expect(collectModuleRoutes([])).toStrictEqual([]);
+    });
+
+    it('flattens routes from all modules in registry order', () => {
+        const routeA = { path: '/a', component: EmptyComponent };
+        const routeB = { path: '/b', component: EmptyComponent };
+        const routeC = { path: '/c', component: EmptyComponent };
+
+        const moduleA: ModuleDefinition = { name: 'a', routes: [routeA, routeB] };
+        const moduleB: ModuleDefinition = { name: 'b', routes: [routeC] };
+
+        expect(collectModuleRoutes([moduleA, moduleB])).toStrictEqual([routeA, routeB, routeC]);
+    });
+
+    it('returns routes from a single module', () => {
+        const route = { path: '/x', component: EmptyComponent };
+        const definition: ModuleDefinition = { name: 'x', routes: [route] };
+
+        expect(collectModuleRoutes([definition])).toStrictEqual([route]);
+    });
+});
+
+describe('collectModuleMessages', () => {
+    it('returns an empty object when no modules are given', async () => {
+        const result = await collectModuleMessages([], 'en-GB');
+
+        expect(result).toStrictEqual({});
+    });
+
+    it('namespaces loaded messages under the module name', async () => {
+        const messages = { hello: 'world' };
+        const definition: ModuleDefinition = {
+            name: 'dashboard',
+            routes: [],
+            locales: async () => messages,
+        };
+
+        const result = await collectModuleMessages([definition], 'en-GB');
+
+        expect(result).toStrictEqual({ dashboard: messages });
+    });
+
+    it('skips modules that have no locales property', async () => {
+        const definition: ModuleDefinition = { name: 'settings', routes: [] };
+
+        const result = await collectModuleMessages([definition], 'en-GB');
+
+        expect(result).toStrictEqual({});
+    });
+
+    it('skips modules whose loader returns null', async () => {
+        const definition: ModuleDefinition = {
+            name: 'profile',
+            routes: [],
+            locales: async () => null,
+        };
+
+        const result = await collectModuleMessages([definition], 'en-GB');
+
+        expect(result).toStrictEqual({});
+    });
+
+    it('collects messages from multiple modules, skipping those with null results', async () => {
+        const messagesA = { key: 'value' };
+        const alphaModule: ModuleDefinition = { name: 'alpha', routes: [], locales: async () => messagesA };
+        const betaModule: ModuleDefinition = { name: 'beta', routes: [], locales: async () => null };
+        const gammaModule: ModuleDefinition = { name: 'gamma', routes: [] };
+
+        const result = await collectModuleMessages([alphaModule, betaModule, gammaModule], 'en-GB');
+
+        expect(result).toStrictEqual({ alpha: messagesA });
+    });
+});
