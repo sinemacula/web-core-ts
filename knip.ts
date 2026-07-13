@@ -21,23 +21,13 @@ const SCRIPT_BLOCK = /<script[^>]*>([\s\S]*?)<\/script>/gm;
 const config: KnipConfig = {
     workspaces: {
         '.': {
-            entry: [
-                'src/**/*.test.ts',
-                'e2e/**/*.spec.ts',
-                'vitest.config.ts',
-                'playwright.config.ts',
-            ],
+            entry: ['src/**/*.test.ts', 'e2e/**/*.spec.ts', 'vitest.config.ts', 'playwright.config.ts'],
             project: ['src/**/*.ts', 'e2e/**/*.ts'],
             playwright: false,
             vitest: false,
         },
         playground: {
-            entry: [
-                'src/main.ts',
-                'src/**/*.test.ts',
-                'src/test-support/setup-network-guard.ts',
-                'vite.config.ts',
-            ],
+            entry: ['src/main.ts', 'src/**/*.test.ts', 'src/test-support/setup-network-guard.ts', 'vite.config.ts'],
             project: ['src/**/*.ts', 'src/**/*.vue'],
             vite: false,
         },

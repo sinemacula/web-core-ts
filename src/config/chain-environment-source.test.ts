@@ -44,7 +44,10 @@ describe('ChainEnvironmentSource', () => {
     });
 
     it('falls through to the second source when the first does not define the key', () => {
-        const chain = new ChainEnvironmentSource([emptySource(), sourceFrom(wire([['API_URL', 'https://build.example.com']]))]);
+        const chain = new ChainEnvironmentSource([
+            emptySource(),
+            sourceFrom(wire([['API_URL', 'https://build.example.com']])),
+        ]);
 
         expect(chain.get('API_URL')).toBe('https://build.example.com');
     });

@@ -37,13 +37,15 @@ describe('fetchRuntimeEnvironment', () => {
     });
 
     it('returns only string-valued entries from a successful response', async () => {
-        const stub = vi
-            .fn()
-            .mockResolvedValue(jsonResponse(wire<string | number | boolean>([
-                ['API_URL', 'https://api.example.com'],
-                ['COUNT', 42],
-                ['FLAG', true],
-            ])));
+        const stub = vi.fn().mockResolvedValue(
+            jsonResponse(
+                wire<string | number | boolean>([
+                    ['API_URL', 'https://api.example.com'],
+                    ['COUNT', 42],
+                    ['FLAG', true],
+                ]),
+            ),
+        );
         const result = await fetchRuntimeEnvironment(stub);
 
         expect(result).toStrictEqual(wire([['API_URL', 'https://api.example.com']]));

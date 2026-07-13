@@ -8,11 +8,7 @@
  * @copyright 2026 Sine Macula Limited
  */
 
-import type {
-    MiddlewareContext,
-    MiddlewareResult,
-    RouteMiddleware,
-} from '@sinemacula/web-core/router/middleware';
+import type { MiddlewareContext, MiddlewareResult, RouteMiddleware } from '@sinemacula/web-core/router/middleware';
 import { next, redirect } from '@sinemacula/web-core/router/middleware';
 import type { RouteLocationRaw } from 'vue-router';
 

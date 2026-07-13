@@ -44,7 +44,13 @@ describe('ObjectEnvironmentSource', () => {
     });
 
     it('returns the correct value when multiple keys are present', () => {
-        const source = new ObjectEnvironmentSource(wire([['A', '1'], ['B', '2'], ['C', '3']]));
+        const source = new ObjectEnvironmentSource(
+            wire([
+                ['A', '1'],
+                ['B', '2'],
+                ['C', '3'],
+            ]),
+        );
 
         expect(source.get('B')).toBe('2');
     });

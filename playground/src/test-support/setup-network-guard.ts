@@ -12,9 +12,7 @@
  */
 
 const guard: typeof fetch = () => {
-    throw new Error(
-        'Unit tests must not touch the network. Inject a fetchFn stub or use vi.stubGlobal("fetch", ...).',
-    );
+    throw new Error('Unit tests must not touch the network. Inject a fetchFn stub or use vi.stubGlobal("fetch", ...).');
 };
 
 globalThis.fetch = guard;

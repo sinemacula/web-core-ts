@@ -94,7 +94,10 @@ export class AuthApi {
      */
     async refresh(refreshToken: string): Promise<AuthenticatedSession> {
         const body = wire([['refresh_token', refreshToken]]);
-        const raw = await this.#client.patch<unknown>('auth', body, { notifyOnError: false, retryOnUnauthorized: false });
+        const raw = await this.#client.patch<unknown>('auth', body, {
+            notifyOnError: false,
+            retryOnUnauthorized: false,
+        });
 
         return mapSessionPayload(raw);
     }

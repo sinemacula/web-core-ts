@@ -1,11 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES2023",
-        "lib": [
-            "ES2023",
-            "DOM",
-            "DOM.Iterable"
-        ],
+        "lib": ["ES2023", "DOM", "DOM.Iterable"],
         "module": "Preserve",
         "moduleResolution": "Bundler",
         "moduleDetection": "force",
@@ -27,28 +23,11 @@
         "jsx": "preserve",
         "jsxImportSource": "vue",
         "paths": {
-            "@/*": [
-                "./playground/src/*"
-            ]
+            "@/*": ["./playground/src/*"]
         },
-        "types": [
-            "vite/client",
-            "node"
-        ],
+        "types": ["vite/client", "node"],
         "noEmit": true
     },
-    "include": [
-        "src",
-        "playground",
-        "e2e",
-        "vitest.config.ts",
-        "playwright.config.ts",
-        "knip.ts"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist",
-        "coverage",
-        "playground/dist"
-    ]
+    "include": ["src", "playground", "e2e", "vitest.config.ts", "playwright.config.ts", "knip.ts"],
+    "exclude": ["node_modules", "dist", "coverage", "playground/dist"]
 }

@@ -103,7 +103,8 @@ describe('UpdateMonitor', () => {
 
     it('ignores documents without a usable version', async () => {
         const fetchFn = makeFetch(
-            async () => new Response('{"other":true}', { status: 200, headers: { 'content-type': 'application/json' } }),
+            async () =>
+                new Response('{"other":true}', { status: 200, headers: { 'content-type': 'application/json' } }),
         );
         const monitor = new UpdateMonitor({ currentVersion: '1.0.0', fetchFn });
         const handler = vi.fn();
@@ -127,7 +128,8 @@ describe('UpdateMonitor', () => {
 
     it('supports a custom url, interval and version extractor', async () => {
         const fetchFn = makeFetch(
-            async () => new Response('{"release":"5"}', { status: 200, headers: { 'content-type': 'application/json' } }),
+            async () =>
+                new Response('{"release":"5"}', { status: 200, headers: { 'content-type': 'application/json' } }),
         );
         const extractVersion = (payload: unknown): string | null =>
             typeof payload === 'object' && payload !== null && 'release' in payload

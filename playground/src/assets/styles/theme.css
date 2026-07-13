@@ -8,7 +8,7 @@
 
 :root {
     /* Typography */
-    --sm-font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --sm-font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
     --sm-text-xs: 0.75rem;
     --sm-text-sm: 0.875rem;
     --sm-text-base: 1rem;
