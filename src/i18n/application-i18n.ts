@@ -18,6 +18,7 @@ import { createI18n } from 'vue-i18n';
 
 import type { LocaleMessages, ModuleDefinition } from '../module/module';
 import { collectModuleMessages } from '../module/module';
+import type { ModuleMessageSource } from '../module/module-registry';
 import type { LocaleService } from './locale-service';
 
 /**
@@ -63,6 +64,19 @@ export interface ActivateLocaleOptions {
     readonly direction: 'ltr' | 'rtl';
     readonly fallbackLocale?: string;
     readonly targetDocument?: Document;
+
+    /**
+     * Replaces the internal module-message collection for both the active
+     * and fallback locale loads when supplied.
+     */
+    readonly messageSource?: ModuleMessageSource;
+
+    /**
+     * Behaviour when a module name equals a shared top-level message key.
+     * Default 'module-wins' keeps the merge where module messages shadow the
+     * shared key; 'error' throws naming the module and the locale.
+     */
+    readonly onNamespaceCollision?: 'module-wins' | 'error';
 }
 
 /**
@@ -75,21 +89,10 @@ export interface ActivateLocaleOptions {
  * @param options - the i18n instance, translation sources and target locale
  */
 export async function activateLocale(options: ActivateLocaleOptions): Promise<void> {
-    const sharedLoader = options.sharedLoaders?.[options.locale];
-    const shared = sharedLoader === undefined ? {} : await sharedLoader();
-    const moduleMessages = await collectModuleMessages(options.modules, options.locale);
-
-    options.i18n.global.setLocaleMessage(options.locale, { ...shared, ...moduleMessages });
+    await installLocaleMessages(options, options.locale);
 
     if (options.fallbackLocale !== undefined && options.fallbackLocale !== options.locale) {
-        const fallbackSharedLoader = options.sharedLoaders?.[options.fallbackLocale];
-        const fallbackShared = fallbackSharedLoader === undefined ? {} : await fallbackSharedLoader();
-        const fallbackModuleMessages = await collectModuleMessages(options.modules, options.fallbackLocale);
-
-        options.i18n.global.setLocaleMessage(options.fallbackLocale, {
-            ...fallbackShared,
-            ...fallbackModuleMessages,
-        });
+        await installLocaleMessages(options, options.fallbackLocale);
     }
 
     options.i18n.global.locale.value = options.locale;
@@ -111,6 +114,12 @@ export interface LocaleSwitcherOptions {
     readonly supported: Readonly<Record<string, { readonly direction: 'ltr' | 'rtl' }>>;
     readonly fallbackLocale: string;
     readonly targetDocument?: Document;
+
+    /** Forwarded to {@link activateLocale} on every switch. */
+    readonly messageSource?: ModuleMessageSource;
+
+    /** Forwarded to {@link activateLocale} on every switch. */
+    readonly onNamespaceCollision?: 'module-wins' | 'error';
 }
 
 /**
@@ -162,7 +171,40 @@ export function createLocaleSwitcher(options: LocaleSwitcherOptions): LocaleSwit
                 direction: options.supported[matched]?.direction ?? 'ltr',
                 fallbackLocale: options.fallbackLocale,
                 ...(options.targetDocument === undefined ? {} : { targetDocument: options.targetDocument }),
+                ...(options.messageSource === undefined ? {} : { messageSource: options.messageSource }),
+                ...(options.onNamespaceCollision === undefined
+                    ? {}
+                    : { onNamespaceCollision: options.onNamespaceCollision }),
             });
         },
     };
+}
+
+/**
+ * Load one locale's shared and module translations and install the merged
+ * result on the i18n instance.
+ *
+ * @param options - the activation options
+ * @param locale - the locale whose messages are loaded
+ * @throws Error when collisions are set to error and a module name equals a
+ *   shared top-level message key
+ */
+async function installLocaleMessages(options: ActivateLocaleOptions, locale: string): Promise<void> {
+    const sharedLoader = options.sharedLoaders?.[locale];
+    const shared = sharedLoader === undefined ? {} : await sharedLoader();
+    const moduleMessages = options.messageSource === undefined
+        ? await collectModuleMessages(options.modules, locale)
+        : await options.messageSource.messages(locale);
+
+    const collision = options.onNamespaceCollision === 'error'
+        ? Object.keys(moduleMessages).find(name => Object.hasOwn(shared, name))
+        : undefined;
+
+    if (collision !== undefined) {
+        throw new Error(
+            `Module "${collision}" collides with a shared top-level translation key for locale "${locale}".`,
+        );
+    }
+
+    options.i18n.global.setLocaleMessage(locale, { ...shared, ...moduleMessages });
 }

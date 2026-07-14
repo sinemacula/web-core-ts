@@ -52,14 +52,15 @@ export interface ChunkErrorRecoveryOptions {
  * failures and forwards every other router error to the reporter.
  *
  * @param options - the router to guard plus its storage and reporter dependencies and recovery tuning
+ * @returns a teardown that removes the error handler
  */
-export function installChunkErrorRecovery(options: ChunkErrorRecoveryOptions): void {
+export function installChunkErrorRecovery(options: ChunkErrorRecoveryOptions): () => void {
     const { router, storage, reporter } = options;
     const reload = options.reload ?? defaultReload;
     const clock = options.clock ?? Date.now;
     const windowMs = options.windowMs ?? DEFAULT_WINDOW_MS;
 
-    router.onError((error: unknown, to) => {
+    return router.onError((error: unknown, to) => {
         const targetPath = to.fullPath;
 
         if (!isChunkLoadError(error)) {

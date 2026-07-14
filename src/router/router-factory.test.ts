@@ -5,7 +5,7 @@
  * @copyright 2026 Sine Macula Limited
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { defineComponent } from 'vue';
 import type { RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router';
 import { createMemoryHistory } from 'vue-router';
@@ -125,5 +125,69 @@ describe('createApplicationRouter', () => {
         await router.push('/plain');
 
         expect(router.currentRoute.value.path).toBe('/plain');
+    });
+
+    it('runs global middleware before matched-record meta middleware', async () => {
+        const order: string[] = [];
+        const recording = (name: string): RouteMiddleware => ({
+            handle: async () => {
+                order.push(name);
+
+                return next();
+            },
+        });
+        const router = createApplicationRouter({
+            history: createMemoryHistory(),
+            globalMiddleware: [recording('global-one'), recording('global-two')],
+            routes: [
+                { path: '/', component: EmptyComponent },
+                { path: '/ordered', component: EmptyComponent, meta: { middleware: [recording('meta')] } },
+            ],
+        });
+
+        await router.push('/ordered');
+
+        expect(order).toStrictEqual(['global-one', 'global-two', 'meta']);
+        expect(router.currentRoute.value.path).toBe('/ordered');
+    });
+
+    it('short-circuits later global and meta middleware when a global middleware redirects', async () => {
+        const secondGlobalHandle = vi.fn(async () => next());
+        const metaHandle = vi.fn(async () => next());
+        const redirectingGlobal: RouteMiddleware = {
+            handle: async context => (context.to.path === '/guarded' ? redirect('/safe') : next()),
+        };
+        const router = createApplicationRouter({
+            history: createMemoryHistory(),
+            globalMiddleware: [redirectingGlobal, { handle: secondGlobalHandle }],
+            routes: [
+                { path: '/', component: EmptyComponent },
+                { path: '/safe', component: EmptyComponent },
+                { path: '/guarded', component: EmptyComponent, meta: { middleware: [{ handle: metaHandle }] } },
+            ],
+        });
+
+        await router.push('/guarded');
+
+        expect(router.currentRoute.value.path).toBe('/safe');
+        expect(metaHandle).not.toHaveBeenCalled();
+        expect(secondGlobalHandle).toHaveBeenCalledTimes(1);
+    });
+
+    it('runs global middleware on navigations to routes that declare no middleware', async () => {
+        const globalHandle = vi.fn(async () => next());
+        const router = createApplicationRouter({
+            history: createMemoryHistory(),
+            globalMiddleware: [{ handle: globalHandle }],
+            routes: [
+                { path: '/', component: EmptyComponent },
+                { path: '/plain', component: EmptyComponent },
+            ],
+        });
+
+        await router.push('/plain');
+        await router.push('/');
+
+        expect(globalHandle).toHaveBeenCalledTimes(2);
     });
 });

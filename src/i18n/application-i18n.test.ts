@@ -8,6 +8,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
 import type { ModuleDefinition } from '../module/module';
+import type { ModuleMessageSource } from '../module/module-registry';
 import { MemoryStorage } from '../storage/memory-storage';
 import { activateLocale, createApplicationI18n, createLocaleSwitcher } from './application-i18n';
 import { LocaleService } from './locale-service';
@@ -281,6 +282,276 @@ describe('activateLocale', () => {
 
         expect((fallbackMessages.auth as Record<string, string>).login).toBe('Sign in');
     });
+
+    it('uses the message source instead of module loaders for the active locale', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        let loaderCalls = 0;
+        const localisedModule: ModuleDefinition = {
+            name: 'auth',
+            routes: [],
+            locales: async () => {
+                loaderCalls += 1;
+
+                return { login: 'Sign in' };
+            },
+        };
+        const requested: string[] = [];
+        const source: ModuleMessageSource = {
+            messages: async locale => {
+                requested.push(locale);
+
+                return { auth: { login: 'From source' } };
+            },
+        };
+
+        await activateLocale({
+            i18n,
+            modules: [localisedModule],
+            locale: 'en-GB',
+            direction: 'ltr',
+            messageSource: source,
+            targetDocument: document.implementation.createHTMLDocument('t'),
+        });
+
+        expect(loaderCalls).toBe(0);
+        expect(requested).toEqual(['en-GB']);
+
+        const messages = i18n.global.getLocaleMessage('en-GB') as Record<string, Record<string, string>>;
+
+        expect(messages.auth?.login).toBe('From source');
+    });
+
+    it('uses the message source for the fallback locale load as well', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const requested: string[] = [];
+        const source: ModuleMessageSource = {
+            messages: async locale => {
+                requested.push(locale);
+
+                return { auth: { login: locale === 'en-GB' ? 'Sign in' : 'Iniciar sesión' } };
+            },
+        };
+
+        await activateLocale({
+            i18n,
+            modules: [],
+            locale: 'es-ES',
+            direction: 'ltr',
+            fallbackLocale: 'en-GB',
+            messageSource: source,
+            targetDocument: document.implementation.createHTMLDocument('t'),
+        });
+
+        expect(requested).toEqual(['es-ES', 'en-GB']);
+
+        const active = i18n.global.getLocaleMessage('es-ES') as Record<string, Record<string, string>>;
+        const fallback = i18n.global.getLocaleMessage('en-GB') as Record<string, Record<string, string>>;
+
+        expect(active.auth?.login).toBe('Iniciar sesión');
+        expect(fallback.auth?.login).toBe('Sign in');
+    });
+
+    it('requests the message source once when fallbackLocale equals the active locale', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const requested: string[] = [];
+        const source: ModuleMessageSource = {
+            messages: async locale => {
+                requested.push(locale);
+
+                return {};
+            },
+        };
+
+        await activateLocale({
+            i18n,
+            modules: [],
+            locale: 'en-GB',
+            direction: 'ltr',
+            fallbackLocale: 'en-GB',
+            messageSource: source,
+            targetDocument: document.implementation.createHTMLDocument('t'),
+        });
+
+        expect(requested).toEqual(['en-GB']);
+    });
+
+    it('lets a module shadow a shared top-level key when the collision option is absent', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const collidingModule: ModuleDefinition = {
+            name: 'common',
+            routes: [],
+            locales: async () => ({ greeting: 'From module' }),
+        };
+
+        await activateLocale({
+            i18n,
+            modules: [collidingModule],
+            sharedLoaders: {
+                'en-GB': async () => ({ common: { greeting: 'From shared' }, welcome: 'Hello' }),
+            },
+            locale: 'en-GB',
+            direction: 'ltr',
+            targetDocument: document.implementation.createHTMLDocument('t'),
+        });
+
+        const messages = i18n.global.getLocaleMessage('en-GB') as Record<string, Record<string, string>>;
+
+        expect(messages.common?.greeting).toBe('From module');
+        expect(i18n.global.t('welcome')).toBe('Hello');
+    });
+
+    it('lets a module shadow a shared top-level key when module-wins is explicit', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const collidingModule: ModuleDefinition = {
+            name: 'common',
+            routes: [],
+            locales: async () => ({ greeting: 'From module' }),
+        };
+
+        await activateLocale({
+            i18n,
+            modules: [collidingModule],
+            sharedLoaders: {
+                'en-GB': async () => ({ common: { greeting: 'From shared' }, welcome: 'Hello' }),
+            },
+            locale: 'en-GB',
+            direction: 'ltr',
+            onNamespaceCollision: 'module-wins',
+            targetDocument: document.implementation.createHTMLDocument('t'),
+        });
+
+        const messages = i18n.global.getLocaleMessage('en-GB') as Record<string, Record<string, string>>;
+
+        expect(messages.common?.greeting).toBe('From module');
+        expect(i18n.global.t('welcome')).toBe('Hello');
+    });
+
+    it('throws the exact collision error naming the module and the locale', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const collidingModule: ModuleDefinition = {
+            name: 'common',
+            routes: [],
+            locales: async () => ({ greeting: 'From module' }),
+        };
+
+        await expect(
+            activateLocale({
+                i18n,
+                modules: [collidingModule],
+                sharedLoaders: {
+                    'fr-FR': async () => ({ common: { greeting: 'From shared' } }),
+                },
+                locale: 'fr-FR',
+                direction: 'ltr',
+                onNamespaceCollision: 'error',
+                targetDocument: document.implementation.createHTMLDocument('t'),
+            }),
+        ).rejects.toThrow('Module "common" collides with a shared top-level translation key for locale "fr-FR".');
+
+        expect(i18n.global.locale.value).toBe('en-GB');
+    });
+
+    it('reports only a module that actually collides', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const cleanModule: ModuleDefinition = {
+            name: 'auth',
+            routes: [],
+            locales: async () => ({ login: 'Sign in' }),
+        };
+        const collidingModule: ModuleDefinition = {
+            name: 'common',
+            routes: [],
+            locales: async () => ({ greeting: 'From module' }),
+        };
+
+        await expect(
+            activateLocale({
+                i18n,
+                modules: [cleanModule, collidingModule],
+                sharedLoaders: {
+                    'en-GB': async () => ({ common: { greeting: 'From shared' } }),
+                },
+                locale: 'en-GB',
+                direction: 'ltr',
+                onNamespaceCollision: 'error',
+                targetDocument: document.implementation.createHTMLDocument('t'),
+            }),
+        ).rejects.toThrow('Module "common" collides with a shared top-level translation key for locale "en-GB".');
+    });
+
+    it('throws for a fallback-locale collision after a clean active load', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const collidingModule: ModuleDefinition = {
+            name: 'common',
+            routes: [],
+            locales: async () => ({ greeting: 'From module' }),
+        };
+
+        await expect(
+            activateLocale({
+                i18n,
+                modules: [collidingModule],
+                sharedLoaders: {
+                    'es-ES': async () => ({ welcome: 'Hola' }),
+                    'en-GB': async () => ({ common: { greeting: 'From shared' } }),
+                },
+                locale: 'es-ES',
+                direction: 'ltr',
+                fallbackLocale: 'en-GB',
+                onNamespaceCollision: 'error',
+                targetDocument: document.implementation.createHTMLDocument('t'),
+            }),
+        ).rejects.toThrow('Module "common" collides with a shared top-level translation key for locale "en-GB".');
+    });
+
+    it('applies collision detection to message-source results', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const source: ModuleMessageSource = {
+            messages: async () => ({ common: { greeting: 'From source' } }),
+        };
+
+        await expect(
+            activateLocale({
+                i18n,
+                modules: [],
+                sharedLoaders: {
+                    'en-GB': async () => ({ common: { greeting: 'From shared' } }),
+                },
+                locale: 'en-GB',
+                direction: 'ltr',
+                messageSource: source,
+                onNamespaceCollision: 'error',
+                targetDocument: document.implementation.createHTMLDocument('t'),
+            }),
+        ).rejects.toThrow('Module "common" collides with a shared top-level translation key for locale "en-GB".');
+    });
+
+    it('activates normally when error mode finds no collision', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const localisedModule: ModuleDefinition = {
+            name: 'auth',
+            routes: [],
+            locales: async () => ({ login: 'Sign in' }),
+        };
+
+        await activateLocale({
+            i18n,
+            modules: [localisedModule],
+            sharedLoaders: {
+                'en-GB': async () => ({ welcome: 'Hello' }),
+            },
+            locale: 'en-GB',
+            direction: 'ltr',
+            onNamespaceCollision: 'error',
+            targetDocument: document.implementation.createHTMLDocument('t'),
+        });
+
+        const messages = i18n.global.getLocaleMessage('en-GB') as Record<string, Record<string, string>>;
+
+        expect(messages.auth?.login).toBe('Sign in');
+        expect(i18n.global.t('welcome')).toBe('Hello');
+        expect(i18n.global.locale.value).toBe('en-GB');
+    });
 });
 
 describe('createLocaleSwitcher', () => {
@@ -420,5 +691,61 @@ describe('createLocaleSwitcher', () => {
         await switcher.switchTo('fr-FR');
 
         expect(document.documentElement.getAttribute('lang')).toBe('fr-FR');
+    });
+
+    it('forwards the message source through to activation', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const requested: string[] = [];
+        const source: ModuleMessageSource = {
+            messages: async locale => {
+                requested.push(locale);
+
+                return { auth: { login: locale } };
+            },
+        };
+
+        const switcher = createLocaleSwitcher({
+            i18n,
+            modules: [],
+            localeService: buildLocaleService(),
+            supported: { 'en-GB': { direction: 'ltr' }, 'fr-FR': { direction: 'ltr' } },
+            fallbackLocale: 'en-GB',
+            messageSource: source,
+            targetDocument: document.implementation.createHTMLDocument('t'),
+        });
+
+        await switcher.switchTo('fr-FR');
+
+        expect(requested).toEqual(['fr-FR', 'en-GB']);
+
+        const messages = i18n.global.getLocaleMessage('fr-FR') as Record<string, Record<string, string>>;
+
+        expect(messages.auth?.login).toBe('fr-FR');
+    });
+
+    it('forwards the collision strategy through to activation', async () => {
+        const i18n = createApplicationI18n('en-GB');
+        const collidingModule: ModuleDefinition = {
+            name: 'common',
+            routes: [],
+            locales: async () => ({ greeting: 'From module' }),
+        };
+
+        const switcher = createLocaleSwitcher({
+            i18n,
+            modules: [collidingModule],
+            sharedLoaders: {
+                'fr-FR': async () => ({ common: { greeting: 'From shared' } }),
+            },
+            localeService: buildLocaleService(),
+            supported: { 'en-GB': { direction: 'ltr' }, 'fr-FR': { direction: 'ltr' } },
+            fallbackLocale: 'en-GB',
+            onNamespaceCollision: 'error',
+            targetDocument: document.implementation.createHTMLDocument('t'),
+        });
+
+        await expect(switcher.switchTo('fr-FR')).rejects.toThrow(
+            'Module "common" collides with a shared top-level translation key for locale "fr-FR".',
+        );
     });
 });

@@ -30,11 +30,12 @@ export interface PageTrackingOptions {
  * Install an after-navigation hook that tracks page views and records breadcrumbs.
  *
  * @param options - the router, tracker and optional breadcrumb trail
+ * @returns a teardown that removes the hook; safe to call more than once
  */
-export function installPageTracking(options: PageTrackingOptions): void {
+export function installPageTracking(options: PageTrackingOptions): () => void {
     const { router, tracker, trail } = options;
 
-    router.afterEach((to, from) => {
+    return router.afterEach((to, from) => {
         tracker.page(String(to.name ?? to.path), { path: to.fullPath });
 
         if (trail !== undefined) {

@@ -19,3 +19,6 @@ declare module 'vue-router' {
         middleware?: readonly RouteMiddleware[];
     }
 }
+
+// Keeps this file a module so the augmentation ships to consumers via import.
+export {};

@@ -27,11 +27,12 @@ export interface DocumentTitleOptions {
  * Install an after-navigation hook that keeps the document title in sync.
  *
  * @param options - the router, i18n instance and application name
+ * @returns a teardown removing the navigation hook
  */
-export function installDocumentTitleSync(options: DocumentTitleOptions): void {
+export function installDocumentTitleSync(options: DocumentTitleOptions): () => void {
     const target = options.targetDocument ?? globalThis.document;
 
-    options.router.afterEach(route => {
+    return options.router.afterEach(route => {
         const key = route.meta.title;
 
         target.title = key === undefined ? options.appName : `${options.i18n.global.t(key)} | ${options.appName}`;

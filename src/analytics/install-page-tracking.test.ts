@@ -136,4 +136,81 @@ describe('installPageTracking', () => {
             expect(trail.list()).toHaveLength(0);
         });
     });
+
+    describe('teardown', () => {
+        it('stops tracking page views after teardown', async () => {
+            const router = buildRouter();
+            const tracker = makeTracker();
+
+            const teardown = installPageTracking({ router, tracker });
+
+            teardown();
+
+            await router.push('/about');
+
+            expect(tracker.pageCalls).toHaveLength(0);
+        });
+
+        it('stops recording breadcrumbs after teardown', async () => {
+            const router = buildRouter();
+            const tracker = makeTracker();
+            const trail = new BreadcrumbTrail(50, () => 0);
+
+            const teardown = installPageTracking({ router, tracker, trail });
+
+            teardown();
+
+            await router.push('/about');
+
+            expect(trail.list()).toHaveLength(0);
+        });
+
+        it('keeps page views tracked before teardown', async () => {
+            const router = buildRouter();
+            const tracker = makeTracker();
+
+            const teardown = installPageTracking({ router, tracker });
+
+            await router.push('/about');
+
+            teardown();
+
+            await router.push('/');
+
+            expect(tracker.pageCalls).toHaveLength(1);
+            expect(tracker.pageCalls[0]?.name).toBe('about');
+        });
+
+        it('is a no-op when called a second time', async () => {
+            const router = buildRouter();
+            const tracker = makeTracker();
+
+            const teardown = installPageTracking({ router, tracker });
+
+            teardown();
+            teardown();
+
+            await router.push('/about');
+
+            expect(tracker.pageCalls).toHaveLength(0);
+        });
+
+        it('leaves hooks installed by other consumers in place', async () => {
+            const router = buildRouter();
+            const first = makeTracker();
+            const second = makeTracker();
+
+            const teardownFirst = installPageTracking({ router, tracker: first });
+
+            installPageTracking({ router, tracker: second });
+
+            teardownFirst();
+            teardownFirst();
+
+            await router.push('/about');
+
+            expect(first.pageCalls).toHaveLength(0);
+            expect(second.pageCalls).toHaveLength(1);
+        });
+    });
 });
