@@ -20,6 +20,12 @@ jobs:
     name: Tests (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
 
+    # The Qlty Cloud coverage publish authenticates via OIDC, which GitHub
+    # only exposes to jobs granted id-token: write.
+    permissions:
+      contents: read
+      id-token: write
+
     strategy:
       matrix:
         node:
