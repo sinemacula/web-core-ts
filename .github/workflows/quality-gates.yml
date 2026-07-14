@@ -1,93 +1,125 @@
-# Quality-gate workflow.
-#
-# Gates beyond the unit-test suite: dead-code detection on every pull request,
-# and full mutation testing on a weekly schedule (or on demand). Mutation runs
-# are too slow for the PR loop; the schedule keeps the suite honest without
-# blocking day-to-day work.
-
+# ==============================================================================
+# QUALITY GATES
+# ==============================================================================
 name: Quality Gates
 
+# ==============================================================================
+# TRIGGERS
+# ==============================================================================
 on:
-  pull_request:
-  push:
-    branches:
-      - master
-  schedule:
-    - cron: 0 3 * * 1
-  workflow_dispatch:
+    push:
+        branches: [ master ]
+    pull_request:
+        types: [ opened, synchronize, reopened, ready_for_review ]
+    schedule:
+        -   cron: 0 3 * * 1
+    workflow_dispatch:
 
+# ==============================================================================
+# CONCURRENCY
+# ==============================================================================
+concurrency:
+    group: quality-gates-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+# ==============================================================================
+# PERMISSIONS
+# ==============================================================================
 permissions:
-  contents: read
+    contents: read
+
+# ==============================================================================
+# DEFAULTS
+# ==============================================================================
+defaults:
+    run:
+        shell: bash
 
 jobs:
-  deadcode:
-    name: Dead code (knip)
-    runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    # ==========================================================================
+    # JOB: DEAD CODE
+    # ==========================================================================
+    deadcode:
+        name: Dead code (knip)
+        runs-on: ubuntu-latest
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v7
+                with:
+                    persist-credentials: false
 
-      - name: Install dependencies
-        run: npm ci
+            -   name: Setup Node.js
+                uses: actions/setup-node@v7
+                with:
+                    node-version: '24'
+                    cache: npm
 
-      - name: Run knip
-        run: npm run deadcode
+            -   name: Install dependencies
+                run: npm ci
 
-  size:
-    name: Bundle size (size-limit)
-    runs-on: ubuntu-latest
+            -   name: Knip
+                run: npm run deadcode
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    # ==========================================================================
+    # JOB: BUNDLE SIZE
+    # ==========================================================================
+    size:
+        name: Bundle size (size-limit)
+        runs-on: ubuntu-latest
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v7
+                with:
+                    persist-credentials: false
 
-      - name: Install dependencies
-        run: npm ci
+            -   name: Setup Node.js
+                uses: actions/setup-node@v7
+                with:
+                    node-version: '24'
+                    cache: npm
 
-      - name: Build
-        run: npm run build
+            -   name: Install dependencies
+                run: npm ci
 
-      - name: Check bundle size
-        run: npm run size
+            -   name: Build
+                run: npm run build
 
-  mutation:
-    name: Mutation tests (stryker)
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+            -   name: Check bundle size
+                run: npm run size
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    # ==========================================================================
+    # JOB: MUTATION
+    # ==========================================================================
+    mutation:
+        name: Mutation tests (stryker)
+        runs-on: ubuntu-latest
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v7
+                with:
+                    persist-credentials: false
 
-      - name: Install dependencies
-        run: npm ci
+            -   name: Setup Node.js
+                uses: actions/setup-node@v7
+                with:
+                    node-version: '24'
+                    cache: npm
 
-      - name: Run mutation tests
-        run: npm run test:mutation
+            -   name: Install dependencies
+                run: npm ci
 
-      - name: Upload mutation report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: mutation-report
-          path: build/mutation/
-          retention-days: 30
+            -   name: Mutation tests
+                run: npm run test:mutation
+
+            -   name: Upload mutation report
+                if: always()
+                uses: actions/upload-artifact@v7
+                with:
+                    name: mutation-report
+                    path: build/mutation/
+                    retention-days: 30
