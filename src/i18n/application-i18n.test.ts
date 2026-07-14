@@ -289,18 +289,18 @@ describe('activateLocale', () => {
         const localisedModule: ModuleDefinition = {
             name: 'auth',
             routes: [],
-            locales: async () => {
+            locales: () => {
                 loaderCalls += 1;
 
-                return { login: 'Sign in' };
+                return Promise.resolve({ login: 'Sign in' });
             },
         };
         const requested: string[] = [];
         const source: ModuleMessageSource = {
-            messages: async locale => {
+            messages: locale => {
                 requested.push(locale);
 
-                return { auth: { login: 'From source' } };
+                return Promise.resolve({ auth: { login: 'From source' } });
             },
         };
 
@@ -325,10 +325,10 @@ describe('activateLocale', () => {
         const i18n = createApplicationI18n('en-GB');
         const requested: string[] = [];
         const source: ModuleMessageSource = {
-            messages: async locale => {
+            messages: locale => {
                 requested.push(locale);
 
-                return { auth: { login: locale === 'en-GB' ? 'Sign in' : 'Iniciar sesión' } };
+                return Promise.resolve({ auth: { login: locale === 'en-GB' ? 'Sign in' : 'Iniciar sesión' } });
             },
         };
 
@@ -355,10 +355,10 @@ describe('activateLocale', () => {
         const i18n = createApplicationI18n('en-GB');
         const requested: string[] = [];
         const source: ModuleMessageSource = {
-            messages: async locale => {
+            messages: locale => {
                 requested.push(locale);
 
-                return {};
+                return Promise.resolve({});
             },
         };
 
@@ -697,10 +697,10 @@ describe('createLocaleSwitcher', () => {
         const i18n = createApplicationI18n('en-GB');
         const requested: string[] = [];
         const source: ModuleMessageSource = {
-            messages: async locale => {
+            messages: locale => {
                 requested.push(locale);
 
-                return { auth: { login: locale } };
+                return Promise.resolve({ auth: { login: locale } });
             },
         };
 

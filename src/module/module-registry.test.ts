@@ -58,9 +58,7 @@ function createPlatform(): ResolvedPlatform {
 
 /** Build an HTTP client stand-in that fails loudly if any method is invoked. */
 function createStubHttpClient(): HttpClient {
-    const reject = async (): Promise<never> => {
-        throw new Error('The stub HTTP client must not be called.');
-    };
+    const reject = (): Promise<never> => Promise.reject(new Error('The stub HTTP client must not be called.'));
 
     return { get: reject, post: reject, put: reject, patch: reject, delete: reject, download: reject };
 }
@@ -503,9 +501,7 @@ describe('bootModules', () => {
             {
                 name: 'gamma',
                 routes: [],
-                boot: async () => {
-                    throw failure;
-                },
+                boot: () => Promise.reject(failure),
             },
             { name: 'delta', routes: [], boot: vi.fn() },
         ];
@@ -540,9 +536,7 @@ describe('bootModules', () => {
             {
                 name: 'alpha',
                 routes: [],
-                boot: async () => {
-                    throw new Error('alpha failed to boot');
-                },
+                boot: () => Promise.reject(new Error('alpha failed to boot')),
             },
         ];
 

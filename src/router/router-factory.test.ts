@@ -130,10 +130,10 @@ describe('createApplicationRouter', () => {
     it('runs global middleware before matched-record meta middleware', async () => {
         const order: string[] = [];
         const recording = (name: string): RouteMiddleware => ({
-            handle: async () => {
+            handle: () => {
                 order.push(name);
 
-                return next();
+                return Promise.resolve(next());
             },
         });
         const router = createApplicationRouter({
