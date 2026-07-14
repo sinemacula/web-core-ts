@@ -17,9 +17,7 @@
     "exports": {
         "./*": "./src/*.ts"
     },
-    "workspaces": [
-        "playground"
-    ],
+    "workspaces": ["playground"],
     "scripts": {
         "dev": "npm run dev --workspace playground",
         "build": "npm run build --workspace playground",

@@ -67,7 +67,10 @@ export function createModuleRegistry(modules: readonly ModuleDefinition[]): Modu
     }
 
     if (duplicates.size > 0) {
-        const names = [...duplicates].sort().map(name => `"${name}"`).join(', ');
+        const names = [...duplicates]
+            .sort()
+            .map(name => `"${name}"`)
+            .join(', ');
 
         throw new ModuleRegistryError(`Duplicate module names: ${names}.`);
     }
@@ -127,8 +130,8 @@ export function registerModules(
             setUnauthorizedHandler: handler => {
                 if (unauthorizedOwner !== null) {
                     throw new ModuleRegistryError(
-                        `Modules "${unauthorizedOwner}" and "${definition.name}" both set the unauthorized handler; `
-                        + 'only one refresh authority is allowed.',
+                        `Modules "${unauthorizedOwner}" and "${definition.name}" both set the unauthorized handler; ` +
+                            'only one refresh authority is allowed.',
                     );
                 }
 

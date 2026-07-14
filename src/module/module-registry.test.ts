@@ -245,9 +245,15 @@ describe('registerModules', () => {
         let received: ModuleRegisterContext | undefined;
 
         registerModules(
-            [{ name: 'alpha', routes: [], register: registerContext => {
-                received = registerContext;
-            } }],
+            [
+                {
+                    name: 'alpha',
+                    routes: [],
+                    register: registerContext => {
+                        received = registerContext;
+                    },
+                },
+            ],
             context,
         );
 
@@ -267,13 +273,21 @@ describe('registerModules', () => {
         const interceptorC = vi.fn();
 
         const modules: ModuleDefinition[] = [
-            { name: 'alpha', routes: [], register: ({ http }) => {
-                http.addRequestInterceptor(interceptorA);
-                http.addRequestInterceptor(interceptorB);
-            } },
-            { name: 'beta', routes: [], register: ({ http }) => {
-                http.addRequestInterceptor(interceptorC);
-            } },
+            {
+                name: 'alpha',
+                routes: [],
+                register: ({ http }) => {
+                    http.addRequestInterceptor(interceptorA);
+                    http.addRequestInterceptor(interceptorB);
+                },
+            },
+            {
+                name: 'beta',
+                routes: [],
+                register: ({ http }) => {
+                    http.addRequestInterceptor(interceptorC);
+                },
+            },
         ];
 
         const contributions = registerModules(modules, createRegisterContext());
@@ -286,12 +300,20 @@ describe('registerModules', () => {
         const handlerB = vi.fn();
 
         const modules: ModuleDefinition[] = [
-            { name: 'alpha', routes: [], register: ({ http }) => {
-                http.addResponseErrorHandler(handlerA);
-            } },
-            { name: 'beta', routes: [], register: ({ http }) => {
-                http.addResponseErrorHandler(handlerB);
-            } },
+            {
+                name: 'alpha',
+                routes: [],
+                register: ({ http }) => {
+                    http.addResponseErrorHandler(handlerA);
+                },
+            },
+            {
+                name: 'beta',
+                routes: [],
+                register: ({ http }) => {
+                    http.addResponseErrorHandler(handlerB);
+                },
+            },
         ];
 
         const contributions = registerModules(modules, createRegisterContext());
@@ -303,9 +325,13 @@ describe('registerModules', () => {
         const handler = vi.fn(async () => true);
 
         const modules: ModuleDefinition[] = [
-            { name: 'session', routes: [], register: ({ http }) => {
-                http.setUnauthorizedHandler(handler);
-            } },
+            {
+                name: 'session',
+                routes: [],
+                register: ({ http }) => {
+                    http.setUnauthorizedHandler(handler);
+                },
+            },
         ];
 
         const contributions = registerModules(modules, createRegisterContext());
@@ -315,12 +341,20 @@ describe('registerModules', () => {
 
     it('throws naming both modules when a second module sets the unauthorized handler', () => {
         const modules: ModuleDefinition[] = [
-            { name: 'session', routes: [], register: ({ http }) => {
-                http.setUnauthorizedHandler(async () => true);
-            } },
-            { name: 'other', routes: [], register: ({ http }) => {
-                http.setUnauthorizedHandler(async () => false);
-            } },
+            {
+                name: 'session',
+                routes: [],
+                register: ({ http }) => {
+                    http.setUnauthorizedHandler(async () => true);
+                },
+            },
+            {
+                name: 'other',
+                routes: [],
+                register: ({ http }) => {
+                    http.setUnauthorizedHandler(async () => false);
+                },
+            },
         ];
 
         expect(() => registerModules(modules, createRegisterContext())).toThrow(ModuleRegistryError);
@@ -331,10 +365,14 @@ describe('registerModules', () => {
 
     it('throws naming the module twice when it sets the unauthorized handler twice', () => {
         const modules: ModuleDefinition[] = [
-            { name: 'session', routes: [], register: ({ http }) => {
-                http.setUnauthorizedHandler(async () => true);
-                http.setUnauthorizedHandler(async () => false);
-            } },
+            {
+                name: 'session',
+                routes: [],
+                register: ({ http }) => {
+                    http.setUnauthorizedHandler(async () => true);
+                    http.setUnauthorizedHandler(async () => false);
+                },
+            },
         ];
 
         expect(() => registerModules(modules, createRegisterContext())).toThrow(
@@ -390,18 +428,26 @@ describe('bootModules', () => {
         const { promise, resolve } = deferred<undefined>();
 
         const modules: ModuleDefinition[] = [
-            { name: 'alpha', routes: [], boot: async () => {
-                order.push('alpha:start');
-                await promise;
-                order.push('alpha:end');
+            {
+                name: 'alpha',
+                routes: [],
+                boot: async () => {
+                    order.push('alpha:start');
+                    await promise;
+                    order.push('alpha:end');
 
-                return undefined;
-            } },
-            { name: 'beta', routes: [], boot: () => {
-                order.push('beta:start');
+                    return undefined;
+                },
+            },
+            {
+                name: 'beta',
+                routes: [],
+                boot: () => {
+                    order.push('beta:start');
 
-                return undefined;
-            } },
+                    return undefined;
+                },
+            },
         ];
 
         const pending = bootModules(modules, createBootContext());
@@ -454,9 +500,13 @@ describe('bootModules', () => {
         const modules: ModuleDefinition[] = [
             { name: 'alpha', routes: [], boot: () => () => order.push('alpha') },
             { name: 'beta', routes: [], boot: () => () => order.push('beta') },
-            { name: 'gamma', routes: [], boot: async () => {
-                throw failure;
-            } },
+            {
+                name: 'gamma',
+                routes: [],
+                boot: async () => {
+                    throw failure;
+                },
+            },
             { name: 'delta', routes: [], boot: vi.fn() },
         ];
 
@@ -471,9 +521,13 @@ describe('bootModules', () => {
 
         const modules: ModuleDefinition[] = [
             { name: 'alpha', routes: [], boot: () => () => order.push('alpha') },
-            { name: 'beta', routes: [], boot: () => {
-                throw new Error('beta exploded');
-            } },
+            {
+                name: 'beta',
+                routes: [],
+                boot: () => {
+                    throw new Error('beta exploded');
+                },
+            },
         ];
 
         await expect(bootModules(modules, createBootContext())).rejects.toThrow('beta exploded');
@@ -483,9 +537,13 @@ describe('bootModules', () => {
 
     it('rethrows without running any teardown when the first boot rejects', async () => {
         const modules: ModuleDefinition[] = [
-            { name: 'alpha', routes: [], boot: async () => {
-                throw new Error('alpha failed to boot');
-            } },
+            {
+                name: 'alpha',
+                routes: [],
+                boot: async () => {
+                    throw new Error('alpha failed to boot');
+                },
+            },
         ];
 
         await expect(bootModules(modules, createBootContext())).rejects.toThrow('alpha failed to boot');

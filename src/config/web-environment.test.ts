@@ -232,8 +232,6 @@ describe('createWebEnvironment in production', () => {
         });
 
         expect(thrown).toBeInstanceOf(ConfigurationError);
-        expect((thrown as ConfigurationError).message).toBe(
-            'Runtime configuration is missing required keys: API_URL.',
-        );
+        expect((thrown as ConfigurationError).message).toBe('Runtime configuration is missing required keys: API_URL.');
     });
 });

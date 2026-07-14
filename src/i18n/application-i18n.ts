@@ -192,13 +192,15 @@ export function createLocaleSwitcher(options: LocaleSwitcherOptions): LocaleSwit
 async function installLocaleMessages(options: ActivateLocaleOptions, locale: string): Promise<void> {
     const sharedLoader = options.sharedLoaders?.[locale];
     const shared = sharedLoader === undefined ? {} : await sharedLoader();
-    const moduleMessages = options.messageSource === undefined
-        ? await collectModuleMessages(options.modules, locale)
-        : await options.messageSource.messages(locale);
+    const moduleMessages =
+        options.messageSource === undefined
+            ? await collectModuleMessages(options.modules, locale)
+            : await options.messageSource.messages(locale);
 
-    const collision = options.onNamespaceCollision === 'error'
-        ? Object.keys(moduleMessages).find(name => Object.hasOwn(shared, name))
-        : undefined;
+    const collision =
+        options.onNamespaceCollision === 'error'
+            ? Object.keys(moduleMessages).find(name => Object.hasOwn(shared, name))
+            : undefined;
 
     if (collision !== undefined) {
         throw new Error(
