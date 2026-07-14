@@ -335,9 +335,7 @@ export interface WebCoreApp<T extends WebCoreConfig> {
  * @throws {ModuleRegistryError} when the module list fails validation
  * @throws {WebCoreAppError} when the monitor options cannot work
  */
-export async function createWebCoreApp<T extends WebCoreConfig>(
-    options: WebCoreAppOptions<T>,
-): Promise<WebCoreApp<T>> {
+export async function createWebCoreApp<T extends WebCoreConfig>(options: WebCoreAppOptions<T>): Promise<WebCoreApp<T>> {
     const platform = resolvePlatform(options.platform);
     const runtimeUrl = options.config.runtimeUrl ?? RUNTIME_ENVIRONMENT_URL;
 
