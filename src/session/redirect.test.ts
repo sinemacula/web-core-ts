@@ -5,9 +5,39 @@
  * @copyright 2026 Sine Macula Limited
  */
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
+import { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
+import { MemoryStorage } from '../storage/memory-storage';
 import { appendRedirectTarget, REDIRECT_QUERY_KEY, sanitiseRedirectTarget } from './redirect';
+import type { SessionApi } from './session-api';
+import { installSessionContext, resetSessionContext } from './session-context';
+
+/** Build a session API stand-in that fails loudly if any method is invoked. */
+function createSessionApiStub(): SessionApi {
+    const fail = (): Promise<never> => Promise.reject(new Error('not implemented'));
+
+    return { login: fail, refresh: fail, logout: fail, currentUser: fail };
+}
+
+/** Install a test session context carrying the given login path. */
+function installTestContext(loginPath: string): void {
+    installSessionContext({
+        storageKeys: {
+            accessToken: 'auth.access_token',
+            refreshToken: 'auth.refresh_token',
+            expiresAt: 'auth.expires_at',
+            deviceUuid: 'auth.device_uuid',
+        },
+        routes: { login: { name: 'auth.login' }, loginPath, home: '/', forbidden: '/forbidden' },
+        storage: new MemoryStorage(),
+        storeId: 'auth',
+        api: createSessionApiStub(),
+        coordinator: new TokenRefreshCoordinator({ refresh: () => Promise.resolve(false) }),
+        parseTimestamp: () => null,
+        device: () => ({ uuid: 'device-uuid', os: 'WEB' }),
+    });
+}
 
 describe('sanitiseRedirectTarget', () => {
     it('accepts a valid relative path', () => {
@@ -72,6 +102,36 @@ describe('sanitiseRedirectTarget', () => {
 
     it('still accepts an ordinary path under a custom login path', () => {
         expect(sanitiseRedirectTarget('/dashboard', '/signin')).toBe('/dashboard');
+    });
+
+    describe('with an installed session context', () => {
+        afterEach(() => {
+            resetSessionContext();
+        });
+
+        it('rejects the context login path on a bare call', () => {
+            installTestContext('/signin');
+
+            expect(sanitiseRedirectTarget('/signin')).toBeNull();
+        });
+
+        it('rejects the context login path carrying its own query', () => {
+            installTestContext('/signin');
+
+            expect(sanitiseRedirectTarget('/signin?redirect=%2F')).toBeNull();
+        });
+
+        it('accepts a target sharing the built-in login-path prefix', () => {
+            installTestContext('/signin');
+
+            expect(sanitiseRedirectTarget('/login-history')).toBe('/login-history');
+        });
+
+        it('prefers an explicit login path over the context login path', () => {
+            installTestContext('/signin');
+
+            expect(sanitiseRedirectTarget('/signin', '/login')).toBe('/signin');
+        });
     });
 });
 

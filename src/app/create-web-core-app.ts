@@ -96,6 +96,10 @@ let phaseRecorder: ((phase: BootPhase) => void) | null = null;
 /**
  * Test-only: observe the name of every executed boot phase, in order.
  *
+ * Not part of the supported public surface: the phase names and their order
+ * are internal and may change without notice.
+ *
+ * @internal
  * @param recorder - receives each phase name as the boot reaches it
  * @returns a remover that detaches the recorder
  */

@@ -59,7 +59,7 @@ An application is composed of feature modules. A module is a plain object satisf
 | `locales`  | Optional loader resolving the module's translations for one locale, null when not provided |
 | `guards`   | Optional global middleware, run on every navigation before route-level `meta.middleware`   |
 | `stores`   | Optional store hooks instantiated eagerly at the stores phase, in registry order           |
-| `register` | Optional synchronous hook contributing HTTP machinery before shared services exist         |
+| `register` | Optional synchronous hook contributing HTTP machinery before the client is built           |
 | `boot`     | Optional post-router, pre-mount hook for runtime effects; may return a teardown            |
 | `fallback` | Optional marker: this module owns the application catch-all; the registry orders it last   |
 
@@ -76,7 +76,8 @@ declaration order, with the (at most one) `fallback` module moved last. A duplic
 `ModuleRegistryError` listing every duplicate; more than one fallback throws naming each of them. The preset
 calls it for you - applications only maintain the array.
 
-The lifecycle then runs in registry order. `register` hooks execute first, before shared services exist,
+The lifecycle then runs in registry order. `register` hooks execute first, after configuration, storage,
+notifications and observability are installed but before the HTTP client, stores, i18n and router exist,
 each receiving a `ModuleHttpRegistrar` whose contributions feed the HTTP client's construction:
 `addRequestInterceptor` (appended after preset-level interceptors, in registry order),
 `addResponseErrorHandler` (run after the preset's handler, in registry order), and `setUnauthorizedHandler` -

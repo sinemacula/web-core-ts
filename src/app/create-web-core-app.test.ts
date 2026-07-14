@@ -109,11 +109,11 @@ type TestWindow = Window & {
     listenerCount(type: string): number;
 };
 
-function makeWindow(): TestWindow {
+function makeWindow(languages: readonly string[] = ['en-US']): TestWindow {
     const listeners = new Map<string, EventListenerOrEventListenerObject[]>();
 
     return {
-        navigator: { onLine: true, languages: ['en-US'] },
+        navigator: { onLine: true, languages },
         addEventListener(type: string, listener: EventListenerOrEventListenerObject) {
             const existing = listeners.get(type) ?? [];
 
@@ -689,6 +689,26 @@ describe('createWebCoreApp', () => {
             expect(app.i18n.global.t('shared.title')).toBe('Partage');
             expect(app.i18n.global.getNumberFormat('fr-FR')).toEqual({ decimal: { style: 'decimal' } });
             expect(localeSwitcher().current.value).toBe('fr-FR');
+
+            app.dispose();
+        });
+
+        it('detects the locale from the window navigator languages when no candidates are supplied', async () => {
+            const seams = makeSeams();
+            const platform = {
+                fetchFn: seams.fetchFn,
+                storage: seams.storage,
+                targetWindow: makeWindow(['fr-FR']),
+                targetDocument: seams.targetDocument,
+                clock: seams.clock,
+                history: seams.history,
+            };
+
+            const app = await bootApp({ platform });
+
+            expect(app.i18n.global.locale.value).toBe('fr-FR');
+            expect(localeSwitcher().current.value).toBe('fr-FR');
+            expect(seams.targetDocument.documentElement.getAttribute('lang')).toBe('fr-FR');
 
             app.dispose();
         });

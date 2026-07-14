@@ -1226,6 +1226,40 @@ describe('createSessionModule', () => {
             expect(flags.contexts).toStrictEqual([{ userId: 'u1' }]);
         });
 
+        it('merges a custom reporting mapping over the default', async () => {
+            const harness = createHarness({
+                identity: { reporting: identified => ({ id: `reporting-${String(identified.id)}` }) },
+            });
+
+            harness.storage.set(ACCESS_TOKEN_KEY, 'tok');
+            fake.queueUser(user());
+
+            useSessionStore(harness.pinia);
+            await boot(harness);
+            await vi.advanceTimersByTimeAsync(0);
+
+            expect(reporter.users).toStrictEqual([{ id: 'reporting-u1' }]);
+            expect(tracker.identified).toStrictEqual(['u1']);
+            expect(flags.contexts).toStrictEqual([{ userId: 'u1' }]);
+        });
+
+        it('merges a custom feature-flag mapping over the default', async () => {
+            const harness = createHarness({
+                identity: { featureFlags: identified => ({ userId: `flags-${String(identified.id)}` }) },
+            });
+
+            harness.storage.set(ACCESS_TOKEN_KEY, 'tok');
+            fake.queueUser(user());
+
+            useSessionStore(harness.pinia);
+            await boot(harness);
+            await vi.advanceTimersByTimeAsync(0);
+
+            expect(flags.contexts).toStrictEqual([{ userId: 'flags-u1' }]);
+            expect(reporter.users).toStrictEqual([{ id: 'u1', email: 'alice@example.com', name: 'Alice Smith' }]);
+            expect(tracker.identified).toStrictEqual(['u1']);
+        });
+
         it('disables the fan-out entirely when identity is false', async () => {
             const harness = createHarness({ identity: false });
 

@@ -82,6 +82,10 @@ export function sessionContext<U extends SessionUser = SessionUser>(): SessionCo
 /**
  * Clear the session context back to its uninstalled state. Test-only.
  */
+export function isSessionContextInstalled(): boolean {
+    return holder.isInstalled();
+}
+
 export function resetSessionContext(): void {
     holder.reset();
 }

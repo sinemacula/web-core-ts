@@ -12,7 +12,13 @@
 
 import type { RouteLocationRaw } from 'vue-router';
 
+import { isSessionContextInstalled, sessionContext } from './session-context';
+
 const DEFAULT_LOGIN_PATH = '/login';
+
+function defaultLoginPath(): string {
+    return isSessionContextInstalled() ? sessionContext().routes.loginPath : DEFAULT_LOGIN_PATH;
+}
 
 /**
  * Query parameter under which the post-login redirect target is carried.
@@ -28,15 +34,18 @@ export const REDIRECT_QUERY_KEY = 'redirect';
  * would bounce the visitor in a loop).
  *
  * @param target - the untrusted candidate, typically a route query value
- * @param loginPath - the login-path prefix rejected as a loop guard
+ * @param loginPath - the login-path prefix rejected as a loop guard; defaults
+ *   to the installed session context's configured login path, else `/login`
  * @returns the sanitised path, or `null` when the value is not a safe target
  */
-export function sanitiseRedirectTarget(target: unknown, loginPath: string = DEFAULT_LOGIN_PATH): string | null {
+export function sanitiseRedirectTarget(target: unknown, loginPath?: string): string | null {
     if (typeof target !== 'string') {
         return null;
     }
 
-    if (!target.startsWith('/') || target.startsWith('//') || target.includes('\\') || target.startsWith(loginPath)) {
+    const guard = loginPath ?? defaultLoginPath();
+
+    if (!target.startsWith('/') || target.startsWith('//') || target.includes('\\') || target.startsWith(guard)) {
         return null;
     }
 
