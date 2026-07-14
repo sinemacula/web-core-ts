@@ -1,0 +1,40 @@
+/**
+ * Application stylesheet.
+ *
+ * Imports the shared design tokens and applies a minimal base layer. All
+ * component styling lives in scoped SFC styles built on the tokens - no
+ * utility framework.
+ */
+
+@import "./theme.css";
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+body {
+    background: var(--sm-surface-page);
+    color: var(--sm-text-body);
+    font-family: var(--sm-font-sans);
+    font-size: var(--sm-text-base);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+:focus-visible {
+    outline: var(--sm-focus-ring);
+    outline-offset: var(--sm-focus-offset);
+}
