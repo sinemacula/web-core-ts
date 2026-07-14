@@ -16,7 +16,7 @@
 
 import type { KnipConfig } from 'knip';
 
-const SCRIPT_BLOCK = /<script[^>]*>([\s\S]*?)<\/script>/gim;
+const SCRIPT_BLOCK = /<script[^>]*>([\s\S]*?)<\/script\s*>/gim;
 
 const config: KnipConfig = {
     workspaces: {
