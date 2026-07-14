@@ -58,45 +58,42 @@ public/                     Static assets copied verbatim into the artifact
 scripts/
   generate-runtime-env.mjs  Renders runtime-env.json at deploy time
 src/
-  main.ts                   Entry point - mounts via the bootstrap
+  main.ts                   Entry point and composition root - one createWebCoreApp call, then mount
   App.vue                   Application root: router outlet, progress, error panel, notification hosts
   assets/                   Global styles (theme tokens + app layer)
-  bootstrap/                Composition root - the only place wiring happens
   config/                   Laravel-style typed configuration definitions
-  services/                 Application singletons: config(), api(), appStorage(), ...
+  services/                 App-typed wrappers over the kernel service accessors: config(), api(), ...
   modules/                  Feature modules: routes + views + stores + services + locales
   layouts/                  Page chrome
   locales/                  Shared translations (lazy-loaded)
   components/               App-level hosts (toasts, confirm dialogs, navigation progress) and ui/ primitives
   forms/                    Typed form schemas and server-error mapping
-  test-support/             Unit-test fakes: HTTP client, network guard
+  test-support/             Unit-test fakes and seams: HTTP client, network guard, session-context installer
 ```
 
 For what lives in the kernel itself, see the [root README](../README.md).
 
 ## Boot sequence
 
-`src/main.ts` → `startApplication()` → `createApplication()` (the composition root in
-`src/bootstrap/application.ts`):
+`src/main.ts` is the whole composition root: one `createWebCoreApp` call, then `app.start('#app')`. The phase
+sequence - runtime environment, configuration, services, module lifecycle, i18n, router, observability,
+monitors - is kernel-owned and documented in the
+[root README](../README.md#bootstrapping-an-application); this app supplies only its own inputs:
 
-1. **Runtime environment** - fetch `/runtime-env.json`. In development, `VITE_*` variables are chained behind
-   it as a fallback; in production the document must contain every key in `REQUIRED_RUNTIME_KEYS`
-   (`src/config/runtime.ts`) or boot fails loudly.
-2. **Configuration** - resolve the typed definitions in `src/config/*`; freeze into the `config()` singleton.
-3. **Services** - install storage (`appStorage()`), feature flags, and the API client (`api()`): a
-   `FetchHttpClient` carrying the bearer-token interceptor and token-refresh coordinator. The toast, confirm
-   and session-lifecycle services come up alongside.
-4. **i18n** - detect the locale (stored preference → navigator → default), lazily load shared + module
-   translations, set `lang`/`dir`, and install the runtime locale switcher.
-5. **Router** - collect routes from the module registry, install the middleware pipeline, document-title sync
-   and chunk-error recovery.
-6. **Observability and monitors** - error reporting, analytics and the breadcrumb trail (console adapters
-   locally, null adapters elsewhere until a provider is wired in); release builds also start the update and
-   connectivity monitors.
-7. Mount.
+- **Configuration** - `createWebEnvironment` over the fetched `/runtime-env.json`. In development, `VITE_*`
+  variables are chained behind the runtime document as a fallback; in production the document must contain
+  every key in `REQUIRED_RUNTIME_KEYS` (`src/config/runtime.ts`) or boot fails loudly. `defineConfiguration`
+  (`src/config/*`) shapes the frozen tree read back through `config()`.
+- **Modules** - `[createSessionModule(), ...modules]`: the kernel session module with every default (this
+  app is the reference those defaults mirror) ahead of the explicit module list in `src/modules/index.ts`.
+- **Locales** - the shared loaders and datetime/number formats from `src/locales/`.
+- **Application copy** - the two toast keys the kernel never defaults: `common.states.error` for unexpected
+  HTTP failures and `common.updates.available` for the update monitor.
 
-Every step takes its dependencies through `CreateApplicationOptions` overrides, which is how the bootstrap
-itself is tested to 100%.
+A failed boot renders a static message into the mount node instead of mounting. `src/boot.test.ts` pins what
+is app-specific about this composition by driving `createWebCoreApp` through the kernel's platform seams
+(fake fetch, memory storage, memory history); the phase machinery itself is covered by the kernel's own
+suite.
 
 ## Configuration (runtime, not build time)
 
@@ -124,17 +121,23 @@ disables update detection.
 3. Add translations under `locales/` and register their loaders in `module.ts` - messages are namespaced
    under the module name automatically.
 4. Register the module in `src/modules/index.ts`. That is the only registration step - there is no filesystem
-   magic. The errors module contributes the catch-all route, so it must stay last.
-5. Cross-module imports go through a module's public surface (top-level files like `auth/middleware.ts`),
-   never into its internals.
+   magic, and declaration order is the effective order except that the module marked `fallback: true` (the
+   errors module - it owns the catch-all route) is always ordered last by the registry.
+5. Modules that need more than routes and translations declare it on the definition: `guards` for global
+   navigation middleware, `stores` for eagerly-instantiated pinia stores, `register` to contribute HTTP
+   machinery, `boot` for runtime effects with a teardown. See the module contract in the
+   [root README](../README.md#modules).
+6. Cross-module imports go through a module's public surface (`<module>/index.ts`), never into its internals.
 
 ## What is demo material
 
-The `auth` and `errors` modules are reference implementations of concerns every app on the framework needs:
-session lifecycle, token refresh, route guards, forbidden and not-found handling. The `users` and `dashboard`
-modules are demonstration content - an authenticated landing view and a query-backed list that give the
-end-to-end suite realistic pages to exercise. A real application would adapt the former and replace the
-latter.
+The `auth` module is the reference login flow: the login view, form composable and locale copy over the
+kernel session module, whose generic machinery (store, guards, token refresh, redirect handling) it
+re-exports through `auth/index.ts` under the app's established names (`useAuthStore`, `authenticated`, ...).
+The `errors` module is the reference forbidden and not-found handling, owning the application catch-all
+through its `fallback` marker. The `users` and `dashboard` modules are demonstration content - an
+authenticated landing view and a query-backed list that give the end-to-end suite realistic pages to
+exercise. A real application would adapt the former and replace the latter.
 
 ## End-to-end tests
 

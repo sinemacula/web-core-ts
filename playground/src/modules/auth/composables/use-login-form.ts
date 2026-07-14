@@ -12,6 +12,7 @@
  */
 
 import { HttpError, HttpValidationError } from '@sinemacula/web-core/http/http-error';
+import { useSessionStore } from '@sinemacula/web-core/session/session-store';
 import { useForm } from 'vee-validate';
 import type { ComputedRef, Ref } from 'vue';
 import { computed, ref } from 'vue';
@@ -19,7 +20,6 @@ import * as z from 'zod';
 
 import { applyServerValidationErrors } from '@/forms/server-errors';
 import { zodToTypedSchema } from '@/forms/typed-schema';
-import { useAuthStore } from '@/modules/auth/stores/auth-store';
 
 const loginSchema = z.object({
     email: z.string().min(1, 'auth.login.validation.emailRequired').email('auth.login.validation.emailInvalid'),
@@ -82,7 +82,7 @@ export function useLoginForm(): LoginForm {
 
             error.value = null;
 
-            await useAuthStore().login({ email: email.value, password: password.value });
+            await useSessionStore().login({ email: email.value, password: password.value });
 
             return true;
         } catch (caught) {

@@ -24,7 +24,7 @@ describe('storage service', () => {
     });
 
     it('throws before initialisation when appStorage() is called', () => {
-        expect(() => appStorage()).toThrow('Storage was accessed before initialisation');
+        expect(() => appStorage()).toThrow('application storage accessed before initialisation');
     });
 
     it('throws again after resetStorage() clears the singleton', () => {
@@ -33,6 +33,6 @@ describe('storage service', () => {
         initialiseStorage(adapter);
         resetStorage();
 
-        expect(() => appStorage()).toThrow('Storage was accessed before initialisation');
+        expect(() => appStorage()).toThrow('application storage accessed before initialisation');
     });
 });
