@@ -35,11 +35,17 @@ export interface GlobalErrorHandlingOptions {
  * - A `window 'error'` listener catches synchronous script errors.
  * - A `window 'unhandledrejection'` listener catches unhandled Promise rejections.
  *
+ * The returned teardown restores the Vue error handler that was in place
+ * before installation and removes both window listeners; calling it more
+ * than once is a no-op.
+ *
  * @param options - the app, reporter, optional trail and optional window target
+ * @returns a teardown that undoes the installation
  */
-export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions): void {
+export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions): () => void {
     const { app, reporter, trail } = options;
     const target = options.targetWindow ?? globalThis.window;
+    const previousErrorHandler = app.config.errorHandler;
 
     app.config.errorHandler = (err, _instance, info) => {
         const context: Record<string, unknown> = { source: 'vue', info };
@@ -51,7 +57,7 @@ export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions):
         reporter.captureError(err, context);
     };
 
-    target.addEventListener('error', event => {
+    const onError = (event: ErrorEvent): void => {
         const context: Record<string, unknown> = { source: 'window' };
 
         if (trail !== undefined) {
@@ -59,9 +65,9 @@ export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions):
         }
 
         reporter.captureError(event.error ?? event.message, context);
-    });
+    };
 
-    target.addEventListener('unhandledrejection', event => {
+    const onUnhandledRejection = (event: PromiseRejectionEvent): void => {
         const context: Record<string, unknown> = { source: 'unhandledrejection' };
 
         if (trail !== undefined) {
@@ -69,5 +75,28 @@ export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions):
         }
 
         reporter.captureError(event.reason, context);
-    });
+    };
+
+    target.addEventListener('error', onError);
+    target.addEventListener('unhandledrejection', onUnhandledRejection);
+
+    let installed = true;
+
+    return () => {
+        if (!installed) {
+            return;
+        }
+
+        installed = false;
+
+        // Conditional restore: exactOptionalPropertyTypes forbids assigning undefined back.
+        if (previousErrorHandler === undefined) {
+            delete app.config.errorHandler;
+        } else {
+            app.config.errorHandler = previousErrorHandler;
+        }
+
+        target.removeEventListener('error', onError);
+        target.removeEventListener('unhandledrejection', onUnhandledRejection);
+    };
 }

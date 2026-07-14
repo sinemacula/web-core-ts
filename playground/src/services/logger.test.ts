@@ -31,13 +31,13 @@ describe('logger service', () => {
     });
 
     it('throws before initialisation when logger() is called', () => {
-        expect(() => logger()).toThrow('The logger was accessed before initialisation');
+        expect(() => logger()).toThrow('logger accessed before initialisation');
     });
 
     it('throws again after resetLogger() clears the singleton', () => {
         initialiseLogger(stubLogger);
         resetLogger();
 
-        expect(() => logger()).toThrow('The logger was accessed before initialisation');
+        expect(() => logger()).toThrow('logger accessed before initialisation');
     });
 });

@@ -32,13 +32,13 @@ describe('feature-flags service', () => {
     });
 
     it('throws before initialisation when featureFlags() is called', () => {
-        expect(() => featureFlags()).toThrow('The feature-flag adapter was accessed before initialisation');
+        expect(() => featureFlags()).toThrow('feature-flag adapter accessed before initialisation');
     });
 
     it('throws again after resetFeatureFlags() clears the singleton', () => {
         initialiseFeatureFlags(stubFlags);
         resetFeatureFlags();
 
-        expect(() => featureFlags()).toThrow('The feature-flag adapter was accessed before initialisation');
+        expect(() => featureFlags()).toThrow('feature-flag adapter accessed before initialisation');
     });
 });

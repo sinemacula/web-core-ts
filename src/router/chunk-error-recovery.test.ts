@@ -176,6 +176,42 @@ describe('installChunkErrorRecovery', () => {
         }
     });
 
+    it('returns a teardown that removes the error handler', async () => {
+        const router = buildRouter(() => Promise.reject(chunkImportError()));
+        const storage = new MemoryStorage();
+        const reload = vi.fn();
+        const reporter = fakeReporter();
+
+        const teardown = installChunkErrorRecovery({ router, storage, reporter, reload, clock: () => 1_000 });
+        teardown();
+
+        await navigateToBroken(router);
+
+        expect(reload).not.toHaveBeenCalled();
+        expect(reporter.captureError).not.toHaveBeenCalled();
+        expect(storage.get('chunk-recovery./broken')).toBeNull();
+    });
+
+    it('stops recovering after teardown while earlier recoveries stand', async () => {
+        const router = buildRouter(() => Promise.reject(chunkImportError()));
+        const storage = new MemoryStorage();
+        const reload = vi.fn();
+        let now = 1_000;
+        const clock = () => now;
+
+        const teardown = installChunkErrorRecovery({ router, storage, reload, clock, windowMs: 60_000 });
+        await navigateToBroken(router);
+
+        expect(reload).toHaveBeenCalledTimes(1);
+
+        teardown();
+        now += 60_000;
+        await navigateToBroken(router);
+
+        expect(reload).toHaveBeenCalledTimes(1);
+        expect(storage.get('chunk-recovery./broken')).toBe('1000');
+    });
+
     it('reloads via a full document navigation to globalThis.location when no reload function is provided', async () => {
         const location = { href: '' };
         vi.stubGlobal('location', location);

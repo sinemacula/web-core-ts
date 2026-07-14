@@ -31,13 +31,13 @@ describe('analytics service', () => {
     });
 
     it('throws before initialisation when analytics() is called', () => {
-        expect(() => analytics()).toThrow('The analytics tracker was accessed before initialisation');
+        expect(() => analytics()).toThrow('analytics tracker accessed before initialisation');
     });
 
     it('throws again after resetAnalytics() clears the singleton', () => {
         initialiseAnalytics(stubTracker);
         resetAnalytics();
 
-        expect(() => analytics()).toThrow('The analytics tracker was accessed before initialisation');
+        expect(() => analytics()).toThrow('analytics tracker accessed before initialisation');
     });
 });

@@ -23,7 +23,7 @@ describe('toast service', () => {
     });
 
     it('throws before initialisation when toasts() is called', () => {
-        expect(() => toasts()).toThrow('The toast service was accessed before initialisation');
+        expect(() => toasts()).toThrow('toast service accessed before initialisation');
     });
 
     it('throws again after resetToasts() clears the singleton', () => {
@@ -32,6 +32,6 @@ describe('toast service', () => {
         initialiseToasts(instance);
         resetToasts();
 
-        expect(() => toasts()).toThrow('The toast service was accessed before initialisation');
+        expect(() => toasts()).toThrow('toast service accessed before initialisation');
     });
 });

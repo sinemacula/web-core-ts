@@ -17,7 +17,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import GuestLayout from '@/layouts/guest-layout.vue';
 import { useLoginForm } from '@/modules/auth/composables/use-login-form';
-import { REDIRECT_QUERY_KEY, sanitiseRedirectTarget } from '@/modules/auth/redirect';
+import { REDIRECT_QUERY_KEY, sanitiseRedirectTarget } from '@sinemacula/web-core/session/redirect';
 
 const { t } = useI18n();
 const route = useRoute();

@@ -24,7 +24,7 @@ describe('api service', () => {
     });
 
     it('throws before initialisation when api() is called', () => {
-        expect(() => api()).toThrow('The API client was accessed before initialisation');
+        expect(() => api()).toThrow('http client accessed before initialisation');
     });
 
     it('throws again after resetApi() clears the singleton', () => {
@@ -33,6 +33,6 @@ describe('api service', () => {
         initialiseApi(client);
         resetApi();
 
-        expect(() => api()).toThrow('The API client was accessed before initialisation');
+        expect(() => api()).toThrow('http client accessed before initialisation');
     });
 });

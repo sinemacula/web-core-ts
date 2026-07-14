@@ -5,9 +5,9 @@
  * @copyright 2026 Sine Macula Limited
  */
 
+import { guestOnly } from '@sinemacula/web-core/session/middleware';
 import type { RouteRecordRaw } from 'vue-router';
 
-import { guestOnly } from './middleware/guest-only';
 import { AUTH_ROUTE_NAMES } from './route-names';
 
 export const authRoutes: readonly RouteRecordRaw[] = [

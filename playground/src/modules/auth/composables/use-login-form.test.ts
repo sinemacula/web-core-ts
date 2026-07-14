@@ -15,6 +15,7 @@ import { resolveLoginErrorKey, useLoginForm } from '@/modules/auth/composables/u
 import { initialiseApi, resetApi } from '@/services/api';
 import { initialiseStorage, resetStorage } from '@/services/storage';
 import { FakeHttpClient } from '@/test-support/fake-http-client';
+import { installTestSession, resetSessionContext } from '@/test-support/install-test-session';
 
 /**
  * Build a `Record<string, unknown>` from an array of `[key, value]` pairs.
@@ -78,7 +79,10 @@ describe('useLoginForm', () => {
     let fake: FakeHttpClient;
 
     beforeEach(() => {
-        initialiseStorage(new MemoryStorage());
+        const storage = new MemoryStorage();
+
+        initialiseStorage(storage);
+        installTestSession(storage);
         fake = new FakeHttpClient();
         initialiseApi(fake);
     });
@@ -86,6 +90,7 @@ describe('useLoginForm', () => {
     afterEach(() => {
         resetApi();
         resetStorage();
+        resetSessionContext();
     });
 
     it('initialises with empty fields and no error', () => {

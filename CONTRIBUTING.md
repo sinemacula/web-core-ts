@@ -23,8 +23,8 @@
   ports-and-adapters at the edges. Product and application functionality belongs in `playground/`.
 - No barrel files; consumers import the kernel by subpath (e.g. `@sinemacula/web-core/http/http-client`).
 - Behaviour lives in plain TypeScript; Vue single-file components stay thin (template plus wiring).
-- Cross-module imports between playground modules go through a module's public surface (top-level files such
-  as `auth/middleware.ts`), never into its internals.
+- Cross-module imports between playground modules go through a module's public surface (its `index.ts`),
+  never into its internals.
 - Wire-format keys (snake_case) never appear as object-literal keys; use the `wire()` entry-tuple idiom.
 - New behaviour ships with colocated tests; coverage thresholds are not negotiable.
 - Styling uses the `--sm-*` design tokens; components never hard-code visual values.

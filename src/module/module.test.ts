@@ -8,10 +8,17 @@
 import { describe, expect, it } from 'vitest';
 import { defineComponent } from 'vue';
 
+import type { RouteMiddleware } from '../router/middleware';
+import { next } from '../router/middleware';
 import type { ModuleDefinition } from './module';
-import { collectModuleMessages, collectModuleRoutes, createLocaleLoader } from './module';
+import { collectModuleGuards, collectModuleMessages, collectModuleRoutes, createLocaleLoader } from './module';
 
 const EmptyComponent = defineComponent({ render: () => null });
+
+/** Build a distinct pass-through guard so ordering is observable by identity. */
+function createGuard(): RouteMiddleware {
+    return { handle: () => next() };
+}
 
 describe('createLocaleLoader', () => {
     it('returns the messages when the locale is present in the map', async () => {
@@ -109,5 +116,36 @@ describe('collectModuleMessages', () => {
         const result = await collectModuleMessages([alphaModule, betaModule, gammaModule], 'en-GB');
 
         expect(result).toStrictEqual({ alpha: messagesA });
+    });
+});
+
+describe('collectModuleGuards', () => {
+    it('returns an empty array when no modules are given', () => {
+        expect(collectModuleGuards([])).toStrictEqual([]);
+    });
+
+    it('returns an empty array when no module declares guards', () => {
+        const definition: ModuleDefinition = { name: 'plain', routes: [] };
+
+        expect(collectModuleGuards([definition])).toStrictEqual([]);
+    });
+
+    it('returns the guards of a single module', () => {
+        const guard = createGuard();
+        const definition: ModuleDefinition = { name: 'guarded', routes: [], guards: [guard] };
+
+        expect(collectModuleGuards([definition])).toStrictEqual([guard]);
+    });
+
+    it('flattens guards from all modules in registry order, skipping guardless modules', () => {
+        const guardA = createGuard();
+        const guardB = createGuard();
+        const guardC = createGuard();
+
+        const alphaModule: ModuleDefinition = { name: 'alpha', routes: [], guards: [guardA, guardB] };
+        const betaModule: ModuleDefinition = { name: 'beta', routes: [] };
+        const gammaModule: ModuleDefinition = { name: 'gamma', routes: [], guards: [guardC] };
+
+        expect(collectModuleGuards([alphaModule, betaModule, gammaModule])).toStrictEqual([guardA, guardB, guardC]);
     });
 });
