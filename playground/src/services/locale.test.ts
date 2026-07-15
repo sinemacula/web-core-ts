@@ -31,13 +31,13 @@ describe('locale-switcher service', () => {
     });
 
     it('throws before initialisation when localeSwitcher() is called', () => {
-        expect(() => localeSwitcher()).toThrow('The locale switcher was accessed before initialisation');
+        expect(() => localeSwitcher()).toThrow('locale switcher accessed before initialisation');
     });
 
     it('throws again after resetLocaleSwitcher() clears the singleton', () => {
         initialiseLocaleSwitcher(stubSwitcher);
         resetLocaleSwitcher();
 
-        expect(() => localeSwitcher()).toThrow('The locale switcher was accessed before initialisation');
+        expect(() => localeSwitcher()).toThrow('locale switcher accessed before initialisation');
     });
 });

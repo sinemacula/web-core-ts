@@ -80,7 +80,7 @@ describe('config service', () => {
     });
 
     it('throws before initialisation when config() is called', () => {
-        expect(() => config()).toThrow('Configuration was accessed before initialisation');
+        expect(() => config()).toThrow('configuration accessed before initialisation');
     });
 
     it('throws again after resetConfiguration() clears the singleton', () => {
@@ -89,6 +89,6 @@ describe('config service', () => {
         initialiseConfiguration(env);
         resetConfiguration();
 
-        expect(() => config()).toThrow('Configuration was accessed before initialisation');
+        expect(() => config()).toThrow('configuration accessed before initialisation');
     });
 });

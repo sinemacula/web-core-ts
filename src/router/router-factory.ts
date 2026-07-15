@@ -2,8 +2,10 @@
  * Application router factory.
  *
  * Builds the Vue Router instance from module-contributed routes and installs
- * the middleware pipeline as a global guard. Scroll behaviour restores saved
- * positions, honours hash anchors, and otherwise returns to the top.
+ * the middleware pipeline as a global guard, running any global middleware
+ * before the middleware declared on the matched records. Scroll behaviour
+ * restores saved positions, honours hash anchors, and otherwise returns to
+ * the top.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -12,6 +14,7 @@
 import type { RouteLocationNormalized, RouteRecordRaw, Router, RouterHistory, RouterScrollBehavior } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 
+import type { RouteMiddleware } from './middleware';
 import { runMiddlewarePipeline } from './middleware';
 
 /**
@@ -20,15 +23,20 @@ import { runMiddlewarePipeline } from './middleware';
 export interface RouterFactoryOptions {
     readonly routes: readonly RouteRecordRaw[];
     readonly history?: RouterHistory;
+
+    /** Middleware run on every navigation before matched-record meta middleware. */
+    readonly globalMiddleware?: readonly RouteMiddleware[];
 }
 
 /**
  * Build the application router.
  *
- * @param options - the routes to install and an optional history override
+ * @param options - the routes to install plus optional history and global middleware overrides
  * @returns the configured router
  */
 export function createApplicationRouter(options: RouterFactoryOptions): Router {
+    const globalMiddleware = options.globalMiddleware ?? [];
+
     const router = createRouter({
         history: options.history ?? createWebHistory(),
         routes: [...options.routes],
@@ -36,7 +44,7 @@ export function createApplicationRouter(options: RouterFactoryOptions): Router {
     });
 
     router.beforeEach(async (to, from) => {
-        const result = await runMiddlewarePipeline(collectRouteMiddleware(to), { to, from });
+        const result = await runMiddlewarePipeline([...globalMiddleware, ...collectRouteMiddleware(to)], { to, from });
 
         return result.kind === 'redirect' ? result.to : true;
     });

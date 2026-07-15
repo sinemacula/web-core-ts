@@ -90,4 +90,34 @@ describe('installDocumentTitleSync', () => {
         await router.push('/about');
         expect(target.title).toBe('About | App');
     });
+
+    it('returns a teardown that stops updating the title on navigation', async () => {
+        const { i18n, router } = await buildEnv();
+        const target = document.implementation.createHTMLDocument('test');
+
+        const teardown = installDocumentTitleSync({ router, i18n, appName: 'App', targetDocument: target });
+
+        await router.push('/');
+        expect(target.title).toBe('Home | App');
+
+        teardown();
+
+        await router.push('/about');
+        expect(target.title).toBe('Home | App');
+    });
+
+    it('leaves the title untouched when torn down before any navigation', async () => {
+        const { i18n, router } = await buildEnv();
+        const target = document.implementation.createHTMLDocument('test');
+
+        target.title = 'untouched';
+
+        const teardown = installDocumentTitleSync({ router, i18n, appName: 'App', targetDocument: target });
+
+        teardown();
+
+        await router.push('/about');
+
+        expect(target.title).toBe('untouched');
+    });
 });

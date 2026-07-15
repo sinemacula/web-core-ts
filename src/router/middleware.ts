@@ -10,6 +10,8 @@
  * @copyright 2026 Sine Macula Limited
  */
 
+import './route-meta';
+
 import type { RouteLocationNormalized, RouteLocationRaw } from 'vue-router';
 
 /**

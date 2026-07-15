@@ -30,13 +30,13 @@ describe('reporting service', () => {
     });
 
     it('throws before initialisation when reporting() is called', () => {
-        expect(() => reporting()).toThrow('The error reporter was accessed before initialisation');
+        expect(() => reporting()).toThrow('error reporter accessed before initialisation');
     });
 
     it('throws again after resetReporting() clears the singleton', () => {
         initialiseReporting(stubReporter);
         resetReporting();
 
-        expect(() => reporting()).toThrow('The error reporter was accessed before initialisation');
+        expect(() => reporting()).toThrow('error reporter accessed before initialisation');
     });
 });

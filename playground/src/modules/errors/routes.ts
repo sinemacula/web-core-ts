@@ -18,9 +18,6 @@ export const errorsRoutes: readonly RouteRecordRaw[] = [
             title: 'errors.forbidden.title',
         },
     },
-    // Catch-all: must remain the last route in this array, and this module
-    // must be registered last in the module registry, so that no other
-    // module's route can be shadowed by it.
     {
         path: '/:pathMatch(.*)*',
         name: ERRORS_ROUTE_NAMES.notFound,

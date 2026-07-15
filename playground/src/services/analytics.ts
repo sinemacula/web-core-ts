@@ -1,44 +1,16 @@
 /**
  * Application analytics service.
  *
- * Holds the boot-time {@link AnalyticsTracker} singleton used by every module
- * that needs to track user actions or page views. The bootstrap wires a vendor
- * adapter (e.g. Segment, PostHog); tests wire a null or spy adapter.
+ * Thin delegating re-export of the kernel analytics holder under the
+ * application's established accessor names. `resetAnalytics` clears every
+ * kernel service holder between tests.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
  */
 
-import type { AnalyticsTracker } from '@sinemacula/web-core/analytics/analytics-tracker';
-
-let tracker: AnalyticsTracker | null = null;
-
-/**
- * Install the analytics tracker. Called once by the application bootstrap.
- *
- * @param instance - the analytics tracker to install
- */
-export function initialiseAnalytics(instance: AnalyticsTracker): void {
-    tracker = instance;
-}
-
-/**
- * The active analytics tracker.
- *
- * @returns the active analytics tracker
- * @throws Error when accessed before {@link initialiseAnalytics} has been called
- */
-export function analytics(): AnalyticsTracker {
-    if (tracker === null) {
-        throw new Error('The analytics tracker was accessed before initialisation. Call initialiseAnalytics() first.');
-    }
-
-    return tracker;
-}
-
-/**
- * Discard the analytics tracker singleton. Test use only.
- */
-export function resetAnalytics(): void {
-    tracker = null;
-}
+export {
+    analytics,
+    installAnalytics as initialiseAnalytics,
+    resetWebCoreServices as resetAnalytics,
+} from '@sinemacula/web-core/app/services';

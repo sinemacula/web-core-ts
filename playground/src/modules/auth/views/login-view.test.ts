@@ -21,6 +21,7 @@ import LoginView from '@/modules/auth/views/login-view.vue';
 import { initialiseApi, resetApi } from '@/services/api';
 import { initialiseStorage, resetStorage } from '@/services/storage';
 import { FakeHttpClient } from '@/test-support/fake-http-client';
+import { installTestSession, resetSessionContext } from '@/test-support/install-test-session';
 
 /**
  * Build a `Record<string, unknown>` from an array of `[key, value]` pairs.
@@ -94,7 +95,10 @@ function submitForm(container: HTMLDivElement): void {
 
 describe('LoginView', () => {
     beforeEach(() => {
-        initialiseStorage(new MemoryStorage());
+        const storage = new MemoryStorage();
+
+        initialiseStorage(storage);
+        installTestSession(storage);
         initialiseApi(new FakeHttpClient());
         setActivePinia(createPinia());
     });
@@ -102,6 +106,7 @@ describe('LoginView', () => {
     afterEach(() => {
         resetApi();
         resetStorage();
+        resetSessionContext();
     });
 
     it('renders the login form', () => {

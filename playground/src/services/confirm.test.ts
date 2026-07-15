@@ -23,7 +23,7 @@ describe('confirm service', () => {
     });
 
     it('throws before initialisation when confirmDialogs() is called', () => {
-        expect(() => confirmDialogs()).toThrow('The confirmation dialog service was accessed before initialisation');
+        expect(() => confirmDialogs()).toThrow('confirmation dialog service accessed before initialisation');
     });
 
     it('throws again after resetConfirm() clears the singleton', () => {
@@ -32,6 +32,6 @@ describe('confirm service', () => {
         initialiseConfirm(instance);
         resetConfirm();
 
-        expect(() => confirmDialogs()).toThrow('The confirmation dialog service was accessed before initialisation');
+        expect(() => confirmDialogs()).toThrow('confirmation dialog service accessed before initialisation');
     });
 });

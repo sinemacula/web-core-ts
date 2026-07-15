@@ -36,6 +36,7 @@ function makeReporter(): ErrorReporter & {
 function makeWindow(): Window & {
     dispatchError(init: ErrorEventInit): void;
     dispatchRejection(reason: unknown): void;
+    listenerCount(type: string): number;
 } {
     const listeners = new Map<string, EventListenerOrEventListenerObject[]>();
 
@@ -45,6 +46,17 @@ function makeWindow(): Window & {
 
             existing.push(listener);
             listeners.set(type, existing);
+        },
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject) {
+            const existing = listeners.get(type) ?? [];
+            const index = existing.indexOf(listener);
+
+            if (index !== -1) {
+                existing.splice(index, 1);
+            }
+        },
+        listenerCount(type: string) {
+            return (listeners.get(type) ?? []).length;
         },
         dispatchError(init: ErrorEventInit) {
             const event = new ErrorEvent('error', init);
@@ -75,6 +87,7 @@ function makeWindow(): Window & {
     } as unknown as Window & {
         dispatchError(init: ErrorEventInit): void;
         dispatchRejection(reason: unknown): void;
+        listenerCount(type: string): number;
     };
 
     return win;
@@ -246,13 +259,153 @@ describe('installGlobalErrorHandling', () => {
             const app = createApp(Stub);
             const reporter = makeReporter();
             const addSpy = vi.spyOn(globalThis.window, 'addEventListener');
+            const removeSpy = vi.spyOn(globalThis.window, 'removeEventListener');
 
-            installGlobalErrorHandling({ app, reporter });
+            const teardown = installGlobalErrorHandling({ app, reporter });
 
             expect(addSpy).toHaveBeenCalledWith('error', expect.any(Function));
             expect(addSpy).toHaveBeenCalledWith('unhandledrejection', expect.any(Function));
 
+            teardown();
+
+            const addedError = addSpy.mock.calls.find(call => call[0] === 'error')?.[1];
+            const addedRejection = addSpy.mock.calls.find(call => call[0] === 'unhandledrejection')?.[1];
+            const removedError = removeSpy.mock.calls.find(call => call[0] === 'error')?.[1];
+            const removedRejection = removeSpy.mock.calls.find(call => call[0] === 'unhandledrejection')?.[1];
+
+            expect(removedError).toBe(addedError);
+            expect(removedRejection).toBe(addedRejection);
+
             addSpy.mockRestore();
+            removeSpy.mockRestore();
+        });
+    });
+
+    describe('teardown', () => {
+        it('restores the previous Vue error handler', () => {
+            const app = createApp(Stub);
+            const previous = vi.fn();
+
+            app.config.errorHandler = previous;
+
+            const teardown = installGlobalErrorHandling({ app, reporter: makeReporter(), targetWindow: makeWindow() });
+
+            teardown();
+
+            expect(app.config.errorHandler).toBe(previous);
+        });
+
+        it('resets the Vue error handler to undefined when none was set', () => {
+            const app = createApp(Stub);
+            const teardown = installGlobalErrorHandling({ app, reporter: makeReporter(), targetWindow: makeWindow() });
+
+            teardown();
+
+            expect(app.config.errorHandler).toBeUndefined();
+        });
+
+        it('routes Vue errors to the restored handler instead of the reporter after teardown', () => {
+            const app = createApp(Stub);
+            const reporter = makeReporter();
+            const previous = vi.fn();
+
+            app.config.errorHandler = previous;
+
+            const teardown = installGlobalErrorHandling({ app, reporter, targetWindow: makeWindow() });
+
+            teardown();
+
+            const error = new Error('after teardown');
+
+            app.config.errorHandler?.(error, null, 'render function');
+
+            expect(reporter.captureErrorCalls).toHaveLength(0);
+            expect(previous).toHaveBeenCalledTimes(1);
+            expect(previous).toHaveBeenCalledWith(error, null, 'render function');
+        });
+
+        it('stops capturing window error events after teardown', () => {
+            const app = createApp(Stub);
+            const reporter = makeReporter();
+            const win = makeWindow();
+
+            const teardown = installGlobalErrorHandling({ app, reporter, targetWindow: win });
+
+            teardown();
+
+            win.dispatchError({ error: new Error('x'), message: 'x' });
+
+            expect(reporter.captureErrorCalls).toHaveLength(0);
+        });
+
+        it('stops capturing unhandled rejections after teardown', () => {
+            const app = createApp(Stub);
+            const reporter = makeReporter();
+            const win = makeWindow();
+
+            const teardown = installGlobalErrorHandling({ app, reporter, targetWindow: win });
+
+            teardown();
+
+            win.dispatchRejection(new Error('x'));
+
+            expect(reporter.captureErrorCalls).toHaveLength(0);
+        });
+
+        it('removes exactly the two listeners it added', () => {
+            const app = createApp(Stub);
+            const win = makeWindow();
+
+            const teardown = installGlobalErrorHandling({ app, reporter: makeReporter(), targetWindow: win });
+
+            expect(win.listenerCount('error')).toBe(1);
+            expect(win.listenerCount('unhandledrejection')).toBe(1);
+
+            teardown();
+
+            expect(win.listenerCount('error')).toBe(0);
+            expect(win.listenerCount('unhandledrejection')).toBe(0);
+        });
+
+        it('leaves listeners registered by other consumers in place', () => {
+            const app = createApp(Stub);
+            const win = makeWindow();
+            const other = vi.fn();
+
+            win.addEventListener('error', other);
+
+            const teardown = installGlobalErrorHandling({ app, reporter: makeReporter(), targetWindow: win });
+
+            teardown();
+
+            expect(win.listenerCount('error')).toBe(1);
+
+            win.dispatchError({ error: new Error('x'), message: 'x' });
+
+            expect(other).toHaveBeenCalledTimes(1);
+        });
+
+        it('is a no-op when called a second time', () => {
+            const app = createApp(Stub);
+            const reporter = makeReporter();
+            const win = makeWindow();
+
+            const teardown = installGlobalErrorHandling({ app, reporter, targetWindow: win });
+
+            teardown();
+
+            const replacement = vi.fn();
+
+            app.config.errorHandler = replacement;
+
+            teardown();
+
+            expect(app.config.errorHandler).toBe(replacement);
+
+            win.dispatchError({ error: new Error('x'), message: 'x' });
+            win.dispatchRejection('reason');
+
+            expect(reporter.captureErrorCalls).toHaveLength(0);
         });
     });
 });

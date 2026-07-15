@@ -19,13 +19,15 @@ import { createI18n } from 'vue-i18n';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
 import { AUTH_ROUTE_NAMES } from '@/modules/auth/route-names';
-import { ACCESS_TOKEN_STORAGE_KEY } from '@/modules/auth/stores/auth-store';
 import DashboardView from '@/modules/dashboard/views/dashboard-view.vue';
 import { initialiseApi, resetApi } from '@/services/api';
 import { initialiseConfiguration, resetConfiguration } from '@/services/config';
 import { initialiseLocaleSwitcher, resetLocaleSwitcher } from '@/services/locale';
 import { initialiseStorage, resetStorage } from '@/services/storage';
 import { FakeHttpClient } from '@/test-support/fake-http-client';
+import { installTestSession, resetSessionContext } from '@/test-support/install-test-session';
+
+const ACCESS_TOKEN_STORAGE_KEY = 'auth.access_token';
 
 /**
  * Minimal no-op stub that satisfies the {@link LocaleSwitcher} interface,
@@ -98,6 +100,7 @@ describe('DashboardView', () => {
 
         storage.set(ACCESS_TOKEN_STORAGE_KEY, 'valid-token');
         initialiseStorage(storage);
+        installTestSession(storage);
         initialiseApi(new FakeHttpClient());
         initialiseConfiguration(new Environment(new ObjectEnvironmentSource(wire([['APP_NAME', 'TestApp']]))));
         initialiseLocaleSwitcher(stubLocaleSwitcher);
@@ -109,6 +112,7 @@ describe('DashboardView', () => {
         resetStorage();
         resetConfiguration();
         resetLocaleSwitcher();
+        resetSessionContext();
     });
 
     it('renders the dashboard card', () => {
