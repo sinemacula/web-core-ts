@@ -8,6 +8,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { createServiceHolder } from './service-holder';
+import { SupportError } from './support-error';
 
 interface Widget {
     readonly label: string;
@@ -26,10 +27,10 @@ describe('createServiceHolder', () => {
         expect(() => holder.resolve()).toThrow('toast service accessed before initialisation');
     });
 
-    it('throws a plain Error instance when resolved before install', () => {
+    it('throws a SupportError when resolved before install', () => {
         const holder = createServiceHolder<Widget>('http client');
 
-        expect(() => holder.resolve()).toThrow(Error);
+        expect(() => holder.resolve()).toThrow(SupportError);
     });
 
     it('reports not installed before install', () => {

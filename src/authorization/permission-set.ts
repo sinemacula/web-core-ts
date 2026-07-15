@@ -28,9 +28,6 @@
 export class PermissionSet {
     readonly #granted: readonly string[];
 
-    /**
-     * @param granted - the permission strings this set grants
-     */
     constructor(granted: readonly string[]) {
         this.#granted = granted;
     }

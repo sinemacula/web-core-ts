@@ -36,6 +36,7 @@ describe('FilterScalar', () => {
 describe('FilterOperators', () => {
     it('accepts a fully-populated operator map', () => {
         const ops: FilterOperators = {
+            // biome-ignore-start lint/style/useNamingConvention: toolkit wire-protocol operator keys are $-prefixed
             $eq: 'Alice',
             $neq: 'Bob',
             $gt: 18,
@@ -48,6 +49,7 @@ describe('FilterOperators', () => {
             $contains: 'x',
             $null: true,
             $notNull: true,
+            // biome-ignore-end lint/style/useNamingConvention: toolkit wire-protocol operator keys are $-prefixed
         };
 
         expect(ops.$eq).toBe('Alice');
@@ -58,6 +60,7 @@ describe('FilterOperators', () => {
     });
 
     it('accepts a partial operator map', () => {
+        // biome-ignore lint/style/useNamingConvention: toolkit wire-protocol operator keys are $-prefixed
         const ops: FilterOperators = { $ge: 18 };
 
         expect(ops.$ge).toBe(18);
@@ -69,8 +72,10 @@ describe('FilterTree', () => {
     it('accepts an arbitrary record of unknown values', () => {
         const tree: FilterTree = {
             name: 'Alice',
+            // biome-ignore-start lint/style/useNamingConvention: toolkit wire-protocol operator keys are $-prefixed
             age: { $ge: 18 },
             $and: { status: 'active' },
+            // biome-ignore-end lint/style/useNamingConvention: toolkit wire-protocol operator keys are $-prefixed
         };
 
         expect(tree.name).toBe('Alice');

@@ -1,5 +1,5 @@
 /**
- * Auth module translations — French (France).
+ * Auth module translations - French (France).
  *
  * Namespaced under `auth.` by the module registry.
  *

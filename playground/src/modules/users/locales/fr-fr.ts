@@ -1,5 +1,5 @@
 /**
- * Users module translations — French (France).
+ * Users module translations - French (France).
  *
  * Namespaced under `users.` by the module registry.
  *

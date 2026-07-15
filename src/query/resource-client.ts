@@ -33,6 +33,8 @@ export class ResourceClient<Value> {
     readonly #map: ResourceMapper<Value>;
 
     /**
+     * Construct a client bound to one API resource collection.
+     *
      * @param options - the HTTP client, resource path, and response mapper
      */
     constructor(options: ResourceClientOptions<Value>) {

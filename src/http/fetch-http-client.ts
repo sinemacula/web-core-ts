@@ -134,6 +134,7 @@ export class FetchHttpClient implements HttpClient {
         this.#retryBackoff = options.retry?.backoff ?? new ExponentialBackoff();
     }
 
+    /** Send a GET request; transient failures are retried per the configured retry policy. */
     get<T>(path: string, options?: HttpRequestOptions): Promise<T> {
         return this.#sendAttempt(
             {
@@ -149,6 +150,7 @@ export class FetchHttpClient implements HttpClient {
         );
     }
 
+    /** Send a POST request; transient failures are not retried. */
     post<T>(path: string, body?: unknown, options?: HttpRequestOptions): Promise<T> {
         return this.#sendAttempt(
             { method: 'POST', path, body, options, shouldRetryUnauthorized: true, idempotent: false, parse: 'json' },
@@ -156,6 +158,7 @@ export class FetchHttpClient implements HttpClient {
         );
     }
 
+    /** Send a PUT request; transient failures are not retried. */
     put<T>(path: string, body?: unknown, options?: HttpRequestOptions): Promise<T> {
         return this.#sendAttempt(
             { method: 'PUT', path, body, options, shouldRetryUnauthorized: true, idempotent: false, parse: 'json' },
@@ -163,6 +166,7 @@ export class FetchHttpClient implements HttpClient {
         );
     }
 
+    /** Send a PATCH request; transient failures are not retried. */
     patch<T>(path: string, body?: unknown, options?: HttpRequestOptions): Promise<T> {
         return this.#sendAttempt(
             { method: 'PATCH', path, body, options, shouldRetryUnauthorized: true, idempotent: false, parse: 'json' },
@@ -170,6 +174,7 @@ export class FetchHttpClient implements HttpClient {
         );
     }
 
+    /** Send a DELETE request; transient failures are not retried. */
     delete<T>(path: string, options?: HttpRequestOptions): Promise<T> {
         return this.#sendAttempt(
             {
@@ -185,6 +190,7 @@ export class FetchHttpClient implements HttpClient {
         );
     }
 
+    /** Download a GET response as a raw Blob; transient failures are retried per the retry policy. */
     download(path: string, options?: HttpRequestOptions): Promise<Blob> {
         return this.#sendAttempt<Blob>(
             {
@@ -245,7 +251,7 @@ export class FetchHttpClient implements HttpClient {
     /**
      * Resolve the request through interceptors, dispatch it, and run the
      * 401-refresh-and-retry-once flow. Never notifies the response-error
-     * handler — {@link FetchHttpClient.#sendAttempt} does that once, for the
+     * handler - {@link FetchHttpClient.#sendAttempt} does that once, for the
      * final outcome only.
      *
      * @param sendRequest - the request descriptor
@@ -323,6 +329,13 @@ export class FetchHttpClient implements HttpClient {
         }
     }
 
+    /**
+     * Thread the request through every registered interceptor, in
+     * registration order, so each sees the previous interceptor's output.
+     *
+     * @param initial - the request before any interceptor runs
+     * @returns the request after the final interceptor
+     */
     async #applyInterceptors(initial: HttpRequest): Promise<HttpRequest> {
         let request = initial;
 
@@ -333,6 +346,14 @@ export class FetchHttpClient implements HttpClient {
         return request;
     }
 
+    /**
+     * Perform the fetch, mapping a deliberate abort onto {@link CancelledError}
+     * and any other transport failure onto {@link NetworkError}.
+     *
+     * @param request - the fully-resolved request to send
+     * @param callerSignal - the per-request abort signal, if any
+     * @returns the raw fetch response
+     */
     async #dispatch(request: HttpRequest, callerSignal: AbortSignal | undefined): Promise<Response> {
         const signal = this.#resolveSignal(callerSignal);
 
@@ -347,6 +368,15 @@ export class FetchHttpClient implements HttpClient {
         }
     }
 
+    /**
+     * Build the fetch `RequestInit`, passing FormData and Blob bodies through
+     * unchanged and JSON-serialising any other body with a default
+     * content-type.
+     *
+     * @param request - the resolved request to translate
+     * @param signal - the effective abort signal, or null when none applies
+     * @returns the RequestInit to hand to fetch
+     */
     #buildRequestInit(request: HttpRequest, signal: AbortSignal | null): RequestInit {
         const headers = { ...request.headers };
 
@@ -389,10 +419,24 @@ export class FetchHttpClient implements HttpClient {
         return timeoutSignal === null ? callerSignal : AbortSignal.any([callerSignal, timeoutSignal]);
     }
 
+    /**
+     * Build the per-request timeout signal from the configured timeout.
+     *
+     * @returns a signal that aborts once the timeout elapses, or null when no
+     *          timeout is configured
+     */
     #buildTimeoutSignal(): AbortSignal | null {
         return this.#timeout === null ? null : AbortSignal.timeout(this.#timeout);
     }
 
+    /**
+     * Join the base URL with a request path and append encoded query
+     * parameters, dropping undefined values.
+     *
+     * @param path - the request path, whose leading slashes are trimmed
+     * @param query - the query parameters to encode, if any
+     * @returns the absolute request URL, with a query string when present
+     */
     #buildUrl(path: string, query: QueryParameters | undefined): string {
         const url = `${this.#baseUrl}/${path.replace(/^\/+/u, '')}`;
         const parameters = new URLSearchParams();

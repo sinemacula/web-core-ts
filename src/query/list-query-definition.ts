@@ -4,7 +4,7 @@
  * Module authors call {@link defineListQuery} once per resource list to declare
  * what filters, search, sort columns, and base shaping that list supports.
  * Screen developers receive the definition and interact with it only through
- * {@link useListQuery} — they never read these fields directly.
+ * {@link useListQuery} - they never read these fields directly.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

@@ -44,6 +44,9 @@ export function useFatalBoundary(): FatalBoundary {
         return false;
     });
 
+    /**
+     * Clear the fatal state so the guarded content renders again.
+     */
     function reset(): void {
         fatal.value = false;
     }

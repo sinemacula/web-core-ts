@@ -109,6 +109,9 @@ export class IdleMonitor {
         };
     }
 
+    /**
+     * Reset the countdown to a fresh timeout, unless the monitor is stopped.
+     */
     #rearm(): void {
         if (!this.#started) {
             return;
@@ -118,10 +121,16 @@ export class IdleMonitor {
         this.#arm();
     }
 
+    /**
+     * Schedule the timeout that notifies subscribers once inactivity lapses.
+     */
     #arm(): void {
         this.#timer = setTimeout(this.#onTimeout, this.#timeoutMs);
     }
 
+    /**
+     * Cancel the pending timeout when one is scheduled.
+     */
     #disarm(): void {
         if (this.#timer !== null) {
             clearTimeout(this.#timer);

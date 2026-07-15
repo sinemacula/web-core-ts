@@ -1,5 +1,5 @@
 /**
- * Errors module translations — English (United States).
+ * Errors module translations - English (United States).
  *
  * Namespaced under `errors.` by the module registry.
  *

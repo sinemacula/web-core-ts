@@ -1,5 +1,5 @@
 /**
- * Dashboard module translations — French (France).
+ * Dashboard module translations - French (France).
  *
  * Namespaced under `dashboard.` by the module registry.
  *

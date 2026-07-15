@@ -21,6 +21,7 @@ export class BrowserStorage implements KeyValueStorage {
         this.#storage = storage;
     }
 
+    /** Read from the underlying Web Storage, returning null when it throws. */
     get(key: string): string | null {
         try {
             return this.#storage.getItem(key);
@@ -29,6 +30,7 @@ export class BrowserStorage implements KeyValueStorage {
         }
     }
 
+    /** Write to the underlying Web Storage; a storage failure is swallowed. */
     set(key: string, value: string): void {
         try {
             this.#storage.setItem(key, value);
@@ -37,6 +39,7 @@ export class BrowserStorage implements KeyValueStorage {
         }
     }
 
+    /** Remove from the underlying Web Storage; a storage failure is swallowed. */
     remove(key: string): void {
         try {
             this.#storage.removeItem(key);

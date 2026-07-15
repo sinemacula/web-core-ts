@@ -1,5 +1,5 @@
 /**
- * Auth module translations — English (United States).
+ * Auth module translations - English (United States).
  *
  * Namespaced under `auth.` by the module registry.
  *

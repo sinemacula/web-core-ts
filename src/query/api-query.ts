@@ -2,7 +2,7 @@
  * Immutable fluent query builder for the laravel-api-toolkit 2.x wire protocol.
  *
  * `ApiQuery` is the organisation's structured-query surface over the API
- * toolkit — GraphQL-style shaping: filter, sort, paginate, sparse fields,
+ * toolkit - GraphQL-style shaping: filter, sort, paginate, sparse fields,
  * counts, and aggregates. Every method returns a **new** `ApiQuery` instance;
  * the original is never mutated, making it safe to share a base query across
  * multiple derived queries.
@@ -91,6 +91,17 @@ function mergeOperators(existing: unknown, patch: FilterOperators): FilterOperat
 }
 
 /**
+ * Build a single-operator filter patch without a literal operator key.
+ *
+ * @param operator - the wire-protocol operator (for example `$in`)
+ * @param value - the operand stored under the operator
+ * @returns a one-entry operator map
+ */
+function operatorPatch(operator: string, value: unknown): FilterOperators {
+    return Object.fromEntries([[operator, value]]) as FilterOperators;
+}
+
+/**
  * Merge a nested object map entry.
  *
  * Used to combine repeated `$and` / `$or` group calls and `$has` / `$hasnt`
@@ -118,6 +129,7 @@ function mergeGroup(existing: unknown, patch: FilterTree): FilterTree {
  * preserved; the last call wins and the entry appears at the end of the sort
  * list.
  */
+// eslint-disable-next-line @sinemacula/max-methods-per-class -- fluent immutable query builder whose public methods map 1:1 to the laravel-api-toolkit wire operators; splitting it would break method chaining
 export class ApiQuery {
     readonly #state: QueryState;
 
@@ -177,7 +189,7 @@ export class ApiQuery {
      * @returns a new `ApiQuery` with the filter applied
      */
     whereIn(field: string, values: readonly FilterScalar[]): ApiQuery {
-        return this.#withFilter(field, mergeOperators(this.#state.filters[field], { $in: values }));
+        return this.#withFilter(field, mergeOperators(this.#state.filters[field], operatorPatch('$in', values)));
     }
 
     /**
@@ -188,7 +200,7 @@ export class ApiQuery {
      * @returns a new `ApiQuery` with the filter applied
      */
     whereBetween(field: string, pair: readonly [FilterScalar, FilterScalar]): ApiQuery {
-        return this.#withFilter(field, mergeOperators(this.#state.filters[field], { $between: pair }));
+        return this.#withFilter(field, mergeOperators(this.#state.filters[field], operatorPatch('$between', pair)));
     }
 
     /**
@@ -199,7 +211,7 @@ export class ApiQuery {
      * @returns a new `ApiQuery` with the filter applied
      */
     whereContains(field: string, value: FilterScalar | readonly FilterScalar[]): ApiQuery {
-        return this.#withFilter(field, mergeOperators(this.#state.filters[field], { $contains: value }));
+        return this.#withFilter(field, mergeOperators(this.#state.filters[field], operatorPatch('$contains', value)));
     }
 
     /**
@@ -209,7 +221,7 @@ export class ApiQuery {
      * @returns a new `ApiQuery` with the filter applied
      */
     whereNull(field: string): ApiQuery {
-        return this.#withFilter(field, mergeOperators(this.#state.filters[field], { $null: true }));
+        return this.#withFilter(field, mergeOperators(this.#state.filters[field], operatorPatch('$null', true)));
     }
 
     /**
@@ -219,7 +231,7 @@ export class ApiQuery {
      * @returns a new `ApiQuery` with the filter applied
      */
     whereNotNull(field: string): ApiQuery {
-        return this.#withFilter(field, mergeOperators(this.#state.filters[field], { $notNull: true }));
+        return this.#withFilter(field, mergeOperators(this.#state.filters[field], operatorPatch('$notNull', true)));
     }
 
     // -------------------------------------------------------------------------

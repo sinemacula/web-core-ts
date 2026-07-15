@@ -14,6 +14,8 @@ import type { HttpClient } from '@sinemacula/web-core/http/http-client';
 import type { RawRecord, ResourceMapper } from '@sinemacula/web-core/query/envelope';
 import { ResourceClient } from '@sinemacula/web-core/query/resource-client';
 
+import { PlaygroundError } from '@/errors/playground-error';
+
 /**
  * A row in the users list.
  */
@@ -29,7 +31,7 @@ export interface UserListItem {
  *
  * @param raw - the raw wire record
  * @returns the mapped user row
- * @throws Error when a required field is missing or of the wrong type
+ * @throws PlaygroundError when a required field is missing or of the wrong type
  */
 export const mapUserRow: ResourceMapper<UserListItem> = (raw: RawRecord): UserListItem => {
     if (
@@ -38,7 +40,7 @@ export const mapUserRow: ResourceMapper<UserListItem> = (raw: RawRecord): UserLi
         typeof raw.email !== 'string' ||
         typeof raw.created_at !== 'string'
     ) {
-        throw new Error('The user row did not match the expected shape.');
+        throw new PlaygroundError('The user row did not match the expected shape.');
     }
 
     return {

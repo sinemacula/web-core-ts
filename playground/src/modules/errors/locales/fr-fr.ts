@@ -1,5 +1,5 @@
 /**
- * Errors module translations — French (France).
+ * Errors module translations - French (France).
  *
  * Namespaced under `errors.` by the module registry.
  *

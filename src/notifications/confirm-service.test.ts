@@ -138,7 +138,7 @@ describe('ConfirmService', () => {
             expect(thirdResult).toBe(true);
         });
 
-        it('clears the queue fully — no active request after settling the last', async () => {
+        it('clears the queue fully - no active request after settling the last', async () => {
             const service = new ConfirmService();
 
             const first = service.confirm({ title: 'first', message: 'msg' });

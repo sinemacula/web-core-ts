@@ -81,10 +81,24 @@ export function useRouteQueryState(router: Router, options: RouteQueryStateOptio
         return result;
     });
 
+    /**
+     * Read the resolved value of a managed key.
+     *
+     * @param key - the managed key to read
+     * @returns the resolved value, or an empty string when the key is unmanaged
+     */
     function get(key: string): string {
         return values.value[key] ?? '';
     }
 
+    /**
+     * Merge a patch into the URL query, leaving unmanaged parameters untouched.
+     *
+     * A null value removes its key; keys outside `defaults` are ignored.
+     *
+     * @param patch - the managed keys to set, or null to clear
+     * @returns a promise that settles once the router navigation completes
+     */
     async function set(patch: Readonly<Record<string, string | null>>): Promise<void> {
         const current = router.currentRoute.value.query;
         const next: LocationQuery = { ...current };

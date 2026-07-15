@@ -162,7 +162,7 @@ describe('useApiQuery', () => {
             expect(parameters.value.page).toBe(3);
         });
 
-        it('returns a fresh ApiQuery instance from apply — not mutated original', () => {
+        it('returns a fresh ApiQuery instance from apply - not mutated original', () => {
             const { apply } = useApiQuery();
             let capturedInput: ApiQuery | undefined;
 

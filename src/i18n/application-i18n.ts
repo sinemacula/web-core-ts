@@ -19,6 +19,7 @@ import { createI18n } from 'vue-i18n';
 import type { LocaleMessages, ModuleDefinition } from '../module/module';
 import { collectModuleMessages } from '../module/module';
 import type { ModuleMessageSource } from '../module/module-registry';
+import { I18nError } from './i18n-error';
 import type { LocaleService } from './locale-service';
 
 /**
@@ -133,7 +134,7 @@ export interface LocaleSwitcher {
      * Resolve, persist and activate a new locale.
      *
      * @param locale - the requested locale (matched against the enabled set)
-     * @throws Error when `locale` does not match any enabled locale
+     * @throws {@link I18nError} when `locale` does not match any enabled locale
      */
     switchTo(locale: string): Promise<void>;
 }
@@ -158,7 +159,7 @@ export function createLocaleSwitcher(options: LocaleSwitcherOptions): LocaleSwit
             const matched = options.localeService.match(locale);
 
             if (matched === null) {
-                throw new Error(`Cannot switch to locale "${locale}": it is not an enabled locale.`);
+                throw new I18nError(`Cannot switch to locale "${locale}": it is not an enabled locale.`);
             }
 
             options.localeService.persist(matched);
@@ -186,8 +187,8 @@ export function createLocaleSwitcher(options: LocaleSwitcherOptions): LocaleSwit
  *
  * @param options - the activation options
  * @param locale - the locale whose messages are loaded
- * @throws Error when collisions are set to error and a module name equals a
- *   shared top-level message key
+ * @throws {@link I18nError} when collisions are set to error and a module name
+ *   equals a shared top-level message key
  */
 async function installLocaleMessages(options: ActivateLocaleOptions, locale: string): Promise<void> {
     const sharedLoader = options.sharedLoaders?.[locale];
@@ -203,7 +204,7 @@ async function installLocaleMessages(options: ActivateLocaleOptions, locale: str
             : undefined;
 
     if (collision !== undefined) {
-        throw new Error(
+        throw new I18nError(
             `Module "${collision}" collides with a shared top-level translation key for locale "${locale}".`,
         );
     }

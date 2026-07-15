@@ -16,6 +16,12 @@ import { isSessionContextInstalled, sessionContext } from './session-context';
 
 const DEFAULT_LOGIN_PATH = '/login';
 
+/**
+ * Resolve the login-path prefix that guards against a redirect loop.
+ *
+ * @returns the installed session context's configured login path, or the
+ *   built-in default when no session context is installed
+ */
 function defaultLoginPath(): string {
     return isSessionContextInstalled() ? sessionContext().routes.loginPath : DEFAULT_LOGIN_PATH;
 }

@@ -19,7 +19,7 @@ describe('usersRoutes', () => {
     const [route] = usersRoutes;
 
     if (route === undefined) {
-        throw new Error('usersRoutes is empty — at least one route is required');
+        throw new Error('usersRoutes is empty - at least one route is required');
     }
 
     beforeEach(() => {

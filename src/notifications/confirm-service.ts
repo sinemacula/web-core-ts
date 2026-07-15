@@ -3,7 +3,7 @@
  *
  * This service owns only the reactive state (the active confirmation request)
  * and the resolution lifecycle. Rendering is entirely the application's
- * concern — a thin host component subscribes to {@link ConfirmService.active}
+ * concern - a thin host component subscribes to {@link ConfirmService.active}
  * and renders the dialog; this service never touches the DOM.
  *
  * Sequential semantics: only one confirmation dialog is surface at a time.

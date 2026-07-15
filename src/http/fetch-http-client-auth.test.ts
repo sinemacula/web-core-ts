@@ -1,5 +1,5 @@
 /**
- * Unit tests for FetchHttpClient — authentication flows, network errors,
+ * Unit tests for FetchHttpClient - authentication flows, network errors,
  * signal/timeout, default fetch fallback, and download-specific auth handling.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
@@ -89,7 +89,7 @@ function makeAbortAwareFetch(): ReturnType<typeof makeFetch> {
 // Request interceptors
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — request interceptors', () => {
+describe('FetchHttpClient - request interceptors', () => {
     it('runs zero interceptors without error', async () => {
         const fetchFn = makeFetch(async () => jsonResponse({ ok: true }));
         const client = makeClient(fetchFn, { requestInterceptors: [] });
@@ -160,7 +160,7 @@ describe('FetchHttpClient — request interceptors', () => {
 // 401 / unauthorized handling
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — 401 unauthorized handling', () => {
+describe('FetchHttpClient - 401 unauthorized handling', () => {
     it('retries the request exactly once when onUnauthorized returns true', async () => {
         const fetchFn = vi
             .fn<(...args: FetchArgs) => Promise<Response>>()
@@ -255,10 +255,10 @@ describe('FetchHttpClient — 401 unauthorized handling', () => {
 });
 
 // ---------------------------------------------------------------------------
-// download() — interceptors and 401 handling
+// download() - interceptors and 401 handling
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — download interceptors and 401 handling', () => {
+describe('FetchHttpClient - download interceptors and 401 handling', () => {
     it('applies a bearer-token interceptor to download requests', async () => {
         const fetchFn = makeFetch(async () => new Response(new Blob(['bytes']), { status: 200 }));
         const bearerInterceptor = vi.fn(request => ({
@@ -305,7 +305,7 @@ describe('FetchHttpClient — download interceptors and 401 handling', () => {
 // Network failure
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — network failure', () => {
+describe('FetchHttpClient - network failure', () => {
     it('throws NetworkError when fetch rejects', async () => {
         const fetchFn = vi
             .fn<(...args: FetchArgs) => Promise<Response>>()
@@ -358,7 +358,7 @@ describe('FetchHttpClient — network failure', () => {
 // Cancellation
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — cancellation', () => {
+describe('FetchHttpClient - cancellation', () => {
     it('throws CancelledError when the fetch rejection is an AbortError, even without a caller signal', async () => {
         const fetchFn = vi
             .fn<(...args: FetchArgs) => Promise<Response>>()
@@ -402,7 +402,7 @@ describe('FetchHttpClient — cancellation', () => {
 // Signal / timeout
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — signal and timeout', () => {
+describe('FetchHttpClient - signal and timeout', () => {
     it('passes the caller signal when provided', async () => {
         const fetchFn = makeFetch(async () => jsonResponse({}));
         const client = makeClient(fetchFn);
@@ -472,10 +472,10 @@ describe('FetchHttpClient — signal and timeout', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Default fetchFn — uses globalThis.fetch
+// Default fetchFn - uses globalThis.fetch
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — default fetchFn', () => {
+describe('FetchHttpClient - default fetchFn', () => {
     afterEach(() => {
         vi.unstubAllGlobals();
     });

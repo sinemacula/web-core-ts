@@ -677,7 +677,7 @@ describe('WebSocketConnection', () => {
             conn.connect();
             sockets.at(0)?.emitOpen();
 
-            // No handler registered — must not throw.
+            // No handler registered - must not throw.
             expect(() => sockets.at(0)?.emitMessage('hello')).not.toThrow();
         });
 

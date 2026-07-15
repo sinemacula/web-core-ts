@@ -463,13 +463,13 @@ describe('createSessionModule', () => {
             const harness = createHarness();
 
             expect(sessionContext().storeId).toBe('auth');
-            expect((useSessionStore(harness.pinia) as unknown as { $id: string }).$id).toBe('auth');
+            expect((useSessionStore(harness.pinia) as unknown as Record<'$id', string>).$id).toBe('auth');
         });
 
         it('registers the session store under a custom id', () => {
             const harness = createHarness({ storeId: 'session-custom' });
 
-            expect((useSessionStore(harness.pinia) as unknown as { $id: string }).$id).toBe('session-custom');
+            expect((useSessionStore(harness.pinia) as unknown as Record<'$id', string>).$id).toBe('session-custom');
         });
 
         it('hydrates a legacy persisted expiry through the wire-timestamp parser', () => {

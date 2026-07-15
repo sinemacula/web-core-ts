@@ -19,7 +19,7 @@ describe('dashboardRoutes', () => {
     const [route] = dashboardRoutes;
 
     if (route === undefined) {
-        throw new Error('dashboardRoutes is empty — at least one route is required');
+        throw new Error('dashboardRoutes is empty - at least one route is required');
     }
 
     beforeEach(() => {

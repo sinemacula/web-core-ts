@@ -13,9 +13,6 @@
  * An invalid bootstrap preset option combination.
  */
 export class WebCoreAppError extends Error {
-    /**
-     * @param message - description of the invalid option combination
-     */
     constructor(message: string) {
         super(message);
         this.name = 'WebCoreAppError';

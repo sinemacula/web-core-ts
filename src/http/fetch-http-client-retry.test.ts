@@ -1,5 +1,5 @@
 /**
- * Unit tests for FetchHttpClient — opt-in transient retry policy.
+ * Unit tests for FetchHttpClient - opt-in transient retry policy.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -41,7 +41,7 @@ function fixedBackoff(delay: number): ExponentialBackoff {
     return new ExponentialBackoff({ initialDelay: delay, multiplier: 1, maxDelay: delay });
 }
 
-describe('FetchHttpClient — transient retry', () => {
+describe('FetchHttpClient - transient retry', () => {
     beforeEach(() => {
         vi.useFakeTimers();
     });

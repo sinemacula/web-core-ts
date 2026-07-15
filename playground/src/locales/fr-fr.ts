@@ -1,5 +1,5 @@
 /**
- * Shared application translations — French (France).
+ * Shared application translations - French (France).
  *
  * Module-specific translations live with their module; only genuinely
  * cross-cutting strings belong here.

@@ -21,6 +21,12 @@ export class ChainEnvironmentSource implements EnvironmentSource {
         this.#sources = sources;
     }
 
+    /**
+     * Return the value from the first source in the chain that defines `key`.
+     *
+     * @param key - the environment variable name
+     * @returns the first defined value, or undefined when no source defines it
+     */
     get(key: string): string | undefined {
         for (const source of this.#sources) {
             const value = source.get(key);

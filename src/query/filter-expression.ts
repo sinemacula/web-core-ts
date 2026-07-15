@@ -38,7 +38,7 @@
  * Bare array form: `{ "$has": ["posts", "comments"] }`
  * Conditioned form: `{ "$has": { "posts": { "published": true } } }`
  * Mixed form (bare + conditioned): use the object form with `{}` for bare
- * relations — `{ "$has": { "posts": {}, "comments": { "title": "X" } } }`.
+ * relations - `{ "$has": { "posts": {}, "comments": { "title": "X" } } }`.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -54,6 +54,7 @@ export type FilterScalar = string | number | boolean;
  * `{ "$ge": 18, "$le": 65 }`.
  */
 export interface FilterOperators {
+    // biome-ignore-start lint/style/useNamingConvention: toolkit wire-protocol operator keys are $-prefixed
     readonly $eq?: FilterScalar;
     readonly $neq?: FilterScalar;
     readonly $gt?: FilterScalar;
@@ -66,6 +67,7 @@ export interface FilterOperators {
     readonly $contains?: FilterScalar | readonly FilterScalar[];
     readonly $null?: true;
     readonly $notNull?: true;
+    // biome-ignore-end lint/style/useNamingConvention: toolkit wire-protocol operator keys are $-prefixed
 }
 
 /**

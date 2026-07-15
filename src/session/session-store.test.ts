@@ -539,7 +539,7 @@ describe('useSessionStore', () => {
 
     describe('store id', () => {
         it('registers under the auth id from the context by default', () => {
-            const store = useSessionStore() as unknown as { $id: string };
+            const store = useSessionStore() as unknown as Record<'$id', string>;
 
             expect(store.$id).toBe('auth');
         });
@@ -548,7 +548,7 @@ describe('useSessionStore', () => {
             resetSessionContext();
             installTestContext({ storeId: 'custom-session' });
 
-            const store = useSessionStore() as unknown as { $id: string };
+            const store = useSessionStore() as unknown as Record<'$id', string>;
 
             expect(store.$id).toBe('custom-session');
         });

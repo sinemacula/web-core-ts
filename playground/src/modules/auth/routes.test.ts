@@ -19,7 +19,7 @@ describe('authRoutes', () => {
     const [route] = authRoutes;
 
     if (route === undefined) {
-        throw new Error('authRoutes is empty — at least one route is required');
+        throw new Error('authRoutes is empty - at least one route is required');
     }
 
     beforeEach(() => {

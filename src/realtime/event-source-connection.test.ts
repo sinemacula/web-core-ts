@@ -297,7 +297,7 @@ describe('EventSourceConnection', () => {
 
             vi.advanceTimersByTime(1_000);
 
-            // Still only the original source — reconnect was cancelled.
+            // Still only the original source - reconnect was cancelled.
             expect(sources).toHaveLength(1);
         });
 

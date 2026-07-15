@@ -6,6 +6,8 @@
  * @copyright 2026 Sine Macula Limited
  */
 
+import { SupportError } from './support-error';
+
 /**
  * A named slot for a single application-wide service instance.
  */
@@ -21,7 +23,7 @@ export interface ServiceHolder<T> {
      * Return the installed instance.
      *
      * @returns the installed instance
-     * @throws Error when nothing has been installed
+     * @throws {@link SupportError} when nothing has been installed
      */
     resolve(): T;
 
@@ -55,7 +57,7 @@ export function createServiceHolder<T>(name: string): ServiceHolder<T> {
         },
         resolve(): T {
             if (!installed) {
-                throw new Error(`${name} accessed before initialisation`);
+                throw new SupportError(`${name} accessed before initialisation`);
             }
 
             return instance as T;

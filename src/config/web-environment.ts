@@ -26,6 +26,8 @@ const DEFAULT_BUILD_TIME_PREFIX = 'VITE_';
  */
 export class ConfigurationError extends Error {
     /**
+     * Construct a configuration error describing the missing keys.
+     *
      * @param message - description of the missing keys
      */
     constructor(message: string) {

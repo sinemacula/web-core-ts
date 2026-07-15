@@ -1,5 +1,5 @@
 /**
- * Unit tests for FetchHttpClient — request construction (verbs, URLs,
+ * Unit tests for FetchHttpClient - request construction (verbs, URLs,
  * query parameters, body/content-type, default headers).
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
@@ -86,7 +86,7 @@ function lastHeaders(fn: ReturnType<typeof makeFetch>): Record<string, string> {
 // HTTP verbs
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — verbs', () => {
+describe('FetchHttpClient - verbs', () => {
     it('GET sends a GET request to the correct URL', async () => {
         const fetchFn = makeFetch(async () => jsonResponse({ ok: true }));
         const client = makeClient(fetchFn);
@@ -138,7 +138,7 @@ describe('FetchHttpClient — verbs', () => {
 // URL construction
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — URL construction', () => {
+describe('FetchHttpClient - URL construction', () => {
     it('trims a trailing slash from baseUrl', async () => {
         const fetchFn = makeFetch(async () => jsonResponse({}));
         const client = new FetchHttpClient({ baseUrl: 'https://api.example.com/', fetchFn });
@@ -180,7 +180,7 @@ describe('FetchHttpClient — URL construction', () => {
 // Query parameters
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — query parameters', () => {
+describe('FetchHttpClient - query parameters', () => {
     it('appends string query params', async () => {
         const fetchFn = makeFetch(async () => jsonResponse([]));
         const client = makeClient(fetchFn);
@@ -231,7 +231,7 @@ describe('FetchHttpClient — query parameters', () => {
 // Request body & content-type
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — body and content-type', () => {
+describe('FetchHttpClient - body and content-type', () => {
     it('serialises the body to JSON for POST', async () => {
         const fetchFn = makeFetch(async () => jsonResponse({ id: 1 }));
         const client = makeClient(fetchFn);
@@ -341,7 +341,7 @@ describe('FetchHttpClient — body and content-type', () => {
 // Default headers
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — defaultHeaders', () => {
+describe('FetchHttpClient - defaultHeaders', () => {
     it('merges default headers into every request', async () => {
         const fetchFn = makeFetch(async () => jsonResponse({}));
         const client = makeClient(fetchFn, { defaultHeaders: { 'x-api-key': 'secret' } });

@@ -460,7 +460,7 @@ describe('createWebCoreApp', () => {
                                 received.push(instance);
 
                                 return {
-                                    $dispose: () => {
+                                    $dispose() {
                                         // Disposal ordering is covered separately.
                                     },
                                 };
@@ -952,12 +952,12 @@ describe('createWebCoreApp', () => {
                         name: 'alpha',
                         stores: [
                             () => ({
-                                $dispose: () => {
+                                $dispose() {
                                     order.push('dispose:store-1');
                                 },
                             }),
                             () => ({
-                                $dispose: () => {
+                                $dispose() {
                                     order.push('dispose:store-2');
                                 },
                             }),
