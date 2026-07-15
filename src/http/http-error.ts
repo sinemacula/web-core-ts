@@ -23,9 +23,9 @@ export class NetworkError extends Error {
 }
 
 /**
- * The request was deliberately cancelled — the caller's `AbortSignal` fired,
+ * The request was deliberately cancelled - the caller's `AbortSignal` fired,
  * or the effective signal (which may compose a caller signal with a
- * configured timeout) reports aborted — rather than the transport genuinely
+ * configured timeout) reports aborted - rather than the transport genuinely
  * failing. UIs generally suppress error handling for this type entirely; it
  * composes with {@link useResource}, which already swallows a run's own
  * signal-abort rejection instead of surfacing it as `error`. Unlike

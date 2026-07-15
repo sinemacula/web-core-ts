@@ -7,7 +7,7 @@
  * instead of leaving the container.
  *
  * Design decisions:
- * - No Vue lifecycle hooks (`onMounted`, `onUnmounted`) — the host is
+ * - No Vue lifecycle hooks (`onMounted`, `onUnmounted`) - the host is
  *   responsible for calling `activate`/`deactivate` from watchers. This makes
  *   the composable unit-testable with a plain happy-dom container without
  *   needing to mount a Vue component.
@@ -104,6 +104,10 @@ export function useFocusTrap(container: Ref<HTMLElement | null>): FocusTrapContr
     let previouslyFocused: HTMLElement | null = null;
     let keydownHandler: ((event: KeyboardEvent) => void) | null = null;
 
+    /**
+     * Remember the active element, focus the first trap target, and intercept
+     * Tab. No-op when the container is absent or holds nothing focusable.
+     */
     function activate(): void {
         const el = container.value;
 
@@ -132,6 +136,9 @@ export function useFocusTrap(container: Ref<HTMLElement | null>): FocusTrapContr
         el.addEventListener('keydown', keydownHandler);
     }
 
+    /**
+     * Stop intercepting Tab and restore focus to the pre-activation element.
+     */
     function deactivate(): void {
         const el = container.value;
 

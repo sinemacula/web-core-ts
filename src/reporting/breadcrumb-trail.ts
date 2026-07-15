@@ -36,6 +36,8 @@ export class BreadcrumbTrail {
     #entries: RecordedBreadcrumb[] = [];
 
     /**
+     * Start an empty trail bounded to a fixed capacity, timestamped by `clock`.
+     *
      * @param capacity - maximum number of breadcrumbs to retain (default 50)
      * @param clock - timestamp source, injected for testability (default Date.now)
      */

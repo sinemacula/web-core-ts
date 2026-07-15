@@ -33,8 +33,8 @@ import { StaticFeatureFlags } from '../feature-flags/static-feature-flags';
 import type { HttpClient, RequestInterceptor, ResponseErrorHandler } from '../http/http-client';
 import type { ApplicationI18n, LocaleFormats, LocaleSwitcher } from '../i18n/application-i18n';
 import type { Logger } from '../logging/logger';
-import type { LocaleMessages, ModuleDefinition, ResolvedPlatform } from '../module/module';
-import type { ModuleHttpContributions } from '../module/module-registry';
+import type { LocaleMessages, ModuleDefinition, ModuleStoreFactory, ResolvedPlatform } from '../module/module';
+import type { ModuleHttpContributions, ModuleRegistry } from '../module/module-registry';
 import { bootModules, createModuleRegistry, registerModules } from '../module/module-registry';
 import { ConfirmService } from '../notifications/confirm-service';
 import { ToastService } from '../notifications/toast-service';
@@ -332,6 +332,54 @@ export interface WebCoreApp<T extends WebCoreConfig> {
 }
 
 /**
+ * The kernel services and Vue application produced by the foundation phases.
+ */
+interface AppFoundation<T extends WebCoreConfig> {
+    readonly environment: Environment;
+    readonly repository: ConfigRepository<T & Record<string, unknown>>;
+    readonly settings: Readonly<T>;
+    readonly storage: KeyValueStorage;
+    readonly registry: ModuleRegistry;
+    readonly app: App<Element>;
+    readonly pinia: Pinia;
+    readonly flags: FeatureFlags;
+    readonly toastService: ToastService;
+    readonly confirmService: ConfirmService;
+    readonly observability: WiredObservability;
+}
+
+/**
+ * The HTTP client, eager store handles and locale wiring from the module phases.
+ */
+interface ModuleLayer {
+    readonly http: HttpClient;
+    readonly storeHandles: readonly ReturnType<ModuleStoreFactory>[];
+    readonly i18n: ApplicationI18n;
+    readonly switcher: LocaleSwitcher;
+}
+
+/**
+ * The router and teardown handles from the app-integration phases.
+ */
+interface AppIntegration {
+    readonly router: Router;
+    readonly titleSyncTeardown: () => void;
+    readonly errorHandlingTeardown: () => void;
+    readonly pageTrackingTeardown: () => void;
+    readonly moduleTeardown: () => void;
+}
+
+/**
+ * The realtime connection, monitors and chunk-recovery teardown from the
+ * release phases.
+ */
+interface ReleaseLayer {
+    readonly chunkRecoveryTeardown: (() => void) | null;
+    readonly realtimeConnection: RealtimeConnection | null;
+    readonly monitors: WiredMonitors;
+}
+
+/**
  * Boot a web application through the kernel's phase sequence.
  *
  * @param options - the application's modules, configuration and overrides
@@ -343,6 +391,29 @@ export async function createWebCoreApp<T extends WebCoreConfig>(options: WebCore
     const platform = resolvePlatform(options.platform);
     const runtimeUrl = options.config.runtimeUrl ?? RUNTIME_ENVIRONMENT_URL;
 
+    const foundation = await bootFoundation(options, platform, runtimeUrl);
+    const moduleLayer = await bootModuleLayer(options, platform, foundation);
+    const integration = await wireAppIntegration(options, platform, foundation, moduleLayer);
+    const release = wireReleaseMonitors(options, platform, runtimeUrl, foundation, integration);
+
+    return assembleApp(foundation, moduleLayer, integration, release);
+}
+
+/**
+ * Run the foundation phases: fetch the runtime environment, freeze the
+ * configuration, install storage, feature flags and notifications, create the
+ * Vue application, and resolve observability.
+ *
+ * @param options - the application's modules, configuration and overrides
+ * @param platform - the resolved platform seams
+ * @param runtimeUrl - the runtime document URL
+ * @returns the kernel services and application feeding the later phases
+ */
+async function bootFoundation<T extends WebCoreConfig>(
+    options: WebCoreAppOptions<T>,
+    platform: ResolvedPlatform,
+    runtimeUrl: string,
+): Promise<AppFoundation<T>> {
     recordPhase('runtime-environment');
 
     const runtime = await fetchRuntimeEnvironment(platform.fetchFn, runtimeUrl);
@@ -390,6 +461,37 @@ export async function createWebCoreApp<T extends WebCoreConfig>(options: WebCore
 
     const observability = resolveObservability(settings, options.observability);
 
+    return {
+        environment,
+        repository,
+        settings,
+        storage,
+        registry,
+        app,
+        pinia,
+        flags,
+        toastService,
+        confirmService,
+        observability,
+    };
+}
+
+/**
+ * Run the module phases: register modules, build the HTTP client, instantiate
+ * eager stores, and wire internationalisation.
+ *
+ * @param options - the application's modules, configuration and overrides
+ * @param platform - the resolved platform seams
+ * @param foundation - the services and application from the foundation phases
+ * @returns the HTTP client, eager store handles and locale wiring
+ */
+async function bootModuleLayer<T extends WebCoreConfig>(
+    options: WebCoreAppOptions<T>,
+    platform: ResolvedPlatform,
+    foundation: AppFoundation<T>,
+): Promise<ModuleLayer> {
+    const { settings, repository, environment, storage, registry, app, pinia } = foundation;
+
     recordPhase('register-modules');
 
     const contributions = registerModules(registry.modules, {
@@ -415,6 +517,28 @@ export async function createWebCoreApp<T extends WebCoreConfig>(options: WebCore
     const { i18n, switcher } = await resolveLocale(settings, registry.modules, storage, platform, options);
 
     app.use(i18n);
+
+    return { http, storeHandles, i18n, switcher };
+}
+
+/**
+ * Run the app-integration phases: wire the router, install global error
+ * handling and page tracking, then boot the modules.
+ *
+ * @param options - the application's modules, configuration and overrides
+ * @param platform - the resolved platform seams
+ * @param foundation - the services and application from the foundation phases
+ * @param moduleLayer - the HTTP client and locale wiring from the module phases
+ * @returns the router and the teardown handles installed by these phases
+ */
+async function wireAppIntegration<T extends WebCoreConfig>(
+    options: WebCoreAppOptions<T>,
+    platform: ResolvedPlatform,
+    foundation: AppFoundation<T>,
+    moduleLayer: ModuleLayer,
+): Promise<AppIntegration> {
+    const { settings, repository, storage, registry, app, pinia, observability } = foundation;
+    const { http, i18n } = moduleLayer;
 
     recordPhase('router');
 
@@ -455,6 +579,30 @@ export async function createWebCoreApp<T extends WebCoreConfig>(options: WebCore
         platform,
     });
 
+    return { router, titleSyncTeardown, errorHandlingTeardown, pageTrackingTeardown, moduleTeardown };
+}
+
+/**
+ * Run the release phases: wire chunk-load recovery, connect realtime, and
+ * start the update and connectivity monitors.
+ *
+ * @param options - the application's modules, configuration and overrides
+ * @param platform - the resolved platform seams
+ * @param runtimeUrl - the runtime document URL, the default monitor poll target
+ * @param foundation - the services and application from the foundation phases
+ * @param integration - the router wired by the app-integration phases
+ * @returns the chunk-recovery teardown, realtime connection and monitors
+ */
+function wireReleaseMonitors<T extends WebCoreConfig>(
+    options: WebCoreAppOptions<T>,
+    platform: ResolvedPlatform,
+    runtimeUrl: string,
+    foundation: AppFoundation<T>,
+    integration: AppIntegration,
+): ReleaseLayer {
+    const { settings, storage, observability } = foundation;
+    const { router } = integration;
+
     recordPhase('chunk-recovery');
 
     const chunkRecoveryTeardown = resolveChunkRecovery(
@@ -476,6 +624,30 @@ export async function createWebCoreApp<T extends WebCoreConfig>(options: WebCore
     recordPhase('monitors');
 
     const monitors = resolveMonitors(settings, runtimeUrl, platform, options.monitors);
+
+    return { chunkRecoveryTeardown, realtimeConnection, monitors };
+}
+
+/**
+ * Assemble the application handle from the results of every boot phase.
+ *
+ * @param foundation - the services and application from the foundation phases
+ * @param moduleLayer - the HTTP client, eager stores and locale wiring
+ * @param integration - the router and teardown handles
+ * @param release - the realtime connection, monitors and chunk-recovery teardown
+ * @returns the assembled application handle, ready to start
+ */
+function assembleApp<T extends WebCoreConfig>(
+    foundation: AppFoundation<T>,
+    moduleLayer: ModuleLayer,
+    integration: AppIntegration,
+    release: ReleaseLayer,
+): WebCoreApp<T> {
+    const { app, pinia, settings, repository, storage, toastService, confirmService, observability, flags } =
+        foundation;
+    const { http, switcher, i18n } = moduleLayer;
+    const { router } = integration;
+    const { realtimeConnection, monitors } = release;
 
     let disposed = false;
 
@@ -511,21 +683,38 @@ export async function createWebCoreApp<T extends WebCoreConfig>(options: WebCore
 
             disposed = true;
 
-            monitors.connectivity?.stop();
-            monitors.updates?.stop();
-            realtimeConnection?.disconnect();
-            chunkRecoveryTeardown?.();
-            moduleTeardown();
-
-            for (const handle of [...storeHandles].reverse()) {
-                handle.$dispose();
-            }
-
-            pageTrackingTeardown();
-            errorHandlingTeardown();
-            titleSyncTeardown();
+            teardownApp(moduleLayer, integration, release);
         },
     };
+}
+
+/**
+ * Tear down everything the boot installed, in reverse order: monitors,
+ * realtime, chunk recovery, module boots, stores, then the page-tracking,
+ * error-handling and title-sync uninstalls.
+ *
+ * @param moduleLayer - the eager store handles to dispose
+ * @param integration - the module boot and page, error and title teardowns
+ * @param release - the monitors, realtime connection and chunk-recovery teardown
+ */
+function teardownApp(moduleLayer: ModuleLayer, integration: AppIntegration, release: ReleaseLayer): void {
+    const { storeHandles } = moduleLayer;
+    const { moduleTeardown, titleSyncTeardown, errorHandlingTeardown, pageTrackingTeardown } = integration;
+    const { chunkRecoveryTeardown, realtimeConnection, monitors } = release;
+
+    monitors.connectivity?.stop();
+    monitors.updates?.stop();
+    realtimeConnection?.disconnect();
+    chunkRecoveryTeardown?.();
+    moduleTeardown();
+
+    for (const handle of [...storeHandles].reverse()) {
+        handle.$dispose();
+    }
+
+    pageTrackingTeardown();
+    errorHandlingTeardown();
+    titleSyncTeardown();
 }
 
 /**

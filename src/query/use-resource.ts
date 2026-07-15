@@ -105,50 +105,24 @@ export function useResource<Value>(options: UseResourceOptions<Value>): Resource
     const isLoading = ref(false);
     const resolvedOnce = ref(false);
 
-    let sequence = 0;
-    let activeController: AbortController | null = null;
+    const { run, abort } = createRunner(fetcher, { data, error, isLoading, resolvedOnce });
 
-    async function run(): Promise<void> {
-        const token = ++sequence;
-
-        activeController?.abort();
-
-        const controller = new AbortController();
-
-        activeController = controller;
-        error.value = null;
-        isLoading.value = true;
-
-        try {
-            const result = await fetcher(controller.signal);
-
-            if (token !== sequence) {
-                return;
-            }
-
-            data.value = result;
-            resolvedOnce.value = true;
-        } catch (caught) {
-            if (token !== sequence || controller.signal.aborted) {
-                return;
-            }
-
-            error.value = caught;
-        } finally {
-            if (token === sequence) {
-                isLoading.value = false;
-            }
-        }
-    }
-
+    /**
+     * Run the fetcher again, superseding any run already in flight.
+     *
+     * @returns a promise that settles once this run has settled
+     */
     async function refetch(): Promise<void> {
         await run();
     }
 
     let stopWatch: (() => void) | null = null;
 
+    /**
+     * Abort any in-flight run and stop reacting to the watch source(s).
+     */
     function stop(): void {
-        activeController?.abort();
+        abort();
         stopWatch?.();
     }
 
@@ -176,4 +150,83 @@ export function useResource<Value>(options: UseResourceOptions<Value>): Resource
         refetch,
         stop,
     };
+}
+
+/**
+ * The reactive fields a runner settles as a request progresses.
+ *
+ * @typeParam Value - the resolved value type
+ */
+interface ResourceState<Value> {
+    readonly data: Ref<Value | null>;
+    readonly error: Ref<unknown>;
+    readonly isLoading: Ref<boolean>;
+    readonly resolvedOnce: Ref<boolean>;
+}
+
+/**
+ * Drive sequential runs of a fetcher, settling `state` for the latest run only.
+ *
+ * Owns the sequence token and the active `AbortController` so a superseded or
+ * stopped run neither settles `state` nor surfaces its rejection. The returned
+ * `abort` cancels the in-flight run without starting a new one.
+ *
+ * @param fetcher - executes a single run given that run's abort signal
+ * @param state - the reactive fields settled as each run progresses
+ * @returns the run trigger and an abort control for the in-flight run
+ * @typeParam Value - the resolved value type
+ */
+function createRunner<Value>(
+    fetcher: ResourceFetcher<Value>,
+    state: ResourceState<Value>,
+): { run: () => Promise<void>; abort: () => void } {
+    let sequence = 0;
+    let activeController: AbortController | null = null;
+
+    /**
+     * Execute one run, discarding its outcome when a newer run supersedes it.
+     *
+     * @returns a promise that settles once this run has settled
+     */
+    async function run(): Promise<void> {
+        const token = ++sequence;
+
+        activeController?.abort();
+
+        const controller = new AbortController();
+
+        activeController = controller;
+        state.error.value = null;
+        state.isLoading.value = true;
+
+        try {
+            const result = await fetcher(controller.signal);
+
+            if (token !== sequence) {
+                return;
+            }
+
+            state.data.value = result;
+            state.resolvedOnce.value = true;
+        } catch (caught) {
+            if (token !== sequence || controller.signal.aborted) {
+                return;
+            }
+
+            state.error.value = caught;
+        } finally {
+            if (token === sequence) {
+                state.isLoading.value = false;
+            }
+        }
+    }
+
+    /**
+     * Abort the in-flight run without starting a new one.
+     */
+    function abort(): void {
+        activeController?.abort();
+    }
+
+    return { run, abort };
 }

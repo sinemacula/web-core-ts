@@ -31,7 +31,7 @@ export type FieldErrorSetter = (fields: Readonly<Record<string, string>>) => voi
  * @param setErrors - applies the mapped field errors to the form
  * @returns true when at least one field message was applied to the form;
  *   false when `error` is not a validation failure, or the failure carries an
- *   error map with no field messages — callers should fall through to their
+ *   error map with no field messages - callers should fall through to their
  *   generic error handling in that case
  */
 export function applyServerValidationErrors(error: unknown, setErrors: FieldErrorSetter): boolean {

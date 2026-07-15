@@ -2,7 +2,7 @@
  * Toast notification state and lifecycle manager.
  *
  * This service owns only state (the active toast list) and lifecycle
- * (auto-dismiss timers). Rendering is entirely the application's concern —
+ * (auto-dismiss timers). Rendering is entirely the application's concern -
  * a thin host component subscribes to {@link ToastService.toasts} and
  * renders the list; this service never touches the DOM.
  *

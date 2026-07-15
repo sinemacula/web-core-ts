@@ -12,6 +12,7 @@
  */
 
 import { ExponentialBackoff } from './exponential-backoff';
+import { runReconnect } from './reconnect';
 import type {
     RealtimeConnection,
     RealtimeMessage,
@@ -34,7 +35,7 @@ export interface EventSourceConnectionOptions {
     /**
      * The SSE endpoint URL, or a function that returns it. The function form
      * is called on every `connect()`, enabling per-connect auth tokens in
-     * the query string — the recommended way to authenticate SSE streams
+     * the query string - the recommended way to authenticate SSE streams
      * because native EventSource cannot send custom headers.
      */
     readonly url: string | (() => string);
@@ -160,6 +161,10 @@ export class EventSourceConnection implements RealtimeConnection {
         };
     }
 
+    /**
+     * Open a fresh EventSource, wire its lifecycle handlers, and re-attach
+     * every registered event listener.
+     */
     #openSource(): void {
         this.#setState('connecting');
 
@@ -184,6 +189,12 @@ export class EventSourceConnection implements RealtimeConnection {
         this.#source = source;
     }
 
+    /**
+     * Attach a listener for one event name that fans frames out to its handlers.
+     *
+     * @param source - the EventSource to attach the listener to
+     * @param event - the event name to listen for
+     */
     #attachEventListener(source: EventSource, event: string): void {
         source.addEventListener(event, (messageEvent: MessageEvent) => {
             const message: RealtimeMessage = { event, data: String(messageEvent.data) };
@@ -192,6 +203,10 @@ export class EventSourceConnection implements RealtimeConnection {
         });
     }
 
+    /**
+     * Enter the connecting state and schedule the next reconnect after the
+     * backoff delay for the current attempt.
+     */
     #scheduleReconnect(): void {
         const delay = this.#backoff.delayFor(this.#attempt++);
 
@@ -209,27 +224,17 @@ export class EventSourceConnection implements RealtimeConnection {
      * trace once it settles, so the closed state is re-checked afterwards.
      */
     async #runReconnect(): Promise<void> {
-        if (this.#beforeReconnect === undefined) {
-            this.#openSource();
-
-            return;
-        }
-
-        try {
-            await this.#beforeReconnect();
-        } catch {
-            if (this.#state !== 'closed') {
-                this.#scheduleReconnect();
-            }
-
-            return;
-        }
-
-        if (this.#state !== 'closed') {
-            this.#openSource();
-        }
+        await runReconnect({
+            beforeReconnect: this.#beforeReconnect,
+            isClosed: () => this.#state === 'closed',
+            reopen: () => this.#openSource(),
+            reschedule: () => this.#scheduleReconnect(),
+        });
     }
 
+    /**
+     * Detach the lifecycle handlers from the active EventSource and close it.
+     */
     #closeSource(): void {
         if (this.#source !== null) {
             this.#source.onopen = null;
@@ -239,6 +244,9 @@ export class EventSourceConnection implements RealtimeConnection {
         }
     }
 
+    /**
+     * Cancel any pending reconnect timer.
+     */
     #cancelReconnect(): void {
         if (this.#reconnectTimer !== null) {
             clearTimeout(this.#reconnectTimer);
@@ -246,6 +254,11 @@ export class EventSourceConnection implements RealtimeConnection {
         }
     }
 
+    /**
+     * Transition to `next`, notifying state subscribers only on a real change.
+     *
+     * @param next - the state to transition to
+     */
     #setState(next: RealtimeState): void {
         if (this.#state === next) {
             return;

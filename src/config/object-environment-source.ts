@@ -20,6 +20,12 @@ export class ObjectEnvironmentSource implements EnvironmentSource {
         this.#values = values;
     }
 
+    /**
+     * Read the value for `key` straight from the backing record.
+     *
+     * @param key - the environment variable name
+     * @returns the stored value, or undefined when the record omits it
+     */
     get(key: string): string | undefined {
         return this.#values[key];
     }

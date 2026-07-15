@@ -33,6 +33,7 @@ import { useResource } from '@sinemacula/web-core/query/use-resource';
 import type { ComputedRef, Ref } from 'vue';
 import { computed, getCurrentScope, onScopeDispose, ref, watch } from 'vue';
 
+import { PlaygroundError } from '@/errors/playground-error';
 import { api } from '@/services/api';
 
 import { userList } from '../queries/user-list';
@@ -50,13 +51,13 @@ const SEARCH_DEBOUNCE_MS = 300;
  *
  * @param wireTimestamp - the wire-format timestamp
  * @returns the parsed instant as a `Date`
- * @throws Error when the timestamp cannot be parsed
+ * @throws PlaygroundError when the timestamp cannot be parsed
  */
 export function parseWireTimestamp(wireTimestamp: string): Date {
     const parsed = Date.parse(`${wireTimestamp.replace(' ', 'T')}Z`);
 
     if (Number.isNaN(parsed)) {
-        throw new Error(`The wire timestamp "${wireTimestamp}" could not be parsed.`);
+        throw new PlaygroundError(`The wire timestamp "${wireTimestamp}" could not be parsed.`);
     }
 
     return new Date(parsed);

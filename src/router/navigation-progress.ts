@@ -51,6 +51,9 @@ export function createNavigationProgress(router: Router): NavigationProgress {
         isNavigating.value = false;
     });
 
+    /**
+     * Remove the navigation hooks and reset `isNavigating` to false.
+     */
     function stop(): void {
         removeBeforeEach();
         removeAfterEach();

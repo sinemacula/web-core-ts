@@ -2,7 +2,7 @@
  * Realtime connection port.
  *
  * Server push is a separate concern from request/response. This port sits
- * BESIDE {@link HttpClient}, not on top of it — it models a persistent,
+ * BESIDE {@link HttpClient}, not on top of it - it models a persistent,
  * server-initiated stream rather than a one-shot request. SSE and WebSocket
  * are the two production adapters; tests substitute an in-memory fake.
  *

@@ -1,5 +1,5 @@
 /**
- * Dashboard module translations — English (United States).
+ * Dashboard module translations - English (United States).
  *
  * Namespaced under `dashboard.` by the module registry.
  *

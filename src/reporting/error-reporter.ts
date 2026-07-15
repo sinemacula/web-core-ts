@@ -2,7 +2,7 @@
  * Error reporter port.
  *
  * Vendor SDKs (Sentry, Bugsnag, Rollbar, …) are adapters that implement this
- * interface. The application never imports a vendor SDK directly — it depends
+ * interface. The application never imports a vendor SDK directly - it depends
  * only on this port so that the provider can be swapped, stubbed in tests, or
  * silenced without touching application code.
  *

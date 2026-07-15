@@ -66,6 +66,9 @@ export function useLoginForm(): LoginForm {
     const error = ref<string | null>(null);
     const inFlight = ref(false);
 
+    /**
+     * Validate, then log in; re-entrant calls are ignored while one is in flight.
+     */
     const submit = async (): Promise<boolean> => {
         if (inFlight.value) {
             return false;
@@ -74,31 +77,60 @@ export function useLoginForm(): LoginForm {
         inFlight.value = true;
 
         try {
-            const { valid } = await validate();
-
-            if (!valid) {
-                return false;
-            }
-
-            error.value = null;
-
-            await useSessionStore().login({ email: email.value, password: password.value });
-
-            return true;
-        } catch (caught) {
-            if (applyServerValidationErrors(caught, setErrors)) {
-                return false;
-            }
-
-            error.value = resolveLoginErrorKey(caught);
-
-            return false;
+            return await attemptLogin({
+                validate,
+                login: () => useSessionStore().login({ email: email.value, password: password.value }),
+                applyServerErrors: caught => applyServerValidationErrors(caught, setErrors),
+                error,
+            });
         } finally {
             inFlight.value = false;
         }
     };
 
     return { email, password, emailError, passwordError, error, isSubmitting, submit };
+}
+
+/** The callbacks {@link attemptLogin} needs from the form to run one attempt. */
+interface LoginAttempt {
+    /** Run field validation and report whether the inputs are valid. */
+    readonly validate: () => Promise<{ valid: boolean }>;
+
+    /** Perform the session login with the current credentials. */
+    readonly login: () => Promise<void>;
+
+    /** Surface a caught failure as field errors; returns true when it did. */
+    readonly applyServerErrors: (caught: unknown) => boolean;
+
+    /** The form-level error key sink. */
+    readonly error: Ref<string | null>;
+}
+
+/**
+ * Validate the inputs and, when valid, attempt the session login.
+ *
+ * @param attempt - the form callbacks driving this attempt
+ * @returns true on success, false on invalid input or a failed API call
+ */
+async function attemptLogin(attempt: LoginAttempt): Promise<boolean> {
+    const { valid } = await attempt.validate();
+
+    if (!valid) {
+        return false;
+    }
+
+    try {
+        attempt.error.value = null;
+        await attempt.login();
+
+        return true;
+    } catch (caught) {
+        if (!attempt.applyServerErrors(caught)) {
+            attempt.error.value = resolveLoginErrorKey(caught);
+        }
+
+        return false;
+    }
 }
 
 /**

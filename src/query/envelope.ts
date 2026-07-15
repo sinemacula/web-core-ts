@@ -11,6 +11,7 @@
  */
 
 import { isRecord } from '../support/is-record';
+import { QueryError } from './query-error';
 
 /** A raw wire-format record, prior to mapping onto a domain type. */
 export type RawRecord = Readonly<Record<string, unknown>>;
@@ -42,11 +43,11 @@ export interface ListResult<Value> {
  * @param payload - the raw response payload
  * @param map - validates and maps the raw record onto the domain value
  * @returns the mapped domain value
- * @throws Error when the envelope is absent or malformed
+ * @throws {@link QueryError} when the envelope is absent or malformed
  */
 export function unwrapItem<Value>(payload: unknown, map: ResourceMapper<Value>): Value {
     if (!isRecord(payload) || !isRecord(payload.data)) {
-        throw new Error('The response did not match the expected envelope shape.');
+        throw new QueryError('The response did not match the expected envelope shape.');
     }
 
     return map(payload.data);
@@ -58,16 +59,16 @@ export function unwrapItem<Value>(payload: unknown, map: ResourceMapper<Value>):
  * @param payload - the raw response payload
  * @param map - validates and maps each raw record onto the domain value
  * @returns the mapped items and pagination metadata (null when the `meta` block is absent or malformed)
- * @throws Error when the envelope is absent or malformed
+ * @throws {@link QueryError} when the envelope is absent or malformed
  */
 export function unwrapList<Value>(payload: unknown, map: ResourceMapper<Value>): ListResult<Value> {
     if (!isRecord(payload) || !Array.isArray(payload.data)) {
-        throw new Error('The response did not match the expected envelope shape.');
+        throw new QueryError('The response did not match the expected envelope shape.');
     }
 
     const items = payload.data.map(entry => {
         if (!isRecord(entry)) {
-            throw new Error('The response did not match the expected envelope shape.');
+            throw new QueryError('The response did not match the expected envelope shape.');
         }
 
         return map(entry);

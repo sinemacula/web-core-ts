@@ -1,5 +1,5 @@
 /**
- * Unit tests for ApiQuery — the laravel-api-toolkit 2.x query builder.
+ * Unit tests for ApiQuery - the laravel-api-toolkit 2.x query builder.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -24,7 +24,7 @@ function parsedFilters(query: ApiQuery): unknown {
 
 // ---------------------------------------------------------------------------
 // Helper: build wire-style objects from entry tuples (mirrors the wire() idiom
-// used in other tests in this repo — keeps $-prefixed keys out of object-literal
+// used in other tests in this repo - keeps $-prefixed keys out of object-literal
 // key positions in test assertions where Biome might inspect them).
 // ---------------------------------------------------------------------------
 function wire(entries: ReadonlyArray<readonly [string, unknown]>): Record<string, unknown> {
@@ -41,7 +41,7 @@ describe('ApiQuery', () => {
     });
 
     // -------------------------------------------------------------------------
-    // Filtering — equality
+    // Filtering - equality
     // -------------------------------------------------------------------------
     describe('where (equality)', () => {
         it('emits a string equality filter', () => {
@@ -71,7 +71,7 @@ describe('ApiQuery', () => {
     });
 
     // -------------------------------------------------------------------------
-    // Filtering — operator overload
+    // Filtering - operator overload
     // -------------------------------------------------------------------------
     describe('where (operator overload)', () => {
         it('emits $eq operator', () => {

@@ -3,7 +3,7 @@
  *
  * Provider SDKs (LaunchDarkly, PostHog, Flagsmith, Unleash, …) are adapters
  * that implement this interface. The application never imports a provider SDK
- * directly — it depends only on this port so that the provider can be swapped,
+ * directly - it depends only on this port so that the provider can be swapped,
  * stubbed in tests, or replaced without touching application code.
  *
  * A config-driven {@link StaticFeatureFlags} adapter ships out of the box and
@@ -13,7 +13,7 @@
  * Evaluation context: call {@link FeatureFlags.setContext} after a user
  * authenticates to forward user/org attributes to targeting-capable adapters.
  * The static adapter stores the context for handoff; apps must not hard-wire
- * this call to the auth flow — wire it from a dedicated context-sync layer so
+ * this call to the auth flow - wire it from a dedicated context-sync layer so
  * coupling stays unidirectional.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>

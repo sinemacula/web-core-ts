@@ -3,7 +3,7 @@
  *
  * Resolves flags from an in-memory record populated at construction time. The
  * {@link StaticFeatureFlags.replace} method swaps the entire flag set and
- * notifies every registered change handler — providing the seam that tests and
+ * notifies every registered change handler - providing the seam that tests and
  * future remote-refresh adapters use.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
@@ -24,9 +24,6 @@ export class StaticFeatureFlags implements FeatureFlags {
     #context: FlagEvaluationContext = {};
     readonly #handlers: Set<FlagsChangeHandler> = new Set();
 
-    /**
-     * @param flags - the initial flag set; defaults to an empty record
-     */
     constructor(flags: Readonly<Record<string, FlagValue>> = {}) {
         this.#flags = flags;
     }

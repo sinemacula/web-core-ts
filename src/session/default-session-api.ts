@@ -16,6 +16,7 @@
 import type { HttpClient } from '../http/http-client';
 import { isRecord } from '../support/is-record';
 import type { SessionApi } from './session-api';
+import { SessionError } from './session-error';
 import type { SessionTokens } from './session-tokens';
 import type { SessionUser } from './session-user';
 
@@ -79,13 +80,13 @@ export function createDefaultSessionApi<U extends SessionUser = SessionUser>(
      *
      * @param payload - the raw response payload
      * @returns the normalised tokens
-     * @throws Error when the payload does not match the expected shape
+     * @throws {@link SessionError} when the payload does not match the expected shape
      */
     const mapSession = (payload: unknown): SessionTokens => {
         const data = unwrap(payload);
 
         if (!isRecord(data)) {
-            throw new Error('The session response did not match the expected shape.');
+            throw new SessionError('The session response did not match the expected shape.');
         }
 
         const token = data.token;
@@ -93,7 +94,7 @@ export function createDefaultSessionApi<U extends SessionUser = SessionUser>(
         const expiresAt = data.expires_at;
 
         if (typeof token !== 'string' || typeof refreshToken !== 'string' || typeof expiresAt !== 'string') {
-            throw new Error('The session response did not match the expected shape.');
+            throw new SessionError('The session response did not match the expected shape.');
         }
 
         return { accessToken: token, refreshToken, expiresAtEpochMs: parseTimestamp(expiresAt) };
@@ -161,11 +162,11 @@ function parseWireTimestamp(value: string): number | null {
  *
  * @param payload - the raw response payload
  * @returns the unwrapped data record
- * @throws Error when the envelope is absent or malformed
+ * @throws {@link SessionError} when the envelope is absent or malformed
  */
 function unwrapDataEnvelope(payload: unknown): unknown {
     if (!isRecord(payload) || !isRecord(payload.data)) {
-        throw new Error('The response did not match the expected envelope shape.');
+        throw new SessionError('The response did not match the expected envelope shape.');
     }
 
     return payload.data;
@@ -180,17 +181,17 @@ function unwrapDataEnvelope(payload: unknown): unknown {
  *
  * @param payload - the unwrapped user payload
  * @returns the mapped user
- * @throws Error when the payload is not a record with a usable identifier
+ * @throws {@link SessionError} when the payload is not a record with a usable identifier
  */
 function mapDefaultUser(payload: unknown): SessionUser {
     if (!isRecord(payload)) {
-        throw new Error('The user response did not match the expected shape.');
+        throw new SessionError('The user response did not match the expected shape.');
     }
 
     const id = payload.id;
 
     if (typeof id !== 'string' && typeof id !== 'number') {
-        throw new Error('The user response did not match the expected shape.');
+        throw new SessionError('The user response did not match the expected shape.');
     }
 
     return {

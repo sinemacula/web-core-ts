@@ -55,10 +55,16 @@ export function useApiQuery(options?: UseApiQueryOptions): ApiQueryState {
     const query = computed(() => current.value);
     const parameters = computed(() => current.value.toQueryParameters());
 
+    /**
+     * Replace the current query with the result of applying `mutate` to it.
+     *
+     * @param mutate - transforms the current query into the next one
+     */
     function apply(mutate: (query: ApiQuery) => ApiQuery): void {
         current.value = mutate(current.value);
     }
 
+    /** Restore the query to the seed state captured at creation. */
     function reset(): void {
         current.value = initial;
     }

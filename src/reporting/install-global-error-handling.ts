@@ -57,6 +57,7 @@ export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions):
         reporter.captureError(err, context);
     };
 
+    /** Forward a synchronous window error to the reporter with breadcrumbs. */
     const onError = (event: ErrorEvent): void => {
         const context: Record<string, unknown> = { source: 'window' };
 
@@ -67,6 +68,7 @@ export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions):
         reporter.captureError(event.error ?? event.message, context);
     };
 
+    /** Forward an unhandled promise rejection to the reporter with breadcrumbs. */
     const onUnhandledRejection = (event: PromiseRejectionEvent): void => {
         const context: Record<string, unknown> = { source: 'unhandledrejection' };
 

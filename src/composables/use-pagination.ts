@@ -60,14 +60,25 @@ export function usePagination(options: UsePaginationOptions): Pagination {
     const hasNext = computed(() => page.value < pageCount.value);
     const offset = computed(() => (page.value - 1) * perPage);
 
+    /**
+     * Jump to a page, clamped into the valid `[1, pageCount]` range.
+     *
+     * @param target - the requested page number, before clamping
+     */
     function goTo(target: number): void {
         page.value = Math.min(Math.max(1, target), pageCount.value);
     }
 
+    /**
+     * Advance one page, stopping at the last.
+     */
     function next(): void {
         goTo(page.value + 1);
     }
 
+    /**
+     * Step back one page, stopping at the first.
+     */
     function previous(): void {
         goTo(page.value - 1);
     }

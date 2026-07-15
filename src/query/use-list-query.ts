@@ -17,19 +17,20 @@
  * 7. Each registered refinement, in call order
  *
  * Changing any filter, the search term, or the active sort resets the page to
- * 1 — standard list UX so stale page offsets are never sent to the server.
+ * 1 - standard list UX so stale page offsets are never sent to the server.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
  */
 
-import type { ComputedRef } from 'vue';
+import type { ComputedRef, Ref } from 'vue';
 import { computed, ref } from 'vue';
 
 import type { QueryParameters } from '../http/http-client';
 import { ApiQuery } from './api-query';
 import type { ListFilter } from './list-filter';
 import type { FilterValueOf, ListQueryDefinition, SortDefault } from './list-query-definition';
+import { QueryError } from './query-error';
 
 /** Default page size when the definition does not specify one. */
 const DEFAULT_PAGE_SIZE = 25;
@@ -81,7 +82,7 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
     /**
      * Set a named filter to a concrete value.
      *
-     * Passing `null` is equivalent to calling {@link clearFilter} — the filter
+     * Passing `null` is equivalent to calling {@link clearFilter} - the filter
      * is removed from the active set and the page resets to 1.
      *
      * @param name - the filter name declared in the definition
@@ -154,7 +155,7 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
     refine(mutate: (query: ApiQuery) => ApiQuery): void;
 
     /**
-     * Reset everything — filters, search, sort, page, and refinements — back
+     * Reset everything - filters, search, sort, page, and refinements - back
      * to the definition's defaults.
      */
     reset(): void;
@@ -170,10 +171,6 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
 export function useListQuery<Filters extends Record<string, ListFilter<never>>>(
     definition: ListQueryDefinition<Filters>,
 ): ListQuery<Filters> {
-    // -------------------------------------------------------------------------
-    // Reactive state
-    // -------------------------------------------------------------------------
-
     /**
      * Active filter entries in insertion order.
      *
@@ -183,87 +180,157 @@ export function useListQuery<Filters extends Record<string, ListFilter<never>>>(
      * structurally-unreachable guard branch.
      */
     const activeFilters = ref<Map<string, { filter: ListFilter<unknown>; value: unknown }>>(new Map());
-
-    /** Current search term; empty string means inactive. */
     const activeSearch = ref('');
-
-    /** Explicit sort set by the screen; null means use defaultSort or none. */
     const activeSort = ref<SortDefault | null>(null);
-
-    /** Current 1-based page number. */
     const currentPage = ref(MIN_PAGE);
-
-    /** Ordered list of persistent refinement functions. */
     const refinements = ref<Array<(query: ApiQuery) => ApiQuery>>([]);
 
-    // -------------------------------------------------------------------------
-    // Compile: build the ApiQuery from all reactive state
-    // -------------------------------------------------------------------------
+    const state: ListQueryState = { activeFilters, activeSearch, activeSort, currentPage, refinements };
 
-    const query = computed<ApiQuery>(() => {
-        let q = ApiQuery.create();
-
-        // 1. Base shaping
-        if (definition.base) {
-            q = definition.base(q);
-        }
-
-        // 2. Active filters (insertion order)
-        for (const entry of activeFilters.value.values()) {
-            q = entry.filter.apply(q, entry.value);
-        }
-
-        // 3. Search term
-        const { search: searchFilter } = definition;
-
-        if (activeSearch.value !== '' && searchFilter !== undefined) {
-            q = searchFilter.apply(q, activeSearch.value);
-        }
-
-        // 4. Sort (explicit → defaultSort → none)
-        const sort = activeSort.value ?? definition.defaultSort ?? null;
-
-        if (sort !== null) {
-            q = q.orderBy(sort.column, sort.direction);
-        }
-
-        // 5. Pagination
-        q = q.limit(definition.pageSize ?? DEFAULT_PAGE_SIZE).page(currentPage.value);
-
-        // 6. Refinements
-        for (const refineFn of refinements.value) {
-            q = refineFn(q);
-        }
-
-        return q;
-    });
-
+    const query = computed<ApiQuery>(() => compileQuery(definition, state));
     const parameters = computed<QueryParameters>(() => query.value.toQueryParameters());
-
-    // -------------------------------------------------------------------------
-    // Derived read-only refs
-    // -------------------------------------------------------------------------
-
-    const filterValues = computed<Readonly<Partial<Record<keyof Filters & string, unknown>>>>(() => {
-        const result: Partial<Record<string, unknown>> = {};
-
-        for (const [key, entry] of activeFilters.value) {
-            result[key] = entry.value;
-        }
-
-        return result as Readonly<Partial<Record<keyof Filters & string, unknown>>>;
-    });
-
+    const filterValues = computed<Readonly<Partial<Record<keyof Filters & string, unknown>>>>(() =>
+        deriveFilterValues<Filters>(activeFilters.value),
+    );
     const searchTerm = computed<string>(() => activeSearch.value);
-
     const sort = computed<SortDefault | null>(() => activeSort.value);
-
     const page = computed<number>(() => currentPage.value);
 
-    // -------------------------------------------------------------------------
-    // Mutations
-    // -------------------------------------------------------------------------
+    return {
+        query,
+        parameters,
+        filterValues,
+        searchTerm,
+        sort,
+        page,
+        ...createFilterMutations(definition, state),
+        ...createNavigationMutations(definition, state),
+    };
+}
 
+/**
+ * The mutable reactive state a {@link useListQuery} instance compiles and mutates.
+ */
+interface ListQueryState {
+    readonly activeFilters: Ref<Map<string, { filter: ListFilter<unknown>; value: unknown }>>;
+    readonly activeSearch: Ref<string>;
+    readonly activeSort: Ref<SortDefault | null>;
+    readonly currentPage: Ref<number>;
+    readonly refinements: Ref<Array<(query: ApiQuery) => ApiQuery>>;
+}
+
+/**
+ * The filter-set and search controls of the {@link ListQuery} contract.
+ *
+ * @typeParam Filters - the named-filter record from the definition
+ */
+type FilterMutations<Filters extends Record<string, ListFilter<never>>> = Pick<
+    ListQuery<Filters>,
+    'setFilter' | 'clearFilter' | 'clearFilters' | 'search'
+>;
+
+/**
+ * The sort, pagination, refinement, and reset controls of the {@link ListQuery} contract.
+ *
+ * @typeParam Filters - the named-filter record from the definition
+ */
+type NavigationMutations<Filters extends Record<string, ListFilter<never>>> = Pick<
+    ListQuery<Filters>,
+    'sortBy' | 'next' | 'previous' | 'goTo' | 'refine' | 'reset'
+>;
+
+/**
+ * Compile an {@link ApiQuery} from the current list-query state.
+ *
+ * Applies, in order, the definition's base shaping, each active filter in
+ * insertion order, the active search term, the resolved sort, pagination, and
+ * every registered refinement.
+ *
+ * @param definition - the frozen definition produced by {@link defineListQuery}
+ * @param state - the reactive state to read the current values from
+ * @returns the query compiled for the current state
+ * @typeParam Filters - the named-filter record from the definition
+ */
+function compileQuery<Filters extends Record<string, ListFilter<never>>>(
+    definition: ListQueryDefinition<Filters>,
+    state: ListQueryState,
+): ApiQuery {
+    let q = ApiQuery.create();
+
+    // 1. Base shaping
+    if (definition.base) {
+        q = definition.base(q);
+    }
+
+    // 2. Active filters (insertion order)
+    for (const entry of state.activeFilters.value.values()) {
+        q = entry.filter.apply(q, entry.value);
+    }
+
+    // 3. Search term
+    const { search: searchFilter } = definition;
+
+    if (state.activeSearch.value !== '' && searchFilter !== undefined) {
+        q = searchFilter.apply(q, state.activeSearch.value);
+    }
+
+    // 4. Sort (explicit → defaultSort → none)
+    const sort = state.activeSort.value ?? definition.defaultSort ?? null;
+
+    if (sort !== null) {
+        q = q.orderBy(sort.column, sort.direction);
+    }
+
+    // 5. Pagination
+    q = q.limit(definition.pageSize ?? DEFAULT_PAGE_SIZE).page(state.currentPage.value);
+
+    // 6. Refinements
+    for (const refineFn of state.refinements.value) {
+        q = refineFn(q);
+    }
+
+    return q;
+}
+
+/**
+ * Snapshot the active filter values as a plain record keyed by filter name.
+ *
+ * @param activeFilters - the active filter entries in insertion order
+ * @returns the active values keyed by filter name; cleared filters are absent
+ */
+function deriveFilterValues<Filters extends Record<string, ListFilter<never>>>(
+    activeFilters: Map<string, { filter: ListFilter<unknown>; value: unknown }>,
+): Readonly<Partial<Record<keyof Filters & string, unknown>>> {
+    const result: Partial<Record<string, unknown>> = {};
+
+    for (const [key, entry] of activeFilters) {
+        result[key] = entry.value;
+    }
+
+    return result as Readonly<Partial<Record<keyof Filters & string, unknown>>>;
+}
+
+/**
+ * Build the filter-set and search controls for a {@link useListQuery} instance.
+ *
+ * Every control resets the page to 1 so a stale offset is never sent after the
+ * result set changes shape.
+ *
+ * @param definition - the frozen definition produced by {@link defineListQuery}
+ * @param state - the reactive state the controls mutate
+ * @returns the filter-set and search half of the {@link ListQuery} contract
+ * @typeParam Filters - the named-filter record from the definition
+ */
+function createFilterMutations<Filters extends Record<string, ListFilter<never>>>(
+    definition: ListQueryDefinition<Filters>,
+    state: ListQueryState,
+): FilterMutations<Filters> {
+    /**
+     * Set a named filter to a concrete value, or clear it when `value` is null.
+     *
+     * @param name - the filter name declared in the definition
+     * @param value - the filter value, or `null` to clear
+     */
     function setFilter<K extends keyof Filters & string>(name: K, value: FilterValueOf<Filters[K]> | null): void {
         if (value === null) {
             clearFilter(name);
@@ -279,100 +346,139 @@ export function useListQuery<Filters extends Record<string, ListFilter<never>>>(
             return;
         }
 
-        const next = new Map(activeFilters.value);
+        const next = new Map(state.activeFilters.value);
 
         next.set(name, { filter: filterDef, value });
-        activeFilters.value = next;
-        currentPage.value = MIN_PAGE;
+        state.activeFilters.value = next;
+        state.currentPage.value = MIN_PAGE;
     }
 
+    /**
+     * Remove a single named filter from the active set.
+     *
+     * @param name - the filter name to clear
+     */
     function clearFilter(name: keyof Filters & string): void {
-        if (!activeFilters.value.has(name)) {
+        if (!state.activeFilters.value.has(name)) {
             return;
         }
 
-        const next = new Map(activeFilters.value);
+        const next = new Map(state.activeFilters.value);
 
         next.delete(name);
-        activeFilters.value = next;
-        currentPage.value = MIN_PAGE;
+        state.activeFilters.value = next;
+        state.currentPage.value = MIN_PAGE;
     }
 
+    /**
+     * Remove every active filter.
+     */
     function clearFilters(): void {
-        if (activeFilters.value.size === 0) {
+        if (state.activeFilters.value.size === 0) {
             return;
         }
 
-        activeFilters.value = new Map();
-        currentPage.value = MIN_PAGE;
+        state.activeFilters.value = new Map();
+        state.currentPage.value = MIN_PAGE;
     }
 
+    /**
+     * Set the free-text search term; an empty string clears the search.
+     *
+     * @param term - the search term
+     */
     function search(term: string): void {
-        activeSearch.value = term;
-        currentPage.value = MIN_PAGE;
+        state.activeSearch.value = term;
+        state.currentPage.value = MIN_PAGE;
     }
 
+    return { setFilter, clearFilter, clearFilters, search };
+}
+
+/**
+ * Build the sort, pagination, refinement, and reset controls for a {@link useListQuery} instance.
+ *
+ * @param definition - the frozen definition produced by {@link defineListQuery}
+ * @param state - the reactive state the controls mutate
+ * @returns the sort, pagination, refinement, and reset half of the {@link ListQuery} contract
+ * @typeParam Filters - the named-filter record from the definition
+ */
+function createNavigationMutations<Filters extends Record<string, ListFilter<never>>>(
+    definition: ListQueryDefinition<Filters>,
+    state: ListQueryState,
+): NavigationMutations<Filters> {
+    /**
+     * Set or toggle the active sort, rejecting columns outside `sortable`.
+     *
+     * @param column - the column to sort by
+     * @param direction - explicit direction; omit to toggle an already-active column
+     * @throws {@link QueryError} when `column` is not in `sortable`
+     */
     function sortBy(column: string, direction?: 'asc' | 'desc'): void {
         const { sortable } = definition;
 
         if (sortable !== undefined && !sortable.includes(column)) {
-            throw new Error(`Cannot sort by '${column}'. Allowed columns: ${sortable.map(c => `'${c}'`).join(', ')}.`);
+            throw new QueryError(
+                `Cannot sort by '${column}'. Allowed columns: ${sortable.map(c => `'${c}'`).join(', ')}.`,
+            );
         }
 
         let resolvedDirection: 'asc' | 'desc';
 
         if (direction !== undefined) {
             resolvedDirection = direction;
-        } else if (activeSort.value?.column === column) {
-            resolvedDirection = activeSort.value.direction === 'asc' ? 'desc' : 'asc';
+        } else if (state.activeSort.value?.column === column) {
+            resolvedDirection = state.activeSort.value.direction === 'asc' ? 'desc' : 'asc';
         } else {
             resolvedDirection = 'asc';
         }
 
-        activeSort.value = { column, direction: resolvedDirection };
-        currentPage.value = MIN_PAGE;
+        state.activeSort.value = { column, direction: resolvedDirection };
+        state.currentPage.value = MIN_PAGE;
     }
 
+    /**
+     * Advance to the next page.
+     */
     function next(): void {
-        currentPage.value += 1;
+        state.currentPage.value += 1;
     }
 
+    /**
+     * Step back one page, clamped at page 1.
+     */
     function previous(): void {
-        currentPage.value = Math.max(MIN_PAGE, currentPage.value - 1);
+        state.currentPage.value = Math.max(MIN_PAGE, state.currentPage.value - 1);
     }
 
+    /**
+     * Jump to an arbitrary page, clamped at page 1.
+     *
+     * @param targetPage - the target 1-based page number
+     */
     function goTo(targetPage: number): void {
-        currentPage.value = Math.max(MIN_PAGE, targetPage);
+        state.currentPage.value = Math.max(MIN_PAGE, targetPage);
     }
 
+    /**
+     * Append a persistent refinement applied after all standard query steps.
+     *
+     * @param mutate - receives the partially-built query and returns the refined query
+     */
     function refine(mutate: (query: ApiQuery) => ApiQuery): void {
-        refinements.value = [...refinements.value, mutate];
+        state.refinements.value = [...state.refinements.value, mutate];
     }
 
+    /**
+     * Reset filters, search, sort, page, and refinements to the definition's defaults.
+     */
     function reset(): void {
-        activeFilters.value = new Map();
-        activeSearch.value = '';
-        activeSort.value = null;
-        currentPage.value = MIN_PAGE;
-        refinements.value = [];
+        state.activeFilters.value = new Map();
+        state.activeSearch.value = '';
+        state.activeSort.value = null;
+        state.currentPage.value = MIN_PAGE;
+        state.refinements.value = [];
     }
 
-    return {
-        query,
-        parameters,
-        filterValues,
-        searchTerm,
-        sort,
-        page,
-        setFilter,
-        clearFilter,
-        clearFilters,
-        search,
-        sortBy,
-        next,
-        previous,
-        goTo,
-        refine,
-        reset,
-    };
+    return { sortBy, next, previous, goTo, refine, reset };
 }

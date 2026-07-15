@@ -12,6 +12,8 @@
  */
 
 import { ExponentialBackoff } from './exponential-backoff';
+import { RealtimeError } from './realtime-error';
+import { runReconnect } from './reconnect';
 import type {
     RealtimeConnection,
     RealtimeMessage,
@@ -163,16 +165,19 @@ export class WebSocketConnection implements RealtimeConnection {
      * Send a text frame over the open socket.
      *
      * @param data - the raw text to send
-     * @throws {Error} when the socket is not in the open state
+     * @throws {@link RealtimeError} when the socket is not in the open state
      */
     send(data: string): void {
         if (this.#socket === null || this.#state !== 'open') {
-            throw new Error('Cannot send: WebSocket is not open.');
+            throw new RealtimeError('Cannot send: WebSocket is not open.');
         }
 
         this.#socket.send(data);
     }
 
+    /**
+     * Open a fresh WebSocket and wire its lifecycle handlers.
+     */
     #openSocket(): void {
         this.#setState('connecting');
 
@@ -196,6 +201,12 @@ export class WebSocketConnection implements RealtimeConnection {
         this.#socket = socket;
     }
 
+    /**
+     * Deliver a raw frame to `'message'` subscribers, and additionally to the
+     * named-event subscribers when it parses as a JSON envelope.
+     *
+     * @param raw - the raw text frame received from the socket
+     */
     #dispatchFrame(raw: string): void {
         this.#deliverToHandlers('message', { event: 'message', data: raw });
 
@@ -206,6 +217,12 @@ export class WebSocketConnection implements RealtimeConnection {
         }
     }
 
+    /**
+     * Fan a message out to every handler registered for `event`.
+     *
+     * @param event - the event name whose handlers receive the message
+     * @param message - the message delivered to each handler
+     */
     #deliverToHandlers(event: string, message: RealtimeMessage): void {
         const handlers = this.#messageHandlers.get(event);
 
@@ -218,6 +235,10 @@ export class WebSocketConnection implements RealtimeConnection {
         }
     }
 
+    /**
+     * Enter the connecting state and schedule the next reconnect after the
+     * backoff delay for the current attempt.
+     */
     #scheduleReconnect(): void {
         const delay = this.#backoff.delayFor(this.#attempt++);
 
@@ -235,27 +256,17 @@ export class WebSocketConnection implements RealtimeConnection {
      * trace once it settles, so the closed state is re-checked afterwards.
      */
     async #runReconnect(): Promise<void> {
-        if (this.#beforeReconnect === undefined) {
-            this.#openSocket();
-
-            return;
-        }
-
-        try {
-            await this.#beforeReconnect();
-        } catch {
-            if (this.#state !== 'closed') {
-                this.#scheduleReconnect();
-            }
-
-            return;
-        }
-
-        if (this.#state !== 'closed') {
-            this.#openSocket();
-        }
+        await runReconnect({
+            beforeReconnect: this.#beforeReconnect,
+            isClosed: () => this.#state === 'closed',
+            reopen: () => this.#openSocket(),
+            reschedule: () => this.#scheduleReconnect(),
+        });
     }
 
+    /**
+     * Detach the lifecycle handlers from the active socket and close it.
+     */
     #closeSocket(): void {
         if (this.#socket !== null) {
             this.#socket.onopen = null;
@@ -266,6 +277,9 @@ export class WebSocketConnection implements RealtimeConnection {
         }
     }
 
+    /**
+     * Cancel any pending reconnect timer.
+     */
     #cancelReconnect(): void {
         if (this.#reconnectTimer !== null) {
             clearTimeout(this.#reconnectTimer);
@@ -273,6 +287,11 @@ export class WebSocketConnection implements RealtimeConnection {
         }
     }
 
+    /**
+     * Transition to `next`, notifying state subscribers only on a real change.
+     *
+     * @param next - the state to transition to
+     */
     #setState(next: RealtimeState): void {
         if (this.#state === next) {
             return;
@@ -309,6 +328,25 @@ function defaultWebSocketFactory(url: string, protocols?: string | readonly stri
 }
 
 /**
+ * Report whether a parsed value has the envelope shape: an object carrying a
+ * string `event` and a `data` field.
+ *
+ * @param value - the value parsed from a raw frame
+ * @returns true when the value can be read as an event envelope
+ */
+function isEnvelopeShape(value: unknown): value is { event: string; data: unknown } {
+    if (typeof value !== 'object' || value === null) {
+        return false;
+    }
+
+    if (!('event' in value) || !('data' in value)) {
+        return false;
+    }
+
+    return typeof (value as Record<string, unknown>).event === 'string';
+}
+
+/**
  * Attempt to parse a raw text frame as a typed event envelope.
  *
  * @param raw - the raw text frame to parse
@@ -319,20 +357,13 @@ function tryParseEnvelope(raw: string): { event: string; data: string } | null {
     try {
         const parsed: unknown = JSON.parse(raw);
 
-        if (
-            typeof parsed !== 'object' ||
-            parsed === null ||
-            !('event' in parsed) ||
-            !('data' in parsed) ||
-            typeof (parsed as Record<string, unknown>).event !== 'string'
-        ) {
+        if (!isEnvelopeShape(parsed)) {
             return null;
         }
 
-        const record = parsed as Record<string, unknown>;
-        const data = typeof record.data === 'string' ? record.data : JSON.stringify(record.data);
+        const data = typeof parsed.data === 'string' ? parsed.data : JSON.stringify(parsed.data);
 
-        return { event: record.event as string, data };
+        return { event: parsed.event, data };
     } catch {
         return null;
     }

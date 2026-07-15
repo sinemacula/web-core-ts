@@ -144,7 +144,7 @@ describe('useListQuery', () => {
     // -------------------------------------------------------------------------
     // filter.equals via setFilter
     // -------------------------------------------------------------------------
-    describe('setFilter — equals', () => {
+    describe('setFilter - equals', () => {
         it('applies the filter to the compiled query', () => {
             const { parameters, setFilter } = useListQuery(sharedDefinition);
 
@@ -190,7 +190,7 @@ describe('useListQuery', () => {
     // -------------------------------------------------------------------------
     // Dot-path filter (relation nesting)
     // -------------------------------------------------------------------------
-    describe('setFilter — dot-path relation nesting', () => {
+    describe('setFilter - dot-path relation nesting', () => {
         it('nests posts.author.name correctly', () => {
             const { parameters, setFilter } = useListQuery(sharedDefinition);
 
@@ -201,9 +201,9 @@ describe('useListQuery', () => {
     });
 
     // -------------------------------------------------------------------------
-    // filter.boolean — false is a real value
+    // filter.boolean - false is a real value
     // -------------------------------------------------------------------------
-    describe('setFilter — boolean false', () => {
+    describe('setFilter - boolean false', () => {
         it('emits false as a real equality filter, not a clear', () => {
             const { parameters, setFilter } = useListQuery(sharedDefinition);
 
@@ -222,9 +222,9 @@ describe('useListQuery', () => {
     });
 
     // -------------------------------------------------------------------------
-    // filter.present — true/false
+    // filter.present - true/false
     // -------------------------------------------------------------------------
-    describe('setFilter — present', () => {
+    describe('setFilter - present', () => {
         it('emits $notNull when present is true', () => {
             const { parameters, setFilter } = useListQuery(sharedDefinition);
 
@@ -245,7 +245,7 @@ describe('useListQuery', () => {
     // -------------------------------------------------------------------------
     // filter.anyOf, between, atLeast, atMost, contains
     // -------------------------------------------------------------------------
-    describe('setFilter — anyOf', () => {
+    describe('setFilter - anyOf', () => {
         it('applies a $in filter', () => {
             const { parameters, setFilter } = useListQuery(sharedDefinition);
 
@@ -255,7 +255,7 @@ describe('useListQuery', () => {
         });
     });
 
-    describe('setFilter — between', () => {
+    describe('setFilter - between', () => {
         it('applies a $between filter', () => {
             const { parameters, setFilter } = useListQuery(sharedDefinition);
 
@@ -265,7 +265,7 @@ describe('useListQuery', () => {
         });
     });
 
-    describe('setFilter — atLeast', () => {
+    describe('setFilter - atLeast', () => {
         it('applies a $ge filter', () => {
             const { parameters, setFilter } = useListQuery(sharedDefinition);
 
@@ -275,7 +275,7 @@ describe('useListQuery', () => {
         });
     });
 
-    describe('setFilter — atMost', () => {
+    describe('setFilter - atMost', () => {
         it('applies a $le filter', () => {
             const { parameters, setFilter } = useListQuery(sharedDefinition);
 
@@ -285,7 +285,7 @@ describe('useListQuery', () => {
         });
     });
 
-    describe('setFilter — contains', () => {
+    describe('setFilter - contains', () => {
         it('applies a $contains filter with a scalar', () => {
             const { parameters, setFilter } = useListQuery(sharedDefinition);
 
@@ -306,7 +306,7 @@ describe('useListQuery', () => {
     // -------------------------------------------------------------------------
     // setFilter with null clears the filter
     // -------------------------------------------------------------------------
-    describe('setFilter — null clears', () => {
+    describe('setFilter - null clears', () => {
         it('setFilter(name, null) clears the filter', () => {
             const { parameters, filterValues, setFilter } = useListQuery(sharedDefinition);
 
@@ -454,9 +454,9 @@ describe('useListQuery', () => {
     });
 
     // -------------------------------------------------------------------------
-    // sortBy — defaultSort emission
+    // sortBy - defaultSort emission
     // -------------------------------------------------------------------------
-    describe('sortBy — defaultSort', () => {
+    describe('sortBy - defaultSort', () => {
         it('emits defaultSort when no explicit sort has been set', () => {
             const { parameters } = useListQuery(sharedDefinition);
 
@@ -472,9 +472,9 @@ describe('useListQuery', () => {
     });
 
     // -------------------------------------------------------------------------
-    // sortBy — explicit sort
+    // sortBy - explicit sort
     // -------------------------------------------------------------------------
-    describe('sortBy — explicit sort', () => {
+    describe('sortBy - explicit sort', () => {
         it('sets an explicit ascending sort', () => {
             const { parameters, sortBy } = useListQuery(sharedDefinition);
 
@@ -518,9 +518,9 @@ describe('useListQuery', () => {
     });
 
     // -------------------------------------------------------------------------
-    // sortBy — toggle behaviour
+    // sortBy - toggle behaviour
     // -------------------------------------------------------------------------
-    describe('sortBy — toggle', () => {
+    describe('sortBy - toggle', () => {
         it('defaults to asc on first call without explicit direction', () => {
             const { sort, sortBy } = useListQuery(sharedDefinition);
 
@@ -568,9 +568,9 @@ describe('useListQuery', () => {
     });
 
     // -------------------------------------------------------------------------
-    // sortBy — throws on non-sortable column
+    // sortBy - throws on non-sortable column
     // -------------------------------------------------------------------------
-    describe('sortBy — non-sortable column', () => {
+    describe('sortBy - non-sortable column', () => {
         it('throws an Error naming the rejected column and the allowed list', () => {
             const { sortBy } = useListQuery(sharedDefinition);
 

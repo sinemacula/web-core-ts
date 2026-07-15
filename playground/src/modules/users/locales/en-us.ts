@@ -1,5 +1,5 @@
 /**
- * Users module translations — English (United States).
+ * Users module translations - English (United States).
  *
  * Namespaced under `users.` by the module registry.
  *

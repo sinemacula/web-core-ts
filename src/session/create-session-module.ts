@@ -20,7 +20,7 @@ import { analytics, api, featureFlags, reporting } from '../app/services';
 import { createBearerTokenInterceptor } from '../http/bearer-token-interceptor';
 import type { HttpClient } from '../http/http-client';
 import { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
-import type { ModuleBootContext, ModuleDefinition, ModuleTeardown } from '../module/module';
+import type { ModuleBootContext, ModuleDefinition, ModuleRegisterContext, ModuleTeardown } from '../module/module';
 import type { KeyValueStorage } from '../storage/key-value-storage';
 import { createDefaultSessionApi } from './default-session-api';
 import { appendRedirectTarget, sanitiseRedirectTarget } from './redirect';
@@ -203,38 +203,59 @@ export function createSessionModule<U extends SessionUser = SessionUser, C = { e
     return {
         name: options.name ?? DEFAULT_MODULE_NAME,
         routes: [],
-        register: context => {
-            const coordinator = new TokenRefreshCoordinator({
-                refresh: () => useSessionStore(context.pinia).refresh(),
-            });
-
-            let gateway: SessionApi<U, C> | null = null;
-
-            installSessionContext<U>({
-                storageKeys,
-                routes,
-                storage: context.storage,
-                storeId,
-                coordinator,
-                parseTimestamp: parseLegacyTimestamp,
-                device: () => deviceFingerprint(context.storage, storageKeys.deviceUuid, generateUuid, deviceOs),
-                get api(): SessionApi<U> {
-                    gateway ??= apiFactory(api());
-
-                    return gateway as unknown as SessionApi<U>;
-                },
-            });
-
-            context.http.addRequestInterceptor(
-                createBearerTokenInterceptor({
-                    getAccessToken: () => useSessionStore(context.pinia).accessToken,
-                }),
-            );
-            context.http.setUnauthorizedHandler(() => coordinator.refresh());
-        },
+        register: context =>
+            registerSession<U, C>(context, { storageKeys, routes, storeId, apiFactory, generateUuid, deviceOs }),
         stores: [pinia => useSessionStore(pinia)],
         boot: context => bootSessionLifecycle(context, lifecycle),
     };
+}
+
+/** The resolved register-phase collaborators the session context is built from. */
+interface RegisterConfig<U extends SessionUser, C> {
+    readonly storageKeys: SessionStorageKeys;
+    readonly routes: SessionRoutes;
+    readonly storeId: string;
+    readonly apiFactory: (http: HttpClient) => SessionApi<U, C>;
+    readonly generateUuid: () => string;
+    readonly deviceOs: string;
+}
+
+/**
+ * Install the session context, contribute the bearer-token interceptor, and
+ * claim the single unauthorized-handler slot at the register phase.
+ *
+ * @param context - the module register context
+ * @param config - the resolved collaborators the session context is built from
+ */
+function registerSession<U extends SessionUser, C>(context: ModuleRegisterContext, config: RegisterConfig<U, C>): void {
+    const coordinator = new TokenRefreshCoordinator({
+        refresh: () => useSessionStore(context.pinia).refresh(),
+    });
+
+    let gateway: SessionApi<U, C> | null = null;
+
+    installSessionContext<U>({
+        storageKeys: config.storageKeys,
+        routes: config.routes,
+        storage: context.storage,
+        storeId: config.storeId,
+        coordinator,
+        parseTimestamp: parseLegacyTimestamp,
+        device: () =>
+            deviceFingerprint(context.storage, config.storageKeys.deviceUuid, config.generateUuid, config.deviceOs),
+        get api(): SessionApi<U> {
+            gateway ??= config.apiFactory(api());
+
+            return gateway as unknown as SessionApi<U>;
+        },
+    });
+
+    context.http.addRequestInterceptor(
+        createBearerTokenInterceptor({
+            getAccessToken: () => useSessionStore(context.pinia).accessToken,
+        }),
+    );
+    context.http.setUnauthorizedHandler(() => coordinator.refresh());
 }
 
 /** The resolved boot-phase toggles and collaborator inputs. */
@@ -263,27 +284,11 @@ function bootSessionLifecycle<U extends SessionUser>(
     const teardowns: ModuleTeardown[] = [];
 
     if (options.crossTabSync) {
-        const target = context.platform.targetWindow;
-        const onStorage = createStorageListener(store, options.storageKeys.accessToken);
-
-        target.addEventListener('storage', onStorage);
-        teardowns.push(() => {
-            target.removeEventListener('storage', onStorage);
-        });
+        teardowns.push(wireCrossTabSync(context, store, options.storageKeys));
     }
 
     if (options.proactiveRefresh) {
-        const scheduler = createRefreshScheduler(
-            sessionContext().coordinator,
-            context.platform.clock,
-            options.refreshSkewMs,
-        );
-        const stopExpiryWatch = watch(() => store.expiresAtEpochMs, scheduler.schedule, { immediate: true });
-
-        teardowns.push(() => {
-            stopExpiryWatch();
-            scheduler.cancel();
-        });
+        teardowns.push(wireProactiveRefresh(context, store, options.refreshSkewMs));
     }
 
     if (store.isAuthenticated) {
@@ -293,29 +298,11 @@ function bootSessionLifecycle<U extends SessionUser>(
     }
 
     if (options.sessionLossRedirect) {
-        teardowns.push(
-            watch(
-                () => store.isAuthenticated,
-                (authenticated, previously) => {
-                    if (previously && !authenticated) {
-                        redirectToLogin(context.router, options.routes);
-                    }
-                },
-            ),
-        );
+        teardowns.push(wireSessionLossRedirect(context, store, options.routes));
     }
 
     if (options.identity !== null) {
-        const mapping = options.identity;
-
-        teardowns.push(
-            watch(
-                () => store.user,
-                user => {
-                    applyIdentity(mapping, user);
-                },
-            ),
-        );
+        teardowns.push(wireIdentityFanOut(store, options.identity));
     }
 
     return () => {
@@ -323,6 +310,92 @@ function bootSessionLifecycle<U extends SessionUser>(
             teardown();
         }
     };
+}
+
+/**
+ * Mirror another tab's session change onto this tab's store for as long as
+ * the returned teardown is uncalled.
+ *
+ * @param context - the module boot context
+ * @param store - the session store
+ * @param storageKeys - the resolved storage keys
+ * @returns a teardown detaching the `storage` listener
+ */
+function wireCrossTabSync(
+    context: ModuleBootContext,
+    store: SessionStore,
+    storageKeys: SessionStorageKeys,
+): ModuleTeardown {
+    const target = context.platform.targetWindow;
+    const onStorage = createStorageListener(store, storageKeys.accessToken);
+
+    target.addEventListener('storage', onStorage);
+
+    return () => {
+        target.removeEventListener('storage', onStorage);
+    };
+}
+
+/**
+ * Arm the proactive refresh timer and keep it tracking the session expiry.
+ *
+ * @param context - the module boot context
+ * @param store - the session store
+ * @param refreshSkewMs - how long before expiry the refresh fires
+ * @returns a teardown stopping the expiry watcher and cancelling the timer
+ */
+function wireProactiveRefresh(context: ModuleBootContext, store: SessionStore, refreshSkewMs: number): ModuleTeardown {
+    const scheduler = createRefreshScheduler(sessionContext().coordinator, context.platform.clock, refreshSkewMs);
+    const stopExpiryWatch = watch(() => store.expiresAtEpochMs, scheduler.schedule, { immediate: true });
+
+    return () => {
+        stopExpiryWatch();
+        scheduler.cancel();
+    };
+}
+
+/**
+ * Redirect to the login route whenever the session transitions from
+ * authenticated to unauthenticated.
+ *
+ * @param context - the module boot context
+ * @param store - the session store
+ * @param routes - the resolved route identity
+ * @returns a teardown stopping the session-loss watcher
+ */
+function wireSessionLossRedirect(
+    context: ModuleBootContext,
+    store: SessionStore,
+    routes: SessionRoutes,
+): ModuleTeardown {
+    return watch(
+        () => store.isAuthenticated,
+        (authenticated, previously) => {
+            if (previously && !authenticated) {
+                redirectToLogin(context.router, routes);
+            }
+        },
+    );
+}
+
+/**
+ * Fan the session identity out to the reporting, analytics and feature-flag
+ * holders whenever the session user changes.
+ *
+ * @param store - the session store
+ * @param mapping - the resolved per-channel identity mappings
+ * @returns a teardown stopping the identity watcher
+ */
+function wireIdentityFanOut<U extends SessionUser>(
+    store: SessionStore<U>,
+    mapping: Required<SessionIdentityMapping<U>>,
+): ModuleTeardown {
+    return watch(
+        () => store.user,
+        user => {
+            applyIdentity(mapping, user);
+        },
+    );
 }
 
 /**
@@ -377,6 +450,7 @@ function createRefreshScheduler(
 ): RefreshScheduler {
     let timer: ReturnType<typeof setTimeout> | null = null;
 
+    /** Cancel any pending proactive refresh, leaving no timer armed. */
     const cancel = (): void => {
         if (timer !== null) {
             clearTimeout(timer);
@@ -384,6 +458,13 @@ function createRefreshScheduler(
         }
     };
 
+    /**
+     * Arm a single proactive refresh ahead of the session expiry, replacing
+     * any previously scheduled attempt.
+     *
+     * @param expiresAtEpochMs - the expiry to refresh ahead of, or null to
+     *   cancel without arming a new timer
+     */
     const schedule = (expiresAtEpochMs: number | null): void => {
         cancel();
 

@@ -91,6 +91,11 @@ export class ConnectivityMonitor {
         };
     }
 
+    /**
+     * Record a new state and notify subscribers only when it actually changed.
+     *
+     * @param online - the connectivity state reported by the latest event
+     */
     #setOnline(online: boolean): void {
         if (online === this.#online) {
             return;

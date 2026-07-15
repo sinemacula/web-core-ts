@@ -19,9 +19,6 @@ export const REQUIRED_RUNTIME_KEYS = ['API_URL', 'APP_URL', 'APP_ENV', 'APP_VERS
  * Thrown when required runtime configuration keys are missing or empty.
  */
 export class ConfigurationError extends Error {
-    /**
-     * @param message - description of the missing keys
-     */
     constructor(message: string) {
         super(message);
         this.name = 'ConfigurationError';

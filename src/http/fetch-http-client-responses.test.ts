@@ -1,5 +1,5 @@
 /**
- * Unit tests for FetchHttpClient — response handling (success parsing,
+ * Unit tests for FetchHttpClient - response handling (success parsing,
  * error mapping, validation errors, and blob downloads).
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
@@ -64,7 +64,7 @@ function makeClient(
 // Successful response parsing
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — success response parsing', () => {
+describe('FetchHttpClient - success response parsing', () => {
     it('returns undefined for an empty body', async () => {
         const fetchFn = makeFetch(async () => emptyResponse(204));
         const client = makeClient(fetchFn);
@@ -108,7 +108,7 @@ describe('FetchHttpClient — success response parsing', () => {
 // Non-ok response mapping
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — error response mapping', () => {
+describe('FetchHttpClient - error response mapping', () => {
     it('uses the payload message when present', async () => {
         const fetchFn = makeFetch(async () => jsonResponse({ message: 'custom error' }, 400));
         const client = makeClient(fetchFn);
@@ -230,7 +230,7 @@ describe('FetchHttpClient — error response mapping', () => {
 // Response-error handler
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — response-error handler', () => {
+describe('FetchHttpClient - response-error handler', () => {
     it('notifies the handler with the HttpError and the resolved request on a non-ok response', async () => {
         const fetchFn = makeFetch(async () => jsonResponse({ message: 'boom' }, 500));
         const onResponseError = vi.fn();
@@ -299,7 +299,7 @@ describe('FetchHttpClient — response-error handler', () => {
 // Downloads
 // ---------------------------------------------------------------------------
 
-describe('FetchHttpClient — download', () => {
+describe('FetchHttpClient - download', () => {
     it('returns the response body as a Blob with the correct bytes', async () => {
         const fetchFn = makeFetch(async () => new Response(new Blob(['file bytes']), { status: 200 }));
         const client = makeClient(fetchFn);

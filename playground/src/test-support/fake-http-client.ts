@@ -45,30 +45,51 @@ export class FakeHttpClient implements HttpClient {
         this.#queue.push({ kind: 'reject', error });
     }
 
+    /**
+     * Record a GET and replay the next queued result.
+     */
     get<T>(path: string, _options?: HttpRequestOptions): Promise<T> {
         return this.#consume('GET', path, undefined);
     }
 
+    /**
+     * Record a POST and replay the next queued result.
+     */
     post<T>(path: string, body?: unknown, _options?: HttpRequestOptions): Promise<T> {
         return this.#consume('POST', path, body);
     }
 
+    /**
+     * Record a PUT and replay the next queued result.
+     */
     put<T>(path: string, body?: unknown, _options?: HttpRequestOptions): Promise<T> {
         return this.#consume('PUT', path, body);
     }
 
+    /**
+     * Record a PATCH and replay the next queued result.
+     */
     patch<T>(path: string, body?: unknown, _options?: HttpRequestOptions): Promise<T> {
         return this.#consume('PATCH', path, body);
     }
 
+    /**
+     * Record a DELETE and replay the next queued result.
+     */
     delete<T>(path: string, _options?: HttpRequestOptions): Promise<T> {
         return this.#consume('DELETE', path, undefined);
     }
 
+    /**
+     * Record a GET and replay the next queued result as a Blob.
+     */
     download(path: string, _options?: HttpRequestOptions): Promise<Blob> {
         return this.#consume('GET', path, undefined);
     }
 
+    /**
+     * Record the call and resolve or reject with the next queued result.
+     */
     #consume<T>(method: string, path: string, body: unknown): Promise<T> {
         this.calls.push({ method, path, body });
 
