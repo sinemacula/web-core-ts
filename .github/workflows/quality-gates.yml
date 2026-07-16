@@ -38,35 +38,21 @@ defaults:
 jobs:
 
     # ==========================================================================
-    # JOB: DEAD CODE
+    # JOB: GATES
     # ==========================================================================
-    deadcode:
-        name: Dead code (knip)
-        runs-on: ubuntu-latest
-
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v7
-                with:
-                    persist-credentials: false
-
-            -   name: Setup Node.js
-                uses: actions/setup-node@v7
-                with:
-                    node-version: '24'
-                    cache: npm
-
-            -   name: Install dependencies
-                run: npm ci
-
-            -   name: Knip
-                run: npm run deadcode
+    # Knip, bundle size, and mutation (scoped on PRs, full on schedule) - all
+    # from the shared reusable workflow.
+    gates:
+        uses: sinemacula/.github/.github/workflows/node-quality-gates.yml@v1.6.0
 
     # ==========================================================================
     # JOB: STRUCTURE
     # ==========================================================================
+    # Repo-specific: dogfood the web-core eslint preset. Consumers get the preset
+    # through qlty, so this job does not belong in the shared workflow.
     structure:
         name: Structure lint
+        if: ${{ github.event_name != 'schedule' }}
         runs-on: ubuntu-latest
 
         steps:
@@ -89,65 +75,3 @@ jobs:
 
             -   name: Structure lint
                 run: npm run lint:structure
-
-    # ==========================================================================
-    # JOB: BUNDLE SIZE
-    # ==========================================================================
-    size:
-        name: Bundle size (size-limit)
-        runs-on: ubuntu-latest
-
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v7
-                with:
-                    persist-credentials: false
-
-            -   name: Setup Node.js
-                uses: actions/setup-node@v7
-                with:
-                    node-version: '24'
-                    cache: npm
-
-            -   name: Install dependencies
-                run: npm ci
-
-            -   name: Build
-                run: npm run build
-
-            -   name: Check bundle size
-                run: npm run size
-
-    # ==========================================================================
-    # JOB: MUTATION
-    # ==========================================================================
-    mutation:
-        name: Mutation tests (stryker)
-        runs-on: ubuntu-latest
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v7
-                with:
-                    persist-credentials: false
-
-            -   name: Setup Node.js
-                uses: actions/setup-node@v7
-                with:
-                    node-version: '24'
-                    cache: npm
-
-            -   name: Install dependencies
-                run: npm ci
-
-            -   name: Mutation tests
-                run: npm run test:mutation
-
-            -   name: Upload mutation report
-                if: always()
-                uses: actions/upload-artifact@v7
-                with:
-                    name: mutation-report
-                    path: build/mutation/
-                    retention-days: 30

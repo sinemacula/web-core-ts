@@ -34,6 +34,7 @@
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "test:mutation": "stryker run",
+        "mutation:scope": "node scripts/mutation-scope.mjs",
         "check": "qlty check",
         "fmt": "qlty fmt",
         "smells": "qlty smells",
