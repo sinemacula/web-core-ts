@@ -23,10 +23,5 @@ Thumbs.db
 
 /playground/public/runtime-env.json
 
-.qlty/logs
-.qlty/out
-.qlty/results
-.qlty/plugin_cachedir
-.qlty/sources
-
 /test-results/
+/.pack/
