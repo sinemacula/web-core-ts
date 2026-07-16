@@ -14,9 +14,10 @@
     },
     "packageManager": "npm@11.11.0",
     "exports": {
+        "./eslint": "./eslint/index.js",
         "./*": "./src/*.ts"
     },
-    "files": ["dist", "README.md", "LICENSE"],
+    "files": ["dist", "eslint", "!eslint/**/__tests__/**", "!eslint/vitest.config.mjs", "README.md", "LICENSE"],
     "publishConfig": {
         "access": "public",
         "registry": "https://registry.npmjs.org/"
@@ -37,14 +38,19 @@
         "fmt": "qlty fmt",
         "smells": "qlty smells",
         "deadcode": "knip",
-        "check:pkg": "rm -rf .pack && mkdir -p .pack && npm pack --pack-destination .pack --silent && publint .pack/*.tgz && attw .pack/*.tgz",
+        "lint:structure": "eslint --no-config-lookup --no-inline-config --config eslint.structure.mjs src playground/src e2e",
+        "test:eslint": "vitest run --config eslint/vitest.config.mjs",
+        "check:pkg": "rm -rf .pack && mkdir -p .pack && npm pack --pack-destination .pack --silent && publint .pack/*.tgz && attw .pack/*.tgz --exclude-entrypoints ./eslint",
         "test:e2e": "playwright test",
         "test:e2e:ui": "playwright test --ui",
         "size": "npm run size --workspace playground",
         "postpack": "node scripts/pack-exports.mjs src"
     },
     "peerDependencies": {
+        "@typescript-eslint/utils": "^8",
+        "eslint": ">=9",
         "pinia": ">=3",
+        "typescript-eslint": "^8",
         "vue": ">=3.5",
         "vue-i18n": ">=11",
         "vue-router": ">=4"
@@ -57,19 +63,34 @@
         "@stryker-mutator/core": "^9.6.1",
         "@stryker-mutator/vitest-runner": "^9.6.1",
         "@types/node": "^25.9.3",
+        "@typescript-eslint/rule-tester": "^8.64.0",
+        "@typescript-eslint/utils": "^8.64.0",
         "@vitejs/plugin-vue": "^6.0.7",
         "@vitest/coverage-v8": "^4.1.8",
+        "eslint": "^10.7.0",
         "happy-dom": "^20.10.2",
         "knip": "^6.16.1",
         "mkdist": "^2.4.1",
         "publint": "^0.3.21",
         "size-limit": "^12.1.0",
         "typescript": "^6.0.3",
+        "typescript-eslint": "^8.64.0",
         "vite": "^8.0.16",
         "vitest": "^4.1.8",
         "vue-tsc": "^3.3.4"
     },
     "overrides": {
         "qs": "6.15.2"
+    },
+    "peerDependenciesMeta": {
+        "@typescript-eslint/utils": {
+            "optional": true
+        },
+        "eslint": {
+            "optional": true
+        },
+        "typescript-eslint": {
+            "optional": true
+        }
     }
 }

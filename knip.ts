@@ -21,8 +21,15 @@ const SCRIPT_BLOCK = /<script[^>]*>([\s\S]*?)<\/script\s*>/gim;
 const config: KnipConfig = {
     workspaces: {
         '.': {
-            entry: ['src/**/*.test.ts', 'e2e/**/*.spec.ts', 'vitest.config.ts', 'playwright.config.ts'],
-            project: ['src/**/*.ts', 'e2e/**/*.ts'],
+            entry: [
+                'src/**/*.test.ts',
+                'e2e/**/*.spec.ts',
+                'vitest.config.ts',
+                'playwright.config.ts',
+                'eslint/**/*.test.js',
+                'eslint/vitest.config.mjs',
+            ],
+            project: ['src/**/*.ts', 'e2e/**/*.ts', 'eslint/**/*.js'],
             playwright: false,
             vitest: false,
         },
