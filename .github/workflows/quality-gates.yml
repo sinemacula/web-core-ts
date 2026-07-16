@@ -43,7 +43,7 @@ jobs:
     # Knip, bundle size, and mutation (scoped on PRs, full on schedule) - all
     # from the shared reusable workflow.
     gates:
-        uses: sinemacula/.github/.github/workflows/node-quality-gates.yml@v1.6.0
+        uses: sinemacula/.github/.github/workflows/node-quality-gates.yml@v1.6.1
 
     # ==========================================================================
     # JOB: STRUCTURE
