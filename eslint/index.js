@@ -17,7 +17,7 @@ const MODULE_TS_FILES = ['**/modules/**/*.ts', '**/modules/**/*.tsx'];
 
 export default [
     {
-        // Kernel-wide conventions.
+        // Kernel-wide conventions and import boundaries.
         files: TS_FILES,
         plugins: {
             '@sinemacula/web-core': plugin,
@@ -27,6 +27,25 @@ export default [
         },
         rules: {
             '@sinemacula/web-core/no-snake-case-keys': 'error',
+            'no-restricted-imports': [
+                'error',
+                {
+                    paths: [
+                        {
+                            name: '@sinemacula/web-core',
+                            message:
+                                'Import a kernel subpath (@sinemacula/web-core/<area>/<file>), not the package barrel.',
+                        },
+                    ],
+                    patterns: [
+                        {
+                            group: ['@/modules/*/*', '@/modules/*/**'],
+                            message:
+                                'Reach another module through its public surface (@/modules/<name>), not its internals.',
+                        },
+                    ],
+                },
+            ],
         },
     },
     {
@@ -42,6 +61,13 @@ export default [
             '@sinemacula/web-core/module-name-matches-folder': 'error',
             '@sinemacula/web-core/route-name-namespacing': 'error',
             '@sinemacula/web-core/route-name-via-constant': 'error',
+        },
+    },
+    {
+        // Tests may reach across boundaries to assert internals.
+        files: ['**/*.test.ts', '**/*.test.tsx'],
+        rules: {
+            'no-restricted-imports': 'off',
         },
     },
 ];
