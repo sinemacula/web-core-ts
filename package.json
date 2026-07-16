@@ -38,6 +38,8 @@
         "fmt": "qlty fmt",
         "smells": "qlty smells",
         "deadcode": "knip",
+        "lint:structure": "eslint --no-config-lookup --no-inline-config --config eslint.structure.mjs src playground/src e2e",
+        "test:eslint": "vitest run --config eslint/vitest.config.mjs",
         "check:pkg": "rm -rf .pack && mkdir -p .pack && npm pack --pack-destination .pack --silent && publint .pack/*.tgz && attw .pack/*.tgz --exclude-entrypoints ./eslint",
         "test:e2e": "playwright test",
         "test:e2e:ui": "playwright test --ui",
