@@ -14,9 +14,10 @@
     },
     "packageManager": "npm@11.11.0",
     "exports": {
+        "./eslint": "./eslint/index.js",
         "./*": "./src/*.ts"
     },
-    "files": ["dist", "README.md", "LICENSE"],
+    "files": ["dist", "eslint", "!eslint/**/__tests__/**", "!eslint/vitest.config.mjs", "README.md", "LICENSE"],
     "publishConfig": {
         "access": "public",
         "registry": "https://registry.npmjs.org/"
@@ -37,7 +38,7 @@
         "fmt": "qlty fmt",
         "smells": "qlty smells",
         "deadcode": "knip",
-        "check:pkg": "rm -rf .pack && mkdir -p .pack && npm pack --pack-destination .pack --silent && publint .pack/*.tgz && attw .pack/*.tgz",
+        "check:pkg": "rm -rf .pack && mkdir -p .pack && npm pack --pack-destination .pack --silent && publint .pack/*.tgz && attw .pack/*.tgz --exclude-entrypoints ./eslint",
         "test:e2e": "playwright test",
         "test:e2e:ui": "playwright test --ui",
         "size": "npm run size --workspace playground",
@@ -47,7 +48,10 @@
         "pinia": ">=3",
         "vue": ">=3.5",
         "vue-i18n": ">=11",
-        "vue-router": ">=4"
+        "vue-router": ">=4",
+        "@typescript-eslint/utils": "^8",
+        "eslint": ">=9",
+        "typescript-eslint": "^8"
     },
     "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
@@ -76,5 +80,16 @@
     },
     "overrides": {
         "qs": "6.15.2"
+    },
+    "peerDependenciesMeta": {
+        "@typescript-eslint/utils": {
+            "optional": true
+        },
+        "eslint": {
+            "optional": true
+        },
+        "typescript-eslint": {
+            "optional": true
+        }
     }
 }

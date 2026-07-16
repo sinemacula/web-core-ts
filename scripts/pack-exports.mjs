@@ -23,16 +23,14 @@ if (mode !== 'dist' && mode !== 'src') {
     process.exit(1);
 }
 
-const SRC = `    "exports": {
-        "./*": "./src/*.ts"
-    }`;
+// Only the wildcard entry is swapped, so other explicit exports (e.g. the
+// `./eslint` preset, which ships as plain JS either way) are left untouched.
+const SRC = `"./*": "./src/*.ts"`;
 
-const DIST = `    "exports": {
-        "./*": {
+const DIST = `"./*": {
             "types": "./dist/*.d.ts",
             "import": "./dist/*.js"
-        }
-    }`;
+        }`;
 
 const target = mode === 'dist' ? DIST : SRC;
 const other = mode === 'dist' ? SRC : DIST;
