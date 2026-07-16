@@ -45,13 +45,13 @@
         "postpack": "node scripts/pack-exports.mjs src"
     },
     "peerDependencies": {
-        "pinia": ">=3",
-        "vue": ">=3.5",
-        "vue-i18n": ">=11",
-        "vue-router": ">=4",
         "@typescript-eslint/utils": "^8",
         "eslint": ">=9",
-        "typescript-eslint": "^8"
+        "pinia": ">=3",
+        "typescript-eslint": "^8",
+        "vue": ">=3.5",
+        "vue-i18n": ">=11",
+        "vue-router": ">=4"
     },
     "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
@@ -66,7 +66,6 @@
         "@vitejs/plugin-vue": "^6.0.7",
         "@vitest/coverage-v8": "^4.1.8",
         "eslint": "^10.7.0",
-        "eslint-plugin-project-structure": "^3.14.3",
         "happy-dom": "^20.10.2",
         "knip": "^6.16.1",
         "mkdist": "^2.4.1",
