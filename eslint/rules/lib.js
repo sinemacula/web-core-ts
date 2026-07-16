@@ -31,3 +31,13 @@ export function moduleFolder(filename) {
 
     return index >= 0 && parts[index + 1] ? parts[index + 1] : null;
 }
+
+/** Convert a kebab-case name to camelCase (`user-settings` -> `userSettings`). */
+export function toCamelCase(kebab) {
+    return kebab.replace(/-([a-z0-9])/g, (_, character) => character.toUpperCase());
+}
+
+/** Convert a kebab-case name to UPPER_SNAKE_CASE (`user-settings` -> `USER_SETTINGS`). */
+export function toUpperSnakeCase(kebab) {
+    return kebab.replace(/-/g, '_').toUpperCase();
+}

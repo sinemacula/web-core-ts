@@ -59,6 +59,7 @@ export default [
         },
         rules: {
             '@sinemacula/web-core/module-name-matches-folder': 'error',
+            '@sinemacula/web-core/module-export-names': 'error',
             '@sinemacula/web-core/route-name-namespacing': 'error',
             '@sinemacula/web-core/route-name-via-constant': 'error',
         },

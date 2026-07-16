@@ -8,6 +8,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
+import moduleExportNames from './rules/module-export-names.js';
 import moduleNameMatchesFolder from './rules/module-name-matches-folder.js';
 import noSnakeCaseKeys from './rules/no-snake-case-keys.js';
 import routeNameNamespacing from './rules/route-name-namespacing.js';
@@ -19,6 +20,7 @@ export default {
     },
     rules: {
         'module-name-matches-folder': moduleNameMatchesFolder,
+        'module-export-names': moduleExportNames,
         'route-name-namespacing': routeNameNamespacing,
         'route-name-via-constant': routeNameViaConstant,
         'no-snake-case-keys': noSnakeCaseKeys,
