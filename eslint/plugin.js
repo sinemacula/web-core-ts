@@ -9,6 +9,8 @@
  */
 
 import moduleNameMatchesFolder from './rules/module-name-matches-folder.js';
+import routeNameNamespacing from './rules/route-name-namespacing.js';
+import routeNameViaConstant from './rules/route-name-via-constant.js';
 
 export default {
     meta: {
@@ -16,5 +18,7 @@ export default {
     },
     rules: {
         'module-name-matches-folder': moduleNameMatchesFolder,
+        'route-name-namespacing': routeNameNamespacing,
+        'route-name-via-constant': routeNameViaConstant,
     },
 };
