@@ -11,14 +11,18 @@
  * @copyright   2026 Sine Macula Limited
  */
 
+// biome-ignore-all lint/style/useNamingConvention: ESLint visitor keys are AST node-type names.
+
 import { createRule, moduleFolder } from './lib.js';
 
 /** Whether a property is the non-computed `name` key of an object. */
 function isNameProperty(property) {
-    return property.type === 'Property'
-        && !property.computed
-        && ((property.key.type === 'Identifier' && property.key.name === 'name')
-            || (property.key.type === 'Literal' && property.key.value === 'name'));
+    return (
+        property.type === 'Property' &&
+        !property.computed &&
+        ((property.key.type === 'Identifier' && property.key.name === 'name') ||
+            (property.key.type === 'Literal' && property.key.value === 'name'))
+    );
 }
 
 export default createRule({

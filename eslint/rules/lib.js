@@ -12,9 +12,7 @@
 import { ESLintUtils } from '@typescript-eslint/utils';
 
 /** Shared rule factory linking each rule to its documentation anchor. */
-export const createRule = ESLintUtils.RuleCreator(
-    name => `https://github.com/sinemacula/web-core-ts#${name}`,
-);
+export const createRule = ESLintUtils.RuleCreator(name => `https://github.com/sinemacula/web-core-ts#${name}`);
 
 /** Whether the file path marks it as test code. */
 export function isTestPath(filename) {
