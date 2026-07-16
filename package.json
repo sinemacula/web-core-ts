@@ -2,7 +2,6 @@
     "name": "@sinemacula/web-core",
     "version": "1.0.0",
     "description": "Framework-agnostic kernel shared by every Sine Macula frontend: configuration, HTTP, routing, modules, i18n and storage.",
-    "private": true,
     "type": "module",
     "license": "Apache-2.0",
     "author": "Sine Macula Limited",
@@ -17,10 +16,17 @@
     "exports": {
         "./*": "./src/*.ts"
     },
+    "files": ["dist", "README.md", "LICENSE"],
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    },
     "workspaces": ["playground"],
     "scripts": {
         "dev": "npm run dev --workspace playground",
         "build": "npm run build --workspace playground",
+        "build:dist": "node scripts/build.mjs",
+        "prepack": "node scripts/build.mjs && node scripts/pack-exports.mjs dist",
         "preview": "npm run preview --workspace playground",
         "typecheck": "vue-tsc --noEmit",
         "test": "vitest run",
@@ -31,9 +37,11 @@
         "fmt": "qlty fmt",
         "smells": "qlty smells",
         "deadcode": "knip",
+        "check:pkg": "rm -rf .pack && mkdir -p .pack && npm pack --pack-destination .pack --silent && publint .pack/*.tgz && attw .pack/*.tgz",
         "test:e2e": "playwright test",
         "test:e2e:ui": "playwright test --ui",
-        "size": "npm run size --workspace playground"
+        "size": "npm run size --workspace playground",
+        "postpack": "node scripts/pack-exports.mjs src"
     },
     "peerDependencies": {
         "pinia": ">=3",
@@ -42,6 +50,7 @@
         "vue-router": ">=4"
     },
     "devDependencies": {
+        "@arethetypeswrong/cli": "^0.18.5",
         "@axe-core/playwright": "^4.11.3",
         "@playwright/test": "^1.60.0",
         "@size-limit/file": "^12.1.0",
@@ -52,6 +61,8 @@
         "@vitest/coverage-v8": "^4.1.8",
         "happy-dom": "^20.10.2",
         "knip": "^6.16.1",
+        "mkdist": "^2.4.1",
+        "publint": "^0.3.21",
         "size-limit": "^12.1.0",
         "typescript": "^6.0.3",
         "vite": "^8.0.16",

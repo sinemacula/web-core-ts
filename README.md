@@ -34,6 +34,15 @@ real product wires the kernel, and is the template consuming apps follow.
 | `src/support/`       | Small shared utilities (`deepFreeze`, `isRecord`, clipboard) and the `ServiceHolder` singleton primitive     |
 | `src/updates/`       | Deployed-version monitor polling for new releases                                                            |
 
+## Installation
+
+```bash
+npm install @sinemacula/web-core vue vue-router vue-i18n pinia
+```
+
+`vue`, `vue-router`, `vue-i18n` and `pinia` are peer dependencies - install them alongside the kernel. The package
+is ESM-only and ships compiled `dist/` with type declarations.
+
 ## Import style
 
 No barrel exports. Import the file you need, by its full subpath:
@@ -42,9 +51,11 @@ No barrel exports. Import the file you need, by its full subpath:
 import { FetchHttpClient } from '@sinemacula/web-core/http/fetch-http-client';
 ```
 
-The exports map (`"./*": "./src/*.ts"`) resolves every subpath directly to its source file. `vue`, `vue-router`,
-`vue-i18n` and `pinia` are peer dependencies; the framework-agnostic areas (http, storage, config, ...) never
-import them.
+Inside this repository the exports map (`"./*": "./src/*.ts"`) resolves every subpath directly to its source file,
+so the playground consumes the kernel with no build step. The published package remaps the same wildcard to
+compiled output (`"./*": { "types": "./dist/*.d.ts", "import": "./dist/*.js" }`); import specifiers are identical
+either way. `vue`, `vue-router`, `vue-i18n` and `pinia` are peer dependencies; the framework-agnostic areas (http,
+storage, config, ...) never import them.
 
 ## Modules
 
@@ -300,7 +311,7 @@ from `src/session/authorization.ts`, and read session state through `useSessionS
 |-----------|-------------------------------------------------------------------|
 | Framework | Vue 3 (Composition API) - vue/vue-router/vue-i18n/pinia as peers  |
 | Language  | TypeScript, maximally strict                                      |
-| Build     | Vite                                                              |
+| Build     | mkdist (kernel -> `dist/`) + Vite (playground/apps)               |
 | State     | Pinia - application module stores plus the kernel session store   |
 | Routing   | Vue Router + Laravel-style middleware pipeline                    |
 | i18n      | vue-i18n, lazily-loaded locales                                   |
@@ -336,6 +347,7 @@ npm run dev
 |-------------------------|------------------------------------------------|
 | `npm run dev`           | Playground dev server (Vite)                   |
 | `npm run build`         | Playground production build                    |
+| `npm run build:dist`    | Compile the kernel package to `dist/`          |
 | `npm run preview`       | Preview the playground production build        |
 | `npm run typecheck`     | `vue-tsc` over kernel + workspaces             |
 | `npm run test`          | Unit tests (kernel + playground)               |
@@ -349,6 +361,7 @@ npm run dev
 | `npm run smells`        | qlty duplication + complexity analysis         |
 | `npm run deadcode`      | Knip dead-code detection                       |
 | `npm run size`          | size-limit bundle budgets (playground build)   |
+| `npm run check:pkg`     | Pack + validate the published surface          |
 
 ## Quality gates
 
@@ -359,6 +372,17 @@ npm run dev
 - **Dead code**: Knip across all workspaces.
 - **Bundle size**: size-limit budgets on the playground build.
 - **Hooks**: `.qlty/hooks/` - format on pre-commit, check on pre-push.
+
+## Releases
+
+The package is published to npm from CI - never by hand.
+
+- **Versioning**: release-please reads Conventional Commit history and maintains a standing Release PR that bumps
+  `package.json` and `CHANGELOG.md`. Merging it tags the release and cuts a GitHub Release.
+- **Publish**: the `v*` tag triggers the `npm-publish` workflow, which compiles `dist/` through the `prepack`
+  lifecycle and runs `npm publish --provenance` under npm trusted publishing (OIDC - no token).
+- **Local checks**: `npm run build:dist` compiles the package; `npm run check:pkg` packs it and validates the
+  published surface with publint and are-the-types-wrong.
 
 ## Licence
 
