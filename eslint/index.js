@@ -12,10 +12,25 @@
 import tseslint from 'typescript-eslint';
 import plugin from './plugin.js';
 
+const TS_FILES = ['**/*.ts', '**/*.tsx'];
 const MODULE_TS_FILES = ['**/modules/**/*.ts', '**/modules/**/*.tsx'];
 
 export default [
     {
+        // Kernel-wide conventions.
+        files: TS_FILES,
+        plugins: {
+            '@sinemacula/web-core': plugin,
+        },
+        languageOptions: {
+            parser: tseslint.parser,
+        },
+        rules: {
+            '@sinemacula/web-core/no-snake-case-keys': 'error',
+        },
+    },
+    {
+        // The feature-module contract.
         files: MODULE_TS_FILES,
         plugins: {
             '@sinemacula/web-core': plugin,

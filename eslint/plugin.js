@@ -9,6 +9,7 @@
  */
 
 import moduleNameMatchesFolder from './rules/module-name-matches-folder.js';
+import noSnakeCaseKeys from './rules/no-snake-case-keys.js';
 import routeNameNamespacing from './rules/route-name-namespacing.js';
 import routeNameViaConstant from './rules/route-name-via-constant.js';
 
@@ -20,5 +21,6 @@ export default {
         'module-name-matches-folder': moduleNameMatchesFolder,
         'route-name-namespacing': routeNameNamespacing,
         'route-name-via-constant': routeNameViaConstant,
+        'no-snake-case-keys': noSnakeCaseKeys,
     },
 };
