@@ -5,8 +5,8 @@
  * can attach them as context. The trail evicts the oldest entry whenever it
  * would exceed its capacity.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

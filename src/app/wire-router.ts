@@ -6,8 +6,8 @@
  * surfacing its teardown so the preset can compose it into application
  * disposal.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Router, RouterHistory } from 'vue-router';

@@ -5,8 +5,8 @@
  * depends on this contract rather than on `window.localStorage`, so services
  * stay testable and storage failures stay contained in one adapter.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

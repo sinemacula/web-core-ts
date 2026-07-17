@@ -6,8 +6,8 @@
  * source with typed, fallback-aware accessors so configuration definitions
  * never hand-roll string coercion.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 const TRUTHY_VALUES = ['1', 'true', 'yes', 'on'];

@@ -16,8 +16,8 @@
  * this call to the auth flow - wire it from a dedicated context-sync layer so
  * coupling stays unidirectional.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

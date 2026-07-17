@@ -5,8 +5,8 @@
  * configuration registry and the locale loaders are the only application
  * inputs; everything else is kernel-owned wiring.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 // Side-effect import: registers the Tailwind layer and theme tokens with the

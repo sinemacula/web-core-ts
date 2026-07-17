@@ -6,8 +6,8 @@
  * (template plus wiring) so every line of behaviour lives in fully-covered
  * `.ts` modules.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { resolve } from 'node:path';

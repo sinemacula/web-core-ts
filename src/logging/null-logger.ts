@@ -5,8 +5,8 @@
  * intentionally empty so that calls are silently ignored rather than throwing
  * or writing to the console.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { LogFields, Logger } from './logger';

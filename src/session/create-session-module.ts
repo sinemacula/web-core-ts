@@ -9,8 +9,8 @@
  * identity fan-out at the boot phase. Login UI, locale copy and the user field
  * mapping stay app-side.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { watch } from 'vue';

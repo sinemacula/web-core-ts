@@ -10,18 +10,20 @@
  * need (`onIdle` calling into an auth logout, a warning dialog, and so on); the
  * kernel only detects idleness.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 export interface IdleMonitorOptions {
     /** Milliseconds of inactivity before subscribers are notified. */
     readonly timeoutMs: number;
+
     /**
      * Event types treated as activity; defaults to pointer, keyboard, wheel and
      * touch input.
      */
     readonly events?: readonly string[];
+
     /**
      * The window whose activity events are observed; defaults to the global
      * window.

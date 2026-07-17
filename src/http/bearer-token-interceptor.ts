@@ -5,8 +5,8 @@
  * comes from an {@link AccessTokenProvider} port so the HTTP layer stays
  * decoupled from any particular auth store.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { HttpRequest, RequestInterceptor } from './http-client';

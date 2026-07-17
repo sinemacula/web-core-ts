@@ -5,8 +5,8 @@
  * ready-made. Import `test` and `expect` from this file, never from
  * `@playwright/test` directly.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { test as base } from '@playwright/test';

@@ -6,8 +6,8 @@
  * already, so this file only supplies the two things specific to this resource
  * - the domain shape and the wire-record validator.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { HttpClient } from '@sinemacula/web-core/http/http-client';

@@ -7,8 +7,8 @@
  * delivery mechanism by implementing the {@link FeatureFlags} port without
  * touching this file.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Environment } from '@sinemacula/web-core/config/environment';

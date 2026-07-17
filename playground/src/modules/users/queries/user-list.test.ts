@@ -1,8 +1,8 @@
 /**
  * Unit tests for the userList query definition.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { useListQuery } from '@sinemacula/web-core/query/use-list-query';

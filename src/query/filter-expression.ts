@@ -40,8 +40,8 @@
  * Mixed form (bare + conditioned): use the object form with `{}` for bare
  * relations - `{ "$has": { "posts": {}, "comments": { "title": "X" } } }`.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /** A primitive scalar value accepted as a filter operand. */

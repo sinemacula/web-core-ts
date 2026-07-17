@@ -5,8 +5,8 @@
  * after boot. Values are reachable both through the typed root (`all()`) and
  * through Laravel-style dot notation (`get('app.urls.api')`).
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { deepFreeze } from '../support/deep-freeze';

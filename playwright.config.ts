@@ -6,8 +6,8 @@
  * same artifact that ships. The API is never assumed to exist: specs stub the
  * network at the browser boundary (see `e2e/support/api-mock.ts`).
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { defineConfig, devices } from '@playwright/test';

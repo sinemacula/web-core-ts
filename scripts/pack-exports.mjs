@@ -11,8 +11,8 @@
  * The swap is an exact-block replacement: it fails loudly rather than publish a
  * manifest whose `exports` it could not confidently rewrite.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';

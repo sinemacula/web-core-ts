@@ -5,8 +5,8 @@
  * an axe scan filtered to WCAG 2.1 A and AA rules and fails the test when any
  * violations are found.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import AxeBuilder from '@axe-core/playwright';

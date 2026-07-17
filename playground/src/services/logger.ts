@@ -5,8 +5,8 @@
  * established accessor names. `resetLogger` clears every kernel service holder
  * between tests.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 export {

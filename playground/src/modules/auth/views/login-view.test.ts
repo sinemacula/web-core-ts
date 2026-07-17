@@ -4,8 +4,8 @@
  * Mounts the view inside a minimal Vue app to exercise the template and setup
  * script; API behaviour is covered by use-login-form.test.ts.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { HttpError } from '@sinemacula/web-core/http/http-error';

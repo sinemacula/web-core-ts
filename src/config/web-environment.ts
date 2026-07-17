@@ -10,8 +10,8 @@
  * keys indicate a broken deployment and the application must fail loudly rather
  * than silently boot against incorrect defaults.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { ChainEnvironmentSource } from './chain-environment-source';
@@ -45,20 +45,24 @@ export interface WebEnvironmentOptions {
      * `fetchRuntimeEnvironment`'s result.
      */
     readonly runtime: Readonly<Record<string, string>>;
+
     /**
      * Whether the application runs in a development build. The caller passes
      * `import.meta.env.DEV`, resolved in the application's build context.
      */
     readonly dev: boolean;
+
     /**
      * The build-time variable record (`import.meta.env`), chained after the
      * runtime document in development only.
      */
     readonly buildTimeEnv?: Readonly<Record<string, unknown>>;
+
     /**
      * The prefix carried by build-time variable keys. Defaults to `VITE_`.
      */
     readonly buildTimePrefix?: string;
+
     /**
      * Keys that must be present and non-empty in the runtime document for a
      * production deployment to be considered valid. Ignored in development.

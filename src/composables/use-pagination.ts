@@ -11,8 +11,8 @@
  * Pagination.next}, {@link Pagination.previous}, and {@link Pagination.goTo})
  * clamp into `[1, pageCount]` on every call.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef, Ref } from 'vue';

@@ -5,8 +5,8 @@
  * application can render a progress indicator without every route having to
  * manage the flag itself.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Ref } from 'vue';

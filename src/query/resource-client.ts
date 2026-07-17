@@ -7,8 +7,8 @@
  * create, update, and destroy all share the same envelope-unwrapping and
  * query-merging logic.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { HttpClient, HttpRequestOptions, QueryParameters } from '../http/http-client';

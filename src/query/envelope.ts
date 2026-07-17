@@ -7,8 +7,8 @@
  * domain value (or list of values) via a caller-supplied
  * {@link ResourceMapper}.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { isRecord } from '../support/is-record';

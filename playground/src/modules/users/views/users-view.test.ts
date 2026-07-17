@@ -5,8 +5,8 @@
  * the sort-header wiring; the composable's own behaviour is covered by
  * use-users-list.test.ts.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { Environment } from '@sinemacula/web-core/config/environment';

@@ -11,8 +11,8 @@
  * active are queued (FIFO) and surfaced automatically once the current request
  * is settled via {@link ConfirmService.settle}.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef } from 'vue';

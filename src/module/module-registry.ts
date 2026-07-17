@@ -10,8 +10,8 @@
  * per-locale memo, preserving the namespacing semantics of
  * `collectModuleMessages`.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { RequestInterceptor, ResponseErrorHandler, UnauthorizedHandler } from '../http/http-client';

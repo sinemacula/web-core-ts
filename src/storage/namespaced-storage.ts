@@ -7,8 +7,8 @@
  * another `NamespacedStorage` - rewriting every key with a namespace prefix
  * before delegating.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { KeyValueStorage } from './key-value-storage';

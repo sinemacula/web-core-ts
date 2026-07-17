@@ -7,8 +7,8 @@
  * JSON envelope `{ event: string, data: unknown }` are additionally dispatched
  * to subscribers for that specific event name.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { ExponentialBackoff } from './exponential-backoff';
@@ -39,17 +39,21 @@ export interface WebSocketConnectionOptions {
      * the query string.
      */
     readonly url: string | (() => string);
+
     /** Optional WebSocket subprotocol(s) forwarded to the constructor. */
     readonly protocols?: string | readonly string[];
+
     /**
      * Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`.
      */
     readonly backoff?: ExponentialBackoff;
+
     /**
      * Override the WebSocket constructor. Defaults to
      * `(url, protocols) => new WebSocket(url, protocols)`.
      */
     readonly webSocketFactory?: WebSocketFactory;
+
     /**
      * Awaited after the backoff delay fires and before each reconnect attempt
      * opens a new WebSocket. Never called for the initial `connect()` or a

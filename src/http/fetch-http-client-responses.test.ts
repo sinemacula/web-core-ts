@@ -2,8 +2,8 @@
  * Unit tests for FetchHttpClient - response handling (success parsing, error
  * mapping, validation errors, and blob downloads).
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it, vi } from 'vitest';

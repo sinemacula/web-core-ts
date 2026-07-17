@@ -2,8 +2,8 @@
  * Unit tests for FetchHttpClient - authentication flows, network errors,
  * signal/timeout, default fetch fallback, and download-specific auth handling.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { afterEach, describe, expect, it, vi } from 'vitest';

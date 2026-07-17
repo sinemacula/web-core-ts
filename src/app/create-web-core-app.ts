@@ -12,8 +12,8 @@
  * application after the router is ready and disposes everything the boot
  * installed in reverse order.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Pinia } from 'pinia';

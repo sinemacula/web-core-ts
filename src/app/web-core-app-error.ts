@@ -5,8 +5,8 @@
  * combination that cannot work, so misconfiguration surfaces loudly at boot
  * instead of silently producing an application with missing behaviour.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

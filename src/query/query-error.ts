@@ -6,8 +6,8 @@
  * allow. Callers branch on `instanceof` to separate a query-layer fault from a
  * transport or validation error.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

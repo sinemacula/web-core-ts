@@ -1,8 +1,8 @@
 /**
  * Errors module definition.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ModuleDefinition } from '@sinemacula/web-core/module/module';

@@ -6,8 +6,8 @@
  * Screen developers receive the definition and interact with it only through
  * {@link useListQuery} - they never read these fields directly.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ApiQuery } from './api-query';
@@ -29,6 +29,7 @@ export type FilterValueOf<Filter> = Filter extends ListFilter<infer V> ? V : nev
 export interface SortDefault {
     /** The column name to sort by. */
     readonly column: string;
+
     /** The sort direction. */
     readonly direction: 'asc' | 'desc';
 }

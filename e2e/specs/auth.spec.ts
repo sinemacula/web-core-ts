@@ -4,8 +4,8 @@
  * Exercises the full application - routing middleware, stores, HTTP layer and
  * rendering - against a mocked network boundary.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { expect, test } from '../fixtures/app';

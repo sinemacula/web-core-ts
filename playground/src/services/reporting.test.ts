@@ -1,8 +1,8 @@
 /**
  * Unit tests for the reporting service.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ErrorReporter } from '@sinemacula/web-core/reporting/error-reporter';

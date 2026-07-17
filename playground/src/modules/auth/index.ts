@@ -9,8 +9,8 @@
  * and is re-exported here under the module's established names, so consumers
  * are unaffected by where it is implemented.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 export { can, useCan } from '@sinemacula/web-core/session/authorization';

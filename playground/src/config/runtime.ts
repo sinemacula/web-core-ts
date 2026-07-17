@@ -5,8 +5,8 @@
  * In production, missing keys indicate a broken deployment, so the application
  * must fail loudly rather than silently boot against incorrect defaults.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

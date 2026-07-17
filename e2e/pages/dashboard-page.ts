@@ -1,8 +1,8 @@
 /**
  * Page object for the dashboard home screen.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Locator, Page } from '@playwright/test';

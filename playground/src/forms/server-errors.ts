@@ -7,8 +7,8 @@
  * so views render them verbatim: vue-i18n's `t()` passes an unrecognised key
  * straight through, which is exactly what an English sentence needs.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { HttpValidationError } from '@sinemacula/web-core/http/http-error';

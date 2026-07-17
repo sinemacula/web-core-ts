@@ -6,8 +6,8 @@
  * lazily at call time (matching the guard-factory pattern) rather than caching
  * a store reference at import time.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { PermissionSet } from '../authorization/permission-set';

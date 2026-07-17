@@ -6,8 +6,8 @@
  * market most associated with each locale (USD for en-US, EUR for fr-FR) -
  * these are application defaults, not a user-configurable currency.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { LocaleFormats } from '@sinemacula/web-core/i18n/application-i18n';

@@ -6,8 +6,8 @@
  * short-circuits navigation. Results are a discriminated union, never an
  * imperative `next()` callback.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import './route-meta';

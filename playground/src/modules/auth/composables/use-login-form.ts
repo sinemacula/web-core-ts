@@ -7,8 +7,8 @@
  * validation errors and the server's 422 field errors are both surfaced as
  * field messages; anything else collapses to a form-level translation key.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { HttpError, HttpValidationError } from '@sinemacula/web-core/http/http-error';
@@ -32,17 +32,21 @@ const loginSchema = z.object({
 export interface LoginForm {
     readonly email: Ref<string>;
     readonly password: Ref<string>;
+
     /**
      * Translation key for the email field error, or '' when valid/untouched.
      */
     readonly emailError: ComputedRef<string>;
+
     /**
      * Translation key for the password field error, or '' when valid/untouched.
      */
     readonly passwordError: ComputedRef<string>;
+
     /** Form-level (API) error translation key, or null when none. */
     readonly error: Ref<string | null>;
     readonly isSubmitting: ComputedRef<boolean> | Ref<boolean>;
+
     /**
      * Validates first; returns false when invalid or when the API call fails.
      */

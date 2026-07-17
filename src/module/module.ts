@@ -7,8 +7,8 @@
  * caller-owned, explicitly ordered array consumed by `createModuleRegistry` in
  * `./module-registry` - no filesystem magic, no auto-imports.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Pinia } from 'pinia';

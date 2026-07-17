@@ -1,8 +1,8 @@
 /**
  * Unit tests for the feature-flags service.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { FeatureFlags } from '@sinemacula/web-core/feature-flags/feature-flags';

@@ -5,8 +5,8 @@
  * intended. Runtime assertions are minimal because the types are pure
  * structural declarations; the real coverage lives in api-query.test.ts.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it } from 'vitest';

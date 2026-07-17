@@ -5,8 +5,8 @@
  * caller awaits the same in-flight attempt - cross-request (and, combined with
  * shared storage, cross-tab) refresh safety as a reusable unit.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

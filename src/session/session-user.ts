@@ -5,8 +5,8 @@
  * extend it through the U generic on {@link SessionApi} and supply their own
  * mapping for any richer shape.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

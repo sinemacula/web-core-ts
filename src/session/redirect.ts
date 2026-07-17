@@ -6,8 +6,8 @@
  * same-origin, relative paths are ever honoured; anything else is treated as
  * untrusted input and discarded.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { RouteLocationRaw } from 'vue-router';

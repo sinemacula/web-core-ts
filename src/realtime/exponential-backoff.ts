@@ -5,16 +5,18 @@
  * fully predictable in tests. Callers that need jitter may wrap the returned
  * delay: `backoff.delayFor(attempt) + Math.random() * 500`.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /** Construction options for {@link ExponentialBackoff}. */
 export interface ExponentialBackoffOptions {
     /** Delay in milliseconds for the first attempt. Defaults to 1 000. */
     readonly initialDelay?: number;
+
     /** Multiplicative growth factor applied each attempt. Defaults to 2. */
     readonly multiplier?: number;
+
     /**
      * Upper bound in milliseconds; delays are clamped to this value. Defaults
      * to 30 000.

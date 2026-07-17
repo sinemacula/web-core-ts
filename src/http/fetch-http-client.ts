@@ -14,8 +14,8 @@
  * `retry` policy re-attempts transient failures on idempotent requests with a
  * backoff delay between attempts.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { ExponentialBackoff } from '../realtime/exponential-backoff';
@@ -41,6 +41,7 @@ import { CancelledError, HttpError, HttpValidationError, NetworkError } from './
 export interface FetchHttpClientRetryOptions {
     /** Number of retries attempted after the first try. Defaults to 2. */
     readonly attempts?: number;
+
     /**
      * Delay strategy between attempts. Defaults to a new
      * {@link ExponentialBackoff}; that class predates this use for realtime
@@ -58,6 +59,7 @@ export interface FetchHttpClientOptions {
     readonly defaultHeaders?: Readonly<Record<string, string>>;
     readonly requestInterceptors?: readonly RequestInterceptor[];
     readonly onUnauthorized?: UnauthorizedHandler;
+
     /**
      * Invoked whenever a request ultimately fails. This is where an application
      * wires a toast or error-reporting call; per-request `notifyOnError: false`
@@ -67,6 +69,7 @@ export interface FetchHttpClientOptions {
      * left to the handler.
      */
     readonly onResponseError?: ResponseErrorHandler;
+
     /**
      * Opt-in retry policy for transient failures. Omit entirely for a single
      * attempt on every request; see {@link FetchHttpClientRetryOptions}.

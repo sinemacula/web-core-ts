@@ -4,8 +4,8 @@
  * Mounts the view inside a minimal Vue app to exercise the template and setup
  * script; sign-out API behaviour is covered by auth-store.test.ts.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { Environment } from '@sinemacula/web-core/config/environment';

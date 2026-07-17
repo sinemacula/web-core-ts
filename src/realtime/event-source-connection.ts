@@ -7,8 +7,8 @@
  * function form, which is called fresh on every connect so that per-connect
  * credentials are always current.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { ExponentialBackoff } from './exponential-backoff';
@@ -39,20 +39,24 @@ export interface EventSourceConnectionOptions {
      * native EventSource cannot send custom headers.
      */
     readonly url: string | (() => string);
+
     /**
      * Pass `true` to include credentials (cookies) in the SSE request. Defaults
      * to `false`.
      */
     readonly withCredentials?: boolean;
+
     /**
      * Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`.
      */
     readonly backoff?: ExponentialBackoff;
+
     /**
      * Override the EventSource constructor. Defaults to
      * `(url, init) => new EventSource(url, init)`.
      */
     readonly eventSourceFactory?: EventSourceFactory;
+
     /**
      * Awaited after the backoff delay fires and before each reconnect attempt
      * opens a new EventSource. Never called for the initial `connect()` or a

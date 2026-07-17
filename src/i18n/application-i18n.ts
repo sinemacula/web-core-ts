@@ -7,8 +7,8 @@
  * synchronises the document `lang`/`dir` attributes. Shared translations are
  * injected by the host application; this package owns the mechanics only.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef } from 'vue';

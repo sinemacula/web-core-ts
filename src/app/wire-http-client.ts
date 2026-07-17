@@ -12,8 +12,8 @@
  * in registry order, and the toast and reporting services are read lazily on
  * every invocation.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { FetchHttpClient } from '../http/fetch-http-client';

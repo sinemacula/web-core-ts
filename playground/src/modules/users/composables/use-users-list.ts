@@ -22,8 +22,8 @@
  * the timer here (rather than in `users-view.vue`) is what keeps the view a
  * pure template - all behaviour, including timing, lives in this file.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { PaginationMeta } from '@sinemacula/web-core/query/envelope';
@@ -69,41 +69,54 @@ export function parseWireTimestamp(wireTimestamp: string): Date {
 export interface UsersList {
     /** The current page of mapped user rows. */
     readonly rows: ComputedRef<readonly UserListItem[]>;
+
     /**
      * Pagination metadata for the current page, or null before the first
      * response.
      */
     readonly meta: ComputedRef<PaginationMeta | null>;
+
     /** True while the latest request is in flight. */
     readonly isLoading: Ref<boolean>;
+
     /** True once a request has resolved successfully at least once. */
     readonly hasLoaded: ComputedRef<boolean>;
+
     /** Whatever the latest request threw, or null when none. */
     readonly error: Ref<unknown>;
+
     /** Two-way bound search field value; debounces into the list query. */
     readonly searchInput: Ref<string>;
+
     /** The search term currently committed to the list query. */
     readonly searchTerm: ComputedRef<string>;
+
     /**
      * Commit a search term immediately, bypassing the debounce.
      *
      * @param term - the search term
      */
     search(term: string): void;
+
     /** The active sort, or null when none is set. */
     readonly sort: ComputedRef<SortDefault | null>;
+
     /**
      * Sort by a column, toggling direction when the column is already active.
      *
      * @param column - the column to sort by
      */
     sortBy(column: string): void;
+
     /** The current 1-based page number. */
     readonly page: ComputedRef<number>;
+
     /** Advance to the next page; a no-op once `meta` reports the last page. */
     next(): void;
+
     /** Go to the previous page, clamped at page 1. */
     previous(): void;
+
     /** Re-run the current request. */
     refetch(): Promise<void>;
 }

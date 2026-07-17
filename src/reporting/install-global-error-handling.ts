@@ -5,8 +5,8 @@
  * the provided ErrorReporter so that all unhandled exceptions are captured in
  * one place regardless of their origin.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { App } from 'vue';
@@ -20,13 +20,16 @@ import type { ErrorReporter } from './error-reporter';
 export interface GlobalErrorHandlingOptions {
     /** The Vue application instance to attach the error handler to. */
     readonly app: App;
+
     /** The reporter that receives every captured error or message. */
     readonly reporter: ErrorReporter;
+
     /**
      * Optional breadcrumb trail; when present its snapshot is attached to every
      * report.
      */
     readonly trail?: BreadcrumbTrail;
+
     /**
      * The window to attach native error listeners to (default
      * globalThis.window).

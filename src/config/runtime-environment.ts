@@ -8,8 +8,8 @@
  * payload) resolves to an empty record and the environment chain falls through
  * to Vite's build variables.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

@@ -10,8 +10,8 @@
  * attempts rather than storming a network that is known to be down. The
  * application wires those pauses; this module only detects the state.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 export type ConnectivityHandler = (online: boolean) => void;

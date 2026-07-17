@@ -8,8 +8,8 @@
  * boot fails loudly. The connectivity monitor pauses update polling while the
  * browser is offline and resumes it when connectivity returns.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { ConnectivityMonitor } from '../connectivity/connectivity-monitor';

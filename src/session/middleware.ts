@@ -7,8 +7,8 @@
  * access to `handle()`, so guard instances may be created at module-definition
  * time, before the application boots.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { RouteLocationRaw } from 'vue-router';

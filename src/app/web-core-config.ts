@@ -6,8 +6,8 @@
  * values reuse the feature-flag port's `FlagValue` so a config-delivered flag
  * set feeds the default static adapter without conversion.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { FlagValue } from '../feature-flags/feature-flags';

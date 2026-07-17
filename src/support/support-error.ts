@@ -6,8 +6,8 @@
  * programming mistake surfaces as a typed failure callers can branch on with
  * `instanceof` rather than a bare `Error`.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

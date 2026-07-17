@@ -7,8 +7,8 @@
  * restores saved positions, honours hash anchors, and otherwise returns to the
  * top.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { RouteLocationNormalized, RouteRecordRaw, Router, RouterHistory, RouterScrollBehavior } from 'vue-router';

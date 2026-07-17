@@ -5,8 +5,8 @@
  * storage, reporter and platform seams. Enabled by default; disabling it leaves
  * the router's error channel to the reporter alone.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Router } from 'vue-router';

@@ -6,8 +6,8 @@
  * module services read them through the accessors. `resetWebCoreServices`
  * clears every holder between tests.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { AnalyticsTracker } from '../analytics/analytics-tracker';

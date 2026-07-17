@@ -12,8 +12,8 @@
  * requirement, and a worker's install/activate lifecycle introduces the very
  * stale-version problems this monitor exists to solve.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { isRecord } from '../support/is-record';
@@ -23,19 +23,23 @@ export type UpdateHandler = (nextVersion: string) => void;
 export interface UpdateMonitorOptions {
     /** The version the running application was booted with. */
     readonly currentVersion: string;
+
     /**
      * The version document location; defaults to the runtime environment
      * document.
      */
     readonly url?: string;
+
     /** Poll interval in milliseconds; defaults to five minutes. */
     readonly interval?: number;
     readonly fetchFn?: typeof fetch;
+
     /**
      * Extract the deployed version from the parsed document; defaults to the
      * APP_VERSION entry.
      */
     readonly extractVersion?: (payload: unknown) => string | null;
+
     /**
      * The document whose visibility triggers focus checks; defaults to the
      * global document.

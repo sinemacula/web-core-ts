@@ -18,8 +18,8 @@
  * Changing any filter, the search term, or the active sort resets the page to 1
  * - standard list UX so stale page offsets are never sent to the server.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef, Ref } from 'vue';

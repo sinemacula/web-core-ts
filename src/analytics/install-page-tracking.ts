@@ -5,8 +5,8 @@
  * event for every completed navigation, and optionally records the navigation
  * as a breadcrumb on the session trail.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Router } from 'vue-router';
@@ -20,8 +20,10 @@ import type { AnalyticsTracker } from './analytics-tracker';
 export interface PageTrackingOptions {
     /** The Vue Router instance to attach the after-navigation hook to. */
     readonly router: Router;
+
     /** The tracker that receives every page-view call. */
     readonly tracker: AnalyticsTracker;
+
     /** Optional breadcrumb trail; when present each navigation is appended. */
     readonly trail?: BreadcrumbTrail;
 }

@@ -6,8 +6,8 @@
  * propagation is stopped so the global Vue error handler does not also capture
  * it a second time.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Ref } from 'vue';

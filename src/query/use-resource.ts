@@ -8,8 +8,8 @@
  * composable owns *when* to run, when to abort a stale run, and what the latest
  * settled state looks like.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef, Ref, WatchSource } from 'vue';

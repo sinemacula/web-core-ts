@@ -7,8 +7,8 @@
  * session module guarding the app routes, and the errors module owning the
  * catch-all through its fallback marker.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { WebCoreApp } from '@sinemacula/web-core/app/create-web-core-app';

@@ -4,8 +4,8 @@
  * Keys are optional by design: a deployment that does not configure a service
  * resolves to null and the integration stays disabled.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Environment } from '@sinemacula/web-core/config/environment';

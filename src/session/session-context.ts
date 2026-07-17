@@ -8,8 +8,8 @@
  * gateway, and the single token-refresh authority that both the reactive 401
  * path and the proactive refresh timer route through.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';

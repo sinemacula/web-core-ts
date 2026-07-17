@@ -10,8 +10,8 @@
  * ESM-only plugin packages, while static analysis resolves the same
  * dependencies without running anything.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { KnipConfig } from 'knip';

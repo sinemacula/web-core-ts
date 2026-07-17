@@ -9,8 +9,8 @@
  * The subscription is cleaned up via {@link onScopeDispose} so there are no
  * memory leaks when a component or effect scope is torn down.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef } from 'vue';

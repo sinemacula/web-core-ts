@@ -5,8 +5,8 @@
  * the network layer with `page.route`, so specs exercise the full application
  * (router, stores, HTTP layer, rendering) against deterministic responses.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Page } from '@playwright/test';

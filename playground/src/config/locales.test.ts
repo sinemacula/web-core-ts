@@ -1,8 +1,8 @@
 /**
  * Unit tests for localesConfig.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { Environment } from '@sinemacula/web-core/config/environment';

@@ -7,8 +7,8 @@
  * schema to vee-validate's `TypedSchema` contract, so every form composable in
  * the app validates against zod without a third-party bridge package.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { TypedSchema, TypedSchemaError } from 'vee-validate';

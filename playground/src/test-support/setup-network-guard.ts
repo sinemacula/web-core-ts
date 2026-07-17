@@ -7,8 +7,8 @@
  * legitimately exercise global-fetch fallbacks override it with
  * `vi.stubGlobal('fetch', ...)` as usual.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { PlaygroundError } from '@/errors/playground-error';

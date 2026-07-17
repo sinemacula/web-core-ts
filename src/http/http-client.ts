@@ -5,8 +5,8 @@
  * production adapter is {@link FetchHttpClient}; tests substitute an in-memory
  * fake.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /** The set of HTTP methods supported by the client. */
@@ -22,12 +22,14 @@ export interface HttpRequestOptions {
     readonly query?: QueryParameters;
     readonly headers?: Readonly<Record<string, string>>;
     readonly signal?: AbortSignal;
+
     /**
      * Whether a 401 response may trigger the unauthorized handler (token
      * refresh). Defaults to true. Set false on the refresh request itself so a
      * failed refresh cannot recurse back into the handler.
      */
     readonly retryOnUnauthorized?: boolean;
+
     /**
      * Whether this request's failures are reported to the global response-error
      * handler. Defaults to true. Set false for requests that handle their own

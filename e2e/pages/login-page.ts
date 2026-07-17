@@ -4,8 +4,8 @@
  * Encapsulates every selector and interaction for the screen so specs read as
  * user behaviour and selector changes touch one file.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Locator, Page } from '@playwright/test';

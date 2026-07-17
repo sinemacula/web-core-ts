@@ -2,8 +2,8 @@
  * Unit tests for FetchHttpClient - request construction (verbs, URLs, query
  * parameters, body/content-type, default headers).
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it, vi } from 'vitest';
