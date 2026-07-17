@@ -1,10 +1,10 @@
 /**
  * Router wiring for the bootstrap preset.
  *
- * Builds the application router from the registry's module-contributed
- * routes and global guards, then installs the document-title
- * synchronisation hook, surfacing its teardown so the preset can compose it
- * into application disposal.
+ * Builds the application router from the registry's module-contributed routes
+ * and global guards, then installs the document-title synchronisation hook,
+ * surfacing its teardown so the preset can compose it into application
+ * disposal.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -25,7 +25,9 @@ export interface WireRouterOptions {
     /** The registry's ordered module list, the source of routes and guards. */
     readonly modules: readonly ModuleDefinition[];
 
-    /** The i18n instance translating `meta.title` keys for the document title. */
+    /**
+     * The i18n instance translating `meta.title` keys for the document title.
+     */
     readonly i18n: ApplicationI18n;
 
     /** The application name suffixed onto every document title. */
@@ -51,7 +53,8 @@ export interface WiredRouter {
 /**
  * Wire the application router.
  *
- * @param options - the module list, i18n instance, application name and platform seams
+ * @param options - the module list, i18n instance, application name and
+ * platform seams
  * @returns the router and the teardown removing the title-sync hook
  */
 export function wireRouter(options: WireRouterOptions): WiredRouter {

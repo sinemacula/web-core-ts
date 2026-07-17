@@ -2,8 +2,8 @@
  * HTTP client port.
  *
  * Modules depend on this contract, never on a concrete transport. The
- * production adapter is {@link FetchHttpClient}; tests substitute an
- * in-memory fake.
+ * production adapter is {@link FetchHttpClient}; tests substitute an in-memory
+ * fake.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -12,7 +12,9 @@
 /** The set of HTTP methods supported by the client. */
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-/** A flat record of URL query parameter values; undefined entries are omitted. */
+/**
+ * A flat record of URL query parameter values; undefined entries are omitted.
+ */
 export type QueryParameters = Readonly<Record<string, string | number | boolean | undefined>>;
 
 /** Per-request options forwarded to every HTTP method. */
@@ -22,15 +24,15 @@ export interface HttpRequestOptions {
     readonly signal?: AbortSignal;
     /**
      * Whether a 401 response may trigger the unauthorized handler (token
-     * refresh). Defaults to true. Set false on the refresh request itself so
-     * a failed refresh cannot recurse back into the handler.
+     * refresh). Defaults to true. Set false on the refresh request itself so a
+     * failed refresh cannot recurse back into the handler.
      */
     readonly retryOnUnauthorized?: boolean;
     /**
-     * Whether this request's failures are reported to the global
-     * response-error handler. Defaults to true. Set false for requests that
-     * handle their own errors, such as forms surfacing 422s inline or
-     * background polls that fail silently.
+     * Whether this request's failures are reported to the global response-error
+     * handler. Defaults to true. Set false for requests that handle their own
+     * errors, such as forms surfacing 422s inline or background polls that fail
+     * silently.
      */
     readonly notifyOnError?: boolean;
 }
@@ -52,19 +54,19 @@ export interface HttpRequest {
 export type RequestInterceptor = (request: HttpRequest) => HttpRequest | Promise<HttpRequest>;
 
 /**
- * Invoked when a request fails with 401. Return true to retry the request
- * once (e.g. after a successful token refresh).
+ * Invoked when a request fails with 401. Return true to retry the request once
+ * (e.g. after a successful token refresh).
  */
 export type UnauthorizedHandler = () => Promise<boolean>;
 
 /**
  * Invoked whenever a request ultimately fails, whether with an
- * {@link HttpError} (non-2xx response) or a {@link NetworkError} (no
- * response). This is the global seam for surfacing unexpected failures, e.g.
- * a toast notification or an error-reporting call; per-request opt-out is via
+ * {@link HttpError} (non-2xx response) or a {@link NetworkError} (no response).
+ * This is the global seam for surfacing unexpected failures, e.g. a toast
+ * notification or an error-reporting call; per-request opt-out is via
  * {@link HttpRequestOptions.notifyOnError}. Filtering out expected failures
- * such as {@link HttpValidationError} is left to the handler, since it
- * receives every failure.
+ * such as {@link HttpValidationError} is left to the handler, since it receives
+ * every failure.
  */
 export type ResponseErrorHandler = (error: unknown, request: HttpRequest) => void;
 
@@ -88,7 +90,7 @@ export interface HttpClient {
      *
      * @param path - the API path, relative to the client's base URL
      * @param body - the request body; a FormData or Blob instance is sent
-     *               unchanged for uploads, any other value is serialised to JSON
+     * unchanged for uploads, any other value is serialised to JSON
      * @param options - optional query parameters, headers, and abort signal
      * @returns the parsed response body
      * @throws {@link HttpError} when the server returns a non-2xx status
@@ -101,7 +103,7 @@ export interface HttpClient {
      *
      * @param path - the API path, relative to the client's base URL
      * @param body - the request body; a FormData or Blob instance is sent
-     *               unchanged for uploads, any other value is serialised to JSON
+     * unchanged for uploads, any other value is serialised to JSON
      * @param options - optional query parameters, headers, and abort signal
      * @returns the parsed response body
      * @throws {@link HttpError} when the server returns a non-2xx status
@@ -114,7 +116,7 @@ export interface HttpClient {
      *
      * @param path - the API path, relative to the client's base URL
      * @param body - the request body; a FormData or Blob instance is sent
-     *               unchanged for uploads, any other value is serialised to JSON
+     * unchanged for uploads, any other value is serialised to JSON
      * @param options - optional query parameters, headers, and abort signal
      * @returns the parsed response body
      * @throws {@link HttpError} when the server returns a non-2xx status

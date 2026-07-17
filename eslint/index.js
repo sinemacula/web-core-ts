@@ -1,9 +1,10 @@
 /**
  * web-core ESLint preset: the framework module contract.
  *
- * A flat-config layer web-core apps enable alongside the shared coding-standards
- * base/vue presets. It enforces the `modules/<name>/...` structure the kernel
- * fixes. Framework-specific by design; the generic rules stay in coding-standards.
+ * A flat-config layer web-core apps enable alongside the shared
+ * coding-standards base/vue presets. It enforces the `modules/<name>/...`
+ * structure the kernel fixes. Framework-specific by design; the generic rules
+ * stay in coding-standards.
  *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright   2026 Sine Macula Limited

@@ -5,8 +5,8 @@
  * `runtime-env.json` next to the artifact (served with no-store caching), and
  * the application fetches it before mounting. Local development has no such
  * document, so every failure mode (missing file, network error, malformed
- * payload) resolves to an empty record and the environment chain falls
- * through to Vite's build variables.
+ * payload) resolves to an empty record and the environment chain falls through
+ * to Vite's build variables.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

@@ -1,9 +1,9 @@
 /**
  * No-op analytics tracker adapter.
  *
- * Used as the default when no analytics provider is configured. All methods
- * are intentionally empty so that calls are silently ignored rather than
- * throwing or logging.
+ * Used as the default when no analytics provider is configured. All methods are
+ * intentionally empty so that calls are silently ignored rather than throwing
+ * or logging.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

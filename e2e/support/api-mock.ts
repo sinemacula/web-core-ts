@@ -1,10 +1,9 @@
 /**
  * Browser-boundary API mocking for end-to-end specs.
  *
- * The e2e suite never talks to a real backend: every API call is intercepted
- * at the network layer with `page.route`, so specs exercise the full
- * application (router, stores, HTTP layer, rendering) against deterministic
- * responses.
+ * The e2e suite never talks to a real backend: every API call is intercepted at
+ * the network layer with `page.route`, so specs exercise the full application
+ * (router, stores, HTTP layer, rendering) against deterministic responses.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -51,8 +50,8 @@ async function mockGetCurrentUser(page: Page): Promise<void> {
 }
 
 /**
- * Stub the login endpoint with a successful session response and also
- * stub the current-user endpoint that login triggers.
+ * Stub the login endpoint with a successful session response and also stub the
+ * current-user endpoint that login triggers.
  *
  * @param page - the browser page under test
  */
@@ -125,12 +124,12 @@ function userRow(id: string, fullName: string): Record<string, unknown> {
 /**
  * Stub the GET users endpoint with two deterministic pages of user rows.
  *
- * Requests whose URL contains `page=2` receive the second page, carrying a
- * row unique to that page so specs can assert pagination advanced; every
- * other request receives the first page. The glob also matches the
- * application's own `/users` route and its `users-view.vue` module, so only
- * genuine `fetch` requests (the API gateway) are stubbed - document
- * navigations and dynamically-imported script modules are let through.
+ * Requests whose URL contains `page=2` receive the second page, carrying a row
+ * unique to that page so specs can assert pagination advanced; every other
+ * request receives the first page. The glob also matches the application's own
+ * `/users` route and its `users-view.vue` module, so only genuine `fetch`
+ * requests (the API gateway) are stubbed - document navigations and
+ * dynamically-imported script modules are let through.
  *
  * @param page - the browser page under test
  */
@@ -173,10 +172,9 @@ export async function mockUsersList(page: Page): Promise<void> {
 /**
  * Seed an authenticated session before the application boots.
  *
- * Writes both tokens to local storage from an init script, so the auth
- * store hydrates as signed-in on first load. Also registers the
- * current-user mock so any GET users/self triggered by the seeded
- * session is handled.
+ * Writes both tokens to local storage from an init script, so the auth store
+ * hydrates as signed-in on first load. Also registers the current-user mock so
+ * any GET users/self triggered by the seeded session is handled.
  *
  * @param page - the browser page under test
  */
@@ -192,12 +190,11 @@ export async function seedAuthenticatedSession(page: Page): Promise<void> {
 /**
  * Stub GET users/self to fail with 401 once, then succeed.
  *
- * Registered after {@link seedAuthenticatedSession}'s own current-user mock,
- * so it is checked first and takes over: the boot-time request that follows
- * an authenticated visit finds a session the server has already rejected,
- * forcing the bearer-token interceptor's refresh-and-retry path to engage;
- * the retried request that follows a successful refresh finds the session
- * accepted.
+ * Registered after {@link seedAuthenticatedSession}'s own current-user mock, so
+ * it is checked first and takes over: the boot-time request that follows an
+ * authenticated visit finds a session the server has already rejected, forcing
+ * the bearer-token interceptor's refresh-and-retry path to engage; the retried
+ * request that follows a successful refresh finds the session accepted.
  *
  * @param page - the browser page under test
  */
@@ -268,8 +265,8 @@ export async function mockAuthRefreshSuccess(page: Page): Promise<() => number> 
 }
 
 /**
- * Stub the runtime environment document to report one deployed version at
- * boot and a different version on every request after that.
+ * Stub the runtime environment document to report one deployed version at boot
+ * and a different version on every request after that.
  *
  * Models a release rolling out while a tab is already open: the boot fetch
  * observes the first version, and the update monitor's next poll (a
@@ -278,8 +275,8 @@ export async function mockAuthRefreshSuccess(page: Page): Promise<() => number> 
  *
  * @param page - the browser page under test
  * @param appUrl - the application's own origin, echoed back as APP_URL so the
- *   required-runtime-key check passes when the suite runs against a
- *   production-style build
+ * required-runtime-key check passes when the suite runs against a
+ * production-style build
  */
 export async function mockRuntimeEnvironmentVersionChange(page: Page, appUrl: string): Promise<void> {
     let requestCount = 0;

@@ -4,8 +4,8 @@
  * The application is composed of modules: each contributes routes, optional
  * lazily-loaded translations, global navigation guards, stores, and lifecycle
  * hooks, alongside its own internal views and services. The module list is a
- * caller-owned, explicitly ordered array consumed by `createModuleRegistry`
- * in `./module-registry` - no filesystem magic, no auto-imports.
+ * caller-owned, explicitly ordered array consumed by `createModuleRegistry` in
+ * `./module-registry` - no filesystem magic, no auto-imports.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -38,8 +38,8 @@ export type LocaleMessageLoader = (locale: string) => Promise<LocaleMessages | n
 export type ModuleTeardown = () => void;
 
 /**
- * Platform seams resolved once by the application preset and threaded to
- * every module hook.
+ * Platform seams resolved once by the application preset and threaded to every
+ * module hook.
  */
 export interface ResolvedPlatform {
     readonly fetchFn: typeof fetch;
@@ -49,16 +49,16 @@ export interface ResolvedPlatform {
 }
 
 /**
- * Collector handed to {@link ModuleDefinition.register}; contributions feed
- * the construction of the application HTTP client.
+ * Collector handed to {@link ModuleDefinition.register}; contributions feed the
+ * construction of the application HTTP client.
  */
 export interface ModuleHttpRegistrar {
     /** Appended after preset-level interceptors, in registry order. */
     addRequestInterceptor(interceptor: RequestInterceptor): void;
 
     /**
-     * Single slot - one refresh authority per application. A second call
-     * throws a `ModuleRegistryError` naming both contributing modules.
+     * Single slot - one refresh authority per application. A second call throws
+     * a `ModuleRegistryError` naming both contributing modules.
      */
     setUnauthorizedHandler(handler: UnauthorizedHandler): void;
 
@@ -67,8 +67,8 @@ export interface ModuleHttpRegistrar {
 }
 
 /**
- * Phase 1 context: contribute cross-cutting hooks before shared services
- * exist. Synchronous by design.
+ * Phase 1 context: contribute cross-cutting hooks before shared services exist.
+ * Synchronous by design.
  */
 export interface ModuleRegisterContext {
     readonly config: ConfigRepository<Record<string, unknown>>;
@@ -80,8 +80,8 @@ export interface ModuleRegisterContext {
 }
 
 /**
- * Phase 2 context: runtime effects once the app, pinia, HTTP client, i18n
- * and router exist; runs before mount.
+ * Phase 2 context: runtime effects once the app, pinia, HTTP client, i18n and
+ * router exist; runs before mount.
  */
 export interface ModuleBootContext {
     readonly app: App;
@@ -95,8 +95,8 @@ export interface ModuleBootContext {
 }
 
 /**
- * A store hook instantiated eagerly at the stores phase; matches the shape
- * of a `defineStore` result, and its `$dispose` is composed into application
+ * A store hook instantiated eagerly at the stores phase; matches the shape of a
+ * `defineStore` result, and its `$dispose` is composed into application
  * disposal.
  */
 export type ModuleStoreFactory = (pinia: Pinia) => { $dispose(): void };
@@ -106,8 +106,8 @@ export type ModuleStoreFactory = (pinia: Pinia) => { $dispose(): void };
  */
 export interface ModuleDefinition {
     /**
-     * Unique module name; also the namespace for its translations.
-     * Uniqueness is enforced by the registry.
+     * Unique module name; also the namespace for its translations. Uniqueness
+     * is enforced by the registry.
      */
     readonly name: string;
 
@@ -118,39 +118,39 @@ export interface ModuleDefinition {
     readonly locales?: LocaleMessageLoader;
 
     /**
-     * Global navigation middleware, run on every navigation before
-     * route-level `meta.middleware`, in registry order. Instances may be
-     * created at module-definition time and must defer all store and service
-     * access to `handle()`.
+     * Global navigation middleware, run on every navigation before route-level
+     * `meta.middleware`, in registry order. Instances may be created at
+     * module-definition time and must defer all store and service access to
+     * `handle()`.
      */
     readonly guards?: readonly RouteMiddleware[];
 
     /**
-     * Stores instantiated eagerly at the stores phase (after pinia and
-     * storage install, before i18n and the router), in registry order. A
-     * `useXStore` hook fits directly.
+     * Stores instantiated eagerly at the stores phase (after pinia and storage
+     * install, before i18n and the router), in registry order. A `useXStore`
+     * hook fits directly.
      */
     readonly stores?: readonly ModuleStoreFactory[];
 
     /**
-     * Contribute HTTP machinery (interceptors, the single unauthorized
-     * handler, extra response-error handlers) before the client is built.
-     * Synchronous by design.
+     * Contribute HTTP machinery (interceptors, the single unauthorized handler,
+     * extra response-error handlers) before the client is built. Synchronous by
+     * design.
      */
     readonly register?: (context: ModuleRegisterContext) => void;
 
     /**
      * Imperative installation of module-owned runtime behaviour; runs after
-     * router creation, before mount. May return a teardown removing whatever
-     * it installed.
+     * router creation, before mount. May return a teardown removing whatever it
+     * installed.
      */
     readonly boot?: (context: ModuleBootContext) => ModuleTeardown | undefined | Promise<ModuleTeardown | undefined>;
 
     /**
-     * This module owns the application catch-all; the registry orders it
-     * last. At most one module per registry may declare it. Keeping the
-     * catch-all last within the module's own routes array remains the
-     * module's responsibility.
+     * This module owns the application catch-all; the registry orders it last.
+     * At most one module per registry may declare it. Keeping the catch-all
+     * last within the module's own routes array remains the module's
+     * responsibility.
      */
     readonly fallback?: boolean;
 }

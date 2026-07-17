@@ -1,10 +1,9 @@
 /**
  * Single-flight coordination for token refreshes.
  *
- * When several requests fail with 401 at once, only one refresh may run;
- * every caller awaits the same in-flight attempt - cross-request (and,
- * combined with shared storage, cross-tab) refresh safety as a reusable
- * unit.
+ * When several requests fail with 401 at once, only one refresh may run; every
+ * caller awaits the same in-flight attempt - cross-request (and, combined with
+ * shared storage, cross-tab) refresh safety as a reusable unit.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

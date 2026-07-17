@@ -1,5 +1,6 @@
 /**
- * Require route names to reference a `_ROUTE_NAMES` constant, not an inline string.
+ * Require route names to reference a `_ROUTE_NAMES` constant, not an inline
+ * string.
  *
  * A route's `name` must be a member of the module's `_ROUTE_NAMES` map so the
  * value is defined once and referenced everywhere. Writing the name inline in
@@ -9,7 +10,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-// biome-ignore-all lint/style/useNamingConvention: ESLint visitor keys are AST node-type names.
+// biome-ignore-all lint/style/useNamingConvention: ESLint AST visitor keys
 
 import { createRule } from './lib.js';
 

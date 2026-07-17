@@ -4,12 +4,11 @@
  * The browser's `navigator.onLine` flag and the `online`/`offline` window
  * events are the only signal the kernel has for reachability; this monitor
  * wraps them so subscribers are notified once per actual state change rather
- * than once per event (browsers can fire either event more than once in a
- * row). Consumers use the signal to pause work that is pointless while
- * offline - the update monitor pauses its polling, and realtime connections
- * pause reconnect attempts rather than storming a network that is known to
- * be down. The application wires those pauses; this module only detects the
- * state.
+ * than once per event (browsers can fire either event more than once in a row).
+ * Consumers use the signal to pause work that is pointless while offline - the
+ * update monitor pauses its polling, and realtime connections pause reconnect
+ * attempts rather than storming a network that is known to be down. The
+ * application wires those pauses; this module only detects the state.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -18,7 +17,10 @@
 export type ConnectivityHandler = (online: boolean) => void;
 
 export interface ConnectivityMonitorOptions {
-    /** The window whose connectivity events are observed; defaults to the global window. */
+    /**
+     * The window whose connectivity events are observed; defaults to the global
+     * window.
+     */
     readonly targetWindow?: Window;
 }
 
@@ -50,7 +52,8 @@ export class ConnectivityMonitor {
     }
 
     /**
-     * Begin observing connectivity events. Calling start on a running monitor is a no-op.
+     * Begin observing connectivity events. Calling start on a running monitor
+     * is a no-op.
      */
     start(): void {
         if (this.#started) {

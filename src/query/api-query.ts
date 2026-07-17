@@ -26,7 +26,10 @@
 import type { QueryParameters } from '../http/http-client';
 import type { FilterOperators, FilterScalar, FilterTree } from './filter-expression';
 
-/** The scalar comparison operators accepted by the two-argument `where` overload. */
+/**
+ * The scalar comparison operators accepted by the two-argument `where`
+ * overload.
+ */
 type ScalarOperator = '$eq' | '$neq' | '$gt' | '$lt' | '$ge' | '$le' | '$like';
 
 /** An entry in the order list: column name and sort direction. */
@@ -75,8 +78,8 @@ const EMPTY_STATE: QueryState = {
  * Merge a `FilterOperators` patch into an existing field entry.
  *
  * When the existing entry is already an operator map, the two objects are
- * merged. When it is a scalar equality value (or undefined), the patch
- * replaces it entirely.
+ * merged. When it is a scalar equality value (or undefined), the patch replaces
+ * it entirely.
  *
  * @param existing - the current value stored under the field key
  * @param patch - the operator map to merge or replace with
@@ -129,7 +132,8 @@ function mergeGroup(existing: unknown, patch: FilterTree): FilterTree {
  * preserved; the last call wins and the entry appears at the end of the sort
  * list.
  */
-// eslint-disable-next-line @sinemacula/max-methods-per-class -- fluent immutable query builder whose public methods map 1:1 to the laravel-api-toolkit wire operators; splitting it would break method chaining
+// Splitting this fluent immutable query builder would break method chaining.
+// eslint-disable-next-line @sinemacula/max-methods-per-class -- fluent API
 export class ApiQuery {
     readonly #state: QueryState;
 
@@ -247,7 +251,8 @@ export class ApiQuery {
      * ```
      *
      * @param relation - the relation name
-     * @param build - callback that receives a fresh query and returns the built query
+     * @param build - callback that receives a fresh query and returns the built
+     * query
      * @returns a new `ApiQuery` with the relation filter applied
      */
     whereRelation(relation: string, build: (query: ApiQuery) => ApiQuery): ApiQuery {
@@ -295,7 +300,8 @@ export class ApiQuery {
      * Repeated calls merge into the existing `$and` object rather than
      * replacing it.
      *
-     * @param build - callback that receives a fresh query and returns the built query
+     * @param build - callback that receives a fresh query and returns the built
+     * query
      * @returns a new `ApiQuery` with the `$and` group applied
      */
     andWhere(build: (query: ApiQuery) => ApiQuery): ApiQuery {
@@ -308,10 +314,11 @@ export class ApiQuery {
     /**
      * Add an `$or` group containing the filters built by `build`.
      *
-     * Repeated calls merge into the existing `$or` object rather than
-     * replacing it.
+     * Repeated calls merge into the existing `$or` object rather than replacing
+     * it.
      *
-     * @param build - callback that receives a fresh query and returns the built query
+     * @param build - callback that receives a fresh query and returns the built
+     * query
      * @returns a new `ApiQuery` with the `$or` group applied
      */
     orWhere(build: (query: ApiQuery) => ApiQuery): ApiQuery {
@@ -486,15 +493,16 @@ export class ApiQuery {
     /**
      * The assembled filter tree.
      *
-     * @returns the current filter tree (empty object when no filters have been set)
+     * @returns the current filter tree (empty object when no filters have been
+     * set)
      */
     filterTree(): Readonly<FilterTree> {
         return this.#state.filters;
     }
 
     /**
-     * Emit the query as a flat `QueryParameters` record suitable for passing
-     * to an `HttpClient` method.
+     * Emit the query as a flat `QueryParameters` record suitable for passing to
+     * an `HttpClient` method.
      *
      * Only parameters with content are included; keys with no data are omitted.
      * Bracket-notation keys (e.g. `fields[users]`) are emitted as flat string
@@ -509,13 +517,13 @@ export class ApiQuery {
     /**
      * Emit the query as a URL-encoded query string.
      *
-     * Keys and values are encoded by `URLSearchParams`. Bracket keys
-     * (e.g. `fields[users]`) and JSON filter strings survive the round-trip
-     * intact: parse back with `new URLSearchParams(string)` and the values
-     * will match those in {@link toQueryParameters}.
+     * Keys and values are encoded by `URLSearchParams`. Bracket keys (e.g.
+     * `fields[users]`) and JSON filter strings survive the round-trip intact:
+     * parse back with `new URLSearchParams(string)` and the values will match
+     * those in {@link toQueryParameters}.
      *
-     * Key order follows insertion order, which is stable across identical
-     * query builds.
+     * Key order follows insertion order, which is stable across identical query
+     * builds.
      *
      * @returns the URL-encoded query string (without a leading `?`)
      */
@@ -537,8 +545,8 @@ export class ApiQuery {
     /**
      * Assemble the flat parameter record from the current state.
      *
-     * This is the single source-of-truth for parameter serialisation, shared
-     * by both {@link toQueryParameters} and {@link toQueryString}.
+     * This is the single source-of-truth for parameter serialisation, shared by
+     * both {@link toQueryParameters} and {@link toQueryString}.
      *
      * @returns the flat query-parameter record with no undefined entries
      */
@@ -636,7 +644,8 @@ export class ApiQuery {
     }
 
     /**
-     * Return a new `ApiQuery` with `value` stored under `field` in the filter tree.
+     * Return a new `ApiQuery` with `value` stored under `field` in the filter
+     * tree.
      *
      * @param field - the filter tree key
      * @param value - the value to store
@@ -663,8 +672,9 @@ export class ApiQuery {
         const existing = this.#state.filters[key];
         const conditionTree = build ? build(ApiQuery.create()).#state.filters : undefined;
 
-        // If the existing value is already an object (named form), stay in that form.
-        // Bare additions use {} as their condition entry; conditioned additions use their tree.
+        // If the existing value is already an object (named form), stay in that
+        // form. Bare additions use {} as their condition entry; conditioned
+        // additions use their tree.
         if (existing !== null && typeof existing === 'object' && !Array.isArray(existing)) {
             const entry: FilterTree = conditionTree ?? {};
             const merged = { ...(existing as FilterTree), [relation]: entry };
@@ -679,8 +689,9 @@ export class ApiQuery {
             return this.#withFilter(key, appended);
         }
 
-        // Conditioned relation arriving: promote existing bare array (if any) to object form.
-        // Each previously bare relation becomes a {} entry; the new relation gets its tree.
+        // Conditioned relation arriving: promote existing bare array (if any)
+        // to object form. Each previously bare relation becomes a {} entry; the
+        // new relation gets its tree.
         const baseEntries: Array<[string, FilterTree]> = Array.isArray(existing)
             ? (existing as string[]).map(r => [r, {}])
             : [];

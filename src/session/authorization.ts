@@ -3,8 +3,8 @@
  *
  * Wraps the kernel {@link PermissionSet} primitive over the signed-in user's
  * granted permissions from the session store. Every check reads the store
- * lazily at call time (matching the guard-factory pattern) rather than
- * caching a store reference at import time.
+ * lazily at call time (matching the guard-factory pattern) rather than caching
+ * a store reference at import time.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -19,7 +19,7 @@ import type { SessionUser } from './session-user';
  *
  * @param permission - the permission string to check
  * @returns false when no user is signed in; otherwise whether the user's
- *   granted permissions allow `permission`
+ * granted permissions allow `permission`
  */
 export function can(permission: string): boolean {
     return evaluate(useSessionStore().user, permission);
@@ -29,9 +29,9 @@ export function can(permission: string): boolean {
  * Build a permission-check function suited to template `v-if` bindings.
  *
  * The session store's `user` is reactive; reading it inside the returned
- * function (rather than capturing a snapshot) means a template expression
- * such as `v-if="canCheck('users.view')"` re-evaluates whenever the
- * signed-in user changes.
+ * function (rather than capturing a snapshot) means a template expression such
+ * as `v-if="canCheck('users.view')"` re-evaluates whenever the signed-in user
+ * changes.
  *
  * @returns a function that checks a permission against the current store user
  */

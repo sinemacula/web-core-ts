@@ -13,10 +13,11 @@
  * environment into a public file.
  *
  * APP_VERSION contract: the update monitor diffs this value to detect new
- * deployments, so every deploy MUST set it to a value that changes per
- * release (derive it, do not hard-code it), e.g.:
+ * deployments, so every deploy MUST set it to a value that changes per release
+ * (derive it, do not hard-code it), e.g.:
  *
- *   APP_VERSION=$(git rev-parse --short HEAD) node scripts/generate-runtime-env.mjs > runtime-env.json
+ *   APP_VERSION=$(git rev-parse --short HEAD) \
+ *     node scripts/generate-runtime-env.mjs > runtime-env.json
  *
  * A constant APP_VERSION silently disables update detection.
  *

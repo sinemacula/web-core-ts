@@ -1,9 +1,9 @@
 /**
  * Router navigation-progress tracker.
  *
- * Exposes whether the router currently has a navigation in flight, so the
- * host application can render a progress indicator without every route
- * having to manage the flag itself.
+ * Exposes whether the router currently has a navigation in flight, so the host
+ * application can render a progress indicator without every route having to
+ * manage the flag itself.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -14,7 +14,8 @@ import { getCurrentScope, onScopeDispose, ref } from 'vue';
 import type { Router } from 'vue-router';
 
 /**
- * The reactive navigation-progress state returned by {@link createNavigationProgress}.
+ * The reactive navigation-progress state returned by
+ * {@link createNavigationProgress}.
  */
 export interface NavigationProgress {
     /** `true` while a navigation is in flight. */

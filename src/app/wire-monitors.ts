@@ -4,9 +4,9 @@
  * The update monitor polls the deployed version and surfaces new releases
  * through an application-supplied sticky toast key or handler - the kernel
  * ships no translation keys, so without one of those the monitor stays off.
- * Enabling it explicitly while providing neither is a configuration error
- * and boot fails loudly. The connectivity monitor pauses update polling
- * while the browser is offline and resumes it when connectivity returns.
+ * Enabling it explicitly while providing neither is a configuration error and
+ * boot fails loudly. The connectivity monitor pauses update polling while the
+ * browser is offline and resumes it when connectivity returns.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -31,20 +31,24 @@ export interface MonitorWiringSettings {
  */
 export interface UpdateMonitorWiring<T> {
     /**
-     * Whether the update monitor runs. Default: the deployed version is not
-     * the 'dev' sentinel. The monitor arms only when `toastKey` or
-     * `onUpdate` is provided; enabling it explicitly with neither throws a
+     * Whether the update monitor runs. Default: the deployed version is not the
+     * 'dev' sentinel. The monitor arms only when `toastKey` or `onUpdate` is
+     * provided; enabling it explicitly with neither throws a
      * {@link WebCoreAppError} at boot.
      */
     readonly enabled?: boolean | ((settings: Readonly<T>) => boolean);
 
-    /** The version document location. Defaults to the runtime environment URL. */
+    /**
+     * The version document location. Defaults to the runtime environment URL.
+     */
     readonly url?: string;
 
     /** Poll interval in milliseconds. */
     readonly pollIntervalMs?: number;
 
-    /** Application-owned toast key shown sticky (duration 0) on a new version. */
+    /**
+     * Application-owned toast key shown sticky (duration 0) on a new version.
+     */
     readonly toastKey?: string;
 
     /** Full handler for new versions; wins over `toastKey`. */
@@ -60,13 +64,22 @@ export interface WireMonitorsOptions<T extends MonitorWiringSettings> {
 
     readonly updates?: UpdateMonitorWiring<T>;
 
-    /** Connectivity monitoring; defaults to on exactly when the update monitor runs. */
+    /**
+     * Connectivity monitoring; defaults to on exactly when the update monitor
+     * runs.
+     */
     readonly connectivity?: { readonly enabled?: boolean };
 
-    /** The runtime environment document URL, the update monitor's default poll target. */
+    /**
+     * The runtime environment document URL, the update monitor's default poll
+     * target.
+     */
     readonly runtimeUrl: string;
 
-    /** Toast service accessor, read lazily per update rather than at wiring time. */
+    /**
+     * Toast service accessor, read lazily per update rather than at wiring
+     * time.
+     */
     readonly toasts: () => ToastService;
 
     readonly fetchFn?: typeof fetch;
@@ -87,8 +100,8 @@ export interface WiredMonitors {
  *
  * @param options - the configuration, monitor options and platform seams
  * @returns the started monitors, each null when disabled
- * @throws {WebCoreAppError} when updates are explicitly enabled with neither
- *   a toast key nor an update handler
+ * @throws {WebCoreAppError} when updates are explicitly enabled with neither a
+ * toast key nor an update handler
  */
 export function wireMonitors<T extends MonitorWiringSettings>(options: WireMonitorsOptions<T>): WiredMonitors {
     const updates = wireUpdates(options);
@@ -101,8 +114,8 @@ export function wireMonitors<T extends MonitorWiringSettings>(options: WireMonit
  *
  * @param options - the monitor wiring options
  * @returns the started monitor, or null when it does not run
- * @throws {WebCoreAppError} when updates are explicitly enabled with neither
- *   a toast key nor an update handler
+ * @throws {WebCoreAppError} when updates are explicitly enabled with neither a
+ * toast key nor an update handler
  */
 function wireUpdates<T extends MonitorWiringSettings>(options: WireMonitorsOptions<T>): UpdateMonitor | null {
     const wiring = options.updates;

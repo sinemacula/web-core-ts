@@ -1,11 +1,11 @@
 /**
  * Default session API gateway.
  *
- * Implements {@link SessionApi} over the organisation's wire conventions:
- * the session resource lives at `auth` (POST to log in, PATCH to refresh,
- * DELETE to log out), the user record at `users/self`, responses arrive in a
- * `{ data }` envelope, and session expiry is a naive `YYYY-MM-DD HH:MM:SS`
- * timestamp interpreted as UTC. Every convention is injectable through
+ * Implements {@link SessionApi} over the organisation's wire conventions: the
+ * session resource lives at `auth` (POST to log in, PATCH to refresh, DELETE to
+ * log out), the user record at `users/self`, responses arrive in a `{ data }`
+ * envelope, and session expiry is a naive `YYYY-MM-DD HH:MM:SS` timestamp
+ * interpreted as UTC. Every convention is injectable through
  * {@link DefaultSessionApiOptions} so diverging APIs adjust the mapping here
  * instead of replacing the gateway.
  *
@@ -24,8 +24,8 @@ const DEFAULT_SESSION_ENDPOINT = 'auth';
 const DEFAULT_USER_ENDPOINT = 'users/self';
 
 /**
- * Injection points for {@link createDefaultSessionApi}; the organisation's
- * wire conventions ship as the defaults.
+ * Injection points for {@link createDefaultSessionApi}; the organisation's wire
+ * conventions ship as the defaults.
  */
 export interface DefaultSessionApiOptions<U extends SessionUser = SessionUser> {
     /** Resource paths. Defaults: session `auth`, user `users/self`. */
@@ -44,10 +44,10 @@ export interface DefaultSessionApiOptions<U extends SessionUser = SessionUser> {
     readonly unwrap?: (payload: unknown) => unknown;
 
     /**
-     * Map the unwrapped user payload onto U. This is the adaptation
-     * point for APIs that shape the user record differently. Defaults to
-     * mapping id, email, first plus last name, and permissions, with a
-     * non-array permissions field collapsing to an empty list.
+     * Map the unwrapped user payload onto U. This is the adaptation point for
+     * APIs that shape the user record differently. Defaults to mapping id,
+     * email, first plus last name, and permissions, with a non-array
+     * permissions field collapsing to an empty list.
      */
     readonly mapUser?: (payload: unknown) => U;
 }
@@ -57,8 +57,8 @@ export interface DefaultSessionApiOptions<U extends SessionUser = SessionUser> {
  *
  * The refresh request is sent with `retryOnUnauthorized: false` so a failed
  * refresh cannot recurse back into the unauthorized handler, and with
- * `notifyOnError: false` because a failed background refresh surfaces
- * through the session-loss flow, not a generic error toast.
+ * `notifyOnError: false` because a failed background refresh surfaces through
+ * the session-loss flow, not a generic error toast.
  *
  * @param http - the HTTP client used to reach the session endpoints
  * @param options - overrides for the organisation's wire conventions
@@ -80,7 +80,8 @@ export function createDefaultSessionApi<U extends SessionUser = SessionUser>(
      *
      * @param payload - the raw response payload
      * @returns the normalised tokens
-     * @throws {@link SessionError} when the payload does not match the expected shape
+     * @throws {@link SessionError} when the payload does not match the expected
+     * shape
      */
     const mapSession = (payload: unknown): SessionTokens => {
         const data = unwrap(payload);
@@ -144,9 +145,9 @@ function wire(entries: ReadonlyArray<readonly [string, unknown]>): Record<string
  * Parse the server's wire-format timestamp (`YYYY-MM-DD HH:MM:SS`) as a UTC
  * instant.
  *
- * The API emits naive timestamps with no offset; this assumes they are
- * always UTC by joining the date and time with `T` and appending `Z` before
- * delegating to `Date.parse`.
+ * The API emits naive timestamps with no offset; this assumes they are always
+ * UTC by joining the date and time with `T` and appending `Z` before delegating
+ * to `Date.parse`.
  *
  * @param value - the wire-format timestamp
  * @returns the parsed instant in epoch milliseconds, or null when unparseable
@@ -175,13 +176,14 @@ function unwrapDataEnvelope(payload: unknown): unknown {
 /**
  * Map an unwrapped user payload onto the base {@link SessionUser} shape.
  *
- * The identifier is required; email and name degrade to null when absent so
- * the default mapping tolerates sparse user records. The display name joins
- * the wire `first_name` and `last_name` fields.
+ * The identifier is required; email and name degrade to null when absent so the
+ * default mapping tolerates sparse user records. The display name joins the
+ * wire `first_name` and `last_name` fields.
  *
  * @param payload - the unwrapped user payload
  * @returns the mapped user
- * @throws {@link SessionError} when the payload is not a record with a usable identifier
+ * @throws {@link SessionError} when the payload is not a record with a usable
+ * identifier
  */
 function mapDefaultUser(payload: unknown): SessionUser {
     if (!isRecord(payload)) {
@@ -220,7 +222,7 @@ function composeName(first: unknown, last: unknown): string | null {
  *
  * @param value - the raw `permissions` field from the user payload
  * @returns the string entries of `value` when it is an array, otherwise an
- *   empty array
+ * empty array
  */
 function mapPermissions(value: unknown): readonly string[] {
     if (!Array.isArray(value)) {

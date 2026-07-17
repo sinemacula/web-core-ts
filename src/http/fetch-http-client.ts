@@ -1,18 +1,18 @@
 /**
  * Fetch-backed adapter for the {@link HttpClient} port.
  *
- * JSON-first: request bodies are serialised to JSON, JSON responses are
- * parsed, and non-success responses are mapped onto the {@link HttpError}
- * hierarchy. FormData and Blob bodies are passed to fetch unchanged for
- * uploads, and {@link FetchHttpClient.download} reads a response as a raw
- * Blob. A single optional unauthorized handler supports refresh-and-retry
- * token flows without coupling this adapter to any auth implementation, and
- * an optional response-error handler is notified of every ultimate failure
- * so an application can surface it globally. A caller abort or a configured
- * timeout rejects with {@link CancelledError} rather than {@link NetworkError}
- * so a deliberate cancel is never confused with a transport failure, and an
- * opt-in `retry` policy re-attempts transient failures on idempotent requests
- * with a backoff delay between attempts.
+ * JSON-first: request bodies are serialised to JSON, JSON responses are parsed,
+ * and non-success responses are mapped onto the {@link HttpError} hierarchy.
+ * FormData and Blob bodies are passed to fetch unchanged for uploads, and
+ * {@link FetchHttpClient.download} reads a response as a raw Blob. A single
+ * optional unauthorized handler supports refresh-and-retry token flows without
+ * coupling this adapter to any auth implementation, and an optional
+ * response-error handler is notified of every ultimate failure so an
+ * application can surface it globally. A caller abort or a configured timeout
+ * rejects with {@link CancelledError} rather than {@link NetworkError} so a
+ * deliberate cancel is never confused with a transport failure, and an opt-in
+ * `retry` policy re-attempts transient failures on idempotent requests with a
+ * backoff delay between attempts.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -34,8 +34,8 @@ import { CancelledError, HttpError, HttpValidationError, NetworkError } from './
 
 /**
  * Opt-in transient-retry policy for idempotent requests:
- * {@link FetchHttpClient.get} and {@link FetchHttpClient.download}. POST,
- * PUT, PATCH, and DELETE never retry regardless of this policy, and a
+ * {@link FetchHttpClient.get} and {@link FetchHttpClient.download}. POST, PUT,
+ * PATCH, and DELETE never retry regardless of this policy, and a
  * {@link CancelledError} is never retried.
  */
 export interface FetchHttpClientRetryOptions {
@@ -59,12 +59,12 @@ export interface FetchHttpClientOptions {
     readonly requestInterceptors?: readonly RequestInterceptor[];
     readonly onUnauthorized?: UnauthorizedHandler;
     /**
-     * Invoked whenever a request ultimately fails. This is where an
-     * application wires a toast or error-reporting call; per-request
-     * `notifyOnError: false` opts a request out. The handler receives every
-     * ultimate failure except {@link CancelledError} (a deliberate cancel is
-     * never reported), including {@link HttpValidationError}, so filtering
-     * expected validation failures is left to the handler.
+     * Invoked whenever a request ultimately fails. This is where an application
+     * wires a toast or error-reporting call; per-request `notifyOnError: false`
+     * opts a request out. The handler receives every ultimate failure except
+     * {@link CancelledError} (a deliberate cancel is never reported), including
+     * {@link HttpValidationError}, so filtering expected validation failures is
+     * left to the handler.
      */
     readonly onResponseError?: ResponseErrorHandler;
     /**
@@ -80,7 +80,10 @@ type BodyParseMode = 'json' | 'blob';
 /** HTTP statuses treated as transient, and therefore retryable, failures. */
 const TRANSIENT_STATUSES: ReadonlySet<number> = new Set([502, 503, 504]);
 
-/** Descriptor passed to the private {@link FetchHttpClient.#sendAttempt} dispatch method. */
+/**
+ * Descriptor passed to the private {@link FetchHttpClient.#sendAttempt}
+ * dispatch method.
+ */
 interface SendRequest {
     readonly method: HttpMethod;
     readonly path: string;
@@ -91,7 +94,10 @@ interface SendRequest {
     readonly parse: BodyParseMode;
 }
 
-/** Mutable holder for the most recently resolved request, read for final-outcome error notification. */
+/**
+ * Mutable holder for the most recently resolved request, read for final-outcome
+ * error notification.
+ */
 interface AttemptContext {
     request: HttpRequest | null;
 }
@@ -120,7 +126,8 @@ export class FetchHttpClient implements HttpClient {
     /**
      * Construct a new HTTP client.
      *
-     * @param options - base URL, optional fetch override, timeout, default headers, interceptors, and retry policy
+     * @param options - base URL, optional fetch override, timeout, default
+     * headers, interceptors, and retry policy
      */
     constructor(options: FetchHttpClientOptions) {
         this.#baseUrl = options.baseUrl.replace(/\/+$/u, '');
@@ -134,7 +141,10 @@ export class FetchHttpClient implements HttpClient {
         this.#retryBackoff = options.retry?.backoff ?? new ExponentialBackoff();
     }
 
-    /** Send a GET request; transient failures are retried per the configured retry policy. */
+    /**
+     * Send a GET request; transient failures are retried per the configured
+     * retry policy.
+     */
     get<T>(path: string, options?: HttpRequestOptions): Promise<T> {
         return this.#sendAttempt(
             {
@@ -190,7 +200,10 @@ export class FetchHttpClient implements HttpClient {
         );
     }
 
-    /** Download a GET response as a raw Blob; transient failures are retried per the retry policy. */
+    /**
+     * Download a GET response as a raw Blob; transient failures are retried per
+     * the retry policy.
+     */
     download(path: string, options?: HttpRequestOptions): Promise<Blob> {
         return this.#sendAttempt<Blob>(
             {
@@ -208,8 +221,8 @@ export class FetchHttpClient implements HttpClient {
 
     /**
      * Run one attempt of a request, retrying transient failures on idempotent
-     * requests (with a backoff delay) until the retry budget is exhausted,
-     * then notify the response-error handler with the final outcome only.
+     * requests (with a backoff delay) until the retry budget is exhausted, then
+     * notify the response-error handler with the final outcome only.
      *
      * @param sendRequest - the request descriptor
      * @param attempt - zero-based attempt counter for this call
@@ -255,7 +268,8 @@ export class FetchHttpClient implements HttpClient {
      * final outcome only.
      *
      * @param sendRequest - the request descriptor
-     * @param context - records the resolved request for the caller's error notification
+     * @param context - records the resolved request for the caller's error
+     * notification
      * @returns the parsed response body on success
      */
     async #dispatchOnce<T>(sendRequest: SendRequest, context: AttemptContext): Promise<T> {
@@ -285,13 +299,14 @@ export class FetchHttpClient implements HttpClient {
     }
 
     /**
-     * Run the 401-refresh-and-retry-once flow when the response and request
-     * are eligible.
+     * Run the 401-refresh-and-retry-once flow when the response and request are
+     * eligible.
      *
      * @param response - the response to check for a 401 status
      * @param sendRequest - the request descriptor that produced the response
      * @param context - forwarded to the retried attempt, for error notification
-     * @returns a recovered result when a refresh succeeded and the retry ran, else not-recovered
+     * @returns a recovered result when a refresh succeeded and the retry ran,
+     * else not-recovered
      */
     async #refreshAndRetryOnUnauthorized<T>(
         response: Response,
@@ -313,9 +328,11 @@ export class FetchHttpClient implements HttpClient {
     /**
      * Report a request failure to the configured response-error handler.
      *
-     * @param error - the {@link HttpError} or {@link NetworkError} about to be thrown
+     * @param error - the {@link HttpError} or {@link NetworkError} about to be
+     * thrown
      * @param request - the fully-resolved request that failed
-     * @param options - the per-request options, checked for a notifyOnError opt-out
+     * @param options - the per-request options, checked for a notifyOnError
+     * opt-out
      */
     #notifyResponseError(error: unknown, request: HttpRequest, options: HttpRequestOptions | undefined): void {
         if (this.#onResponseError === null || options?.notifyOnError === false) {
@@ -330,8 +347,8 @@ export class FetchHttpClient implements HttpClient {
     }
 
     /**
-     * Thread the request through every registered interceptor, in
-     * registration order, so each sees the previous interceptor's output.
+     * Thread the request through every registered interceptor, in registration
+     * order, so each sees the previous interceptor's output.
      *
      * @param initial - the request before any interceptor runs
      * @returns the request after the final interceptor
@@ -387,8 +404,8 @@ export class FetchHttpClient implements HttpClient {
         };
 
         if (isUploadBody(request.body)) {
-            // The browser sets the multipart boundary or Blob content-type itself;
-            // overriding it here would strip that information.
+            // The browser sets the multipart boundary or Blob content-type
+            // itself; overriding it here would strip that information.
             init.body = request.body;
         } else if (request.body !== undefined) {
             if (!hasHeader(headers, 'content-type')) {
@@ -423,7 +440,7 @@ export class FetchHttpClient implements HttpClient {
      * Build the per-request timeout signal from the configured timeout.
      *
      * @returns a signal that aborts once the timeout elapses, or null when no
-     *          timeout is configured
+     * timeout is configured
      */
     #buildTimeoutSignal(): AbortSignal | null {
         return this.#timeout === null ? null : AbortSignal.timeout(this.#timeout);
@@ -475,8 +492,8 @@ function isUploadBody(body: unknown): body is FormData | Blob {
 }
 
 /**
- * Determine whether a fetch rejection represents a deliberate abort rather
- * than a genuine transport failure.
+ * Determine whether a fetch rejection represents a deliberate abort rather than
+ * a genuine transport failure.
  *
  * @param error - the value fetch rejected with
  * @returns true when the error is a DOMException named AbortError
@@ -489,8 +506,8 @@ function isAbortError(error: unknown): boolean {
  * Determine whether a failed attempt is eligible for a transient retry.
  *
  * @param error - the error thrown by the failed attempt
- * @returns true for a {@link NetworkError} or an {@link HttpError} with a
- *          502, 503, or 504 status; a {@link CancelledError} is never transient
+ * @returns true for a {@link NetworkError} or an {@link HttpError} with a 502,
+ * 503, or 504 status; a {@link CancelledError} is never transient
  */
 function isTransientError(error: unknown): boolean {
     if (error instanceof NetworkError) {
@@ -504,14 +521,15 @@ function isTransientError(error: unknown): boolean {
  * Parse a successful response body.
  *
  * @param response - the fetch response
- * @param parse - 'blob' reads the raw response body; 'json' parses JSON,
- *                falls back to raw text, or undefined for an empty body
+ * @param parse - 'blob' reads the raw response body; 'json' parses JSON, falls
+ * back to raw text, or undefined for an empty body
  * @returns the parsed payload, matching the requested parse mode
  */
 async function parseResponseBody<T>(response: Response, parse: BodyParseMode): Promise<T> {
     if (parse === 'blob') {
-        // Cast justified: 'blob' mode is only selected by FetchHttpClient#download,
-        // whose public signature guarantees T is Blob.
+        // Cast justified: 'blob' mode is only selected by
+        // FetchHttpClient#download, whose public signature guarantees T is
+        // Blob.
         return (await response.blob()) as T;
     }
 

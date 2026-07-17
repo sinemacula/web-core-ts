@@ -2,10 +2,10 @@
  * Logger port.
  *
  * The sanctioned logging seam: application code never calls `console.*`
- * directly, it depends only on this port so that the provider (console
- * locally, a shipping sink later) can be swapped, stubbed in tests, or
- * silenced without touching call sites. Structured fields survive into
- * whichever sink is wired up.
+ * directly, it depends only on this port so that the provider (console locally,
+ * a shipping sink later) can be swapped, stubbed in tests, or silenced without
+ * touching call sites. Structured fields survive into whichever sink is wired
+ * up.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

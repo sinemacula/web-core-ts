@@ -24,8 +24,9 @@ function parsedFilters(query: ApiQuery): unknown {
 
 // ---------------------------------------------------------------------------
 // Helper: build wire-style objects from entry tuples (mirrors the wire() idiom
-// used in other tests in this repo - keeps $-prefixed keys out of object-literal
-// key positions in test assertions where Biome might inspect them).
+// used in other tests in this repo - keeps $-prefixed keys out of
+// object-literal key positions in test assertions where Biome might inspect
+// them).
 // ---------------------------------------------------------------------------
 function wire(entries: ReadonlyArray<readonly [string, unknown]>): Record<string, unknown> {
     return Object.fromEntries(entries);

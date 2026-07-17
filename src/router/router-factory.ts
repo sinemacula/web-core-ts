@@ -4,8 +4,8 @@
  * Builds the Vue Router instance from module-contributed routes and installs
  * the middleware pipeline as a global guard, running any global middleware
  * before the middleware declared on the matched records. Scroll behaviour
- * restores saved positions, honours hash anchors, and otherwise returns to
- * the top.
+ * restores saved positions, honours hash anchors, and otherwise returns to the
+ * top.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -24,14 +24,17 @@ export interface RouterFactoryOptions {
     readonly routes: readonly RouteRecordRaw[];
     readonly history?: RouterHistory;
 
-    /** Middleware run on every navigation before matched-record meta middleware. */
+    /**
+     * Middleware run on every navigation before matched-record meta middleware.
+     */
     readonly globalMiddleware?: readonly RouteMiddleware[];
 }
 
 /**
  * Build the application router.
  *
- * @param options - the routes to install plus optional history and global middleware overrides
+ * @param options - the routes to install plus optional history and global
+ * middleware overrides
  * @returns the configured router
  */
 export function createApplicationRouter(options: RouterFactoryOptions): Router {

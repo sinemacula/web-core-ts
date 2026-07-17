@@ -2,9 +2,9 @@
  * Configuration registry.
  *
  * Mirrors Laravel's `config/` directory: one typed definition per concern,
- * aggregated here into the single tree the {@link ConfigRepository} freezes
- * at boot. Add new definitions by creating a sibling file and registering it
- * in {@link defineConfiguration}.
+ * aggregated here into the single tree the {@link ConfigRepository} freezes at
+ * boot. Add new definitions by creating a sibling file and registering it in
+ * {@link defineConfiguration}.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

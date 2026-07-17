@@ -1,6 +1,6 @@
 /**
- * Unit tests for FetchHttpClient - request construction (verbs, URLs,
- * query parameters, body/content-type, default headers).
+ * Unit tests for FetchHttpClient - request construction (verbs, URLs, query
+ * parameters, body/content-type, default headers).
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -77,8 +77,9 @@ function lastInit(fn: ReturnType<typeof makeFetch>): RequestInit {
  * @returns the headers as a plain record
  */
 function lastHeaders(fn: ReturnType<typeof makeFetch>): Record<string, string> {
-    // Cast is proven safe: #buildRequestInit always writes a plain object literal
-    // into init.headers, so the value is always Record<string, string> at runtime.
+    // Cast is proven safe: #buildRequestInit always writes a plain object
+    // literal into init.headers, so the value is always Record<string, string>
+    // at runtime.
     return (lastInit(fn).headers ?? {}) as Record<string, string>;
 }
 

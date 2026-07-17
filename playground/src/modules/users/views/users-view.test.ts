@@ -1,8 +1,8 @@
 /**
  * Component tests for users-view.
  *
- * Exercises the template's rendered states (loading, error, empty, table)
- * and the sort-header wiring; the composable's own behaviour is covered by
+ * Exercises the template's rendered states (loading, error, empty, table) and
+ * the sort-header wiring; the composable's own behaviour is covered by
  * use-users-list.test.ts.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
@@ -36,8 +36,8 @@ const stubLocaleSwitcher: LocaleSwitcher = {
 /**
  * Build a `Record<string, unknown>` from an array of `[key, value]` pairs.
  *
- * Wraps `Object.fromEntries` so callers can write snake_case API field names
- * as plain string literals inside array elements rather than as object-literal
+ * Wraps `Object.fromEntries` so callers can write snake_case API field names as
+ * plain string literals inside array elements rather than as object-literal
  * keys - keeping non-camelCase field names out of any position that Biome's
  * naming-convention or literal-keys rules inspect.
  *
@@ -111,9 +111,9 @@ function mountUsersView(): MountedUsersView {
 /**
  * Build a `Record<string, string>` from an array of `[key, value]` pairs.
  *
- * Wraps `Object.fromEntries` so callers can write SCREAMING_SNAKE_CASE env
- * keys as plain string literals without triggering Biome's naming-convention
- * rule on object literal keys.
+ * Wraps `Object.fromEntries` so callers can write SCREAMING_SNAKE_CASE env keys
+ * as plain string literals without triggering Biome's naming-convention rule on
+ * object literal keys.
  *
  * @param entries - key-value pairs for the record
  * @returns a plain `Record<string, string>`

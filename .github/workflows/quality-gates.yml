@@ -48,8 +48,8 @@ jobs:
     # ==========================================================================
     # JOB: STRUCTURE
     # ==========================================================================
-    # Repo-specific: dogfood the web-core eslint preset. Consumers get the preset
-    # through qlty, so this job does not belong in the shared workflow.
+    # Repo-specific: dogfood the web-core eslint preset. Consumers get the
+    # preset through qlty, so this job does not belong in the shared workflow.
     structure:
         name: Structure lint
         if: ${{ github.event_name != 'schedule' }}

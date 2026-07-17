@@ -223,8 +223,9 @@ describe('EventSourceConnection', () => {
         });
 
         it('exercises the default EventSource factory when no factory is injected', () => {
-            // happy-dom does not ship an EventSource stub, so we install a minimal
-            // constructible shim on globalThis to exercise the default factory path.
+            // happy-dom does not ship an EventSource stub, so we install a
+            // minimal constructible shim on globalThis to exercise the default
+            // factory path.
             const globals = globalThis as Record<string, unknown>;
             const OriginalEventSource = globals.EventSource;
 
@@ -521,7 +522,8 @@ describe('EventSourceConnection', () => {
 
             await vi.advanceTimersByTimeAsync(100);
 
-            // First hook call rejected: attempt abandoned, no transport created.
+            // First hook call rejected: attempt abandoned, no transport
+            // created.
             expect(sources).toHaveLength(1);
             expect(conn.state).toBe('connecting');
 
@@ -579,7 +581,8 @@ describe('EventSourceConnection', () => {
             conn.disconnect();
             gate.reject(new Error('token refresh failed'));
             await gate.promise.catch(() => {
-                // Rejection is expected here; the abandonment is asserted below.
+                // Rejection is expected here; the abandonment is asserted
+                // below.
             });
 
             expect(sources).toHaveLength(1);
@@ -739,7 +742,8 @@ describe('EventSourceConnection', () => {
 
             conn.onStateChange(s => states.push(s));
             conn.connect();
-            // Error → connecting again (should not re-emit 'connecting' if already connecting).
+            // Error → connecting again (should not re-emit 'connecting' if
+            // already connecting).
             sources.at(0)?.emitError();
 
             expect(states).toEqual(['connecting']);

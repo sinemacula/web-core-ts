@@ -27,7 +27,8 @@ function onChange(event: Event): void {
     const locale = (event.target as HTMLSelectElement).value;
 
     switcher.switchTo(locale).catch(() => {
-        // Invalid selection cannot occur: the <select> only lists enabled locales.
+        // Invalid selection cannot occur: the <select> only lists enabled
+        // locales.
     });
 }
 </script>

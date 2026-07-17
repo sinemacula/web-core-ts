@@ -3,10 +3,10 @@
  *
  * Owns the session state: access token, refresh token, expiry, and the
  * authenticated user. All transitions go through the actions; nothing else
- * writes tokens to storage. State hydrates from the installed session
- * context's storage at store creation, and expiry persists as an
- * epoch-millisecond string - legacy wire-format values from sessions
- * predating that format are delegated to the context's timestamp parser.
+ * writes tokens to storage. State hydrates from the installed session context's
+ * storage at store creation, and expiry persists as an epoch-millisecond string
+ * - legacy wire-format values from sessions predating that format are delegated
+ * to the context's timestamp parser.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -21,8 +21,8 @@ import type { SessionTokens } from './session-tokens';
 import type { SessionUser } from './session-user';
 
 /**
- * The session store contract consumed by guards, authorization checks and
- * the session module's lifecycle wiring.
+ * The session store contract consumed by guards, authorization checks and the
+ * session module's lifecycle wiring.
  */
 export interface SessionStore<U extends SessionUser = SessionUser> {
     /** The bearer token for the active session, or null when signed out. */
@@ -41,10 +41,11 @@ export interface SessionStore<U extends SessionUser = SessionUser> {
     readonly isAuthenticated: boolean;
 
     /**
-     * Exchange credentials for a session, persist every session key, and
-     * load the current user.
+     * Exchange credentials for a session, persist every session key, and load
+     * the current user.
      *
-     * @param credentials - the login credentials, forwarded opaquely to the gateway
+     * @param credentials - the login credentials, forwarded opaquely to the
+     * gateway
      */
     login(credentials: unknown): Promise<void>;
 
@@ -52,7 +53,7 @@ export interface SessionStore<U extends SessionUser = SessionUser> {
      * Use the refresh token to obtain a new session.
      *
      * @returns true when the session was refreshed; false (with the session
-     *   cleared) when no refresh token exists or the request fails
+     * cleared) when no refresh token exists or the request fails
      */
     refresh(): Promise<boolean>;
 
@@ -62,8 +63,8 @@ export interface SessionStore<U extends SessionUser = SessionUser> {
     logout(): Promise<void>;
 
     /**
-     * Re-read the persisted tokens and expiry from storage into state. Used
-     * by cross-tab synchronisation; it never calls the API.
+     * Re-read the persisted tokens and expiry from storage into state. Used by
+     * cross-tab synchronisation; it never calls the API.
      */
     hydrateFromStorage(): void;
 
@@ -94,8 +95,8 @@ interface SessionState {
 /**
  * Resolve the session store over the installed session context.
  *
- * @param pinia - the pinia instance to resolve against; defaults to the
- *   active instance
+ * @param pinia - the pinia instance to resolve against; defaults to the active
+ * instance
  * @returns the session store, registered under the context's store id
  */
 export function useSessionStore<U extends SessionUser = SessionUser>(pinia?: Pinia): SessionStore<U> {
@@ -164,7 +165,8 @@ function sessionStoreDefinition(id: string): (pinia?: Pinia) => SessionStore {
 async function loginWithCredentials(state: SessionState, credentials: unknown): Promise<void> {
     const context = sessionContext();
 
-    // The credential shape is the gateway's concern; the store forwards it opaquely.
+    // The credential shape is the gateway's concern; the store forwards it
+    // opaquely.
     const session = await context.api.login(credentials as { email: string; password: string }, context.device());
 
     applySession(state, context, session);
@@ -177,7 +179,7 @@ async function loginWithCredentials(state: SessionState, credentials: unknown): 
  *
  * @param state - the mutable store state
  * @returns true when the session was refreshed; false (with the session
- *   cleared) when no refresh token exists or the request fails
+ * cleared) when no refresh token exists or the request fails
  */
 async function refreshSession(state: SessionState): Promise<boolean> {
     if (state.refreshToken === null) {
@@ -228,8 +230,8 @@ function hydrateStateFromStorage(state: SessionState): void {
 }
 
 /**
- * Fetch and store the current user when a session is present but no user
- * record has been loaded yet. Failures are swallowed.
+ * Fetch and store the current user when a session is present but no user record
+ * has been loaded yet. Failures are swallowed.
  *
  * @param state - the mutable store state
  */
@@ -241,7 +243,8 @@ async function rehydrateSessionUser(state: SessionState): Promise<void> {
     try {
         state.user = await sessionContext().api.currentUser();
     } catch {
-        // Swallowed: a dead session is handled by the 401-refresh flow or the session-loss watcher.
+        // Swallowed: a dead session is handled by the 401-refresh flow or the
+        // session-loss watcher.
     }
 }
 
@@ -273,8 +276,8 @@ function applySession(state: SessionState, context: SessionContext, session: Ses
 }
 
 /**
- * Clear all session state from the store and remove every persisted session
- * key from storage.
+ * Clear all session state from the store and remove every persisted session key
+ * from storage.
  *
  * @param state - the mutable store state
  * @param context - the installed session context
@@ -303,6 +306,7 @@ function readPersistedExpiry(context: SessionContext): number | null {
         return null;
     }
 
-    // Digits-only values are the current epoch-ms format; anything else is a legacy wire timestamp.
+    // Digits-only values are the current epoch-ms format; anything else is a
+    // legacy wire timestamp.
     return /^\d+$/.test(persisted) ? Number(persisted) : context.parseTimestamp(persisted);
 }

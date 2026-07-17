@@ -15,7 +15,10 @@ export interface ExponentialBackoffOptions {
     readonly initialDelay?: number;
     /** Multiplicative growth factor applied each attempt. Defaults to 2. */
     readonly multiplier?: number;
-    /** Upper bound in milliseconds; delays are clamped to this value. Defaults to 30 000. */
+    /**
+     * Upper bound in milliseconds; delays are clamped to this value. Defaults
+     * to 30 000.
+     */
     readonly maxDelay?: number;
 }
 
@@ -23,8 +26,9 @@ export interface ExponentialBackoffOptions {
  * Computes capped exponential backoff delays for reconnect strategies.
  *
  * No jitter is applied deliberately: deterministic output makes reconnect
- * behaviour fully testable without fake random number generators. Jitter is
- * a caller concern and can be layered on top of {@link ExponentialBackoff.delayFor}.
+ * behaviour fully testable without fake random number generators. Jitter is a
+ * caller concern and can be layered on top of
+ * {@link ExponentialBackoff.delayFor}.
  */
 export class ExponentialBackoff {
     readonly #initialDelay: number;
@@ -34,7 +38,8 @@ export class ExponentialBackoff {
     /**
      * Construct a backoff calculator.
      *
-     * @param options - optional overrides for initial delay, multiplier, and max delay
+     * @param options - optional overrides for initial delay, multiplier, and
+     * max delay
      */
     constructor(options?: ExponentialBackoffOptions) {
         this.#initialDelay = options?.initialDelay ?? 1_000;
@@ -45,7 +50,8 @@ export class ExponentialBackoff {
     /**
      * Compute the delay in milliseconds for a given attempt index.
      *
-     * @param attempt - zero-based attempt counter; negative values are treated as 0
+     * @param attempt - zero-based attempt counter; negative values are treated
+     * as 0
      * @returns the delay in milliseconds, capped at `maxDelay`
      */
     delayFor(attempt: number): number {

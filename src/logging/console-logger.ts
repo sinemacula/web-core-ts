@@ -2,8 +2,8 @@
  * Console logger adapter.
  *
  * Writes log entries to the browser console for use during development. Not
- * intended for production - swap in a real provider adapter via the Logger
- * port when deploying.
+ * intended for production - swap in a real provider adapter via the Logger port
+ * when deploying.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -32,7 +32,8 @@ export class ConsoleLogger implements Logger {
     /**
      * Retain the lowest level to write; quieter entries are dropped.
      *
-     * @param minimumLevel - the lowest level written to the console (default 'debug')
+     * @param minimumLevel - the lowest level written to the console (default
+     * 'debug')
      */
     constructor(minimumLevel: LogLevel = 'debug') {
         this.#minimumLevel = minimumLevel;
@@ -48,12 +49,16 @@ export class ConsoleLogger implements Logger {
         this.#write('info', console.info, message, fields);
     }
 
-    /** Write a warning entry through `console.warn` when the level is enabled. */
+    /**
+     * Write a warning entry through `console.warn` when the level is enabled.
+     */
     warn(message: string, fields?: LogFields): void {
         this.#write('warn', console.warn, message, fields);
     }
 
-    /** Write an error entry through `console.error` when the level is enabled. */
+    /**
+     * Write an error entry through `console.error` when the level is enabled.
+     */
     error(message: string, fields?: LogFields): void {
         this.#write('error', console.error, message, fields);
     }

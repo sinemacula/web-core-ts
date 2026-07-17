@@ -1,11 +1,11 @@
 /**
  * Session guard factories.
  *
- * Route middleware over the session store: `authenticated` requires a
- * signed-in user, `guestOnly` requires a signed-out visitor, and `authorize`
- * additionally requires a permission. Every factory defers all store and
- * session-context access to `handle()`, so guard instances may be created at
- * module-definition time, before the application boots.
+ * Route middleware over the session store: `authenticated` requires a signed-in
+ * user, `guestOnly` requires a signed-out visitor, and `authorize` additionally
+ * requires a permission. Every factory defers all store and session-context
+ * access to `handle()`, so guard instances may be created at module-definition
+ * time, before the application boots.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -23,9 +23,9 @@ import { useSessionStore } from './session-store';
 /**
  * Build middleware that requires an authenticated session.
  *
- * @param redirectTo - where unauthenticated navigations are sent, carrying
- *   the attempted route's path as a redirect query parameter; defaults to
- *   the session context's login route
+ * @param redirectTo - where unauthenticated navigations are sent, carrying the
+ * attempted route's path as a redirect query parameter; defaults to the session
+ * context's login route
  * @returns the route middleware
  */
 export function authenticated(redirectTo?: RouteLocationRaw): RouteMiddleware {
@@ -43,8 +43,8 @@ export function authenticated(redirectTo?: RouteLocationRaw): RouteMiddleware {
 /**
  * Build middleware that requires a signed-out visitor.
  *
- * @param redirectTo - where authenticated navigations are sent; defaults to
- *   the session context's home route
+ * @param redirectTo - where authenticated navigations are sent; defaults to the
+ * session context's home route
  * @returns the route middleware
  */
 export function guestOnly(redirectTo?: RouteLocationRaw): RouteMiddleware {
@@ -59,9 +59,8 @@ export function guestOnly(redirectTo?: RouteLocationRaw): RouteMiddleware {
  * Build middleware that requires a signed-in user holding a permission.
  *
  * An unauthenticated visitor is redirected to the session context's login
- * route, carrying the attempted route exactly as {@link authenticated} does.
- * An authenticated visitor lacking the permission is redirected to
- * `redirectTo`.
+ * route, carrying the attempted route exactly as {@link authenticated} does. An
+ * authenticated visitor lacking the permission is redirected to `redirectTo`.
  *
  * @example
  * ```ts
@@ -69,8 +68,8 @@ export function guestOnly(redirectTo?: RouteLocationRaw): RouteMiddleware {
  * ```
  *
  * @param permission - the permission the signed-in user must hold
- * @param redirectTo - where an authenticated-but-unauthorised visitor is
- *   sent; defaults to the session context's forbidden route
+ * @param redirectTo - where an authenticated-but-unauthorised visitor is sent;
+ * defaults to the session context's forbidden route
  * @returns the route middleware
  */
 export function authorize(permission: string, redirectTo?: RouteLocationRaw): RouteMiddleware {

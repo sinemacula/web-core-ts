@@ -119,8 +119,8 @@ plugins = ["eslint"]
 file_patterns = [".qlty/**"]
 
 # Knip deliberately runs OUTSIDE qlty: the workspace-aware configuration
-# (knip.ts) needs a Vue SFC compiler function that JSON configs cannot
-# express, and qlty stages the shared source's default knip.json into the
-# workspace root, which outranks knip.ts in knip's own config resolution.
-# Dead-code detection is enforced as a blocking CI gate instead - see
-# `npm run deadcode` in .github/workflows/quality-gates.yml.
+# (knip.ts) needs a Vue SFC compiler function that JSON configs cannot express,
+# and qlty stages the shared source's default knip.json into the workspace root,
+# which outranks knip.ts in knip's own config resolution. Dead-code detection is
+# enforced as a blocking CI gate instead - see `npm run deadcode` in
+# .github/workflows/quality-gates.yml.

@@ -1,8 +1,8 @@
 /**
  * Vitest test-runner configuration.
  *
- * Tests are colocated with source (`*.test.ts`). Coverage is measured over
- * the plain TypeScript surface only: Vue single-file components are kept thin
+ * Tests are colocated with source (`*.test.ts`). Coverage is measured over the
+ * plain TypeScript surface only: Vue single-file components are kept thin
  * (template plus wiring) so every line of behaviour lives in fully-covered
  * `.ts` modules.
  *

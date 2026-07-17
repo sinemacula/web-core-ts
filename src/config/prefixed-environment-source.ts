@@ -2,8 +2,8 @@
  * Environment source that maps unprefixed keys onto a prefixed record.
  *
  * Local development reads Vite's `import.meta.env`, whose keys carry the
- * `VITE_` prefix. Wrapping that record here lets configuration definitions
- * use canonical, deployment-style names (`API_URL`) everywhere.
+ * `VITE_` prefix. Wrapping that record here lets configuration definitions use
+ * canonical, deployment-style names (`API_URL`) everywhere.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

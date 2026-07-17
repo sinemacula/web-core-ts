@@ -2,9 +2,9 @@
  * Structural configuration contract read by the bootstrap preset.
  *
  * The preset reads only this slice of the application's configuration tree;
- * applications define richer trees and satisfy the contract structurally.
- * Flag values reuse the feature-flag port's `FlagValue` so a config-delivered
- * flag set feeds the default static adapter without conversion.
+ * applications define richer trees and satisfy the contract structurally. Flag
+ * values reuse the feature-flag port's `FlagValue` so a config-delivered flag
+ * set feeds the default static adapter without conversion.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

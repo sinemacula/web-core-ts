@@ -1,11 +1,11 @@
 /**
  * Locale wiring for the bootstrap preset.
  *
- * Builds the i18n instance, detects the active locale (stored preference,
- * then caller candidates, then the configured default), activates it through
- * a memoised module message source, and installs a runtime locale switcher
- * built over the same locale service and message source so boot-time
- * detection and later runtime switches stay consistent.
+ * Builds the i18n instance, detects the active locale (stored preference, then
+ * caller candidates, then the configured default), activates it through a
+ * memoised module message source, and installs a runtime locale switcher built
+ * over the same locale service and message source so boot-time detection and
+ * later runtime switches stay consistent.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -36,7 +36,9 @@ export interface LocaleWiringConfig {
 export interface WireLocaleOptions {
     readonly config: LocaleWiringConfig;
 
-    /** The registry's ordered module list, the source of module translations. */
+    /**
+     * The registry's ordered module list, the source of module translations.
+     */
     readonly modules: readonly ModuleDefinition[];
 
     /** Shared (non-module) translation loaders keyed by locale. */
@@ -45,12 +47,14 @@ export interface WireLocaleOptions {
     /** Datetime and number formats installed on the i18n instance. */
     readonly formats?: LocaleFormats;
 
-    /** The storage key the locale preference persists under. Default 'locale'. */
+    /**
+     * The storage key the locale preference persists under. Default 'locale'.
+     */
     readonly localeStorageKey?: string;
 
     /**
-     * Behaviour when a module name shadows a shared top-level translation
-     * key. Default 'error': activation throws naming the module and locale;
+     * Behaviour when a module name shadows a shared top-level translation key.
+     * Default 'error': activation throws naming the module and locale;
      * 'module-wins' keeps the merge where module messages shadow the key.
      */
     readonly duplicateNamespaceStrategy?: 'error' | 'module-wins';
@@ -58,7 +62,10 @@ export interface WireLocaleOptions {
     /** The storage the locale preference is read from and persisted to. */
     readonly storage: KeyValueStorage;
 
-    /** Preferred locales, most preferred first (typically `navigator.languages`). */
+    /**
+     * Preferred locales, most preferred first (typically
+     * `navigator.languages`).
+     */
     readonly localeCandidates: readonly string[];
 
     /** The document whose `lang`/`dir` attributes are synchronised. */
@@ -76,13 +83,14 @@ export interface WiredLocale {
 /**
  * Wire application internationalisation.
  *
- * Detects the locale, activates it (loading the configured default alongside
- * as the fallback), and installs the locale switcher singleton.
+ * Detects the locale, activates it (loading the configured default alongside as
+ * the fallback), and installs the locale switcher singleton.
  *
- * @param options - the configuration slice, modules, i18n options and platform seams
+ * @param options - the configuration slice, modules, i18n options and platform
+ * seams
  * @returns the i18n instance and the installed locale switcher
- * @throws Error when the collision strategy is 'error' and a module name
- *   equals a shared top-level translation key
+ * @throws Error when the collision strategy is 'error' and a module name equals
+ * a shared top-level translation key
  */
 export async function wireLocale(options: WireLocaleOptions): Promise<WiredLocale> {
     const locales = options.config.locales;

@@ -2,9 +2,10 @@
  * Response-envelope unwrapping for the laravel-api-toolkit wire protocol.
  *
  * Every endpoint wraps its payload in a `{ data: ... }` envelope, with list
- * endpoints additionally carrying a `meta` block for pagination. This module
- * is the single place that peels the envelope away and hands callers a typed
- * domain value (or list of values) via a caller-supplied {@link ResourceMapper}.
+ * endpoints additionally carrying a `meta` block for pagination. This module is
+ * the single place that peels the envelope away and hands callers a typed
+ * domain value (or list of values) via a caller-supplied
+ * {@link ResourceMapper}.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -23,7 +24,9 @@ export type RawRecord = Readonly<Record<string, unknown>>;
  */
 export type ResourceMapper<Value> = (raw: RawRecord) => Value;
 
-/** Laravel paginator metadata, mapped from the envelope's snake_case wire keys. */
+/**
+ * Laravel paginator metadata, mapped from the envelope's snake_case wire keys.
+ */
 export interface PaginationMeta {
     readonly currentPage: number;
     readonly lastPage: number;
@@ -31,14 +34,18 @@ export interface PaginationMeta {
     readonly total: number;
 }
 
-/** The result of unwrapping a list envelope: mapped items plus optional pagination metadata. */
+/**
+ * The result of unwrapping a list envelope: mapped items plus optional
+ * pagination metadata.
+ */
 export interface ListResult<Value> {
     readonly items: readonly Value[];
     readonly meta: PaginationMeta | null;
 }
 
 /**
- * Unwrap a `{ data: {...} }` single-resource envelope and map it onto a domain value.
+ * Unwrap a `{ data: {...} }` single-resource envelope and map it onto a domain
+ * value.
  *
  * @param payload - the raw response payload
  * @param map - validates and maps the raw record onto the domain value
@@ -54,11 +61,13 @@ export function unwrapItem<Value>(payload: unknown, map: ResourceMapper<Value>):
 }
 
 /**
- * Unwrap a `{ data: [...], meta?: {...} }` list envelope and map each entry onto a domain value.
+ * Unwrap a `{ data: [...], meta?: {...} }` list envelope and map each entry
+ * onto a domain value.
  *
  * @param payload - the raw response payload
  * @param map - validates and maps each raw record onto the domain value
- * @returns the mapped items and pagination metadata (null when the `meta` block is absent or malformed)
+ * @returns the mapped items and pagination metadata (null when the `meta` block
+ * is absent or malformed)
  * @throws {@link QueryError} when the envelope is absent or malformed
  */
 export function unwrapList<Value>(payload: unknown, map: ResourceMapper<Value>): ListResult<Value> {
@@ -81,8 +90,8 @@ export function unwrapList<Value>(payload: unknown, map: ResourceMapper<Value>):
  * Map a raw `meta` block onto {@link PaginationMeta}.
  *
  * @param raw - the raw `meta` value from the envelope
- * @returns the mapped pagination metadata, or null when the block is absent, non-record, or carries a
- *          missing/non-numeric pagination key
+ * @returns the mapped pagination metadata, or null when the block is absent,
+ * non-record, or carries a missing/non-numeric pagination key
  */
 function mapPaginationMeta(raw: unknown): PaginationMeta | null {
     if (!isRecord(raw)) {

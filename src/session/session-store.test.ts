@@ -20,7 +20,9 @@ const ACCESS_TOKEN_KEY = 'auth.access_token';
 const REFRESH_TOKEN_KEY = 'auth.refresh_token';
 const EXPIRES_AT_KEY = 'auth.expires_at';
 
-/** The epoch-millisecond instant for the UTC wire timestamp 2026-12-31 23:59:59. */
+/**
+ * The epoch-millisecond instant for the UTC wire timestamp 2026-12-31 23:59:59.
+ */
 const SESSION_EXPIRY_EPOCH_MS = 1_798_761_599_000;
 
 /**

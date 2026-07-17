@@ -211,21 +211,24 @@ describe('WebSocketConnection', () => {
 
         it('exercises the default WebSocket factory with no protocols', () => {
             // happy-dom provides a WebSocket stub so connect() does not throw;
-            // this covers the protocols === undefined branch in the default factory.
+            // this covers the protocols === undefined branch in the default
+            // factory.
             const conn = new WebSocketConnection({ url: 'ws://localhost' });
 
             expect(() => conn.connect()).not.toThrow();
         });
 
         it('exercises the default WebSocket factory with a string protocol', () => {
-            // Covers the typeof protocols === 'string' branch in the default factory.
+            // Covers the typeof protocols === 'string' branch in the default
+            // factory.
             const conn = new WebSocketConnection({ url: 'ws://localhost', protocols: 'v1' });
 
             expect(() => conn.connect()).not.toThrow();
         });
 
         it('exercises the default WebSocket factory with an array of protocols', () => {
-            // Covers the readonly string[] → string[] cast branch in the default factory.
+            // Covers the readonly string[] → string[] cast branch in the
+            // default factory.
             const conn = new WebSocketConnection({ url: 'ws://localhost', protocols: ['v1', 'v2'] });
 
             expect(() => conn.connect()).not.toThrow();
@@ -472,7 +475,8 @@ describe('WebSocketConnection', () => {
 
             await vi.advanceTimersByTimeAsync(100);
 
-            // First hook call rejected: attempt abandoned, no transport created.
+            // First hook call rejected: attempt abandoned, no transport
+            // created.
             expect(sockets).toHaveLength(1);
             expect(conn.state).toBe('connecting');
 
@@ -530,7 +534,8 @@ describe('WebSocketConnection', () => {
             conn.disconnect();
             gate.reject(new Error('token refresh failed'));
             await gate.promise.catch(() => {
-                // Rejection is expected here; the abandonment is asserted below.
+                // Rejection is expected here; the abandonment is asserted
+                // below.
             });
 
             expect(sockets).toHaveLength(1);
@@ -666,7 +671,8 @@ describe('WebSocketConnection', () => {
             sockets.at(0)?.emitOpen();
             sockets.at(0)?.emitMessage(JSON.stringify({ event: 'message', data: 'hi' }));
 
-            // Delivered once via the raw-frame path; not a second time from the envelope path.
+            // Delivered once via the raw-frame path; not a second time from the
+            // envelope path.
             expect(received).toHaveLength(1);
         });
 
@@ -789,7 +795,8 @@ describe('WebSocketConnection', () => {
 
             conn.onStateChange(s => states.push(s));
             conn.connect();
-            // Close → reconnect pending → already 'connecting', should not re-emit.
+            // Close → reconnect pending → already 'connecting', should not
+            // re-emit.
             sockets.at(0)?.emitClose();
 
             expect(states).toEqual(['connecting']);

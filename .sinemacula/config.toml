@@ -1,6 +1,6 @@
 # Sine Macula Project Configuration
-# Lives at .sinemacula/config.toml in the user's repo root.
-# Shared by the Blueprint, Build, and Deploy plugins.
+# Lives at .sinemacula/config.toml in the user's repo root. Shared by the
+# Blueprint, Build, and Deploy plugins.
 
 [project]
 project_name = "web-core-ts"
@@ -9,8 +9,8 @@ copyright = "Sine Macula Limited"
 package_manager = "npm"
 
 [language]
-# Primary language — auto-detected or manually set.
-# Must match a pack name in plugins/build/packs/.
+# Primary language — auto-detected or manually set. Must match a pack name in
+# plugins/build/packs/.
 primary = "typescript"
 pack = "typescript"
 
@@ -27,8 +27,8 @@ workflow_dir = ".sinemacula/blueprint/workflows/{workflow-slug}/"
 prd_dir = "docs/prd"
 path_prd = "docs/prd/{NN}-{slug}.md"
 
-# Workflow-internal artifact paths (relative to repo root).
-# {workflow-dir} expands to the workflow's directory above.
+# Workflow-internal artifact paths (relative to repo root). {workflow-dir}
+# expands to the workflow's directory above.
 path_intake = "{workflow-dir}/intake-brief.md"
 path_spike = "{workflow-dir}/spikes/spike-{slug}.md"
 path_problem_map = "{workflow-dir}/problem-map.md"
@@ -37,11 +37,12 @@ path_state = "{workflow-dir}/workflow-state.md"
 
 [build.paths]
 # Workflow directory — one per workflow, supports concurrent workflows.
-# {workflow-slug} is derived from the PRD or user request (kebab-case, max 40 chars).
+# {workflow-slug} is derived from the PRD or user request (kebab-case, max 40
+# chars).
 workflow_dir = ".sinemacula/build/workflows/{workflow-slug}/"
 
-# Workflow-internal artifact paths (relative to repo root).
-# {workflow-dir} expands to the workflow's directory above.
+# Workflow-internal artifact paths (relative to repo root). {workflow-dir}
+# expands to the workflow's directory above.
 path_state = "{workflow-dir}/workflow-state.md"
 path_spec = "{workflow-dir}/spec.md"
 path_architecture = "{workflow-dir}/architecture.md"
@@ -56,8 +57,7 @@ path_clean_plan = "{workflow-dir}/clean-plan.md"
 path_knowledge = "{workflow-dir}/knowledge.md"
 
 [build.standards]
-# Override language pack thresholds per-project.
-# Uncomment and adjust as needed.
+# Override language pack thresholds per-project. Uncomment and adjust as needed.
 # min_coverage = 80
 # max_cyclomatic_complexity = 10
 # max_method_lines = 30
@@ -69,8 +69,8 @@ path_knowledge = "{workflow-dir}/knowledge.md"
 # clean_max_issues_per_unit = 25
 
 [build.checks]
-# CLI commands that must pass before workflow completion.
-# Each entry is run via Bash; non-zero exit blocks the gate.
+# CLI commands that must pass before workflow completion. Each entry is run via
+# Bash; non-zero exit blocks the gate.
 required = ["npm run typecheck", "npm run test", "qlty check --no-formatters"]
 
 [build.completion]
@@ -83,13 +83,13 @@ required = ["npm run typecheck", "npm run test", "qlty check --no-formatters"]
 default_action = "prompt"
 
 [build.continuous_learning]
-# Preference injection cap.
-# `inject_top_n` — ranked preferences injected at SessionStart (confidence × recency).
+# Preference injection cap. `inject_top_n` — ranked preferences injected at
+# SessionStart (confidence × recency).
 inject_top_n = 5
 
 [learning]
-# Continuous-learning observation pipeline.
-# Default-on. Set to false to disable all observation writes for this project.
+# Continuous-learning observation pipeline. Default-on. Set to false to disable
+# all observation writes for this project.
 enabled = true
 
 # Auto-injection thresholds.

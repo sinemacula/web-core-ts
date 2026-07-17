@@ -3,14 +3,14 @@
  *
  * Builds the application HTTP client from the frozen configuration, the
  * resolved fetch seam, preset-level interceptors, and the module registry's
- * register-phase contributions, then installs it into the kernel http
- * holder. The response-error handler resolves in precedence order: an
- * explicit override wins; otherwise a configured toast key arms the default
- * handler, which skips validation failures and 401s, raises the
- * application's toast, and captures the error with request context;
- * otherwise unexpected failures are captured only. Module response-error
- * handlers always run after the resolved handler, in registry order, and
- * the toast and reporting services are read lazily on every invocation.
+ * register-phase contributions, then installs it into the kernel http holder.
+ * The response-error handler resolves in precedence order: an explicit override
+ * wins; otherwise a configured toast key arms the default handler, which skips
+ * validation failures and 401s, raises the application's toast, and captures
+ * the error with request context; otherwise unexpected failures are captured
+ * only. Module response-error handlers always run after the resolved handler,
+ * in registry order, and the toast and reporting services are read lazily on
+ * every invocation.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -62,7 +62,9 @@ export interface WireHttpClientOptions<C extends WebCoreConfig> {
     /** Full replacement of the preset response-error handler. */
     readonly onResponseError?: ResponseErrorHandler;
 
-    /** Arms the default handler's toast; the kernel ships no translation keys. */
+    /**
+     * Arms the default handler's toast; the kernel ships no translation keys.
+     */
     readonly unexpectedErrorToastKey?: string;
 
     /** Full adapter override; receives the resolved construction inputs. */
@@ -133,8 +135,8 @@ function composeResponseErrorHandler<C extends WebCoreConfig>(options: WireHttpC
  *
  * Validation failures stay silent (forms render their field errors) and 401s
  * belong to the refresh flow; everything else raises the application's toast
- * when a key is configured and is captured with request context. The toast
- * and reporting services are resolved lazily on every invocation.
+ * when a key is configured and is captured with request context. The toast and
+ * reporting services are resolved lazily on every invocation.
  *
  * @param toastKey - the application's toast key, or undefined to capture only
  * @returns the default response-error handler

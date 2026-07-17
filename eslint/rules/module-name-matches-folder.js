@@ -11,7 +11,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-// biome-ignore-all lint/style/useNamingConvention: ESLint visitor keys are AST node-type names.
+// biome-ignore-all lint/style/useNamingConvention: ESLint AST visitor keys
 
 import { createRule, moduleFolder } from './lib.js';
 

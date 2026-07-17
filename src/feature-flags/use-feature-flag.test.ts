@@ -139,9 +139,9 @@ describe('useVariant', () => {
 
         flags.replace({ flow: 'checkout-v2' });
 
-        // The computed was cached at checkout-v1; since the onChange subscription
-        // was removed by onScopeDispose, tick is never bumped and the cached
-        // value is returned unchanged.
+        // The computed was cached at checkout-v1; since the onChange
+        // subscription was removed by onScopeDispose, tick is never bumped and
+        // the cached value is returned unchanged.
         expect(result?.value).toBe('checkout-v1');
     });
 });

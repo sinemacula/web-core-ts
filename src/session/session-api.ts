@@ -1,8 +1,8 @@
 /**
  * Session API port.
  *
- * The session module depends on this contract, never on a concrete gateway.
- * The shipped adapter is {@link createDefaultSessionApi}; applications with
+ * The session module depends on this contract, never on a concrete gateway. The
+ * shipped adapter is {@link createDefaultSessionApi}; applications with
  * diverging wire conventions substitute their own implementation.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>

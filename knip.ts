@@ -5,10 +5,10 @@
  * playground harness. Vue single-file components are compiled down to their
  * script blocks so Knip can follow imports through `.vue` files.
  *
- * The vite/vitest plugins are disabled in favour of listing the config
- * files as static entries: executing the Vite config under Knip's loader
- * breaks on ESM-only plugin packages, while static analysis resolves the
- * same dependencies without running anything.
+ * The vite/vitest plugins are disabled in favour of listing the config files as
+ * static entries: executing the Vite config under Knip's loader breaks on
+ * ESM-only plugin packages, while static analysis resolves the same
+ * dependencies without running anything.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

@@ -39,7 +39,9 @@ export class BrowserStorage implements KeyValueStorage {
         }
     }
 
-    /** Remove from the underlying Web Storage; a storage failure is swallowed. */
+    /**
+     * Remove from the underlying Web Storage; a storage failure is swallowed.
+     */
     remove(key: string): void {
         try {
             this.#storage.removeItem(key);

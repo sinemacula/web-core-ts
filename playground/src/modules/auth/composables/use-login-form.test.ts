@@ -20,8 +20,8 @@ import { installTestSession, resetSessionContext } from '@/test-support/install-
 /**
  * Build a `Record<string, unknown>` from an array of `[key, value]` pairs.
  *
- * Wraps `Object.fromEntries` so callers can write snake_case API field names
- * as plain string literals inside array elements rather than as object-literal
+ * Wraps `Object.fromEntries` so callers can write snake_case API field names as
+ * plain string literals inside array elements rather than as object-literal
  * keys - keeping non-camelCase field names out of any position that Biome's
  * naming-convention or literal-keys rules inspect.
  *
@@ -38,9 +38,9 @@ interface MountedLoginForm {
 }
 
 /**
- * Mount `useLoginForm` inside a real Vue component setup so that
- * vee-validate's lifecycle hooks (`onMounted`, `provide`) have a valid
- * component instance to attach to.
+ * Mount `useLoginForm` inside a real Vue component setup so that vee-validate's
+ * lifecycle hooks (`onMounted`, `provide`) have a valid component instance to
+ * attach to.
  *
  * @returns the form composable result and a cleanup function
  * @throws Error when the composable fails to initialise (should never happen)
@@ -315,7 +315,8 @@ describe('useLoginForm', () => {
 
             expect(firstResult).toBe(true);
             expect(secondResult).toBe(false);
-            // POST auth + GET users/self = 2 calls total (guard blocks a second login)
+            // POST auth + GET users/self = 2 calls total (guard blocks a second
+            // login)
             expect(fake.calls).toHaveLength(2);
 
             unmount();

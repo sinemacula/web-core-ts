@@ -199,7 +199,8 @@ describe('activateLocale', () => {
             targetDocument: document.implementation.createHTMLDocument('t'),
         });
 
-        // The loader for en-GB is only called once (for the active locale), not a second time
+        // The loader for en-GB is only called once (for the active locale), not
+        // a second time
         expect(fallbackLoaderCalled).toBe(true);
         expect(i18n.global.locale.value).toBe('en-GB');
     });
@@ -251,7 +252,8 @@ describe('activateLocale', () => {
             targetDocument: document.implementation.createHTMLDocument('t'),
         });
 
-        // en-GB messages are not loaded - the fallback locale had no loader called
+        // en-GB messages are not loaded - the fallback locale had no loader
+        // called
         const enMessages = i18n.global.getLocaleMessage('en-GB') as Record<string, unknown>;
 
         expect(enMessages.hello).toBeUndefined();
@@ -269,7 +271,8 @@ describe('activateLocale', () => {
         await activateLocale({
             i18n,
             modules: [localisedModule],
-            // sharedLoaders intentionally omitted - covers the sharedLoaders?.[] undefined branch
+            // sharedLoaders intentionally omitted - covers the
+            // sharedLoaders?.[] undefined branch
             locale: 'fr-FR',
             direction: 'ltr',
             fallbackLocale: 'en-GB',

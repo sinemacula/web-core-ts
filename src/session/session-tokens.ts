@@ -3,8 +3,8 @@
  *
  * The normalised token bundle returned by every {@link SessionApi} call that
  * establishes or renews a session. Wire-format parsing happens at the API
- * gateway boundary, never in the session lifecycle, so consumers only ever
- * see epoch milliseconds.
+ * gateway boundary, never in the session lifecycle, so consumers only ever see
+ * epoch milliseconds.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -21,8 +21,7 @@ export interface SessionTokens {
     readonly refreshToken: string | null;
 
     /**
-     * Absolute expiry in epoch milliseconds; null disables proactive
-     * refresh.
+     * Absolute expiry in epoch milliseconds; null disables proactive refresh.
      */
     readonly expiresAtEpochMs: number | null;
 }

@@ -73,8 +73,8 @@ export class Environment {
      * resolve to the fallback.
      *
      * @param key - the environment variable name
-     * @param fallback - the value returned when the variable is missing
-     *   or invalid
+     * @param fallback - the value returned when the variable is missing or
+     * invalid
      * @returns the resolved value, or the fallback
      */
     integer(key: string): number | undefined;
@@ -96,8 +96,8 @@ export class Environment {
      * fallback.
      *
      * @param key - the environment variable name
-     * @param fallback - the value returned when the variable is missing
-     *   or invalid
+     * @param fallback - the value returned when the variable is missing or
+     * invalid
      * @returns the parsed value, or the fallback
      */
     json<T>(key: string): T | undefined;

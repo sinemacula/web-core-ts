@@ -1,14 +1,14 @@
 /**
  * Module registry construction and lifecycle execution.
  *
- * `createModuleRegistry` validates a caller-owned module list (unique names,
- * at most one fallback) and fixes the effective order: declaration order with
- * the fallback module moved last. `registerModules` runs the synchronous
- * register phase and collects each module's HTTP contributions,
- * `bootModules` runs the boot phase and composes the returned teardowns into
- * one LIFO disposal, and `createModuleMessageSource` loads module
- * translations in parallel with a per-locale memo, preserving the
- * namespacing semantics of `collectModuleMessages`.
+ * `createModuleRegistry` validates a caller-owned module list (unique names, at
+ * most one fallback) and fixes the effective order: declaration order with the
+ * fallback module moved last. `registerModules` runs the synchronous register
+ * phase and collects each module's HTTP contributions, `bootModules` runs the
+ * boot phase and composes the returned teardowns into one LIFO disposal, and
+ * `createModuleMessageSource` loads module translations in parallel with a
+ * per-locale memo, preserving the namespacing semantics of
+ * `collectModuleMessages`.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -50,9 +50,9 @@ export interface ModuleRegistry {
  *
  * @param modules - the caller-owned module list, in declaration order
  * @returns the frozen registry, with the fallback module moved last
- * @throws {@link ModuleRegistryError} when a module name is duplicated,
- *         listing every duplicate sorted, or when more than one module
- *         declares fallback, naming each of them
+ * @throws {@link ModuleRegistryError} when a module name is duplicated, listing
+ * every duplicate sorted, or when more than one module declares fallback,
+ * naming each of them
  */
 export function createModuleRegistry(modules: readonly ModuleDefinition[]): ModuleRegistry {
     const seen = new Set<string>();
@@ -106,7 +106,7 @@ export interface ModuleHttpContributions {
  * @param context - the register-phase context, minus the collector
  * @returns the frozen HTTP contributions collected across all modules
  * @throws {@link ModuleRegistryError} when a second module sets the
- *         unauthorized handler, naming both contributing modules
+ * unauthorized handler, naming both contributing modules
  */
 export function registerModules(
     modules: readonly ModuleDefinition[],

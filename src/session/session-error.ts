@@ -1,10 +1,10 @@
 /**
  * Error type for the session layer.
  *
- * Thrown when a session or user response cannot be normalised - the envelope
- * is missing, or a required token or identifier field is absent or the wrong
- * type - so a malformed payload surfaces as a typed failure callers can branch
- * on with `instanceof` rather than a bare `Error`.
+ * Thrown when a session or user response cannot be normalised - the envelope is
+ * missing, or a required token or identifier field is absent or the wrong type
+ * - so a malformed payload surfaces as a typed failure callers can branch on
+ * with `instanceof` rather than a bare `Error`.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

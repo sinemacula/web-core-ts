@@ -1,5 +1,6 @@
 /**
- * List the mutable source files changed against a base ref, for scoped mutation.
+ * List the mutable source files changed against a base ref, for scoped
+ * mutation.
  *
  * The reusable quality-gates workflow feeds this list to Stryker's `--mutate`
  * on pull requests so only the touched files are mutated; the full suite runs

@@ -34,7 +34,7 @@ export class StaticFeatureFlags implements FeatureFlags {
      *
      * @param key - the flag key to look up
      * @param fallback - returned when the flag is absent or non-boolean;
-     *   defaults to `false`
+     * defaults to `false`
      * @returns the resolved boolean flag value, or the fallback
      */
     isEnabled(key: string, fallback = false): boolean {
@@ -48,8 +48,8 @@ export class StaticFeatureFlags implements FeatureFlags {
      * matches the fallback's type; otherwise returns the fallback.
      *
      * @param key - the flag key to look up
-     * @param fallback - returned when the flag is absent or the wrong type;
-     *   its type pins the return type
+     * @param fallback - returned when the flag is absent or the wrong type; its
+     * type pins the return type
      * @returns the resolved variant value, or the fallback
      */
     variant<Value extends FlagValue>(key: string, fallback: Value): Value {
@@ -57,7 +57,8 @@ export class StaticFeatureFlags implements FeatureFlags {
 
         if (typeof value === typeof fallback) {
             // The typeof guard makes the runtime type of value equal to Value;
-            // the cast is the only way to satisfy TypeScript across FlagValue union members.
+            // the cast is the only way to satisfy TypeScript across FlagValue
+            // union members.
             return value as Value;
         }
 
@@ -65,8 +66,8 @@ export class StaticFeatureFlags implements FeatureFlags {
     }
 
     /**
-     * Store the evaluation context for handoff to a future remote provider.
-     * The static adapter does not target flags itself.
+     * Store the evaluation context for handoff to a future remote provider. The
+     * static adapter does not target flags itself.
      *
      * @param context - the attribute map to store
      */
@@ -106,8 +107,8 @@ export class StaticFeatureFlags implements FeatureFlags {
     }
 
     /**
-     * The stored evaluation context. Read by a migration layer when handing
-     * off to a remote provider that takes context at initialisation time.
+     * The stored evaluation context. Read by a migration layer when handing off
+     * to a remote provider that takes context at initialisation time.
      *
      * @returns the current evaluation context
      */

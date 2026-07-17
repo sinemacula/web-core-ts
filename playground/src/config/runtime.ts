@@ -29,7 +29,8 @@ export class ConfigurationError extends Error {
  * Assert that all required runtime keys are present and non-empty.
  *
  * @param values - the resolved runtime environment values
- * @throws {ConfigurationError} when one or more required keys are missing or empty
+ * @throws {ConfigurationError} when one or more required keys are missing or
+ * empty
  */
 export function assertRuntimeConfig(values: Readonly<Record<string, string>>): void {
     const missing = REQUIRED_RUNTIME_KEYS.filter(key => {

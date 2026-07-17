@@ -10,10 +10,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { IdleMonitor } from './idle-monitor';
 
 /**
- * Build a fake `Window` whose activity listeners can be triggered and
- * inspected directly.
+ * Build a fake `Window` whose activity listeners can be triggered and inspected
+ * directly.
  *
- * @returns the fake window plus test helpers to emit events and inspect listeners
+ * @returns the fake window plus test helpers to emit events and inspect
+ * listeners
  */
 function fakeWindow(): {
     window: Window;

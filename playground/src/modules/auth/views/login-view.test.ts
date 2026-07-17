@@ -1,8 +1,8 @@
 /**
  * Component tests for login-view.
  *
- * Mounts the view inside a minimal Vue app to exercise the template and
- * setup script; API behaviour is covered by use-login-form.test.ts.
+ * Mounts the view inside a minimal Vue app to exercise the template and setup
+ * script; API behaviour is covered by use-login-form.test.ts.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -26,8 +26,8 @@ import { installTestSession, resetSessionContext } from '@/test-support/install-
 /**
  * Build a `Record<string, unknown>` from an array of `[key, value]` pairs.
  *
- * Wraps `Object.fromEntries` so callers can write snake_case API field names
- * as plain string literals without triggering Biome's naming-convention rule.
+ * Wraps `Object.fromEntries` so callers can write snake_case API field names as
+ * plain string literals without triggering Biome's naming-convention rule.
  *
  * @param entries - key-value pairs for the record
  * @returns a plain `Record<string, unknown>`
@@ -146,7 +146,8 @@ describe('LoginView', () => {
         await new Promise<void>(resolve => setTimeout(resolve, 50));
 
         // After the failed submit some error UI should be present in the DOM
-        // (the exact content depends on i18n key resolution but the element exists)
+        // (the exact content depends on i18n key resolution but the element
+        // exists)
         const emailInput = container.querySelector<HTMLInputElement>('input[type="email"]');
 
         expect(emailInput).not.toBeNull();

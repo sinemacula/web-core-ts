@@ -2,16 +2,16 @@
  * Toast notification state and lifecycle manager.
  *
  * This service owns only state (the active toast list) and lifecycle
- * (auto-dismiss timers). Rendering is entirely the application's concern -
- * a thin host component subscribes to {@link ToastService.toasts} and
- * renders the list; this service never touches the DOM.
+ * (auto-dismiss timers). Rendering is entirely the application's concern - a
+ * thin host component subscribes to {@link ToastService.toasts} and renders the
+ * list; this service never touches the DOM.
  *
- * Auto-dismiss: when a toast is shown with a non-zero duration a
- * `setTimeout` is scheduled. Dismissing or clearing a toast cancels its
- * pending timer so no stale callbacks fire.
+ * Auto-dismiss: when a toast is shown with a non-zero duration a `setTimeout`
+ * is scheduled. Dismissing or clearing a toast cancels its pending timer so no
+ * stale callbacks fire.
  *
- * Toast ids are derived from an internal incrementing sequence
- * (`toast-1`, `toast-2`, …) to keep them deterministic in tests.
+ * Toast ids are derived from an internal incrementing sequence (`toast-1`,
+ * `toast-2`, …) to keep them deterministic in tests.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -48,9 +48,9 @@ const DEFAULT_DURATION = 5_000;
 /**
  * Product-agnostic service that manages the reactive toast queue.
  *
- * Construct one shared instance per application and inject it wherever
- * toasts need to be triggered. Mount a single host component that reads
- * {@link toasts} to render the list.
+ * Construct one shared instance per application and inject it wherever toasts
+ * need to be triggered. Mount a single host component that reads {@link toasts}
+ * to render the list.
  */
 export class ToastService {
     readonly #defaultDuration: number;
@@ -139,8 +139,8 @@ export class ToastService {
     /**
      * Dismiss a specific toast by id.
      *
-     * Cancels any pending auto-dismiss timer for the toast. No-op for
-     * unknown ids.
+     * Cancels any pending auto-dismiss timer for the toast. No-op for unknown
+     * ids.
      *
      * @param id - the toast id to remove
      */

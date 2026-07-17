@@ -737,7 +737,8 @@ describe('useListQuery', () => {
             const definition = defineListQuery({});
             const { parameters, refine } = useListQuery(definition);
 
-            // Verify the refinement can still mutate query that already has limit/page
+            // Verify the refinement can still mutate query that already has
+            // limit/page
             refine(q => q.fieldsFor('users', ['id']));
 
             expect(parameters.value['fields[users]']).toBe('id');
@@ -1001,8 +1002,8 @@ describe('useListQuery', () => {
     // -------------------------------------------------------------------------
     describe('defensive guard branches', () => {
         it('is a no-op when setFilter is called with a key not in the definition filters record', () => {
-            // Exercises the filterDef === undefined branch in setFilter.
-            // Cast through unknown to simulate a runtime mismatch (e.g. a stale
+            // Exercises the filterDef === undefined branch in setFilter. Cast
+            // through unknown to simulate a runtime mismatch (e.g. a stale
             // filter key after a hot-reload definition change).
             const definition = defineListQuery({
                 filters: { status: filter.equals('status') },

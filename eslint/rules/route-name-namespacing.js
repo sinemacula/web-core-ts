@@ -1,16 +1,17 @@
 /**
  * Require route names to be namespaced under the module folder.
  *
- * Every value in a module's `_ROUTE_NAMES` map must read `<folder>.<kebab>` (for
- * example `auth.login`, `errors.not-found`). The first segment is the module
- * name, which is also the i18n namespace, so an un-namespaced or mis-namespaced
- * route name collides across modules and breaks title/translation lookup.
+ * Every value in a module's `_ROUTE_NAMES` map must read `<folder>.<kebab>`
+ * (for example `auth.login`, `errors.not-found`). The first segment is the
+ * module name, which is also the i18n namespace, so an un-namespaced or
+ * mis-namespaced route name collides across modules and breaks
+ * title/translation lookup.
  *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright   2026 Sine Macula Limited
  */
 
-// biome-ignore-all lint/style/useNamingConvention: ESLint visitor keys are AST node-type names.
+// biome-ignore-all lint/style/useNamingConvention: ESLint AST visitor keys
 
 import { createRule, moduleFolder } from './lib.js';
 

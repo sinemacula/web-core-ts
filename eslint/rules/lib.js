@@ -3,7 +3,8 @@
  *
  * These rules encode the framework's module contract (`modules/<name>/...`) and
  * ship with the kernel so every web-core app enforces the same layout. They are
- * framework-specific by design and never belong in the generic shared standards.
+ * framework-specific by design and never belong in the generic shared
+ * standards.
  *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright   2026 Sine Macula Limited
@@ -32,12 +33,17 @@ export function moduleFolder(filename) {
     return index >= 0 && parts[index + 1] ? parts[index + 1] : null;
 }
 
-/** Convert a kebab-case name to camelCase (`user-settings` -> `userSettings`). */
+/**
+ * Convert a kebab-case name to camelCase (`user-settings` -> `userSettings`).
+ */
 export function toCamelCase(kebab) {
     return kebab.replace(/-([a-z0-9])/g, (_, character) => character.toUpperCase());
 }
 
-/** Convert a kebab-case name to UPPER_SNAKE_CASE (`user-settings` -> `USER_SETTINGS`). */
+/**
+ * Convert a kebab-case name to UPPER_SNAKE_CASE (`user-settings` ->
+ * `USER_SETTINGS`).
+ */
 export function toUpperSnakeCase(kebab) {
     return kebab.replace(/-/g, '_').toUpperCase();
 }

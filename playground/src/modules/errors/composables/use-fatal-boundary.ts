@@ -1,10 +1,10 @@
 /**
  * Application-level fatal error boundary composable.
  *
- * Catches errors thrown by any descendant component so the application can
- * fall back to a minimal panel instead of a blank screen. The error is
- * reported and propagation is stopped so the global Vue error handler does
- * not also capture it a second time.
+ * Catches errors thrown by any descendant component so the application can fall
+ * back to a minimal panel instead of a blank screen. The error is reported and
+ * propagation is stopped so the global Vue error handler does not also capture
+ * it a second time.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited

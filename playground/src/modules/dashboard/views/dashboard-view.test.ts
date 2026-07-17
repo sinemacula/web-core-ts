@@ -1,8 +1,8 @@
 /**
  * Component tests for dashboard-view.
  *
- * Mounts the view inside a minimal Vue app to exercise the template and
- * setup script; sign-out API behaviour is covered by auth-store.test.ts.
+ * Mounts the view inside a minimal Vue app to exercise the template and setup
+ * script; sign-out API behaviour is covered by auth-store.test.ts.
  *
  * @author Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright 2026 Sine Macula Limited
@@ -41,9 +41,9 @@ const stubLocaleSwitcher: LocaleSwitcher = {
 /**
  * Build a `Record<string, string>` from an array of `[key, value]` pairs.
  *
- * Wraps `Object.fromEntries` so callers can write SCREAMING_SNAKE_CASE env
- * keys as plain string literals without triggering Biome's naming-convention
- * rule on object literal keys.
+ * Wraps `Object.fromEntries` so callers can write SCREAMING_SNAKE_CASE env keys
+ * as plain string literals without triggering Biome's naming-convention rule on
+ * object literal keys.
  *
  * @param entries - key-value pairs for the record
  * @returns a plain `Record<string, string>`

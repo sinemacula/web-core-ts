@@ -15,7 +15,9 @@ import { collectModuleGuards, collectModuleMessages, collectModuleRoutes, create
 
 const EmptyComponent = defineComponent({ render: () => null });
 
-/** Build a distinct pass-through guard so ordering is observable by identity. */
+/**
+ * Build a distinct pass-through guard so ordering is observable by identity.
+ */
 function createGuard(): RouteMiddleware {
     return { handle: () => next() };
 }

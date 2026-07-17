@@ -55,9 +55,9 @@ function lastInit(fn: ReturnType<typeof makeFetch>): RequestInit {
 }
 
 /**
- * A fetch stub that mimics real fetch's abort behaviour: it rejects as soon
- * as its signal aborts, whether that has already happened by the time fetch
- * is called or happens later while the request is pending.
+ * A fetch stub that mimics real fetch's abort behaviour: it rejects as soon as
+ * its signal aborts, whether that has already happened by the time fetch is
+ * called or happens later while the request is pending.
  *
  * @returns the fetch stub
  */
@@ -104,7 +104,8 @@ describe('FetchHttpClient - request interceptors', () => {
 
         await client.get('/items');
 
-        // Cast proven safe: #buildRequestInit always writes a plain object literal.
+        // Cast proven safe: #buildRequestInit always writes a plain object
+        // literal.
         expect((lastInit(fetchFn).headers as Record<string, string>)['x-trace']).toBe('1');
     });
 
@@ -134,7 +135,8 @@ describe('FetchHttpClient - request interceptors', () => {
 
         await client.get('/items');
 
-        // Cast proven safe: #buildRequestInit always writes a plain object literal.
+        // Cast proven safe: #buildRequestInit always writes a plain object
+        // literal.
         const headers = lastInit(fetchFn).headers as Record<string, string>;
 
         expect(headers['x-first']).toBe('yes');
@@ -151,7 +153,8 @@ describe('FetchHttpClient - request interceptors', () => {
 
         await client.get('/items');
 
-        // Cast proven safe: #buildRequestInit always writes a plain object literal.
+        // Cast proven safe: #buildRequestInit always writes a plain object
+        // literal.
         expect((lastInit(fetchFn).headers as Record<string, string>)['x-async']).toBe('true');
     });
 });
@@ -269,7 +272,8 @@ describe('FetchHttpClient - download interceptors and 401 handling', () => {
 
         await client.download('/files/1');
 
-        // Cast proven safe: #buildRequestInit always writes a plain object literal.
+        // Cast proven safe: #buildRequestInit always writes a plain object
+        // literal.
         expect((lastInit(fetchFn).headers as Record<string, string>).authorization).toBe('Bearer token-123');
     });
 
@@ -408,8 +412,8 @@ describe('FetchHttpClient - signal and timeout', () => {
         const client = makeClient(fetchFn);
         const signal = AbortSignal.abort();
 
-        // Swallow the expected AbortError: the test goal is to verify the signal
-        // was forwarded to fetch, not to observe the rejection.
+        // Swallow the expected AbortError: the test goal is to verify the
+        // signal was forwarded to fetch, not to observe the rejection.
         await client.get('/items', { signal }).catch(() => undefined);
 
         expect(lastInit(fetchFn).signal).toBe(signal);

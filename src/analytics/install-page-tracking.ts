@@ -27,7 +27,8 @@ export interface PageTrackingOptions {
 }
 
 /**
- * Install an after-navigation hook that tracks page views and records breadcrumbs.
+ * Install an after-navigation hook that tracks page views and records
+ * breadcrumbs.
  *
  * @param options - the router, tracker and optional breadcrumb trail
  * @returns a teardown that removes the hook; safe to call more than once

@@ -1,8 +1,8 @@
 /**
  * Error type for the internationalisation layer.
  *
- * Thrown when a locale cannot be activated - an unknown locale is requested,
- * or a module name collides with a shared top-level translation key - so the
+ * Thrown when a locale cannot be activated - an unknown locale is requested, or
+ * a module name collides with a shared top-level translation key - so the
  * failure surfaces as a typed error callers can branch on with `instanceof`
  * rather than a bare `Error`.
  *

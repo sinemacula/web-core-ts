@@ -30,7 +30,8 @@ function wire(entries: ReadonlyArray<readonly [string, unknown]>): Record<string
 }
 
 /**
- * Validate and map a raw record onto a `Widget`, mirroring a real resource mapper.
+ * Validate and map a raw record onto a `Widget`, mirroring a real resource
+ * mapper.
  *
  * @param raw - the raw wire record
  * @returns the mapped widget

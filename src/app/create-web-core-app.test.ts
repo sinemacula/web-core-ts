@@ -461,7 +461,8 @@ describe('createWebCoreApp', () => {
 
                                 return {
                                     $dispose() {
-                                        // Disposal ordering is covered separately.
+                                        // Disposal ordering is covered
+                                        // separately.
                                     },
                                 };
                             },
