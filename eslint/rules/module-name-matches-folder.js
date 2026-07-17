@@ -13,7 +13,7 @@
 
 // biome-ignore-all lint/style/useNamingConvention: ESLint AST visitor keys
 
-import { createRule, moduleFolder } from './lib.js';
+import { createRule, moduleFolder, typeReferenceName, unwrapExpression } from './lib.js';
 
 /** Whether a property is the non-computed `name` key of an object. */
 function isNameProperty(property) {
@@ -22,6 +22,21 @@ function isNameProperty(property) {
         !property.computed &&
         ((property.key.type === 'Identifier' && property.key.name === 'name') ||
             (property.key.type === 'Literal' && property.key.value === 'name'))
+    );
+}
+
+/**
+ * Whether a declarator asserts module identity - annotated `: ModuleDefinition`
+ * (including a qualified `ns.ModuleDefinition`) or `... satisfies ModuleDefinition`.
+ */
+function declaresModule(node) {
+    if (typeReferenceName(node.id?.typeAnnotation?.typeAnnotation) === 'ModuleDefinition') {
+        return true;
+    }
+
+    return (
+        node.init?.type === 'TSSatisfiesExpression' &&
+        typeReferenceName(node.init.typeAnnotation) === 'ModuleDefinition'
     );
 }
 
@@ -53,13 +68,17 @@ export default createRule({
 
         return {
             VariableDeclarator(node) {
-                const annotation = node.id?.typeAnnotation?.typeAnnotation;
-
-                if (annotation?.typeName?.name !== 'ModuleDefinition' || node.init?.type !== 'ObjectExpression') {
+                if (!declaresModule(node)) {
                     return;
                 }
 
-                const nameProperty = node.init.properties.find(isNameProperty);
+                const object = unwrapExpression(node.init);
+
+                if (object?.type !== 'ObjectExpression') {
+                    return;
+                }
+
+                const nameProperty = object.properties.find(isNameProperty);
 
                 if (nameProperty?.value.type !== 'Literal' || typeof nameProperty.value.value !== 'string') {
                     return;

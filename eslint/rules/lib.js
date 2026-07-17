@@ -24,13 +24,52 @@ export function isTestPath(filename) {
 
 /**
  * The feature-module folder a file belongs to (the segment after `modules/`),
- * or null when the file sits outside a module tree.
+ * or null when the file sits outside a module tree or directly under `modules/`.
  */
 export function moduleFolder(filename) {
     const parts = filename.replace(/\\/g, '/').split('/');
     const index = parts.lastIndexOf('modules');
 
-    return index >= 0 && parts[index + 1] ? parts[index + 1] : null;
+    // Require a segment AFTER the folder (the file itself), so a file placed
+    // directly under `modules/` is not mistaken for a module of that name.
+    if (index < 0 || index + 2 >= parts.length || !parts[index + 1]) {
+        return null;
+    }
+
+    return parts[index + 1];
+}
+
+/**
+ * Strip `as` / `satisfies` wrappers (e.g. `x as const satisfies T`) down to the
+ * underlying expression, so a rule inspects the real value regardless of
+ * assertions.
+ */
+export function unwrapExpression(node) {
+    let current = node;
+
+    while (current?.type === 'TSAsExpression' || current?.type === 'TSSatisfiesExpression') {
+        current = current.expression;
+    }
+
+    return current ?? null;
+}
+
+/**
+ * The rightmost identifier name of a type reference (`T` or `ns.T` both yield
+ * `T`), or null when the annotation is not a plain type reference.
+ */
+export function typeReferenceName(annotation) {
+    const typeName = annotation?.typeName;
+
+    if (typeName?.type === 'Identifier') {
+        return typeName.name;
+    }
+
+    if (typeName?.type === 'TSQualifiedName') {
+        return typeName.right?.name ?? null;
+    }
+
+    return null;
 }
 
 /**
