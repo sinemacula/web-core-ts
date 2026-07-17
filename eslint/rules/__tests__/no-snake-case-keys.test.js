@@ -18,8 +18,12 @@ ruleTester.run('no-snake-case-keys', rule, {
         { filename: 'src/http/client.ts', code: 'interface Auth { refresh_token: string; }' },
         // camelCase keys are fine.
         { filename: 'src/http/client.ts', code: 'const o = { refreshToken: 1, userId: 2 };' },
-        // A computed key from a variable (not a literal) is not statically a snake_case key.
+        // A computed key from a variable (not a literal) is not statically a snake_case key,
+        // even when the variable itself is named in snake_case.
         { filename: 'src/http/client.ts', code: 'const o = { [field]: 1 };' },
+        { filename: 'src/http/client.ts', code: 'const o = { [refresh_token]: 1 };' },
+        // A non-string (numeric) key is not a snake_case key.
+        { filename: 'src/http/client.ts', code: 'const o = { 42: 1 };' },
         // Test files are exempt.
         { filename: 'src/http/client.test.ts', code: 'const o = { refresh_token: 1 };' },
     ],
@@ -27,18 +31,18 @@ ruleTester.run('no-snake-case-keys', rule, {
         {
             filename: 'src/http/client.ts',
             code: 'const o = { refresh_token: 1 };',
-            errors: [{ messageId: 'snake' }],
+            errors: [{ messageId: 'snake', data: { key: 'refresh_token' } }],
         },
         {
             filename: 'src/http/client.ts',
             code: "const o = { 'created_at': 1 };",
-            errors: [{ messageId: 'snake' }],
+            errors: [{ messageId: 'snake', data: { key: 'created_at' } }],
         },
         // Previously bypassed: a computed string-literal key.
         {
             filename: 'src/http/client.ts',
             code: "const o = { ['refresh_token']: 1 };",
-            errors: [{ messageId: 'snake' }],
+            errors: [{ messageId: 'snake', data: { key: 'refresh_token' } }],
         },
     ],
 });

@@ -34,6 +34,7 @@
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "test:mutation": "stryker run",
+        "test:mutation:eslint": "stryker run stryker.eslint.config.json",
         "mutation:scope": "node scripts/mutation-scope.mjs",
         "check": "qlty check",
         "fmt": "qlty fmt",

@@ -36,6 +36,7 @@ function keyName(property) {
     return null;
 }
 
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'no-snake-case-keys',
     meta: {
@@ -49,8 +50,9 @@ export default createRule({
         },
     },
     defaultOptions: [],
+    // Stryker restore all
     create(context) {
-        const filename = (context.filename ?? context.getFilename()).replace(/\\/g, '/');
+        const filename = context.filename.replace(/\\/g, '/');
 
         if (isTestPath(filename)) {
             return {};

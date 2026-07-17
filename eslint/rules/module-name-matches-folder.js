@@ -43,6 +43,7 @@ function declaresModule(node) {
     );
 }
 
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'module-name-matches-folder',
     meta: {
@@ -56,8 +57,9 @@ export default createRule({
         },
     },
     defaultOptions: [],
+    // Stryker restore all
     create(context) {
-        const filename = (context.filename ?? context.getFilename()).replace(/\\/g, '/');
+        const filename = context.filename.replace(/\\/g, '/');
 
         if (!/(?:^|\/)module\.ts$/.test(filename)) {
             return {};

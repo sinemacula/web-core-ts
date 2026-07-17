@@ -21,6 +21,7 @@ const KERNEL_BARREL = '@sinemacula/web-core';
 // alone (the public surface) has no trailing segment and is allowed.
 const MODULE_INTERNAL = /^@\/modules\/([^/]+)\/.+/;
 
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'module-import-boundary',
     meta: {
@@ -36,8 +37,9 @@ export default createRule({
         },
     },
     defaultOptions: [],
+    // Stryker restore all
     create(context) {
-        const filename = (context.filename ?? context.getFilename()).replace(/\\/g, '/');
+        const filename = context.filename.replace(/\\/g, '/');
 
         if (isTestPath(filename)) {
             return {};
@@ -47,7 +49,9 @@ export default createRule({
 
         /** Report on an import/export source that crosses a boundary. */
         function check(source) {
-            if (source?.type !== 'Literal' || typeof source.value !== 'string') {
+            // A local `export { x }` has a null source; import/export sources are
+            // otherwise always string literals.
+            if (source?.type !== 'Literal') {
                 return;
             }
 

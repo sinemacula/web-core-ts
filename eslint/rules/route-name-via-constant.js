@@ -55,6 +55,7 @@ function inlineName(value) {
     return null;
 }
 
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'route-name-via-constant',
     meta: {
@@ -68,8 +69,9 @@ export default createRule({
         },
     },
     defaultOptions: [],
+    // Stryker restore all
     create(context) {
-        const filename = (context.filename ?? context.getFilename()).replace(/\\/g, '/');
+        const filename = context.filename.replace(/\\/g, '/');
 
         if (!/(?:^|\/)routes\.ts$/.test(filename)) {
             return {};

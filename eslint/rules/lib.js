@@ -13,6 +13,7 @@
 import { ESLintUtils } from '@typescript-eslint/utils';
 
 /** Shared rule factory linking each rule to its documentation anchor. */
+// Stryker disable next-line all: documentation anchor, not behaviour
 export const createRule = ESLintUtils.RuleCreator(name => `https://github.com/sinemacula/web-core-ts#${name}`);
 
 /** Whether the file path marks it as test code. */
@@ -66,7 +67,7 @@ export function typeReferenceName(annotation) {
     }
 
     if (typeName?.type === 'TSQualifiedName') {
-        return typeName.right?.name ?? null;
+        return typeName.right.name;
     }
 
     return null;

@@ -22,6 +22,10 @@ ruleTester.run('module-import-boundary', rule, {
         // Ordinary package and relative imports are untouched.
         { filename: 'src/app.ts', code: "import { defineComponent } from 'vue';" },
         { filename: 'src/modules/auth/routes.ts', code: "import { helper } from './helper';" },
+        // A local re-export carries no source to inspect.
+        { filename: 'src/modules/auth/module.ts', code: 'const thing = 1; export { thing };' },
+        // A dynamic import of a computed specifier is not a static path.
+        { filename: 'src/modules/auth/routes.ts', code: 'export const load = () => import(chunkPath);' },
         // A dynamic import of own internals is fine.
         {
             filename: 'src/modules/auth/routes.ts',

@@ -66,6 +66,7 @@ function exportedNames(program) {
     return names;
 }
 
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'module-export-names',
     meta: {
@@ -79,8 +80,9 @@ export default createRule({
         },
     },
     defaultOptions: [],
+    // Stryker restore all
     create(context) {
-        const filename = (context.filename ?? context.getFilename()).replace(/\\/g, '/');
+        const filename = context.filename.replace(/\\/g, '/');
         const folder = moduleFolder(filename);
 
         if (folder === null) {
