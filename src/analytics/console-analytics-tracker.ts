@@ -27,12 +27,16 @@ export class ConsoleAnalyticsTracker implements AnalyticsTracker {
         console.info('[AnalyticsTracker] page', name, ...(properties !== undefined ? [properties] : []));
     }
 
-    /** Write the user id and traits to the console via `console.info`. */
+    /**
+     * Write the user id and traits to the console via `console.info`.
+     */
     identify(id: string, traits?: Readonly<Record<string, unknown>>): void {
         console.info('[AnalyticsTracker] identify', id, ...(traits !== undefined ? [traits] : []));
     }
 
-    /** Write the identity reset to the console via `console.info`. */
+    /**
+     * Write the identity reset to the console via `console.info`.
+     */
     reset(): void {
         console.info('[AnalyticsTracker] reset');
     }

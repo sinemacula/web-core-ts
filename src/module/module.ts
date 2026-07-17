@@ -62,7 +62,9 @@ export interface ModuleHttpRegistrar {
      */
     setUnauthorizedHandler(handler: UnauthorizedHandler): void;
 
-    /** Run after the preset's response-error handler, in registry order. */
+    /**
+     * Run after the preset's response-error handler, in registry order.
+     */
     addResponseErrorHandler(handler: ResponseErrorHandler): void;
 }
 
@@ -117,41 +119,19 @@ export interface ModuleDefinition {
     /** Lazily-loaded translations, keyed under the module name. */
     readonly locales?: LocaleMessageLoader;
 
-    /**
-     * Global navigation middleware, run on every navigation before route-level
-     * `meta.middleware`, in registry order. Instances may be created at
-     * module-definition time and must defer all store and service access to
-     * `handle()`.
-     */
+    /** Global navigation middleware, run on every navigation before route-level `meta.middleware`, in registry order. Instances may be created at module-definition time and must defer all store and service access to `handle()`. */
     readonly guards?: readonly RouteMiddleware[];
 
-    /**
-     * Stores instantiated eagerly at the stores phase (after pinia and storage
-     * install, before i18n and the router), in registry order. A `useXStore`
-     * hook fits directly.
-     */
+    /** Stores instantiated eagerly at the stores phase (after pinia and storage install, before i18n and the router), in registry order. A `useXStore` hook fits directly. */
     readonly stores?: readonly ModuleStoreFactory[];
 
-    /**
-     * Contribute HTTP machinery (interceptors, the single unauthorized handler,
-     * extra response-error handlers) before the client is built. Synchronous by
-     * design.
-     */
+    /** Contribute HTTP machinery (interceptors, the single unauthorized handler, extra response-error handlers) before the client is built. Synchronous by design. */
     readonly register?: (context: ModuleRegisterContext) => void;
 
-    /**
-     * Imperative installation of module-owned runtime behaviour; runs after
-     * router creation, before mount. May return a teardown removing whatever it
-     * installed.
-     */
+    /** Imperative installation of module-owned runtime behaviour; runs after router creation, before mount. May return a teardown removing whatever it installed. */
     readonly boot?: (context: ModuleBootContext) => ModuleTeardown | undefined | Promise<ModuleTeardown | undefined>;
 
-    /**
-     * This module owns the application catch-all; the registry orders it last.
-     * At most one module per registry may declare it. Keeping the catch-all
-     * last within the module's own routes array remains the module's
-     * responsibility.
-     */
+    /** This module owns the application catch-all; the registry orders it last. At most one module per registry may declare it. Keeping the catch-all last within the module's own routes array remains the module's responsibility. */
     readonly fallback?: boolean;
 }
 

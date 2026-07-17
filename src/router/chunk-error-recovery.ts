@@ -36,31 +36,19 @@ export interface ChunkErrorRecoveryOptions {
     /** The router whose navigation errors are inspected and recovered. */
     readonly router: Router;
 
-    /**
-     * Records the last recovery attempt per path, guarding against reload
-     * loops.
-     */
+    /** Records the last recovery attempt per path, guarding against reload loops. */
     readonly storage: KeyValueStorage;
 
-    /**
-     * Receives non-chunk router errors, and chunk errors a reload did not cure.
-     */
+    /** Receives non-chunk router errors, and chunk errors a reload did not cure. */
     readonly reporter?: ErrorReporter;
 
-    /**
-     * Performs the recovery reload; defaults to a full document navigation to
-     * `targetPath`.
-     */
+    /** Performs the recovery reload; defaults to a full document navigation to `targetPath`. */
     readonly reload?: (targetPath: string) => void;
 
-    /**
-     * Resolves the current time; defaults to `Date.now`, injected for tests.
-     */
+    /** Resolves the current time; defaults to `Date.now`, injected for tests. */
     readonly clock?: () => number;
 
-    /**
-     * The reload-loop guard window in milliseconds; defaults to sixty seconds.
-     */
+    /** The reload-loop guard window in milliseconds; defaults to sixty seconds. */
     readonly windowMs?: number;
 }
 

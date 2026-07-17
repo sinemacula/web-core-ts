@@ -22,7 +22,9 @@ export interface FatalBoundary {
     /** `true` once a descendant component has thrown an uncaught error. */
     readonly fatal: Ref<boolean>;
 
-    /** Clear the fatal state, allowing the guarded content to render again. */
+    /**
+     * Clear the fatal state, allowing the guarded content to render again.
+     */
     reset(): void;
 }
 

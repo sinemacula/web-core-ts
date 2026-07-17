@@ -62,9 +62,7 @@ export interface WireHttpClientOptions<C extends WebCoreConfig> {
     /** Full replacement of the preset response-error handler. */
     readonly onResponseError?: ResponseErrorHandler;
 
-    /**
-     * Arms the default handler's toast; the kernel ships no translation keys.
-     */
+    /** Arms the default handler's toast; the kernel ships no translation keys. */
     readonly unexpectedErrorToastKey?: string;
 
     /** Full adapter override; receives the resolved construction inputs. */

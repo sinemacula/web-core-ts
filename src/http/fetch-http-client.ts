@@ -42,12 +42,7 @@ export interface FetchHttpClientRetryOptions {
     /** Number of retries attempted after the first try. Defaults to 2. */
     readonly attempts?: number;
 
-    /**
-     * Delay strategy between attempts. Defaults to a new
-     * {@link ExponentialBackoff}; that class predates this use for realtime
-     * reconnect scheduling and may move to a shared support module once both
-     * use sites are extracted from this package.
-     */
+    /** Delay strategy between attempts. Defaults to a new {@link ExponentialBackoff}; that class predates this use for realtime reconnect scheduling and may move to a shared support module once both use sites are extracted from this package. */
     readonly backoff?: ExponentialBackoff;
 }
 
@@ -60,20 +55,10 @@ export interface FetchHttpClientOptions {
     readonly requestInterceptors?: readonly RequestInterceptor[];
     readonly onUnauthorized?: UnauthorizedHandler;
 
-    /**
-     * Invoked whenever a request ultimately fails. This is where an application
-     * wires a toast or error-reporting call; per-request `notifyOnError: false`
-     * opts a request out. The handler receives every ultimate failure except
-     * {@link CancelledError} (a deliberate cancel is never reported), including
-     * {@link HttpValidationError}, so filtering expected validation failures is
-     * left to the handler.
-     */
+    /** Invoked whenever a request ultimately fails. This is where an application wires a toast or error-reporting call; per-request `notifyOnError: false` opts a request out. The handler receives every ultimate failure except {@link CancelledError} (a deliberate cancel is never reported), including {@link HttpValidationError}, so filtering expected validation failures is left to the handler. */
     readonly onResponseError?: ResponseErrorHandler;
 
-    /**
-     * Opt-in retry policy for transient failures. Omit entirely for a single
-     * attempt on every request; see {@link FetchHttpClientRetryOptions}.
-     */
+    /** Opt-in retry policy for transient failures. Omit entirely for a single attempt on every request; see {@link FetchHttpClientRetryOptions}. */
     readonly retry?: FetchHttpClientRetryOptions;
 }
 
@@ -163,7 +148,9 @@ export class FetchHttpClient implements HttpClient {
         );
     }
 
-    /** Send a POST request; transient failures are not retried. */
+    /**
+     * Send a POST request; transient failures are not retried.
+     */
     post<T>(path: string, body?: unknown, options?: HttpRequestOptions): Promise<T> {
         return this.#sendAttempt(
             { method: 'POST', path, body, options, shouldRetryUnauthorized: true, idempotent: false, parse: 'json' },
@@ -171,7 +158,9 @@ export class FetchHttpClient implements HttpClient {
         );
     }
 
-    /** Send a PUT request; transient failures are not retried. */
+    /**
+     * Send a PUT request; transient failures are not retried.
+     */
     put<T>(path: string, body?: unknown, options?: HttpRequestOptions): Promise<T> {
         return this.#sendAttempt(
             { method: 'PUT', path, body, options, shouldRetryUnauthorized: true, idempotent: false, parse: 'json' },
@@ -179,7 +168,9 @@ export class FetchHttpClient implements HttpClient {
         );
     }
 
-    /** Send a PATCH request; transient failures are not retried. */
+    /**
+     * Send a PATCH request; transient failures are not retried.
+     */
     patch<T>(path: string, body?: unknown, options?: HttpRequestOptions): Promise<T> {
         return this.#sendAttempt(
             { method: 'PATCH', path, body, options, shouldRetryUnauthorized: true, idempotent: false, parse: 'json' },
@@ -187,7 +178,9 @@ export class FetchHttpClient implements HttpClient {
         );
     }
 
-    /** Send a DELETE request; transient failures are not retried. */
+    /**
+     * Send a DELETE request; transient failures are not retried.
+     */
     delete<T>(path: string, options?: HttpRequestOptions): Promise<T> {
         return this.#sendAttempt(
             {

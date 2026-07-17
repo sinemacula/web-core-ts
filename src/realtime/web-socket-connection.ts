@@ -43,27 +43,13 @@ export interface WebSocketConnectionOptions {
     /** Optional WebSocket subprotocol(s) forwarded to the constructor. */
     readonly protocols?: string | readonly string[];
 
-    /**
-     * Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`.
-     */
+    /** Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`. */
     readonly backoff?: ExponentialBackoff;
 
-    /**
-     * Override the WebSocket constructor. Defaults to
-     * `(url, protocols) => new WebSocket(url, protocols)`.
-     */
+    /** Override the WebSocket constructor. Defaults to `(url, protocols) => new WebSocket(url, protocols)`. */
     readonly webSocketFactory?: WebSocketFactory;
 
-    /**
-     * Awaited after the backoff delay fires and before each reconnect attempt
-     * opens a new WebSocket. Never called for the initial `connect()` or a
-     * manual `connect()` call. Wire the application's `TokenRefreshCoordinator`
-     * here so an expired token is refreshed before each reconnect, and pair it
-     * with the `url()` builder reading the fresh token; without this an
-     * expired-token connection retries forever with stale credentials.
-     * Rejection abandons the attempt and the next reconnect is scheduled
-     * through the existing backoff path.
-     */
+    /** Awaited after the backoff delay fires and before each reconnect attempt opens a new WebSocket. Never called for the initial `connect()` or a manual `connect()` call. Wire the application's `TokenRefreshCoordinator` here so an expired token is refreshed before each reconnect, and pair it with the `url()` builder reading the fresh token; without this an expired-token connection retries forever with stale credentials. Rejection abandons the attempt and the next reconnect is scheduled through the existing backoff path. */
     readonly beforeReconnect?: () => Promise<void>;
 }
 
@@ -104,7 +90,9 @@ export class WebSocketConnection implements RealtimeConnection {
         this.#beforeReconnect = options.beforeReconnect;
     }
 
-    /** The current connection lifecycle state. */
+    /**
+     * The current connection lifecycle state.
+     */
     get state(): RealtimeState {
         return this.#state;
     }

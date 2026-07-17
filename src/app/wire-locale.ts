@@ -47,25 +47,16 @@ export interface WireLocaleOptions {
     /** Datetime and number formats installed on the i18n instance. */
     readonly formats?: LocaleFormats;
 
-    /**
-     * The storage key the locale preference persists under. Default 'locale'.
-     */
+    /** The storage key the locale preference persists under. Default 'locale'. */
     readonly localeStorageKey?: string;
 
-    /**
-     * Behaviour when a module name shadows a shared top-level translation key.
-     * Default 'error': activation throws naming the module and locale;
-     * 'module-wins' keeps the merge where module messages shadow the key.
-     */
+    /** Behaviour when a module name shadows a shared top-level translation key. Default 'error': activation throws naming the module and locale; 'module-wins' keeps the merge where module messages shadow the key. */
     readonly duplicateNamespaceStrategy?: 'error' | 'module-wins';
 
     /** The storage the locale preference is read from and persisted to. */
     readonly storage: KeyValueStorage;
 
-    /**
-     * Preferred locales, most preferred first (typically
-     * `navigator.languages`).
-     */
+    /** Preferred locales, most preferred first (typically `navigator.languages`). */
     readonly localeCandidates: readonly string[];
 
     /** The document whose `lang`/`dir` attributes are synchronised. */

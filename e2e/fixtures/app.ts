@@ -15,7 +15,11 @@ import { DashboardPage } from '../pages/dashboard-page';
 import { LoginPage } from '../pages/login-page';
 
 interface AppFixtures {
+
+    /** The login page object. */
     loginPage: LoginPage;
+
+    /** The dashboard page object. */
     dashboardPage: DashboardPage;
 }
 

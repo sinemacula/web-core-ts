@@ -46,7 +46,9 @@ export class ConnectivityMonitor {
         this.#online = this.#targetWindow.navigator.onLine;
     }
 
-    /** The current connectivity state. */
+    /**
+     * The current connectivity state.
+     */
     get online(): boolean {
         return this.#online;
     }

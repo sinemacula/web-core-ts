@@ -21,7 +21,9 @@ export interface NavigationProgress {
     /** `true` while a navigation is in flight. */
     readonly isNavigating: Ref<boolean>;
 
-    /** Remove the router hooks and reset `isNavigating` to false. */
+    /**
+     * Remove the router hooks and reset `isNavigating` to false.
+     */
     stop(): void;
 }
 

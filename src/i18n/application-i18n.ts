@@ -67,17 +67,10 @@ export interface ActivateLocaleOptions {
     readonly fallbackLocale?: string;
     readonly targetDocument?: Document;
 
-    /**
-     * Replaces the internal module-message collection for both the active and
-     * fallback locale loads when supplied.
-     */
+    /** Replaces the internal module-message collection for both the active and fallback locale loads when supplied. */
     readonly messageSource?: ModuleMessageSource;
 
-    /**
-     * Behaviour when a module name equals a shared top-level message key.
-     * Default 'module-wins' keeps the merge where module messages shadow the
-     * shared key; 'error' throws naming the module and the locale.
-     */
+    /** Behaviour when a module name equals a shared top-level message key. Default 'module-wins' keeps the merge where module messages shadow the shared key; 'error' throws naming the module and the locale. */
     readonly onNamespaceCollision?: 'module-wins' | 'error';
 }
 

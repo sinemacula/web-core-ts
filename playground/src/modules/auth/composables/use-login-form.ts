@@ -33,14 +33,10 @@ export interface LoginForm {
     readonly email: Ref<string>;
     readonly password: Ref<string>;
 
-    /**
-     * Translation key for the email field error, or '' when valid/untouched.
-     */
+    /** Translation key for the email field error, or '' when valid/untouched. */
     readonly emailError: ComputedRef<string>;
 
-    /**
-     * Translation key for the password field error, or '' when valid/untouched.
-     */
+    /** Translation key for the password field error, or '' when valid/untouched. */
     readonly passwordError: ComputedRef<string>;
 
     /** Form-level (API) error translation key, or null when none. */

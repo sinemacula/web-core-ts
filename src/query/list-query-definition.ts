@@ -51,24 +51,13 @@ export interface ListQueryDefinition<Filters extends Record<string, ListFilter<n
      */
     readonly filters?: Filters;
 
-    /**
-     * Free-text search mapping. When set, calling `search(term)` on the
-     * resulting {@link ListQuery} applies this filter with the term as its
-     * value.
-     */
+    /** Free-text search mapping. When set, calling `search(term)` on the resulting {@link ListQuery} applies this filter with the term as its value. */
     readonly search?: ListFilter<string>;
 
-    /**
-     * The columns the screen may sort by. When set, `sortBy` rejects any column
-     * not in this list by throwing a descriptive `Error`. When `undefined`, all
-     * columns are accepted.
-     */
+    /** The columns the screen may sort by. When set, `sortBy` rejects any column not in this list by throwing a descriptive `Error`. When `undefined`, all columns are accepted. */
     readonly sortable?: readonly string[];
 
-    /**
-     * The sort applied when no explicit sort has been chosen. Omit to emit no
-     * `order` parameter when the screen has not called `sortBy`.
-     */
+    /** The sort applied when no explicit sort has been chosen. Omit to emit no `order` parameter when the screen has not called `sortBy`. */
     readonly defaultSort?: SortDefault;
 
     /**

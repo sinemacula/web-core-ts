@@ -23,19 +23,10 @@ export interface HttpRequestOptions {
     readonly headers?: Readonly<Record<string, string>>;
     readonly signal?: AbortSignal;
 
-    /**
-     * Whether a 401 response may trigger the unauthorized handler (token
-     * refresh). Defaults to true. Set false on the refresh request itself so a
-     * failed refresh cannot recurse back into the handler.
-     */
+    /** Whether a 401 response may trigger the unauthorized handler (token refresh). Defaults to true. Set false on the refresh request itself so a failed refresh cannot recurse back into the handler. */
     readonly retryOnUnauthorized?: boolean;
 
-    /**
-     * Whether this request's failures are reported to the global response-error
-     * handler. Defaults to true. Set false for requests that handle their own
-     * errors, such as forms surfacing 422s inline or background polls that fail
-     * silently.
-     */
+    /** Whether this request's failures are reported to the global response-error handler. Defaults to true. Set false for requests that handle their own errors, such as forms surfacing 422s inline or background polls that fail silently. */
     readonly notifyOnError?: boolean;
 }
 

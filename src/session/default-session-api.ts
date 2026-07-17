@@ -31,24 +31,13 @@ export interface DefaultSessionApiOptions<U extends SessionUser = SessionUser> {
     /** Resource paths. Defaults: session `auth`, user `users/self`. */
     readonly endpoints?: { readonly session?: string; readonly user?: string };
 
-    /**
-     * Convert a wire timestamp to epoch milliseconds; return null for
-     * unparseable values. Defaults to parsing `YYYY-MM-DD HH:MM:SS` as UTC.
-     */
+    /** Convert a wire timestamp to epoch milliseconds; return null for unparseable values. Defaults to parsing `YYYY-MM-DD HH:MM:SS` as UTC. */
     readonly parseTimestamp?: (value: string) => number | null;
 
-    /**
-     * Unwrap the response envelope. Defaults to unwrapping `{ data }` and
-     * throwing when the envelope is absent or malformed.
-     */
+    /** Unwrap the response envelope. Defaults to unwrapping `{ data }` and throwing when the envelope is absent or malformed. */
     readonly unwrap?: (payload: unknown) => unknown;
 
-    /**
-     * Map the unwrapped user payload onto U. This is the adaptation point for
-     * APIs that shape the user record differently. Defaults to mapping id,
-     * email, first plus last name, and permissions, with a non-array
-     * permissions field collapsing to an empty list.
-     */
+    /** Map the unwrapped user payload onto U. This is the adaptation point for APIs that shape the user record differently. Defaults to mapping id, email, first plus last name, and permissions, with a non-array permissions field collapsing to an empty list. */
     readonly mapUser?: (payload: unknown) => U;
 }
 

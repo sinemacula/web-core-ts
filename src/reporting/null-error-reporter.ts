@@ -20,12 +20,16 @@ export class NullErrorReporter implements ErrorReporter {
         // Intentionally empty: no provider is configured.
     }
 
-    /** Discard the message; the null reporter records nothing. */
+    /**
+     * Discard the message; the null reporter records nothing.
+     */
     captureMessage(_message: string, _context?: Readonly<Record<string, unknown>>): void {
         // Intentionally empty: no provider is configured.
     }
 
-    /** Discard the user; the null reporter records nothing. */
+    /**
+     * Discard the user; the null reporter records nothing.
+     */
     setUser(_user: ReportedUser | null): void {
         // Intentionally empty: no provider is configured.
     }

@@ -38,17 +38,13 @@ export interface UpdateMonitorWiring<T> {
      */
     readonly enabled?: boolean | ((settings: Readonly<T>) => boolean);
 
-    /**
-     * The version document location. Defaults to the runtime environment URL.
-     */
+    /** The version document location. Defaults to the runtime environment URL. */
     readonly url?: string;
 
     /** Poll interval in milliseconds. */
     readonly pollIntervalMs?: number;
 
-    /**
-     * Application-owned toast key shown sticky (duration 0) on a new version.
-     */
+    /** Application-owned toast key shown sticky (duration 0) on a new version. */
     readonly toastKey?: string;
 
     /** Full handler for new versions; wins over `toastKey`. */
@@ -64,22 +60,13 @@ export interface WireMonitorsOptions<T extends MonitorWiringSettings> {
 
     readonly updates?: UpdateMonitorWiring<T>;
 
-    /**
-     * Connectivity monitoring; defaults to on exactly when the update monitor
-     * runs.
-     */
+    /** Connectivity monitoring; defaults to on exactly when the update monitor runs. */
     readonly connectivity?: { readonly enabled?: boolean };
 
-    /**
-     * The runtime environment document URL, the update monitor's default poll
-     * target.
-     */
+    /** The runtime environment document URL, the update monitor's default poll target. */
     readonly runtimeUrl: string;
 
-    /**
-     * Toast service accessor, read lazily per update rather than at wiring
-     * time.
-     */
+    /** Toast service accessor, read lazily per update rather than at wiring time. */
     readonly toasts: () => ToastService;
 
     readonly fetchFn?: typeof fetch;

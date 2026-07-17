@@ -20,17 +20,23 @@ export class NullAnalyticsTracker implements AnalyticsTracker {
         // Intentionally empty: no provider is configured.
     }
 
-    /** Discard the page view; the null tracker records nothing. */
+    /**
+     * Discard the page view; the null tracker records nothing.
+     */
     page(_name: string, _properties?: Readonly<Record<string, unknown>>): void {
         // Intentionally empty: no provider is configured.
     }
 
-    /** Discard the identity; the null tracker records nothing. */
+    /**
+     * Discard the identity; the null tracker records nothing.
+     */
     identify(_id: string, _traits?: Readonly<Record<string, unknown>>): void {
         // Intentionally empty: no provider is configured.
     }
 
-    /** Discard the reset; the null tracker records nothing. */
+    /**
+     * Discard the reset; the null tracker records nothing.
+     */
     reset(): void {
         // Intentionally empty: no provider is configured.
     }

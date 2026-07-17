@@ -18,16 +18,10 @@ export interface IdleMonitorOptions {
     /** Milliseconds of inactivity before subscribers are notified. */
     readonly timeoutMs: number;
 
-    /**
-     * Event types treated as activity; defaults to pointer, keyboard, wheel and
-     * touch input.
-     */
+    /** Event types treated as activity; defaults to pointer, keyboard, wheel and touch input. */
     readonly events?: readonly string[];
 
-    /**
-     * The window whose activity events are observed; defaults to the global
-     * window.
-     */
+    /** The window whose activity events are observed; defaults to the global window. */
     readonly targetWindow?: Window;
 }
 

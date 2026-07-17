@@ -54,29 +54,16 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
      */
     readonly query: ComputedRef<ApiQuery>;
 
-    /**
-     * The flat query-parameter record derived from {@link query}, ready to pass
-     * to an `HttpClient` method.
-     */
+    /** The flat query-parameter record derived from {@link query}, ready to pass to an `HttpClient` method. */
     readonly parameters: ComputedRef<QueryParameters>;
 
-    /**
-     * Snapshot of the currently active filter values, keyed by filter name.
-     * `null` entries are not stored; cleared filters are absent from the
-     * record.
-     */
+    /** Snapshot of the currently active filter values, keyed by filter name. `null` entries are not stored; cleared filters are absent from the record. */
     readonly filterValues: ComputedRef<Readonly<Partial<Record<keyof Filters & string, unknown>>>>;
 
-    /**
-     * The current free-text search term (empty string when no search is
-     * active).
-     */
+    /** The current free-text search term (empty string when no search is active). */
     readonly searchTerm: ComputedRef<string>;
 
-    /**
-     * The active sort, or `null` when neither an explicit sort nor a
-     * `defaultSort` is set.
-     */
+    /** The active sort, or `null` when neither an explicit sort nor a `defaultSort` is set. */
     readonly sort: ComputedRef<SortDefault | null>;
 
     /** The current 1-based page number. */
@@ -100,7 +87,9 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
      */
     clearFilter(name: keyof Filters & string): void;
 
-    /** Clear all active filters. Resets the page to 1. */
+    /**
+     * Clear all active filters. Resets the page to 1.
+     */
     clearFilters(): void;
 
     /**
@@ -130,7 +119,9 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
      */
     sortBy(column: string, direction?: 'asc' | 'desc'): void;
 
-    /** Advance to the next page. Does not touch filters or sort. */
+    /**
+     * Advance to the next page. Does not touch filters or sort.
+     */
     next(): void;
 
     /**

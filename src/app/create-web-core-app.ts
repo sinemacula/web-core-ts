@@ -132,15 +132,10 @@ export interface WebCoreConfigOptions<T extends WebCoreConfig> {
      */
     readonly createEnvironment: (runtime: Readonly<Record<string, string>>) => Environment;
 
-    /**
-     * Configuration definition over the environment; the result is deep-frozen.
-     */
+    /** Configuration definition over the environment; the result is deep-frozen. */
     readonly define: (environment: Environment) => T;
 
-    /**
-     * One URL for both the runtime-environment fetch and the update monitor's
-     * default poll target. Default '/runtime-env.json'.
-     */
+    /** One URL for both the runtime-environment fetch and the update monitor's default poll target. Default '/runtime-env.json'. */
     readonly runtimeUrl?: string;
 }
 
@@ -156,9 +151,7 @@ export interface WebCoreHttpOptions<T extends WebCoreConfig> {
     /** Full replacement of the preset response-error handler. */
     readonly onResponseError?: ResponseErrorHandler;
 
-    /**
-     * Arms the default handler's toast; the kernel ships no translation keys.
-     */
+    /** Arms the default handler's toast; the kernel ships no translation keys. */
     readonly unexpectedErrorToastKey?: string;
 
     /** Full adapter override; receives the resolved construction inputs. */
@@ -175,15 +168,10 @@ export interface WebCoreI18nOptions {
     /** Datetime and number formats installed on the i18n instance. */
     readonly formats?: LocaleFormats;
 
-    /**
-     * The storage key the locale preference persists under. Default 'locale'.
-     */
+    /** The storage key the locale preference persists under. Default 'locale'. */
     readonly localeStorageKey?: string;
 
-    /**
-     * Behaviour when a module name shadows a shared top-level translation key.
-     * Default 'error'; 'module-wins' restores the shadowing merge.
-     */
+    /** Behaviour when a module name shadows a shared top-level translation key. Default 'error'; 'module-wins' restores the shadowing merge. */
     readonly duplicateNamespaceStrategy?: 'error' | 'module-wins';
 }
 
@@ -252,10 +240,7 @@ export interface WebCorePlatformOptions {
     /** The router history implementation; defaults to web history. */
     readonly history?: RouterHistory;
 
-    /**
-     * Preferred locales, most preferred first; defaults to
-     * `navigator.languages`.
-     */
+    /** Preferred locales, most preferred first; defaults to `navigator.languages`. */
     readonly localeCandidates?: readonly string[];
 }
 
@@ -277,16 +262,10 @@ export interface WebCoreAppOptions<T extends WebCoreConfig> {
     readonly i18n?: WebCoreI18nOptions;
     readonly observability?: WebCoreObservabilityOptions<T>;
 
-    /**
-     * Feature-flag provider factory; defaults to the config-driven static
-     * adapter.
-     */
+    /** Feature-flag provider factory; defaults to the config-driven static adapter. */
     readonly featureFlags?: (settings: Readonly<T>) => FeatureFlags;
 
-    /**
-     * Opt-in realtime connection, installed into the realtime holder and
-     * disconnected on dispose. No default - the kernel knows no endpoint.
-     */
+    /** Opt-in realtime connection, installed into the realtime holder and disconnected on dispose. No default - the kernel knows no endpoint. */
     readonly realtime?: (settings: Readonly<T>) => RealtimeConnection;
 
     readonly notifications?: WebCoreNotificationOptions;

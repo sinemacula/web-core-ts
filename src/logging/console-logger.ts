@@ -39,12 +39,16 @@ export class ConsoleLogger implements Logger {
         this.#minimumLevel = minimumLevel;
     }
 
-    /** Write a debug entry through `console.info` when the level is enabled. */
+    /**
+     * Write a debug entry through `console.info` when the level is enabled.
+     */
     debug(message: string, fields?: LogFields): void {
         this.#write('debug', console.info, message, fields);
     }
 
-    /** Write an info entry through `console.info` when the level is enabled. */
+    /**
+     * Write an info entry through `console.info` when the level is enabled.
+     */
     info(message: string, fields?: LogFields): void {
         this.#write('info', console.info, message, fields);
     }

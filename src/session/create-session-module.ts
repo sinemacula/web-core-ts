@@ -65,24 +65,13 @@ export interface SessionRoutes {
      */
     readonly login: RouteLocationRaw;
 
-    /**
-     * The login-path prefix rejected by the redirect sanitiser as a loop guard.
-     * Applications renaming the login path set `login` and `loginPath`
-     * together. Default '/login'.
-     */
+    /** The login-path prefix rejected by the redirect sanitiser as a loop guard. Applications renaming the login path set `login` and `loginPath` together. Default '/login'. */
     readonly loginPath: string;
 
-    /**
-     * Where authenticated visitors leaving guest-only routes are sent. Default
-     * '/'.
-     */
+    /** Where authenticated visitors leaving guest-only routes are sent. Default '/'. */
     readonly home: RouteLocationRaw;
 
-    /**
-     * Where authenticated-but-unauthorised visitors are sent. Default
-     * '/forbidden' - a path string by design: the application's fallback or
-     * errors module owns the page.
-     */
+    /** Where authenticated-but-unauthorised visitors are sent. Default '/forbidden' - a path string by design: the application's fallback or errors module owns the page. */
     readonly forbidden: RouteLocationRaw;
 }
 
@@ -97,16 +86,10 @@ export interface SessionIdentityMapping<U extends SessionUser> {
      */
     readonly reporting?: (user: U) => { id: string; email?: string; name?: string };
 
-    /**
-     * Maps the user onto the analytics identify() id. Default the stringified
-     * user id.
-     */
+    /** Maps the user onto the analytics identify() id. Default the stringified user id. */
     readonly analytics?: (user: U) => string;
 
-    /**
-     * Maps the user onto the feature-flag evaluation context. Default
-     * `{ userId }`.
-     */
+    /** Maps the user onto the feature-flag evaluation context. Default `{ userId }`. */
     readonly featureFlags?: (user: U) => Readonly<Record<string, string>>;
 }
 
@@ -124,10 +107,7 @@ export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = {
     /** The pinia store id the session store registers under. Default 'auth'. */
     readonly storeId?: string;
 
-    /**
-     * Session API factory over the application HTTP client. Default
-     * {@link createDefaultSessionApi}.
-     */
+    /** Session API factory over the application HTTP client. Default {@link createDefaultSessionApi}. */
     readonly api?: (http: HttpClient) => SessionApi<U, C>;
 
     /** Overrides for the persisted storage keys. */
@@ -136,16 +116,10 @@ export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = {
     /** Overrides for the route identity. */
     readonly routes?: Partial<SessionRoutes>;
 
-    /**
-     * How long before expiry the proactive refresh fires, in milliseconds.
-     * Default 60 seconds.
-     */
+    /** How long before expiry the proactive refresh fires, in milliseconds. Default 60 seconds. */
     readonly refreshSkewMs?: number;
 
-    /**
-     * The operating-system label reported in the device fingerprint. Default
-     * 'WEB'.
-     */
+    /** The operating-system label reported in the device fingerprint. Default 'WEB'. */
     readonly deviceOs?: string;
 
     /** Device uuid factory. Default `crypto.randomUUID()`. */
@@ -157,18 +131,10 @@ export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = {
     /** Refresh the session ahead of its expiry. Default true. */
     readonly proactiveRefresh?: boolean;
 
-    /**
-     * Redirect to the login route when the session transitions from
-     * authenticated to unauthenticated, carrying the sanitised current path as
-     * the redirect query parameter. Default true.
-     */
+    /** Redirect to the login route when the session transitions from authenticated to unauthenticated, carrying the sanitised current path as the redirect query parameter. Default true. */
     readonly sessionLossRedirect?: boolean;
 
-    /**
-     * Identity fan-out to the reporting, analytics and feature-flag holders;
-     * per-channel overrides merge over the defaults, and false disables the
-     * fan-out entirely.
-     */
+    /** Identity fan-out to the reporting, analytics and feature-flag holders; per-channel overrides merge over the defaults, and false disables the fan-out entirely. */
     readonly identity?: false | SessionIdentityMapping<U>;
 }
 

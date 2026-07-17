@@ -24,9 +24,7 @@ export interface RouterFactoryOptions {
     readonly routes: readonly RouteRecordRaw[];
     readonly history?: RouterHistory;
 
-    /**
-     * Middleware run on every navigation before matched-record meta middleware.
-     */
+    /** Middleware run on every navigation before matched-record meta middleware. */
     readonly globalMiddleware?: readonly RouteMiddleware[];
 }
 

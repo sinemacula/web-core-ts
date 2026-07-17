@@ -35,10 +35,7 @@ export interface UseResourceOptions<Value> {
     /** Executes a single run of the request. */
     readonly fetcher: ResourceFetcher<Value>;
 
-    /**
-     * One or more reactive sources that trigger a refetch when they change,
-     * e.g. a `useListQuery` `parameters` computed ref.
-     */
+    /** One or more reactive sources that trigger a refetch when they change, e.g. a `useListQuery` `parameters` computed ref. */
     readonly watch?: WatchSource<unknown> | ReadonlyArray<WatchSource<unknown>>;
 
     /**
@@ -58,9 +55,7 @@ export interface Resource<Value> {
     /** The most recently resolved value, or `null` before the first success. */
     readonly data: Ref<Value | null>;
 
-    /**
-     * Whatever the fetcher threw on its most recent run, or `null` when none.
-     */
+    /** Whatever the fetcher threw on its most recent run, or `null` when none. */
     readonly error: Ref<unknown>;
 
     /** `true` while the latest run is in flight. */
@@ -76,7 +71,9 @@ export interface Resource<Value> {
      */
     refetch(): Promise<void>;
 
-    /** Abort any in-flight run and stop reacting to the watch source(s). */
+    /**
+     * Abort any in-flight run and stop reacting to the watch source(s).
+     */
     stop(): void;
 }
 

@@ -38,23 +38,13 @@ export interface SessionContext<U extends SessionUser = SessionUser> {
     /** Lazily constructed over the installed HTTP client on first access. */
     readonly api: SessionApi<U>;
 
-    /**
-     * The single refresh authority: both the reactive 401 path and the
-     * proactive refresh timer route through it, so concurrent refresh attempts
-     * collapse into one in-flight call.
-     */
+    /** The single refresh authority: both the reactive 401 path and the proactive refresh timer route through it, so concurrent refresh attempts collapse into one in-flight call. */
     readonly coordinator: TokenRefreshCoordinator;
 
-    /**
-     * Convert a legacy persisted wire timestamp to epoch milliseconds during
-     * hydration; returns null for unparseable values.
-     */
+    /** Convert a legacy persisted wire timestamp to epoch milliseconds during hydration; returns null for unparseable values. */
     readonly parseTimestamp: (value: string) => number | null;
 
-    /**
-     * Resolve the stable device fingerprint, generating and persisting the uuid
-     * on first use.
-     */
+    /** Resolve the stable device fingerprint, generating and persisting the uuid on first use. */
     readonly device: () => SessionDevice;
 }
 

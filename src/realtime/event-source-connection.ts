@@ -40,33 +40,16 @@ export interface EventSourceConnectionOptions {
      */
     readonly url: string | (() => string);
 
-    /**
-     * Pass `true` to include credentials (cookies) in the SSE request. Defaults
-     * to `false`.
-     */
+    /** Pass `true` to include credentials (cookies) in the SSE request. Defaults to `false`. */
     readonly withCredentials?: boolean;
 
-    /**
-     * Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`.
-     */
+    /** Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`. */
     readonly backoff?: ExponentialBackoff;
 
-    /**
-     * Override the EventSource constructor. Defaults to
-     * `(url, init) => new EventSource(url, init)`.
-     */
+    /** Override the EventSource constructor. Defaults to `(url, init) => new EventSource(url, init)`. */
     readonly eventSourceFactory?: EventSourceFactory;
 
-    /**
-     * Awaited after the backoff delay fires and before each reconnect attempt
-     * opens a new EventSource. Never called for the initial `connect()` or a
-     * manual `connect()` call. Wire the application's `TokenRefreshCoordinator`
-     * here so an expired token is refreshed before each reconnect, and pair it
-     * with the `url()` builder reading the fresh token; without this an
-     * expired-token connection retries forever with stale credentials.
-     * Rejection abandons the attempt and the next reconnect is scheduled
-     * through the existing backoff path.
-     */
+    /** Awaited after the backoff delay fires and before each reconnect attempt opens a new EventSource. Never called for the initial `connect()` or a manual `connect()` call. Wire the application's `TokenRefreshCoordinator` here so an expired token is refreshed before each reconnect, and pair it with the `url()` builder reading the fresh token; without this an expired-token connection retries forever with stale credentials. Rejection abandons the attempt and the next reconnect is scheduled through the existing backoff path. */
     readonly beforeReconnect?: () => Promise<void>;
 }
 
@@ -106,7 +89,9 @@ export class EventSourceConnection implements RealtimeConnection {
         this.#beforeReconnect = options.beforeReconnect;
     }
 
-    /** The current connection lifecycle state. */
+    /**
+     * The current connection lifecycle state.
+     */
     get state(): RealtimeState {
         return this.#state;
     }

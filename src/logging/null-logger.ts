@@ -20,17 +20,23 @@ export class NullLogger implements Logger {
         // Intentionally empty: no provider is configured.
     }
 
-    /** Discard the entry; the null logger writes nothing. */
+    /**
+     * Discard the entry; the null logger writes nothing.
+     */
     info(_message: string, _fields?: LogFields): void {
         // Intentionally empty: no provider is configured.
     }
 
-    /** Discard the entry; the null logger writes nothing. */
+    /**
+     * Discard the entry; the null logger writes nothing.
+     */
     warn(_message: string, _fields?: LogFields): void {
         // Intentionally empty: no provider is configured.
     }
 
-    /** Discard the entry; the null logger writes nothing. */
+    /**
+     * Discard the entry; the null logger writes nothing.
+     */
     error(_message: string, _fields?: LogFields): void {
         // Intentionally empty: no provider is configured.
     }

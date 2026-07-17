@@ -70,10 +70,7 @@ export interface UsersList {
     /** The current page of mapped user rows. */
     readonly rows: ComputedRef<readonly UserListItem[]>;
 
-    /**
-     * Pagination metadata for the current page, or null before the first
-     * response.
-     */
+    /** Pagination metadata for the current page, or null before the first response. */
     readonly meta: ComputedRef<PaginationMeta | null>;
 
     /** True while the latest request is in flight. */
@@ -111,13 +108,19 @@ export interface UsersList {
     /** The current 1-based page number. */
     readonly page: ComputedRef<number>;
 
-    /** Advance to the next page; a no-op once `meta` reports the last page. */
+    /**
+     * Advance to the next page; a no-op once `meta` reports the last page.
+     */
     next(): void;
 
-    /** Go to the previous page, clamped at page 1. */
+    /**
+     * Go to the previous page, clamped at page 1.
+     */
     previous(): void;
 
-    /** Re-run the current request. */
+    /**
+     * Re-run the current request.
+     */
     refetch(): Promise<void>;
 }
 

@@ -24,26 +24,17 @@ export interface UpdateMonitorOptions {
     /** The version the running application was booted with. */
     readonly currentVersion: string;
 
-    /**
-     * The version document location; defaults to the runtime environment
-     * document.
-     */
+    /** The version document location; defaults to the runtime environment document. */
     readonly url?: string;
 
     /** Poll interval in milliseconds; defaults to five minutes. */
     readonly interval?: number;
     readonly fetchFn?: typeof fetch;
 
-    /**
-     * Extract the deployed version from the parsed document; defaults to the
-     * APP_VERSION entry.
-     */
+    /** Extract the deployed version from the parsed document; defaults to the APP_VERSION entry. */
     readonly extractVersion?: (payload: unknown) => string | null;
 
-    /**
-     * The document whose visibility triggers focus checks; defaults to the
-     * global document.
-     */
+    /** The document whose visibility triggers focus checks; defaults to the global document. */
     readonly targetDocument?: Document;
 }
 
