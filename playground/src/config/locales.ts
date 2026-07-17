@@ -36,7 +36,6 @@ export function localesConfig(env: Environment): LocalesConfig {
         enabled: env.json<string[]>('ENABLED_LOCALES', ['en-US', 'fr-FR']),
         supported: {
             'en-US': { name: 'English', direction: 'ltr' },
-            'es-ES': { name: 'Español', direction: 'ltr' },
             'fr-FR': { name: 'Français', direction: 'ltr' },
         },
     };

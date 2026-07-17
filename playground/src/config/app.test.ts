@@ -38,8 +38,6 @@ describe('appConfig', () => {
         expect(result.urls.app).toBe('http://localhost:5173');
         expect(result.urls.static).toBe('http://localhost:5173');
         expect(result.urls.stream).toBe('http://localhost:8000');
-        expect(result.links.terms).toBe('https://www.sinemacula.co.uk/terms-conditions');
-        expect(result.links.privacy).toBe('https://www.sinemacula.co.uk/privacy-policy');
     });
 
     it('returns explicit values for every key when all env vars are set', () => {

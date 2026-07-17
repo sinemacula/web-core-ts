@@ -20,10 +20,6 @@ export interface AppConfig {
         readonly static: string;
         readonly stream: string;
     };
-    readonly links: {
-        readonly terms: string;
-        readonly privacy: string;
-    };
 }
 
 /**
@@ -45,10 +41,6 @@ export function appConfig(env: Environment): AppConfig {
             app,
             static: env.string('STATIC_URL', app),
             stream: env.string('STREAM_URL', api),
-        },
-        links: {
-            terms: 'https://www.sinemacula.co.uk/terms-conditions',
-            privacy: 'https://www.sinemacula.co.uk/privacy-policy',
         },
     };
 }
