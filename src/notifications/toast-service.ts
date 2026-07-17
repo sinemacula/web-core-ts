@@ -30,9 +30,17 @@ export type ToastVariant = 'success' | 'error' | 'information' | 'warning';
  * responsible for translating it before display.
  */
 export interface Toast {
+
+    /** The unique id assigned when the toast was shown. */
     readonly id: string;
+
+    /** The visual emphasis of the toast. */
     readonly variant: ToastVariant;
+
+    /** The message, by convention a translation key. */
     readonly message: string;
+
+    /** Milliseconds before auto-dismiss; 0 disables it. */
     readonly duration: number;
 }
 
@@ -40,6 +48,8 @@ export interface Toast {
  * Options accepted by the per-show methods.
  */
 export interface ShowToastOptions {
+
+    /** Auto-dismiss duration in milliseconds; 0 disables it. */
     readonly duration?: number;
 }
 
@@ -53,9 +63,17 @@ const DEFAULT_DURATION = 5_000;
  * to render the list.
  */
 export class ToastService {
+
+    /** Fallback auto-dismiss duration in milliseconds. */
     readonly #defaultDuration: number;
+
+    /** The reactive list of currently visible toasts. */
     readonly #list = ref<Toast[]>([]);
+
+    /** Pending auto-dismiss timers, keyed by toast id. */
     readonly #timers = new Map<string, ReturnType<typeof setTimeout>>();
+
+    /** Monotonic counter backing generated toast ids. */
     #sequence = 0;
 
     /** The reactive, read-only list of currently visible toasts. */

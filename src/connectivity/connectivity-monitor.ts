@@ -17,10 +17,8 @@
 export type ConnectivityHandler = (online: boolean) => void;
 
 export interface ConnectivityMonitorOptions {
-    /**
-     * The window whose connectivity events are observed; defaults to the global
-     * window.
-     */
+
+    /** The window whose connectivity events are observed; defaults to the global window. */
     readonly targetWindow?: Window;
 }
 
@@ -28,17 +26,27 @@ export interface ConnectivityMonitorOptions {
  * Tracks browser network connectivity and notifies subscribers on change.
  */
 export class ConnectivityMonitor {
+
+    /** The window whose connectivity events are observed. */
     readonly #targetWindow: Window;
+
+    /** The registered connectivity subscribers. */
     readonly #handlers = new Set<ConnectivityHandler>();
+
+    /** Records the online state when an online event fires. */
     readonly #onOnline = (): void => {
         this.#setOnline(true);
     };
 
+    /** Records the offline state when an offline event fires. */
     readonly #onOffline = (): void => {
         this.#setOnline(false);
     };
 
+    /** The last observed connectivity state. */
     #online: boolean;
+
+    /** Whether the monitor is currently observing events. */
     #started: boolean = false;
 
     constructor(options: ConnectivityMonitorOptions = {}) {

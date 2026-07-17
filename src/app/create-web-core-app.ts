@@ -124,12 +124,8 @@ function recordPhase(phase: BootPhase): void {
  * Configuration construction options.
  */
 export interface WebCoreConfigOptions<T extends WebCoreConfig> {
-    /**
-     * Caller-owned environment construction - the only place build-time
-     * variables may appear. Receives the fetched runtime document; throw to
-     * abort boot. Pair with `createWebEnvironment` for the standard dev-chain
-     * and production required-keys behaviour.
-     */
+
+    /** Caller-owned environment construction - the only place build-time variables may appear. Receives the fetched runtime document; throw to abort boot. Pair with `createWebEnvironment` for the standard dev-chain and production required-keys behaviour. */
     readonly createEnvironment: (runtime: Readonly<Record<string, string>>) => Environment;
 
     /** Configuration definition over the environment; the result is deep-frozen. */
@@ -143,9 +139,8 @@ export interface WebCoreConfigOptions<T extends WebCoreConfig> {
  * HTTP client construction options.
  */
 export interface WebCoreHttpOptions<T extends WebCoreConfig> {
-    /**
-     * Preset-level interceptors; module contributions are appended after these.
-     */
+
+    /** Preset-level interceptors; module contributions are appended after these. */
     readonly interceptors?: readonly RequestInterceptor[];
 
     /** Full replacement of the preset response-error handler. */
@@ -162,6 +157,7 @@ export interface WebCoreHttpOptions<T extends WebCoreConfig> {
  * Internationalisation options.
  */
 export interface WebCoreI18nOptions {
+
     /** Shared (non-module) translation loaders keyed by locale. */
     readonly sharedLoaders?: Readonly<Record<string, () => Promise<LocaleMessages>>>;
 
@@ -180,8 +176,14 @@ export interface WebCoreI18nOptions {
  * console adapters and every other environment gets the null adapters.
  */
 export interface WebCoreObservabilityOptions<T extends WebCoreConfig> {
+
+    /** Error-reporter factory; wins over the environment default. */
     readonly reporter?: (settings: Readonly<T>) => ErrorReporter;
+
+    /** Analytics-tracker factory; wins over the environment default. */
     readonly analytics?: (settings: Readonly<T>) => AnalyticsTracker;
+
+    /** Logger factory; wins over the environment default. */
     readonly logger?: (settings: Readonly<T>) => Logger;
 }
 
@@ -189,7 +191,11 @@ export interface WebCoreObservabilityOptions<T extends WebCoreConfig> {
  * State-only notification services; rendering hosts stay application-side.
  */
 export interface WebCoreNotificationOptions {
+
+    /** Replacement toast service; defaults to a fresh state-only service. */
     readonly toasts?: ToastService;
+
+    /** Replacement confirm service; defaults to a fresh state-only service. */
     readonly confirm?: ConfirmService;
 }
 
@@ -197,6 +203,7 @@ export interface WebCoreNotificationOptions {
  * Chunk-load-failure recovery tuning.
  */
 export interface WebCoreChunkRecoveryOptions {
+
     /** Whether recovery is installed at all. Default true. */
     readonly enabled?: boolean;
 
@@ -211,14 +218,17 @@ export interface WebCoreChunkRecoveryOptions {
  * Release monitoring options.
  */
 export interface WebCoreMonitorOptions<T extends WebCoreConfig> {
+
+    /** Update-monitor options; omit to take the version-derived defaults. */
     readonly updates?: UpdateMonitorWiring<T>;
 
-    /**
-     * Connectivity monitoring; defaults to on exactly when the update monitor
-     * runs.
-     */
-    readonly connectivity?: { readonly enabled?: boolean };
+    /** Connectivity monitoring; defaults to on exactly when the update monitor runs. */
+    readonly connectivity?: {
+        /** Whether connectivity monitoring runs. */
+        readonly enabled?: boolean;
+    };
 
+    /** Chunk-load-failure recovery tuning. */
     readonly chunkRecovery?: WebCoreChunkRecoveryOptions;
 }
 
@@ -226,12 +236,17 @@ export interface WebCoreMonitorOptions<T extends WebCoreConfig> {
  * Platform seams threaded to every subsystem that accepts them.
  */
 export interface WebCorePlatformOptions {
+
+    /** The fetch implementation; defaults to the global `fetch`. */
     readonly fetchFn?: typeof fetch;
 
     /** The application storage adapter; defaults to browser local storage. */
     readonly storage?: KeyValueStorage;
 
+    /** The window seam; defaults to the global `window`. */
     readonly targetWindow?: Window;
+
+    /** The document seam; defaults to the global `document`. */
     readonly targetDocument?: Document;
 
     /** Resolves the current time; defaults to `Date.now`. */
@@ -248,6 +263,7 @@ export interface WebCorePlatformOptions {
  * Options accepted by {@link createWebCoreApp}.
  */
 export interface WebCoreAppOptions<T extends WebCoreConfig> {
+
     /** Root component mounted by {@link WebCoreApp.start}. */
     readonly root: Component;
 
@@ -257,9 +273,16 @@ export interface WebCoreAppOptions<T extends WebCoreConfig> {
     /** Injectable for tests; defaults to a fresh pinia instance. */
     readonly pinia?: Pinia;
 
+    /** Configuration construction options. */
     readonly config: WebCoreConfigOptions<T>;
+
+    /** HTTP client construction options. */
     readonly http?: WebCoreHttpOptions<T>;
+
+    /** Internationalisation options. */
     readonly i18n?: WebCoreI18nOptions;
+
+    /** Observability adapter factories. */
     readonly observability?: WebCoreObservabilityOptions<T>;
 
     /** Feature-flag provider factory; defaults to the config-driven static adapter. */
@@ -268,8 +291,13 @@ export interface WebCoreAppOptions<T extends WebCoreConfig> {
     /** Opt-in realtime connection, installed into the realtime holder and disconnected on dispose. No default - the kernel knows no endpoint. */
     readonly realtime?: (settings: Readonly<T>) => RealtimeConnection;
 
+    /** State-only notification services. */
     readonly notifications?: WebCoreNotificationOptions;
+
+    /** Release monitoring options. */
     readonly monitors?: WebCoreMonitorOptions<T>;
+
+    /** Platform seams threaded to every subsystem. */
     readonly platform?: WebCorePlatformOptions;
 }
 
@@ -277,16 +305,38 @@ export interface WebCoreAppOptions<T extends WebCoreConfig> {
  * Direct typed references to every service the preset installed.
  */
 export interface WebCoreServices<T> {
+
+    /** The application configuration repository. */
     readonly config: ConfigRepository<T & Record<string, unknown>>;
+
+    /** The installed HTTP client. */
     readonly http: HttpClient;
+
+    /** The application storage adapter. */
     readonly storage: KeyValueStorage;
+
+    /** The toast notification service. */
     readonly toasts: ToastService;
+
+    /** The confirmation dialog service. */
     readonly confirm: ConfirmService;
+
+    /** The installed error reporter. */
     readonly reporting: ErrorReporter;
+
+    /** The installed analytics tracker. */
     readonly analytics: AnalyticsTracker;
+
+    /** The installed logger. */
     readonly logger: Logger;
+
+    /** The feature-flag provider. */
     readonly featureFlags: FeatureFlags;
+
+    /** The runtime locale switcher. */
     readonly localeSwitcher: LocaleSwitcher;
+
+    /** The realtime connection, or null when none was installed. */
     readonly realtime: RealtimeConnection | null;
 }
 
@@ -294,18 +344,31 @@ export interface WebCoreServices<T> {
  * The assembled application handle returned by {@link createWebCoreApp}.
  */
 export interface WebCoreApp<T extends WebCoreConfig> {
+
+    /** The Vue application instance. */
     readonly app: App<Element>;
+
+    /** The application router. */
     readonly router: Router;
+
+    /** The Pinia instance backing the stores. */
     readonly pinia: Pinia;
+
+    /** The i18n instance. */
     readonly i18n: ApplicationI18n;
 
     /** The frozen configuration tree. */
     readonly config: Readonly<T>;
 
+    /** Direct typed references to every service the preset installed. */
     readonly services: WebCoreServices<T>;
 
+    /** The release monitors, each null when it does not run. */
     readonly monitors: {
+        /** The running update monitor, or null when it does not run. */
         readonly updates: UpdateMonitor | null;
+
+        /** The running connectivity monitor, or null when disabled. */
         readonly connectivity: ConnectivityMonitor | null;
     };
 
@@ -331,16 +394,38 @@ export interface WebCoreApp<T extends WebCoreConfig> {
  * The kernel services and Vue application produced by the foundation phases.
  */
 interface AppFoundation<T extends WebCoreConfig> {
+
+    /** The constructed runtime environment. */
     readonly environment: Environment;
+
+    /** The frozen configuration repository. */
     readonly repository: ConfigRepository<T & Record<string, unknown>>;
+
+    /** The frozen configuration tree. */
     readonly settings: Readonly<T>;
+
+    /** The installed storage adapter. */
     readonly storage: KeyValueStorage;
+
+    /** The validated module registry. */
     readonly registry: ModuleRegistry;
+
+    /** The Vue application instance. */
     readonly app: App<Element>;
+
+    /** The Pinia instance backing the stores. */
     readonly pinia: Pinia;
+
+    /** The installed feature-flag provider. */
     readonly flags: FeatureFlags;
+
+    /** The installed toast service. */
     readonly toastService: ToastService;
+
+    /** The installed confirm service. */
     readonly confirmService: ConfirmService;
+
+    /** The wired observability instances and breadcrumb trail. */
     readonly observability: WiredObservability;
 }
 
@@ -349,9 +434,17 @@ interface AppFoundation<T extends WebCoreConfig> {
  * phases.
  */
 interface ModuleLayer {
+
+    /** The installed HTTP client. */
     readonly http: HttpClient;
+
+    /** The eager store handles instantiated during boot. */
     readonly storeHandles: readonly ReturnType<ModuleStoreFactory>[];
+
+    /** The wired i18n instance. */
     readonly i18n: ApplicationI18n;
+
+    /** The installed runtime locale switcher. */
     readonly switcher: LocaleSwitcher;
 }
 
@@ -359,10 +452,20 @@ interface ModuleLayer {
  * The router and teardown handles from the app-integration phases.
  */
 interface AppIntegration {
+
+    /** The wired application router. */
     readonly router: Router;
+
+    /** Removes the document-title synchronisation hook. */
     readonly titleSyncTeardown: () => void;
+
+    /** Removes the global error handling. */
     readonly errorHandlingTeardown: () => void;
+
+    /** Removes the page-tracking subscription. */
     readonly pageTrackingTeardown: () => void;
+
+    /** Runs the module boot teardowns. */
     readonly moduleTeardown: () => void;
 }
 
@@ -371,8 +474,14 @@ interface AppIntegration {
  * release phases.
  */
 interface ReleaseLayer {
+
+    /** Removes the chunk-recovery error handler, or null when disabled. */
     readonly chunkRecoveryTeardown: (() => void) | null;
+
+    /** The installed realtime connection, or null when none. */
     readonly realtimeConnection: RealtimeConnection | null;
+
+    /** The started release monitors. */
     readonly monitors: WiredMonitors;
 }
 

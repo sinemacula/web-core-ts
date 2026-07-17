@@ -15,7 +15,10 @@ import type { ErrorReporter, ReportedUser } from './error-reporter';
  * An error reporter that discards every report without side effects.
  */
 export class NullErrorReporter implements ErrorReporter {
-    /** Discard the error; the null reporter records nothing. */
+
+    /**
+     * Discard the error; the null reporter records nothing.
+     */
     captureError(_error: unknown, _context?: Readonly<Record<string, unknown>>): void {
         // Intentionally empty: no provider is configured.
     }

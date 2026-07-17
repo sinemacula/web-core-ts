@@ -39,6 +39,7 @@ import { CancelledError, HttpError, HttpValidationError, NetworkError } from './
  * {@link CancelledError} is never retried.
  */
 export interface FetchHttpClientRetryOptions {
+
     /** Number of retries attempted after the first try. Defaults to 2. */
     readonly attempts?: number;
 
@@ -48,11 +49,23 @@ export interface FetchHttpClientRetryOptions {
 
 /** Construction options for {@link FetchHttpClient}. */
 export interface FetchHttpClientOptions {
+
+    /** Base URL that every request path is resolved against. */
     readonly baseUrl: string;
+
+    /** Fetch implementation to use; defaults to the global fetch. */
     readonly fetchFn?: typeof fetch;
+
+    /** Per-request timeout in milliseconds; omit for none. */
     readonly timeout?: number;
+
+    /** Headers sent on every request unless overridden. */
     readonly defaultHeaders?: Readonly<Record<string, string>>;
+
+    /** Interceptors applied to each request in registration order. */
     readonly requestInterceptors?: readonly RequestInterceptor[];
+
+    /** Handler invoked on a 401 to attempt a refresh-and-retry. */
     readonly onUnauthorized?: UnauthorizedHandler;
 
     /** Invoked whenever a request ultimately fails. This is where an application wires a toast or error-reporting call; per-request `notifyOnError: false` opts a request out. The handler receives every ultimate failure except {@link CancelledError} (a deliberate cancel is never reported), including {@link HttpValidationError}, so filtering expected validation failures is left to the handler. */
@@ -73,12 +86,26 @@ const TRANSIENT_STATUSES: ReadonlySet<number> = new Set([502, 503, 504]);
  * dispatch method.
  */
 interface SendRequest {
+
+    /** The HTTP method to dispatch. */
     readonly method: HttpMethod;
+
+    /** The request path, relative to the base URL. */
     readonly path: string;
+
+    /** The request body, if any. */
     readonly body: unknown;
+
+    /** The per-request options, if any. */
     readonly options: HttpRequestOptions | undefined;
+
+    /** Whether a 401 may trigger the refresh-and-retry flow. */
     readonly shouldRetryUnauthorized: boolean;
+
+    /** Whether transient failures may be retried. */
     readonly idempotent: boolean;
+
+    /** How the successful response body is read. */
     readonly parse: BodyParseMode;
 }
 
@@ -87,6 +114,8 @@ interface SendRequest {
  * error notification.
  */
 interface AttemptContext {
+
+    /** The most recently resolved request, or null before dispatch. */
     request: HttpRequest | null;
 }
 
@@ -95,20 +124,49 @@ interface AttemptContext {
  * `T | undefined`, because a legitimately recovered value can itself be
  * `undefined` (an empty response body).
  */
-type UnauthorizedRetryResult<T> = { readonly recovered: true; readonly value: T } | { readonly recovered: false };
+type UnauthorizedRetryResult<T> =
+    | {
+          /** Marks a recovered outcome. */
+          readonly recovered: true;
+
+          /** The value recovered by the retry. */
+          readonly value: T;
+      }
+    | {
+          /** Marks a non-recovered outcome. */
+          readonly recovered: false;
+      };
 
 /**
  * The production {@link HttpClient} adapter, built on the Fetch API.
  */
 export class FetchHttpClient implements HttpClient {
+
+    /** The normalised base URL, without a trailing slash. */
     readonly #baseUrl: string;
+
+    /** The fetch implementation used for every dispatch. */
     readonly #fetchFn: typeof fetch;
+
+    /** The per-request timeout in milliseconds, or null. */
     readonly #timeout: number | null;
+
+    /** Headers merged into every request. */
     readonly #defaultHeaders: Readonly<Record<string, string>>;
+
+    /** Interceptors applied to each request in order. */
     readonly #interceptors: readonly RequestInterceptor[];
+
+    /** The 401 refresh handler, or null when unset. */
     readonly #onUnauthorized: UnauthorizedHandler | null;
+
+    /** The response-error handler, or null when unset. */
     readonly #onResponseError: ResponseErrorHandler | null;
+
+    /** The number of transient retries after the first try. */
     readonly #retryAttempts: number;
+
+    /** The backoff strategy spacing retry attempts. */
     readonly #retryBackoff: ExponentialBackoff;
 
     /**

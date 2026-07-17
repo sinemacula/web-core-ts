@@ -12,6 +12,7 @@ import { SupportError } from './support-error';
  * A named slot for a single application-wide service instance.
  */
 export interface ServiceHolder<T> {
+
     /**
      * Install the service instance, replacing any previously installed one.
      *

@@ -28,6 +28,7 @@ import type {
  * A module list failed registry validation or lifecycle execution.
  */
 export class ModuleRegistryError extends Error {
+
     constructor(message: string) {
         super(message);
         this.name = 'ModuleRegistryError';
@@ -38,10 +39,8 @@ export class ModuleRegistryError extends Error {
  * A validated module list in its effective order.
  */
 export interface ModuleRegistry {
-    /**
-     * Effective order: declaration order, with the (at most one) fallback
-     * module moved last. Frozen.
-     */
+
+    /** Effective order: declaration order, with the (at most one) fallback module moved last. Frozen. */
     readonly modules: readonly ModuleDefinition[];
 }
 
@@ -94,8 +93,14 @@ export function createModuleRegistry(modules: readonly ModuleDefinition[]): Modu
  * The HTTP machinery collected from every module's register phase.
  */
 export interface ModuleHttpContributions {
+
+    /** Request interceptors gathered in registry order. */
     readonly requestInterceptors: readonly RequestInterceptor[];
+
+    /** The single unauthorized handler, or null when none was set. */
     readonly onUnauthorized: UnauthorizedHandler | null;
+
+    /** Response-error handlers gathered in registry order. */
     readonly responseErrorHandlers: readonly ResponseErrorHandler[];
 }
 
@@ -198,6 +203,7 @@ export async function bootModules(
  * Memoised, parallel loading of module translations.
  */
 export interface ModuleMessageSource {
+
     /**
      * Load and namespace every module's translations for one locale.
      *

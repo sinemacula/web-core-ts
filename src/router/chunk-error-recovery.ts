@@ -33,6 +33,7 @@ const STORAGE_KEY_PREFIX = 'chunk-recovery.';
  * Options for installing chunk-load-failure recovery on a router.
  */
 export interface ChunkErrorRecoveryOptions {
+
     /** The router whose navigation errors are inspected and recovered. */
     readonly router: Router;
 

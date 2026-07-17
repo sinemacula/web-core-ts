@@ -25,6 +25,7 @@ const DEFAULT_BUILD_TIME_PREFIX = 'VITE_';
  * Thrown when required runtime configuration keys are missing or empty.
  */
 export class ConfigurationError extends Error {
+
     /**
      * Construct a configuration error describing the missing keys.
      *
@@ -40,10 +41,8 @@ export class ConfigurationError extends Error {
  * Inputs for {@link createWebEnvironment}.
  */
 export interface WebEnvironmentOptions {
-    /**
-     * The fetched runtime document. Standalone callers may pass
-     * `fetchRuntimeEnvironment`'s result.
-     */
+
+    /** The fetched runtime document. Standalone callers may pass `fetchRuntimeEnvironment`'s result. */
     readonly runtime: Readonly<Record<string, string>>;
 
     /** Whether the application runs in a development build. The caller passes `import.meta.env.DEV`, resolved in the application's build context. */

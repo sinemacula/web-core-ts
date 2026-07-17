@@ -19,8 +19,14 @@ export type QueryParameters = Readonly<Record<string, string | number | boolean 
 
 /** Per-request options forwarded to every HTTP method. */
 export interface HttpRequestOptions {
+
+    /** Query parameters appended to the request URL. */
     readonly query?: QueryParameters;
+
+    /** Extra request headers, merged over the client defaults. */
     readonly headers?: Readonly<Record<string, string>>;
+
+    /** Abort signal that cancels the request when it fires. */
     readonly signal?: AbortSignal;
 
     /** Whether a 401 response may trigger the unauthorized handler (token refresh). Defaults to true. Set false on the refresh request itself so a failed refresh cannot recurse back into the handler. */
@@ -34,9 +40,17 @@ export interface HttpRequestOptions {
  * A fully-resolved outgoing request, as seen by request interceptors.
  */
 export interface HttpRequest {
+
+    /** The HTTP method to send. */
     readonly method: HttpMethod;
+
+    /** The absolute request URL. */
     readonly url: string;
+
+    /** The resolved request headers. */
     readonly headers: Readonly<Record<string, string>>;
+
+    /** The request body, before serialisation. */
     readonly body: unknown;
 }
 
@@ -67,6 +81,7 @@ export type ResponseErrorHandler = (error: unknown, request: HttpRequest) => voi
  * A typed, JSON-first HTTP client.
  */
 export interface HttpClient {
+
     /**
      * Send a GET request.
      *

@@ -12,6 +12,7 @@ import { WebSocketConnection, type WebSocketFactory } from './web-socket-connect
 
 /** Minimal fake WebSocket for injection via the factory. */
 class FakeWebSocket {
+
     readonly url: string;
     readonly protocols: string | readonly string[] | undefined;
     onopen: ((event: Event) => void) | null = null;
@@ -79,6 +80,7 @@ function fixedBackoff(delay: number): ExponentialBackoff {
 
 /** A promise plus its externally callable settlement functions. */
 interface Deferred<T> {
+
     readonly promise: Promise<T>;
     readonly resolve: (value: T) => void;
     readonly reject: (reason: unknown) => void;

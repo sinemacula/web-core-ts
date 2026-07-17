@@ -28,7 +28,13 @@ export function zodToTypedSchema<T extends z.ZodObject<z.ZodRawShape>>(
     return {
         // biome-ignore lint/style/useNamingConvention: vee-validate contract
         __type: 'VVTypedSchema' as const,
-        parse(values: z.input<T>): Promise<{ value?: z.output<T>; errors: TypedSchemaError[] }> {
+        parse(values: z.input<T>): Promise<{
+            /** The parsed output when validation succeeds. */
+            value?: z.output<T>;
+
+            /** The field errors, one entry per failing path. */
+            errors: TypedSchemaError[];
+        }> {
             const result = schema.safeParse(values);
 
             if (result.success) {

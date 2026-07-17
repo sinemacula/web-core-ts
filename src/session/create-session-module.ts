@@ -41,6 +41,7 @@ import type { SessionUser } from './session-user';
  * wanting a prefix set it in these options so event keys still match).
  */
 export interface SessionStorageKeys {
+
     /** Default 'auth.access_token'. */
     readonly accessToken: string;
 
@@ -59,10 +60,8 @@ export interface SessionStorageKeys {
  * redirect, and the redirect sanitiser's loop guard.
  */
 export interface SessionRoutes {
-    /**
-     * Where unauthenticated visitors are sent. Default
-     * `{ name: 'auth.login' }`.
-     */
+
+    /** Where unauthenticated visitors are sent. Default `{ name: 'auth.login' }`. */
     readonly login: RouteLocationRaw;
 
     /** The login-path prefix rejected by the redirect sanitiser as a loop guard. Applications renaming the login path set `login` and `loginPath` together. Default '/login'. */
@@ -80,11 +79,18 @@ export interface SessionRoutes {
  * feature-flag holders whenever the session user changes.
  */
 export interface SessionIdentityMapping<U extends SessionUser> {
-    /**
-     * Maps the user onto the error reporter identity. Default
-     * `{ id, email, name }` with null fields omitted.
-     */
-    readonly reporting?: (user: U) => { id: string; email?: string; name?: string };
+
+    /** Maps the user onto the error reporter identity. Default `{ id, email, name }` with null fields omitted. */
+    readonly reporting?: (user: U) => {
+        /** The reporter identity id. */
+        id: string;
+
+        /** The reporter identity email; omitted when null. */
+        email?: string;
+
+        /** The reporter identity name; omitted when null. */
+        name?: string;
+    };
 
     /** Maps the user onto the analytics identify() id. Default the stringified user id. */
     readonly analytics?: (user: U) => string;
@@ -97,11 +103,15 @@ export interface SessionIdentityMapping<U extends SessionUser> {
  * Options for {@link createSessionModule}; every default mirrors the
  * organisation's reference application.
  */
-export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = { email: string; password: string }> {
-    /**
-     * Registry name (the module has no routes and no locales). Default
-     * 'session'.
-     */
+export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = {
+    /** The submitted account email address. */
+    email: string;
+
+    /** The submitted account password. */
+    password: string;
+}> {
+
+    /** Registry name (the module has no routes and no locales). Default 'session'. */
     readonly name?: string;
 
     /** The pinia store id the session store registers under. Default 'auth'. */
@@ -171,7 +181,13 @@ const MAX_TIMEOUT_DELAY_MS = 2_147_483_647;
  * @param options - overrides for the reference-application defaults
  * @returns the module definition for the application registry
  */
-export function createSessionModule<U extends SessionUser = SessionUser, C = { email: string; password: string }>(
+export function createSessionModule<U extends SessionUser = SessionUser, C = {
+    /** The submitted account email address. */
+    email: string;
+
+    /** The submitted account password. */
+    password: string;
+}>(
     options: SessionModuleOptions<U, C> = {},
 ): ModuleDefinition {
     const storageKeys: SessionStorageKeys = { ...DEFAULT_STORAGE_KEYS, ...options.storageKeys };
@@ -206,11 +222,23 @@ export function createSessionModule<U extends SessionUser = SessionUser, C = { e
  * The resolved register-phase collaborators the session context is built from.
  */
 interface RegisterConfig<U extends SessionUser, C> {
+
+    /** The resolved storage keys the session persists under. */
     readonly storageKeys: SessionStorageKeys;
+
+    /** The resolved route identity. */
     readonly routes: SessionRoutes;
+
+    /** The pinia store id the session store registers under. */
     readonly storeId: string;
+
+    /** Builds the session API gateway over the application HTTP client. */
     readonly apiFactory: (http: HttpClient) => SessionApi<U, C>;
+
+    /** The device uuid factory. */
     readonly generateUuid: () => string;
+
+    /** The operating-system label reported in the device fingerprint. */
     readonly deviceOs: string;
 }
 
@@ -254,12 +282,26 @@ function registerSession<U extends SessionUser, C>(context: ModuleRegisterContex
 
 /** The resolved boot-phase toggles and collaborator inputs. */
 interface LifecycleOptions<U extends SessionUser> {
+
+    /** The resolved storage keys the session persists under. */
     readonly storageKeys: SessionStorageKeys;
+
+    /** The resolved route identity. */
     readonly routes: SessionRoutes;
+
+    /** How long before expiry the proactive refresh fires, in milliseconds. */
     readonly refreshSkewMs: number;
+
+    /** Whether to mirror session changes made by other tabs. */
     readonly crossTabSync: boolean;
+
+    /** Whether to refresh the session ahead of its expiry. */
     readonly proactiveRefresh: boolean;
+
+    /** Whether to redirect to login when the session is lost. */
     readonly sessionLossRedirect: boolean;
+
+    /** The resolved identity fan-out mapping, or null when disabled. */
     readonly identity: Required<SessionIdentityMapping<U>> | null;
 }
 
@@ -423,7 +465,11 @@ function createStorageListener(store: SessionStore, accessTokenKey: string): (ev
 
 /** A schedule/cancel pair for the proactive refresh timer. */
 interface RefreshScheduler {
+
+    /** Arm a proactive refresh ahead of the given expiry, or cancel when null. */
     readonly schedule: (expiresAtEpochMs: number | null) => void;
+
+    /** Cancel any pending proactive refresh. */
     readonly cancel: () => void;
 }
 
@@ -538,7 +584,16 @@ function resolveIdentityMapping<U extends SessionUser>(
  * @param user - the signed-in user
  * @returns the reported identity, with null email and name omitted
  */
-function defaultReportedIdentity(user: SessionUser): { id: string; email?: string; name?: string } {
+function defaultReportedIdentity(user: SessionUser): {
+    /** The reporter identity id. */
+    id: string;
+
+    /** The reporter identity email; omitted when null. */
+    email?: string;
+
+    /** The reporter identity name; omitted when null. */
+    name?: string;
+} {
     return {
         id: String(user.id),
         ...(user.email === null ? {} : { email: user.email }),

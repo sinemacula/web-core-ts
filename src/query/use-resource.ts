@@ -32,17 +32,14 @@ export type ResourceFetcher<Value> = (signal: AbortSignal) => Promise<Value>;
  * @typeParam Value - the resolved value type
  */
 export interface UseResourceOptions<Value> {
+
     /** Executes a single run of the request. */
     readonly fetcher: ResourceFetcher<Value>;
 
     /** One or more reactive sources that trigger a refetch when they change, e.g. a `useListQuery` `parameters` computed ref. */
     readonly watch?: WatchSource<unknown> | ReadonlyArray<WatchSource<unknown>>;
 
-    /**
-     * Whether to run the fetcher immediately on creation.
-     *
-     * @defaultValue true
-     */
+    /** Whether to run the fetcher immediately on creation; defaults to true. */
     readonly immediate?: boolean;
 }
 
@@ -52,6 +49,7 @@ export interface UseResourceOptions<Value> {
  * @typeParam Value - the resolved value type
  */
 export interface Resource<Value> {
+
     /** The most recently resolved value, or `null` before the first success. */
     readonly data: Ref<Value | null>;
 
@@ -157,9 +155,17 @@ export function useResource<Value>(options: UseResourceOptions<Value>): Resource
  * @typeParam Value - the resolved value type
  */
 interface ResourceState<Value> {
+
+    /** The most recently resolved value, or null before the first success. */
     readonly data: Ref<Value | null>;
+
+    /** Whatever the fetcher last threw, or null when none. */
     readonly error: Ref<unknown>;
+
+    /** Whether the latest run is in flight. */
     readonly isLoading: Ref<boolean>;
+
+    /** Whether a run has resolved successfully at least once. */
     readonly resolvedOnce: Ref<boolean>;
 }
 

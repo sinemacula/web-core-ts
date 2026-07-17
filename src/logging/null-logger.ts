@@ -15,7 +15,10 @@ import type { LogFields, Logger } from './logger';
  * A logger that discards every entry without side effects.
  */
 export class NullLogger implements Logger {
-    /** Discard the entry; the null logger writes nothing. */
+
+    /**
+     * Discard the entry; the null logger writes nothing.
+     */
     debug(_message: string, _fields?: LogFields): void {
         // Intentionally empty: no provider is configured.
     }

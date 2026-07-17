@@ -19,6 +19,7 @@ import { reporting } from '@/services/reporting';
  * The reactive fatal-boundary state returned by {@link useFatalBoundary}.
  */
 export interface FatalBoundary {
+
     /** `true` once a descendant component has thrown an uncaught error. */
     readonly fatal: Ref<boolean>;
 

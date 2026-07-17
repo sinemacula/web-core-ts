@@ -11,6 +11,7 @@
 
 /** Construction options for {@link ExponentialBackoff}. */
 export interface ExponentialBackoffOptions {
+
     /** Delay in milliseconds for the first attempt. Defaults to 1 000. */
     readonly initialDelay?: number;
 
@@ -30,8 +31,14 @@ export interface ExponentialBackoffOptions {
  * {@link ExponentialBackoff.delayFor}.
  */
 export class ExponentialBackoff {
+
+    /** Delay in milliseconds for the first attempt. */
     readonly #initialDelay: number;
+
+    /** Multiplicative growth factor applied each attempt. */
     readonly #multiplier: number;
+
+    /** Upper bound in milliseconds delays are clamped to. */
     readonly #maxDelay: number;
 
     /**

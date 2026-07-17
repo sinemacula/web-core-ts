@@ -32,12 +32,8 @@ export type EventSourceFactory = (url: string, init: EventSourceInit) => EventSo
 
 /** Construction options for {@link EventSourceConnection}. */
 export interface EventSourceConnectionOptions {
-    /**
-     * The SSE endpoint URL, or a function that returns it. The function form is
-     * called on every `connect()`, enabling per-connect auth tokens in the
-     * query string - the recommended way to authenticate SSE streams because
-     * native EventSource cannot send custom headers.
-     */
+
+    /** The SSE endpoint URL, or a function that returns it. The function form is called on every `connect()`, enabling per-connect auth tokens in the query string - the recommended way to authenticate SSE streams because native EventSource cannot send custom headers. */
     readonly url: string | (() => string);
 
     /** Pass `true` to include credentials (cookies) in the SSE request. Defaults to `false`. */
@@ -62,17 +58,38 @@ export interface EventSourceConnectionOptions {
  * reconnect opens a new EventSource.
  */
 export class EventSourceConnection implements RealtimeConnection {
+
+    /** The endpoint URL, or a factory returning it per connect. */
     readonly #url: string | (() => string);
+
+    /** Whether the SSE request includes credentials. */
     readonly #withCredentials: boolean;
+
+    /** The backoff strategy spacing reconnect attempts. */
     readonly #backoff: ExponentialBackoff;
+
+    /** The factory that constructs each EventSource. */
     readonly #factory: EventSourceFactory;
+
+    /** Optional hook awaited before each reconnect. */
     readonly #beforeReconnect: (() => Promise<void>) | undefined;
+
+    /** Registered message handlers, keyed by event name. */
     readonly #messageHandlers: Map<string, Set<RealtimeMessageHandler>> = new Map();
+
+    /** Registered connection-state change handlers. */
     readonly #stateHandlers: Set<RealtimeStateHandler> = new Set();
 
+    /** The active EventSource, or null when not open. */
     #source: EventSource | null = null;
+
+    /** The current connection lifecycle state. */
     #state: RealtimeState = 'idle';
+
+    /** The current zero-based reconnect attempt counter. */
     #attempt: number = 0;
+
+    /** The pending reconnect timer, or null when none. */
     #reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
     /**

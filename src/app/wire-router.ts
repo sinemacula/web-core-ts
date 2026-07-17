@@ -22,6 +22,7 @@ import { createApplicationRouter } from '../router/router-factory';
  * Options for {@link wireRouter}.
  */
 export interface WireRouterOptions {
+
     /** The registry's ordered module list, the source of routes and guards. */
     readonly modules: readonly ModuleDefinition[];
 
@@ -42,6 +43,8 @@ export interface WireRouterOptions {
  * The wired router and the title-sync teardown.
  */
 export interface WiredRouter {
+
+    /** The wired application router. */
     readonly router: Router;
 
     /** Removes the document-title synchronisation hook. */

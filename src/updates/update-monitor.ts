@@ -21,6 +21,7 @@ import { isRecord } from '../support/is-record';
 export type UpdateHandler = (nextVersion: string) => void;
 
 export interface UpdateMonitorOptions {
+
     /** The version the running application was booted with. */
     readonly currentVersion: string;
 
@@ -29,6 +30,8 @@ export interface UpdateMonitorOptions {
 
     /** Poll interval in milliseconds; defaults to five minutes. */
     readonly interval?: number;
+
+    /** The fetch implementation to use; defaults to the global fetch. */
     readonly fetchFn?: typeof fetch;
 
     /** Extract the deployed version from the parsed document; defaults to the APP_VERSION entry. */
@@ -45,19 +48,36 @@ const DEFAULT_INTERVAL = 300_000;
  * Polls the deployed version and notifies subscribers when it changes.
  */
 export class UpdateMonitor {
+
+    /** The version the running application was booted with. */
     readonly #currentVersion: string;
+
+    /** The version document location that is polled. */
     readonly #url: string;
+
+    /** The poll interval in milliseconds. */
     readonly #interval: number;
+
+    /** The fetch implementation used to retrieve the version document. */
     readonly #fetchFn: typeof fetch;
+
+    /** Extracts the deployed version from the parsed document. */
     readonly #extractVersion: (payload: unknown) => string | null;
+
+    /** The document whose visibility triggers focus checks. */
     readonly #targetDocument: Document;
+
+    /** The registered update subscribers. */
     readonly #handlers = new Set<UpdateHandler>();
+
+    /** Polls when the tab regains visibility. */
     readonly #onVisibilityChange = (): void => {
         if (this.#targetDocument.visibilityState === 'visible') {
             this.#poll();
         }
     };
 
+    /** Runs a check, guarding against throwing subscriber callbacks. */
     readonly #poll = (): void => {
         this.checkNow().catch(() => {
             // checkNow swallows transport errors itself; this guards against
@@ -65,7 +85,10 @@ export class UpdateMonitor {
         });
     };
 
+    /** The active poll interval handle, or null when stopped. */
     #timer: ReturnType<typeof setInterval> | null = null;
+
+    /** The last version subscribers were notified of. */
     #notifiedVersion: string | null = null;
 
     constructor(options: UpdateMonitorOptions) {

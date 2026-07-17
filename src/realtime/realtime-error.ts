@@ -13,6 +13,7 @@
  * A realtime operation was attempted in an invalid connection state.
  */
 export class RealtimeError extends Error {
+
     constructor(message: string, options?: ErrorOptions) {
         super(message, options);
         this.name = 'RealtimeError';

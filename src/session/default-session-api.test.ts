@@ -13,6 +13,7 @@ import type { SessionUser } from './session-user';
 
 /** The shape of a single call recorded by {@link FakeHttpClient}. */
 interface RecordedCall {
+
     readonly method: string;
     readonly path: string;
     readonly body: unknown;
@@ -24,6 +25,7 @@ interface RecordedCall {
  * queued response payloads in order.
  */
 class FakeHttpClient implements HttpClient {
+
     readonly calls: RecordedCall[] = [];
     readonly #queue: unknown[] = [];
 
@@ -625,6 +627,7 @@ describe('createDefaultSessionApi', () => {
 
         it('passes the unwrapped payload to a custom mapUser and returns its result', async () => {
             interface AdminUser extends SessionUser {
+
                 readonly role: string;
             }
 

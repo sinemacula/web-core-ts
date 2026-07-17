@@ -46,6 +46,7 @@ function makeFetch(version: string) {
 }
 
 interface Harness {
+
     readonly settings: MonitorWiringSettings;
     readonly service: ToastService;
     readonly toasts: () => ToastService;

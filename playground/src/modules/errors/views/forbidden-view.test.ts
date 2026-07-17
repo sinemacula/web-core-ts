@@ -13,6 +13,7 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 import ForbiddenView from '@/modules/errors/views/forbidden-view.vue';
 
 interface MountedForbiddenView {
+
     readonly container: HTMLDivElement;
     readonly router: ReturnType<typeof createRouter>;
     readonly unmount: () => void;

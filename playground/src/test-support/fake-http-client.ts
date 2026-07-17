@@ -11,20 +11,42 @@
 import type { HttpClient, HttpRequestOptions } from '@sinemacula/web-core/http/http-client';
 
 interface RecordedCall {
+
+    /** The HTTP method invoked. */
     readonly method: string;
+
+    /** The request path. */
     readonly path: string;
+
+    /** The request body, if any. */
     readonly body: unknown;
 }
 
 type QueuedResult =
-    | { readonly kind: 'resolve'; readonly value: unknown }
-    | { readonly kind: 'reject'; readonly error: unknown };
+    | {
+          /** Marks a queued success. */
+          readonly kind: 'resolve';
+
+          /** The value the next call resolves with. */
+          readonly value: unknown;
+      }
+    | {
+          /** Marks a queued failure. */
+          readonly kind: 'reject';
+
+          /** The error the next call rejects with. */
+          readonly error: unknown;
+      };
 
 /**
  * A scriptable, call-recording HTTP client.
  */
 export class FakeHttpClient implements HttpClient {
+
+    /** Every call made against this client, in order. */
     readonly calls: RecordedCall[] = [];
+
+    /** The results still queued to replay, in order. */
     readonly #queue: QueuedResult[] = [];
 
     /**

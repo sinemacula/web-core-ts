@@ -12,6 +12,7 @@ import { ExponentialBackoff } from './exponential-backoff';
 
 /** Minimal fake EventSource for injection via the factory. */
 class FakeEventSource {
+
     readonly url: string;
     readonly withCredentials: boolean;
     onopen: ((event: Event) => void) | null = null;
@@ -91,6 +92,7 @@ function fixedBackoff(delay: number): ExponentialBackoff {
 
 /** A promise plus its externally callable settlement functions. */
 interface Deferred<T> {
+
     readonly promise: Promise<T>;
     readonly resolve: (value: T) => void;
     readonly reject: (reason: unknown) => void;

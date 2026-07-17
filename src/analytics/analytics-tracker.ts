@@ -14,6 +14,7 @@
  * Contract that every analytics adapter must satisfy.
  */
 export interface AnalyticsTracker {
+
     /**
      * Record a named user action with optional properties.
      *

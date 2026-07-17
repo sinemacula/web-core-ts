@@ -27,6 +27,7 @@ export type FilterValueOf<Filter> = Filter extends ListFilter<infer V> ? V : nev
  * The default sort column and direction applied when no explicit sort is set.
  */
 export interface SortDefault {
+
     /** The column name to sort by. */
     readonly column: string;
 
@@ -44,11 +45,8 @@ export interface SortDefault {
  * typed {@link ListFilter} implementations
  */
 export interface ListQueryDefinition<Filters extends Record<string, ListFilter<never>> = Record<string, never>> {
-    /**
-     * Named filters the screen may set. Keys are the screen's vocabulary (e.g.
-     * `'status'`, `'createdAfter'`); values are {@link ListFilter} instances
-     * created by the {@link filter} factory namespace.
-     */
+
+    /** Named filters the screen may set, keyed by the screen's vocabulary. */
     readonly filters?: Filters;
 
     /** Free-text search mapping. When set, calling `search(term)` on the resulting {@link ListQuery} applies this filter with the term as its value. */
@@ -60,21 +58,10 @@ export interface ListQueryDefinition<Filters extends Record<string, ListFilter<n
     /** The sort applied when no explicit sort has been chosen. Omit to emit no `order` parameter when the screen has not called `sortBy`. */
     readonly defaultSort?: SortDefault;
 
-    /**
-     * Number of items per page emitted as the `limit` parameter.
-     *
-     * @defaultValue 25
-     */
+    /** Number of items per page emitted as the `limit` parameter; defaults to 25. */
     readonly pageSize?: number;
 
-    /**
-     * Always-applied base shaping: extra fields, counts, or base filters that
-     * every request for this list must include. Applied first in the compile
-     * order, before any screen-set filters or sorts.
-     *
-     * @param query - a fresh `ApiQuery` to extend
-     * @returns the extended query
-     */
+    /** Always-applied base shaping, compiled before any screen-set filters or sorts. */
     readonly base?: (query: ApiQuery) => ApiQuery;
 }
 

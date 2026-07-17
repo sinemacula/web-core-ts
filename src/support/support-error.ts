@@ -14,6 +14,7 @@
  * A support primitive used outside its required lifecycle.
  */
 export class SupportError extends Error {
+
     constructor(message: string, options?: ErrorOptions) {
         super(message, options);
         this.name = 'SupportError';

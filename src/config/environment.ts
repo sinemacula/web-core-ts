@@ -16,6 +16,7 @@ const TRUTHY_VALUES = ['1', 'true', 'yes', 'on'];
  * A read-only provider of raw environment values.
  */
 export interface EnvironmentSource {
+
     /**
      * Resolve the raw string value for `key`.
      *
@@ -29,6 +30,8 @@ export interface EnvironmentSource {
  * Typed reader over an {@link EnvironmentSource}.
  */
 export class Environment {
+
+    /** The backing source of raw environment values. */
     readonly #source: EnvironmentSource;
 
     constructor(source: EnvironmentSource) {

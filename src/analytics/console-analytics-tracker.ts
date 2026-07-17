@@ -15,7 +15,10 @@ import type { AnalyticsTracker } from './analytics-tracker';
  * An analytics tracker that logs every call with `console.info`.
  */
 export class ConsoleAnalyticsTracker implements AnalyticsTracker {
-    /** Write the event and its properties to the console via `console.info`. */
+
+    /**
+     * Write the event and its properties to the console via `console.info`.
+     */
     track(event: string, properties?: Readonly<Record<string, unknown>>): void {
         console.info('[AnalyticsTracker] track', event, ...(properties !== undefined ? [properties] : []));
     }

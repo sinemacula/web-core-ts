@@ -65,6 +65,7 @@ function createHttpClientStub(): HttpClient {
 
 /** An error reporter recording every captureError invocation. */
 interface RecordingReporter extends ErrorReporter {
+
     readonly captured: { error: unknown; context: Readonly<Record<string, unknown>> | undefined }[];
 }
 
@@ -86,6 +87,7 @@ function createRecordingReporter(): RecordingReporter {
  * A fetch fake recording every call and replaying queued responses in order.
  */
 interface FetchStub {
+
     readonly fetchFn: typeof fetch;
     readonly urls: string[];
     readonly inits: (RequestInit | undefined)[];

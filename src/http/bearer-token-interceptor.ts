@@ -15,6 +15,7 @@ import type { HttpRequest, RequestInterceptor } from './http-client';
  * Supplies the current access token, if any.
  */
 export interface AccessTokenProvider {
+
     /**
      * Resolve the current access token.
      *

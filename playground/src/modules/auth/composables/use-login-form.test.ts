@@ -33,6 +33,7 @@ function wire(entries: ReadonlyArray<readonly [string, unknown]>): Record<string
 }
 
 interface MountedLoginForm {
+
     readonly form: LoginForm;
     readonly unmount: () => void;
 }

@@ -14,11 +14,23 @@ import type { Locator, Page } from '@playwright/test';
  * Drives the login screen.
  */
 export class LoginPage {
+
+    /** The Playwright page under test. */
     readonly page: Page;
+
+    /** The sign in heading. */
     readonly heading: Locator;
+
+    /** The email address field. */
     readonly emailField: Locator;
+
+    /** The password field. */
     readonly passwordField: Locator;
+
+    /** The submit button. */
     readonly submitButton: Locator;
+
+    /** The invalid credentials error message. */
     readonly errorMessage: Locator;
 
     constructor(page: Page) {

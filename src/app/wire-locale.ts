@@ -23,10 +23,20 @@ import { installLocaleSwitcher } from './services';
  * The configuration slice the locale wiring reads.
  */
 export interface LocaleWiringConfig {
+
+    /** Locale identity: default, enabled list, and per-locale metadata. */
     readonly locales: {
+        /** The default locale applied before any preference resolves. */
         readonly default: string;
+
+        /** The locales the application enables, as BCP 47 tags. */
         readonly enabled: readonly string[];
-        readonly supported: Readonly<Record<string, { readonly direction: 'ltr' | 'rtl' }>>;
+
+        /** Per-locale metadata keyed by locale tag. */
+        readonly supported: Readonly<Record<string, {
+            /** The locale's text direction. */
+            readonly direction: 'ltr' | 'rtl';
+        }>>;
     };
 }
 
@@ -34,11 +44,11 @@ export interface LocaleWiringConfig {
  * Options for {@link wireLocale}.
  */
 export interface WireLocaleOptions {
+
+    /** The configuration slice the locale wiring reads. */
     readonly config: LocaleWiringConfig;
 
-    /**
-     * The registry's ordered module list, the source of module translations.
-     */
+    /** The registry's ordered module list, the source of module translations. */
     readonly modules: readonly ModuleDefinition[];
 
     /** Shared (non-module) translation loaders keyed by locale. */
@@ -67,7 +77,11 @@ export interface WireLocaleOptions {
  * The wired i18n instance and its runtime locale switcher.
  */
 export interface WiredLocale {
+
+    /** The wired i18n instance. */
     readonly i18n: ApplicationI18n;
+
+    /** The installed runtime locale switcher. */
     readonly switcher: LocaleSwitcher;
 }
 

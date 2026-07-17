@@ -11,13 +11,28 @@ import type { Environment } from '@sinemacula/web-core/config/environment';
  * Top-level application configuration resolved from the environment.
  */
 export interface AppConfig {
+
+    /** The application environment name. */
     readonly environment: string;
+
+    /** The application display name. */
     readonly name: string;
+
+    /** The deployed application version. */
     readonly version: string;
+
+    /** The base URLs the application uses. */
     readonly urls: {
+        /** The API base URL. */
         readonly api: string;
+
+        /** The application base URL. */
         readonly app: string;
+
+        /** The static asset base URL. */
         readonly static: string;
+
+        /** The realtime stream base URL. */
         readonly stream: string;
     };
 }

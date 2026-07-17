@@ -48,10 +48,8 @@ const MIN_PAGE = 1;
  * key- and value-typing of {@link setFilter} and {@link clearFilter}
  */
 export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
-    /**
-     * The compiled `ApiQuery` instance, recomputed whenever any reactive state
-     * changes.
-     */
+
+    /** The compiled `ApiQuery`, recomputed on any reactive state change. */
     readonly query: ComputedRef<ApiQuery>;
 
     /** The flat query-parameter record derived from {@link query}, ready to pass to an `HttpClient` method. */
@@ -207,10 +205,20 @@ export function useListQuery<Filters extends Record<string, ListFilter<never>>>(
  * mutates.
  */
 interface ListQueryState {
+
+    /** Active filter entries in insertion order, keyed by filter name. */
     readonly activeFilters: Ref<Map<string, { filter: ListFilter<unknown>; value: unknown }>>;
+
+    /** The current free-text search term, empty when no search is active. */
     readonly activeSearch: Ref<string>;
+
+    /** The active sort, or null when none is set. */
     readonly activeSort: Ref<SortDefault | null>;
+
+    /** The current 1-based page number. */
     readonly currentPage: Ref<number>;
+
+    /** The registered refinements, applied in call order. */
     readonly refinements: Ref<Array<(query: ApiQuery) => ApiQuery>>;
 }
 

@@ -14,10 +14,16 @@ import type { Environment } from '@sinemacula/web-core/config/environment';
  * Third-party service configuration resolved from the environment.
  */
 export interface ServicesConfig {
+
+    /** Segment analytics configuration. */
     readonly segment: {
+        /** The Segment write key, or null when unconfigured. */
         readonly writeKey: string | null;
     };
+
+    /** Sentry error-reporting configuration. */
     readonly sentry: {
+        /** The Sentry DSN, or null when unconfigured. */
         readonly dsn: string | null;
     };
 }

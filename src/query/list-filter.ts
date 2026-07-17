@@ -28,6 +28,7 @@ import type { FilterScalar } from './filter-expression';
  * @typeParam Val - the plain value type the screen passes in
  */
 export interface ListFilter<Val> {
+
     /**
      * Apply a concrete value to a query, returning the updated query.
      *

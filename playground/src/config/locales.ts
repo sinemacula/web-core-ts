@@ -11,7 +11,11 @@ import type { Environment } from '@sinemacula/web-core/config/environment';
  * Display metadata for a single supported locale.
  */
 export interface LocaleDefinition {
+
+    /** The human-readable locale name. */
     readonly name: string;
+
+    /** The text direction for the locale. */
     readonly direction: 'ltr' | 'rtl';
 }
 
@@ -19,8 +23,14 @@ export interface LocaleDefinition {
  * Localisation configuration resolved from the environment.
  */
 export interface LocalesConfig {
+
+    /** The default locale. */
     readonly default: string;
+
+    /** The locales enabled for selection. */
     readonly enabled: readonly string[];
+
+    /** Display metadata for every supported locale. */
     readonly supported: Readonly<Record<string, LocaleDefinition>>;
 }
 

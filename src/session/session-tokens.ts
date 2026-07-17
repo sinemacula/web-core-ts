@@ -14,6 +14,7 @@
  * The tokens describing an authenticated session.
  */
 export interface SessionTokens {
+
     /** The bearer token attached to authenticated requests. */
     readonly accessToken: string;
 

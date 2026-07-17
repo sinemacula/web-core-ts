@@ -18,19 +18,35 @@ import type { RouteLocationNormalized, RouteLocationRaw } from 'vue-router';
  * The navigation being evaluated by a middleware pipeline.
  */
 export interface MiddlewareContext {
+
+    /** The route being navigated to. */
     readonly to: RouteLocationNormalized;
+
+    /** The route being navigated from. */
     readonly from: RouteLocationNormalized;
 }
 
 /**
  * Discriminated union describing a middleware pipeline decision.
  */
-export type MiddlewareResult = { readonly kind: 'next' } | { readonly kind: 'redirect'; readonly to: RouteLocationRaw };
+export type MiddlewareResult =
+    | {
+        /** Discriminant marking a proceed decision. */
+        readonly kind: 'next';
+    }
+    | {
+        /** Discriminant marking a redirect decision. */
+        readonly kind: 'redirect';
+
+        /** The location to redirect the navigation to. */
+        readonly to: RouteLocationRaw;
+    };
 
 /**
  * A single navigation guard unit.
  */
 export interface RouteMiddleware {
+
     /**
      * Inspect a navigation and decide whether it proceeds.
      *

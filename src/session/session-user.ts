@@ -13,6 +13,7 @@
  * The authenticated user as seen by the kernel.
  */
 export interface SessionUser {
+
     /** The unique user identifier. */
     readonly id: string | number;
 

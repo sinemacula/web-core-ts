@@ -18,9 +18,17 @@ const DEFAULT_STORAGE_KEY = 'locale';
  * Construction options for {@link LocaleService}.
  */
 export interface LocaleServiceOptions {
+
+    /** The locale used when nothing else matches. */
     readonly defaultLocale: string;
+
+    /** The locales a candidate may resolve to. */
     readonly enabledLocales: readonly string[];
+
+    /** Backing store for the persisted locale preference. */
     readonly storage: KeyValueStorage;
+
+    /** The storage key for the persisted preference. Defaults to `locale`. */
     readonly storageKey?: string;
 }
 
@@ -28,9 +36,17 @@ export interface LocaleServiceOptions {
  * Detects, matches and persists the active locale.
  */
 export class LocaleService {
+
+    /** The locale used when nothing else matches. */
     readonly #defaultLocale: string;
+
+    /** The locales a candidate may resolve to. */
     readonly #enabledLocales: readonly string[];
+
+    /** Backing store for the persisted locale preference. */
     readonly #storage: KeyValueStorage;
+
+    /** The resolved storage key for the persisted preference. */
     readonly #storageKey: string;
 
     constructor(options: LocaleServiceOptions) {

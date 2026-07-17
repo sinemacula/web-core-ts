@@ -28,9 +28,17 @@ export type ResourceMapper<Value> = (raw: RawRecord) => Value;
  * Laravel paginator metadata, mapped from the envelope's snake_case wire keys.
  */
 export interface PaginationMeta {
+
+    /** The current page number. */
     readonly currentPage: number;
+
+    /** The last available page number. */
     readonly lastPage: number;
+
+    /** The number of items per page. */
     readonly perPage: number;
+
+    /** The total number of items across all pages. */
     readonly total: number;
 }
 
@@ -39,7 +47,11 @@ export interface PaginationMeta {
  * pagination metadata.
  */
 export interface ListResult<Value> {
+
+    /** The mapped domain values for this page. */
     readonly items: readonly Value[];
+
+    /** The pagination metadata, or null when absent or malformed. */
     readonly meta: PaginationMeta | null;
 }
 

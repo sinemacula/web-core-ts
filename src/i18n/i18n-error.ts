@@ -14,6 +14,7 @@
  * A locale that could not be activated.
  */
 export class I18nError extends Error {
+
     constructor(message: string, options?: ErrorOptions) {
         super(message, options);
         this.name = 'I18nError';

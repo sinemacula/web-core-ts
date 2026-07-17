@@ -30,7 +30,11 @@ const loginSchema = z.object({
  * Reactive state and submission behaviour for the login screen.
  */
 export interface LoginForm {
+
+    /** The email field's reactive value. */
     readonly email: Ref<string>;
+
+    /** The password field's reactive value. */
     readonly password: Ref<string>;
 
     /** Translation key for the email field error, or '' when valid/untouched. */
@@ -41,6 +45,8 @@ export interface LoginForm {
 
     /** Form-level (API) error translation key, or null when none. */
     readonly error: Ref<string | null>;
+
+    /** True while a submission is in flight. */
     readonly isSubmitting: ComputedRef<boolean> | Ref<boolean>;
 
     /**
@@ -102,8 +108,12 @@ export function useLoginForm(): LoginForm {
  * The callbacks {@link attemptLogin} needs from the form to run one attempt.
  */
 interface LoginAttempt {
+
     /** Run field validation and report whether the inputs are valid. */
-    readonly validate: () => Promise<{ valid: boolean }>;
+    readonly validate: () => Promise<{
+        /** Whether the current inputs pass validation. */
+        valid: boolean;
+    }>;
 
     /** Perform the session login with the current credentials. */
     readonly login: () => Promise<void>;

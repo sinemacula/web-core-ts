@@ -15,7 +15,10 @@ import type { AnalyticsTracker } from './analytics-tracker';
  * An analytics tracker that discards every call without side effects.
  */
 export class NullAnalyticsTracker implements AnalyticsTracker {
-    /** Discard the event; the null tracker records nothing. */
+
+    /**
+     * Discard the event; the null tracker records nothing.
+     */
     track(_event: string, _properties?: Readonly<Record<string, unknown>>): void {
         // Intentionally empty: no provider is configured.
     }

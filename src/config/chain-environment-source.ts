@@ -15,6 +15,8 @@ import type { EnvironmentSource } from './environment';
  * Read environment values from the first source in the chain that defines them.
  */
 export class ChainEnvironmentSource implements EnvironmentSource {
+
+    /** The ordered chain of sources consulted in turn. */
     readonly #sources: readonly EnvironmentSource[];
 
     constructor(sources: readonly EnvironmentSource[]) {

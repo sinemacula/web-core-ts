@@ -26,9 +26,17 @@ import { computed, ref } from 'vue';
  * before display.
  */
 export interface ConfirmRequest {
+
+    /** Translation key for the dialog title. */
     readonly title: string;
+
+    /** Translation key for the dialog message. */
     readonly message: string;
+
+    /** Translation key for the confirm button label. */
     readonly confirmLabel?: string;
+
+    /** Translation key for the cancel button label. */
     readonly cancelLabel?: string;
 }
 
@@ -37,11 +45,17 @@ export interface ConfirmRequest {
  * (i.e. waiting for the user to settle it).
  */
 export interface ActiveConfirm extends ConfirmRequest {
+
+    /** The unique id assigned when the request became active. */
     readonly id: string;
 }
 
 interface PendingEntry {
+
+    /** The confirmation content awaiting display. */
     readonly request: ConfirmRequest;
+
+    /** Settles the associated `confirm` promise with the outcome. */
     readonly resolve: (outcome: boolean) => void;
 }
 
@@ -53,9 +67,17 @@ interface PendingEntry {
  * component that reads {@link active} to render the modal.
  */
 export class ConfirmService {
+
+    /** Pending confirmations awaiting their turn, in FIFO order. */
     readonly #queue: PendingEntry[] = [];
+
+    /** The reactive currently-active confirmation, or null. */
     readonly #active = ref<ActiveConfirm | null>(null);
+
+    /** Monotonic counter backing generated confirmation ids. */
     #sequence = 0;
+
+    /** Resolver for the active confirmation's promise, or null. */
     #currentResolve: ((outcome: boolean) => void) | null = null;
 
     /** The reactive, read-only currently-active confirmation request. */

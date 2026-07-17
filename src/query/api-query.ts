@@ -34,7 +34,11 @@ type ScalarOperator = '$eq' | '$neq' | '$gt' | '$lt' | '$ge' | '$le' | '$like';
 
 /** An entry in the order list: column name and sort direction. */
 interface OrderEntry {
+
+    /** The column name to sort by. */
     readonly column: string;
+
+    /** The sort direction. */
     readonly direction: 'asc' | 'desc';
 }
 
@@ -44,17 +48,41 @@ interface OrderEntry {
  * All collections are readonly arrays/records; mutations produce new objects.
  */
 interface QueryState {
+
+    /** The assembled filter tree. */
     readonly filters: FilterTree;
+
+    /** The ordered list of sort entries. */
     readonly order: readonly OrderEntry[];
+
+    /** The 1-based page number, or undefined when unset. */
     readonly pageNumber: number | undefined;
+
+    /** The page size, or undefined when unset. */
     readonly limitNumber: number | undefined;
+
+    /** The opaque cursor token, or undefined when unset. */
     readonly cursorToken: string | undefined;
+
+    /** Whether cursor pagination is forced on. */
     readonly cursorPagination: boolean;
+
+    /** The global sparse-field list, or undefined when unset. */
     readonly fieldsList: readonly string[] | undefined;
+
+    /** Per-resource sparse-field lists keyed by resource. */
     readonly fieldsMap: Readonly<Record<string, readonly string[]>>;
+
+    /** The global relation-count list, or undefined when unset. */
     readonly countsList: readonly string[] | undefined;
+
+    /** Per-resource relation-count lists keyed by resource. */
     readonly countsMap: Readonly<Record<string, readonly string[]>>;
+
+    /** Sum aggregates keyed by resource then relation. */
     readonly sumsMap: Readonly<Record<string, Readonly<Record<string, readonly string[]>>>>;
+
+    /** Average aggregates keyed by resource then relation. */
     readonly averagesMap: Readonly<Record<string, Readonly<Record<string, readonly string[]>>>>;
 }
 
@@ -135,6 +163,8 @@ function mergeGroup(existing: unknown, patch: FilterTree): FilterTree {
 // Splitting this fluent immutable query builder would break method chaining.
 // eslint-disable-next-line @sinemacula/max-methods-per-class -- fluent API
 export class ApiQuery {
+
+    /** The immutable state bag shared between derived instances. */
     readonly #state: QueryState;
 
     private constructor(state: QueryState) {

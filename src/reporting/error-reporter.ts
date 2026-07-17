@@ -14,8 +14,14 @@
  * A user identity to attach to subsequent error reports.
  */
 export interface ReportedUser {
+
+    /** The stable unique identifier for the user. */
     readonly id: string;
+
+    /** The user's email address, when known. */
     readonly email?: string;
+
+    /** The user's display name, when known. */
     readonly name?: string;
 }
 
@@ -23,6 +29,7 @@ export interface ReportedUser {
  * Contract that every error-reporting adapter must satisfy.
  */
 export interface ErrorReporter {
+
     /**
      * Record an exception with optional structured context.
      *

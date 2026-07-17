@@ -16,9 +16,17 @@ import type { ApplicationI18n } from './application-i18n';
  * Options for installing the document title synchronisation hook.
  */
 export interface DocumentTitleOptions {
+
+    /** The router whose navigations drive the title. */
     readonly router: Router;
+
+    /** The i18n instance used to translate the title key. */
     readonly i18n: ApplicationI18n;
+
+    /** The application name suffixed to every title. */
     readonly appName: string;
+
+    /** The document whose title is set. Defaults to the global document. */
     readonly targetDocument?: Document;
 }
 

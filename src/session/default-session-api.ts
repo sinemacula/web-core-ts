@@ -28,8 +28,15 @@ const DEFAULT_USER_ENDPOINT = 'users/self';
  * conventions ship as the defaults.
  */
 export interface DefaultSessionApiOptions<U extends SessionUser = SessionUser> {
+
     /** Resource paths. Defaults: session `auth`, user `users/self`. */
-    readonly endpoints?: { readonly session?: string; readonly user?: string };
+    readonly endpoints?: {
+        /** Override for the session resource path. */
+        readonly session?: string;
+
+        /** Override for the user resource path. */
+        readonly user?: string;
+    };
 
     /** Convert a wire timestamp to epoch milliseconds; return null for unparseable values. Defaults to parsing `YYYY-MM-DD HH:MM:SS` as UTC. */
     readonly parseTimestamp?: (value: string) => number | null;

@@ -18,6 +18,7 @@ import type { AnalyticsTracker } from './analytics-tracker';
  * Options for installing the page-tracking hook.
  */
 export interface PageTrackingOptions {
+
     /** The Vue Router instance to attach the after-navigation hook to. */
     readonly router: Router;
 

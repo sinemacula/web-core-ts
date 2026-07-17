@@ -42,9 +42,17 @@ export type ModuleTeardown = () => void;
  * module hook.
  */
 export interface ResolvedPlatform {
+
+    /** The fetch implementation threaded to every module hook. */
     readonly fetchFn: typeof fetch;
+
+    /** The window modules read and drive. */
     readonly targetWindow: Window;
+
+    /** The document modules read and render into. */
     readonly targetDocument: Document;
+
+    /** Reads the current time as epoch milliseconds. */
     readonly clock: () => number;
 }
 
@@ -53,7 +61,10 @@ export interface ResolvedPlatform {
  * construction of the application HTTP client.
  */
 export interface ModuleHttpRegistrar {
-    /** Appended after preset-level interceptors, in registry order. */
+
+    /**
+     * Appended after preset-level interceptors, in registry order.
+     */
     addRequestInterceptor(interceptor: RequestInterceptor): void;
 
     /**
@@ -73,11 +84,23 @@ export interface ModuleHttpRegistrar {
  * Synchronous by design.
  */
 export interface ModuleRegisterContext {
+
+    /** The application configuration repository. */
     readonly config: ConfigRepository<Record<string, unknown>>;
+
+    /** The resolved runtime environment. */
     readonly environment: Environment;
+
+    /** The application key/value storage. */
     readonly storage: KeyValueStorage;
+
+    /** The application Pinia instance. */
     readonly pinia: Pinia;
+
+    /** The resolved platform seams. */
     readonly platform: ResolvedPlatform;
+
+    /** The HTTP machinery registrar. */
     readonly http: ModuleHttpRegistrar;
 }
 
@@ -86,13 +109,29 @@ export interface ModuleRegisterContext {
  * router exist; runs before mount.
  */
 export interface ModuleBootContext {
+
+    /** The Vue application instance. */
     readonly app: App;
+
+    /** The application router. */
     readonly router: Router;
+
+    /** The application Pinia instance. */
     readonly pinia: Pinia;
+
+    /** The application i18n instance. */
     readonly i18n: ApplicationI18n;
+
+    /** The built application HTTP client. */
     readonly http: HttpClient;
+
+    /** The application key/value storage. */
     readonly storage: KeyValueStorage;
+
+    /** The application configuration repository. */
     readonly config: ConfigRepository<Record<string, unknown>>;
+
+    /** The resolved platform seams. */
     readonly platform: ResolvedPlatform;
 }
 
@@ -101,16 +140,19 @@ export interface ModuleBootContext {
  * `defineStore` result, and its `$dispose` is composed into application
  * disposal.
  */
-export type ModuleStoreFactory = (pinia: Pinia) => { $dispose(): void };
+export type ModuleStoreFactory = (pinia: Pinia) => {
+    /**
+     * Dispose the store; composed into application disposal.
+     */
+    $dispose(): void;
+};
 
 /**
  * A self-contained feature area of the application.
  */
 export interface ModuleDefinition {
-    /**
-     * Unique module name; also the namespace for its translations. Uniqueness
-     * is enforced by the registry.
-     */
+
+    /** Unique module name; also the namespace for its translations. Uniqueness is enforced by the registry. */
     readonly name: string;
 
     /** Routes contributed to the application router. */

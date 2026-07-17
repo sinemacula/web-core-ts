@@ -33,11 +33,8 @@ export type WebSocketFactory = (url: string, protocols?: string | readonly strin
 
 /** Construction options for {@link WebSocketConnection}. */
 export interface WebSocketConnectionOptions {
-    /**
-     * The WebSocket endpoint URL, or a function that returns it. The function
-     * form is called on every `connect()`, enabling per-connect auth tokens in
-     * the query string.
-     */
+
+    /** The WebSocket endpoint URL, or a function that returns it. The function form is called on every `connect()`, enabling per-connect auth tokens in the query string. */
     readonly url: string | (() => string);
 
     /** Optional WebSocket subprotocol(s) forwarded to the constructor. */
@@ -63,17 +60,38 @@ export interface WebSocketConnectionOptions {
  * new WebSocket.
  */
 export class WebSocketConnection implements RealtimeConnection {
+
+    /** The endpoint URL, or a factory returning it per connect. */
     readonly #url: string | (() => string);
+
+    /** The WebSocket subprotocol(s), or undefined for none. */
     readonly #protocols: string | readonly string[] | undefined;
+
+    /** The backoff strategy spacing reconnect attempts. */
     readonly #backoff: ExponentialBackoff;
+
+    /** The factory that constructs each WebSocket. */
     readonly #factory: WebSocketFactory;
+
+    /** Optional hook awaited before each reconnect. */
     readonly #beforeReconnect: (() => Promise<void>) | undefined;
+
+    /** Registered message handlers, keyed by event name. */
     readonly #messageHandlers: Map<string, Set<RealtimeMessageHandler>> = new Map();
+
+    /** Registered connection-state change handlers. */
     readonly #stateHandlers: Set<RealtimeStateHandler> = new Set();
 
+    /** The active WebSocket, or null when not open. */
     #socket: WebSocket | null = null;
+
+    /** The current connection lifecycle state. */
     #state: RealtimeState = 'idle';
+
+    /** The current zero-based reconnect attempt counter. */
     #attempt: number = 0;
+
+    /** The pending reconnect timer, or null when none. */
     #reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
     /**
@@ -329,7 +347,13 @@ function defaultWebSocketFactory(url: string, protocols?: string | readonly stri
  * @param value - the value parsed from a raw frame
  * @returns true when the value can be read as an event envelope
  */
-function isEnvelopeShape(value: unknown): value is { event: string; data: unknown } {
+function isEnvelopeShape(value: unknown): value is {
+    /** The event name the envelope declares. */
+    event: string;
+
+    /** The payload the envelope carries. */
+    data: unknown;
+} {
     if (typeof value !== 'object' || value === null) {
         return false;
     }
@@ -348,7 +372,13 @@ function isEnvelopeShape(value: unknown): value is { event: string; data: unknow
  * @returns the envelope when the frame is valid JSON with `event` (string) and
  * `data` fields, otherwise `null`
  */
-function tryParseEnvelope(raw: string): { event: string; data: string } | null {
+function tryParseEnvelope(raw: string): {
+    /** The event name the envelope declares. */
+    event: string;
+
+    /** The payload text extracted from the envelope. */
+    data: string;
+} | null {
     try {
         const parsed: unknown = JSON.parse(raw);
 

@@ -20,6 +20,7 @@ const EmptyComponent = defineComponent({ render: () => null });
  * can assert the in-flight state before letting navigation complete.
  */
 interface DeferredComponent {
+
     readonly load: () => Promise<Component>;
     readonly resolve: () => void;
 }

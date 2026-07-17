@@ -38,9 +38,18 @@ export function defineConfiguration(env: Environment): Configuration {
  * The fully-typed configuration tree returned by {@link defineConfiguration}.
  */
 export type Configuration = {
+    /** The API client configuration. */
     api: ReturnType<typeof apiConfig>;
+
+    /** The top-level application configuration. */
     app: ReturnType<typeof appConfig>;
+
+    /** The feature-flag configuration. */
     featureFlags: ReturnType<typeof featureFlagsConfig>;
+
+    /** The localisation configuration. */
     locales: ReturnType<typeof localesConfig>;
+
+    /** The third-party service configuration. */
     services: ReturnType<typeof servicesConfig>;
 };

@@ -36,6 +36,7 @@ const Thrower = defineComponent({
 });
 
 interface MountedBoundary {
+
     readonly boundary: FatalBoundary;
     readonly showThrower: (value: boolean) => void;
     readonly unmount: () => void;
