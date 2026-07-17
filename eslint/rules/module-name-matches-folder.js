@@ -27,16 +27,19 @@ function isNameProperty(property) {
 
 /**
  * Whether a declarator asserts module identity - annotated `: ModuleDefinition`
- * (including a qualified `ns.ModuleDefinition`) or `... satisfies ModuleDefinition`.
+ * (including a qualified `ns.ModuleDefinition`), `... satisfies ModuleDefinition`,
+ * or an `... as ModuleDefinition` cast.
  */
 function declaresModule(node) {
     if (typeReferenceName(node.id?.typeAnnotation?.typeAnnotation) === 'ModuleDefinition') {
         return true;
     }
 
+    const init = node.init;
+
     return (
-        node.init?.type === 'TSSatisfiesExpression' &&
-        typeReferenceName(node.init.typeAnnotation) === 'ModuleDefinition'
+        (init?.type === 'TSSatisfiesExpression' || init?.type === 'TSAsExpression') &&
+        typeReferenceName(init.typeAnnotation) === 'ModuleDefinition'
     );
 }
 

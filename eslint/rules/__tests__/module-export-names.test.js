@@ -31,6 +31,11 @@ ruleTester.run('module-export-names', rule, {
             filename: 'src/modules/auth/composables/use-login-form.ts',
             code: 'export const anything = 1;',
         },
+        // A type-only re-export alongside the runtime value export is fine.
+        {
+            filename: 'src/modules/auth/module.ts',
+            code: 'export type { AuthModule } from "./types"; export const authModule: ModuleDefinition = { name: "auth" };',
+        },
     ],
     invalid: [
         {
@@ -46,6 +51,18 @@ ruleTester.run('module-export-names', rule, {
         {
             filename: 'src/modules/auth/route-names.ts',
             code: 'export const AUTH_ROUTES = {} as const;',
+            errors: [{ messageId: 'missing' }],
+        },
+        // Previously bypassed: a type-only export names no runtime binding.
+        {
+            filename: 'src/modules/auth/module.ts',
+            code: 'export type { authModule } from "./internal";',
+            errors: [{ messageId: 'missing' }],
+        },
+        // Previously bypassed: an inline `type` specifier does not count as a value export.
+        {
+            filename: 'src/modules/auth/module.ts',
+            code: 'type authModule = number; export { type authModule };',
             errors: [{ messageId: 'missing' }],
         },
     ],

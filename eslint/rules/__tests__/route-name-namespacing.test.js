@@ -23,6 +23,15 @@ ruleTester.run('route-name-namespacing', rule, {
             filename: 'src/modules/auth/module.ts',
             code: "const config = { key: 'anything' };",
         },
+        // Correctly namespaced via satisfies / as const satisfies.
+        {
+            filename: 'src/modules/auth/route-names.ts',
+            code: "export const AUTH_ROUTE_NAMES = { login: 'auth.login' } as const satisfies Record<string, string>;",
+        },
+        {
+            filename: 'src/modules/auth/route-names.ts',
+            code: "export const AUTH_ROUTE_NAMES = { login: 'auth.login' } satisfies Record<string, string>;",
+        },
     ],
     invalid: [
         {
@@ -38,6 +47,23 @@ ruleTester.run('route-name-namespacing', rule, {
         {
             filename: 'src/modules/auth/route-names.ts',
             code: "export const AUTH_ROUTE_NAMES = { bad: 'auth.Not_Kebab' } as const;",
+            errors: [{ messageId: 'unnamespaced' }],
+        },
+        // Previously bypassed: satisfies / as const satisfies wrappers.
+        {
+            filename: 'src/modules/auth/route-names.ts',
+            code: "export const AUTH_ROUTE_NAMES = { login: 'login' } as const satisfies Record<string, string>;",
+            errors: [{ messageId: 'unnamespaced' }],
+        },
+        {
+            filename: 'src/modules/auth/route-names.ts',
+            code: "export const AUTH_ROUTE_NAMES = { login: 'login' } satisfies Record<string, string>;",
+            errors: [{ messageId: 'unnamespaced' }],
+        },
+        // Previously bypassed: a template-literal value.
+        {
+            filename: 'src/modules/auth/route-names.ts',
+            code: 'export const AUTH_ROUTE_NAMES = { login: `login` } as const;',
             errors: [{ messageId: 'unnamespaced' }],
         },
     ],
