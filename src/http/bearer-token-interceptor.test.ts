@@ -49,7 +49,7 @@ describe('createBearerTokenInterceptor', () => {
     it('does not mutate the original request headers when adding the token', () => {
         const interceptor = createBearerTokenInterceptor({ getAccessToken: () => 'tok-abc' });
         const original: Record<string, string> = {};
-        interceptor(makeRequest(original));
+        void interceptor(makeRequest(original));
 
         expect(original).not.toHaveProperty('authorization');
     });

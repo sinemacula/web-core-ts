@@ -24,7 +24,7 @@ import { servicesConfig } from './services';
  * @param env - the typed environment reader
  * @returns the full configuration tree
  */
-export function defineConfiguration(env: Environment) {
+export function defineConfiguration(env: Environment): Configuration {
     return {
         api: apiConfig(env),
         app: appConfig(env),
@@ -37,4 +37,10 @@ export function defineConfiguration(env: Environment) {
 /**
  * The fully-typed configuration tree returned by {@link defineConfiguration}.
  */
-export type Configuration = ReturnType<typeof defineConfiguration>;
+export type Configuration = {
+    api: ReturnType<typeof apiConfig>;
+    app: ReturnType<typeof appConfig>;
+    featureFlags: ReturnType<typeof featureFlagsConfig>;
+    locales: ReturnType<typeof localesConfig>;
+    services: ReturnType<typeof servicesConfig>;
+};

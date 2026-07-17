@@ -132,12 +132,12 @@ export function useResource<Value>(options: UseResourceOptions<Value>): Resource
         const sources: ReadonlyArray<WatchSource<unknown>> = Array.isArray(watchSource) ? watchSource : [watchSource];
 
         stopWatch = watch(sources, () => {
-            run();
+            void run();
         });
     }
 
     if (immediate) {
-        run();
+        void run();
     }
 
     if (getCurrentScope() !== undefined) {

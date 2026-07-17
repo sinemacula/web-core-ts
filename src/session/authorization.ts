@@ -22,7 +22,7 @@ import type { SessionUser } from './session-user';
  * granted permissions allow `permission`
  */
 export function can(permission: string): boolean {
-    return evaluate(useSessionStore().user, permission);
+    return isAllowed(useSessionStore().user, permission);
 }
 
 /**
@@ -38,7 +38,7 @@ export function can(permission: string): boolean {
 export function useCan(): (permission: string) => boolean {
     const store = useSessionStore();
 
-    return (permission: string): boolean => evaluate(store.user, permission);
+    return (permission: string): boolean => isAllowed(store.user, permission);
 }
 
 /**
@@ -48,6 +48,6 @@ export function useCan(): (permission: string) => boolean {
  * @param permission - the permission string to check
  * @returns false when `user` is null; otherwise the PermissionSet result
  */
-function evaluate(user: SessionUser | null, permission: string): boolean {
+function isAllowed(user: SessionUser | null, permission: string): boolean {
     return user !== null && new PermissionSet(user.permissions).allows(permission);
 }

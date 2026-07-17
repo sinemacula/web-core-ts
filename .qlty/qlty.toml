@@ -110,7 +110,7 @@ config_files = [".qlty/configs/eslint.config.mjs"]
 name = "eslint"
 mode = "comment"
 package_file = ".qlty/configs/eslint/package.json"
-package_filters = ["eslint", "typescript", "typescript-eslint", "@typescript-eslint", "eslint-plugin-jsdoc", "@sinemacula/coding-standards"]
+package_filters = ["eslint", "typescript", "typescript-eslint", "@typescript-eslint", "eslint-plugin-jsdoc", "eslint-plugin-vue", "eslint-plugin-check-file", "vue-eslint-parser", "@sinemacula/coding-standards"]
 
 # The eslint config lives under .qlty; do not lint .qlty with eslint (it would
 # otherwise flag its own config file).

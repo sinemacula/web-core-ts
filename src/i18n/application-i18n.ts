@@ -38,6 +38,7 @@ export interface LocaleFormats {
  * @param formats - optional datetime/number formats installed per locale
  * @returns the i18n instance, ready to install on the app
  */
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- the vue-i18n legacy:false instance type is not nameable; it is inferred and re-exported as ApplicationI18n
 export function createApplicationI18n(defaultLocale: string, formats?: LocaleFormats) {
     return createI18n({
         fallbackLocale: defaultLocale,

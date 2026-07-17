@@ -225,7 +225,7 @@ export class EventSourceConnection implements RealtimeConnection {
 
         this.#reconnectTimer = setTimeout(() => {
             this.#reconnectTimer = null;
-            this.#runReconnect();
+            void this.#runReconnect();
         }, delay);
     }
 
