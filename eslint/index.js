@@ -11,14 +11,22 @@
  */
 
 import tseslint from 'typescript-eslint';
+import vueParser from 'vue-eslint-parser';
 import plugin from './plugin.js';
 
 const TS_FILES = ['**/*.ts', '**/*.tsx'];
+const VUE_FILES = ['**/*.vue'];
 const MODULE_TS_FILES = ['**/modules/**/*.ts', '**/modules/**/*.tsx'];
+
+/** Conventions + import boundary applied everywhere the framework runs. */
+const CONVENTIONS = {
+    '@sinemacula/web-core/no-snake-case-keys': 'error',
+    '@sinemacula/web-core/module-import-boundary': 'error',
+};
 
 export default [
     {
-        // Kernel-wide conventions and import boundaries.
+        // Kernel-wide conventions and the import boundary, on TypeScript files.
         files: TS_FILES,
         plugins: {
             '@sinemacula/web-core': plugin,
@@ -26,31 +34,25 @@ export default [
         languageOptions: {
             parser: tseslint.parser,
         },
-        rules: {
-            '@sinemacula/web-core/no-snake-case-keys': 'error',
-            'no-restricted-imports': [
-                'error',
-                {
-                    paths: [
-                        {
-                            name: '@sinemacula/web-core',
-                            message:
-                                'Import a kernel subpath (@sinemacula/web-core/<area>/<file>), not the package barrel.',
-                        },
-                    ],
-                    patterns: [
-                        {
-                            group: ['@/modules/*/*', '@/modules/*/**'],
-                            message:
-                                'Reach another module through its public surface (@/modules/<name>), not its internals.',
-                        },
-                    ],
-                },
-            ],
-        },
+        rules: CONVENTIONS,
     },
     {
-        // The feature-module contract.
+        // The same conventions and boundary on Vue single-file components - the
+        // view layer is exactly where cross-module reaching is most likely.
+        files: VUE_FILES,
+        plugins: {
+            '@sinemacula/web-core': plugin,
+        },
+        languageOptions: {
+            parser: vueParser,
+            parserOptions: {
+                parser: tseslint.parser,
+            },
+        },
+        rules: CONVENTIONS,
+    },
+    {
+        // The feature-module contract (module.ts / routes.ts / route-names.ts).
         files: MODULE_TS_FILES,
         plugins: {
             '@sinemacula/web-core': plugin,
@@ -63,13 +65,6 @@ export default [
             '@sinemacula/web-core/module-export-names': 'error',
             '@sinemacula/web-core/route-name-namespacing': 'error',
             '@sinemacula/web-core/route-name-via-constant': 'error',
-        },
-    },
-    {
-        // Tests may reach across boundaries to assert internals.
-        files: ['**/*.test.ts', '**/*.test.tsx'],
-        rules: {
-            'no-restricted-imports': 'off',
         },
     },
 ];

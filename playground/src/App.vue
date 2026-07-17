@@ -14,7 +14,7 @@ import { RouterView } from 'vue-router';
 import ConfirmHost from '@/components/confirm-host.vue';
 import NavigationProgress from '@/components/navigation-progress.vue';
 import ToastHost from '@/components/toast-host.vue';
-import { useFatalBoundary } from '@/modules/errors/composables/use-fatal-boundary';
+import { useFatalBoundary } from '@/composables/use-fatal-boundary';
 
 const { t } = useI18n();
 const boundary = useFatalBoundary();

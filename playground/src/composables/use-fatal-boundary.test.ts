@@ -9,8 +9,8 @@ import type { ErrorReporter } from '@sinemacula/web-core/reporting/error-reporte
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp, defineComponent, h, nextTick, ref } from 'vue';
 
-import type { FatalBoundary } from '@/modules/errors/composables/use-fatal-boundary';
-import { useFatalBoundary } from '@/modules/errors/composables/use-fatal-boundary';
+import type { FatalBoundary } from '@/composables/use-fatal-boundary';
+import { useFatalBoundary } from '@/composables/use-fatal-boundary';
 import { initialiseReporting, resetReporting } from '@/services/reporting';
 
 /**
