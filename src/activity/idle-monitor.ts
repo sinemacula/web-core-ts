@@ -1,9 +1,9 @@
 /**
  * User-idle detection.
  *
- * Enterprise consumers need to know when a tab has gone untouched for a
- * policy-defined period - most commonly to drive an auto-logout - but that
- * policy is an application decision, not a kernel one. This monitor is the
+ * A tab may go untouched for a policy-defined period - most commonly to trigger
+ * an auto-logout - but that policy is an application decision, not a kernel one.
+ * This monitor is the
  * seam: it arms a countdown on a small set of activity events, resets the
  * countdown whenever activity is observed, and notifies subscribers once the
  * countdown lapses. Applications wire the notification to whatever policy they

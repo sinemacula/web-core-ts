@@ -1,11 +1,10 @@
 /**
  * Screen-facing list-query composable.
  *
- * `useListQuery` is the primary UI surface for resource lists. Screen
- * developers think in terms of plain values: "set the status filter to
- * 'active'", "search for 'Alice'", "sort by name descending". All wire-
- * protocol knowledge is encapsulated in the {@link ListQueryDefinition}
- * declared once by the module author.
+ * `useListQuery` is the primary UI surface for resource lists. It accepts plain
+ * values - "set the status filter to 'active'", "search for 'Alice'", "sort by
+ * name descending" - and encapsulates all wire-protocol knowledge in the
+ * {@link ListQueryDefinition} declared once by the module author.
  *
  * Compile order (applied on every reactive recomputation):
  * 1. `ApiQuery.create()`

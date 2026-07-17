@@ -1,5 +1,5 @@
 /**
- * Developer-friendly filter mappers for the list-query layer.
+ * Filter mappers for the list-query layer.
  *
  * Each factory function in the {@link filter} namespace returns a
  * {@link ListFilter} that knows how to apply one kind of filter condition to an
