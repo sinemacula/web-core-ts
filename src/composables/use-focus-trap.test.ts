@@ -1,8 +1,8 @@
 /**
  * Unit tests for use-focus-trap.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -11,8 +11,8 @@ import { ref } from 'vue';
 import { useFocusTrap } from './use-focus-trap';
 
 /**
- * Build a container div with the given inner HTML and append it to the
- * document body so `isConnected` works correctly.
+ * Build a container div with the given inner HTML and append it to the document
+ * body so `isConnected` works correctly.
  *
  * @param innerHtml - the HTML string to place inside the container
  * @returns the mounted container element
@@ -169,7 +169,8 @@ describe('useFocusTrap', () => {
             (container.querySelector<HTMLElement>('#middle') as HTMLElement).focus();
             pressKey('Tab');
 
-            // default behaviour: focus stays on middle (no preventDefault in this path)
+            // default behaviour: focus stays on middle (no preventDefault in
+            // this path)
             expect(document.activeElement?.id).toBe('middle');
         });
 
@@ -215,7 +216,8 @@ describe('useFocusTrap', () => {
             // Remove the button so the container is now empty
             (container.querySelector<HTMLElement>('#dyn') as HTMLElement).remove();
 
-            // Fire the Tab event directly on the container (the listener is attached there)
+            // Fire the Tab event directly on the container (the listener is
+            // attached there)
             expect(() => {
                 container.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false, bubbles: true }));
             }).not.toThrow();
@@ -226,7 +228,8 @@ describe('useFocusTrap', () => {
 
     describe('deactivate when no element was focused before activate', () => {
         it('deactivate is a safe no-op when activeElement was not an HTMLElement at activation time', () => {
-            // Simulate a non-HTMLElement active element (e.g. SVGElement or null)
+            // Simulate a non-HTMLElement active element (e.g. SVGElement or
+            // null)
             const spy = vi.spyOn(document, 'activeElement', 'get').mockReturnValueOnce(null);
 
             container = buildContainer('<button id="sole">Sole</button>');

@@ -1,15 +1,15 @@
 /**
  * Session module context.
  *
- * The resolved session-module options and collaborators, installed once at
- * the module's register phase and read lazily by the session store, the
- * guard factories, and the authorization helpers. The context carries the
- * storage keys, the route identity, the storage adapter, the lazily-built
- * session API gateway, and the single token-refresh authority that both the
- * reactive 401 path and the proactive refresh timer route through.
+ * The resolved session-module options and collaborators, installed once at the
+ * module's register phase and read lazily by the session store, the guard
+ * factories, and the authorization helpers. The context carries the storage
+ * keys, the route identity, the storage adapter, the lazily-built session API
+ * gateway, and the single token-refresh authority that both the reactive 401
+ * path and the proactive refresh timer route through.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
@@ -40,8 +40,8 @@ export interface SessionContext<U extends SessionUser = SessionUser> {
 
     /**
      * The single refresh authority: both the reactive 401 path and the
-     * proactive refresh timer route through it, so concurrent refresh
-     * attempts collapse into one in-flight call.
+     * proactive refresh timer route through it, so concurrent refresh attempts
+     * collapse into one in-flight call.
      */
     readonly coordinator: TokenRefreshCoordinator;
 
@@ -52,8 +52,8 @@ export interface SessionContext<U extends SessionUser = SessionUser> {
     readonly parseTimestamp: (value: string) => number | null;
 
     /**
-     * Resolve the stable device fingerprint, generating and persisting the
-     * uuid on first use.
+     * Resolve the stable device fingerprint, generating and persisting the uuid
+     * on first use.
      */
     readonly device: () => SessionDevice;
 }

@@ -5,11 +5,11 @@
  * and data lifecycle as reactive state. Screens compose it with a
  * `useListQuery` `parameters` computed ref (via `watch`) and a `ResourceClient`
  * method as the fetcher; `useListQuery` decides *what* to ask for, and this
- * composable owns *when* to run, when to abort a stale run, and what the
- * latest settled state looks like.
+ * composable owns *when* to run, when to abort a stale run, and what the latest
+ * settled state looks like.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef, Ref, WatchSource } from 'vue';
@@ -19,8 +19,8 @@ import { computed, getCurrentScope, onScopeDispose, ref, watch } from 'vue';
  * Executes a single run of a request, given the `AbortSignal` for that run.
  *
  * Fetchers that forward the signal to their transport (e.g. `HttpClient`'s
- * `signal` option) let {@link useResource} cancel superseded or stopped runs
- * at the network layer.
+ * `signal` option) let {@link useResource} cancel superseded or stopped runs at
+ * the network layer.
  *
  * @typeParam Value - the resolved value type
  */
@@ -58,7 +58,9 @@ export interface Resource<Value> {
     /** The most recently resolved value, or `null` before the first success. */
     readonly data: Ref<Value | null>;
 
-    /** Whatever the fetcher threw on its most recent run, or `null` when none. */
+    /**
+     * Whatever the fetcher threw on its most recent run, or `null` when none.
+     */
     readonly error: Ref<unknown>;
 
     /** `true` while the latest run is in flight. */
@@ -84,9 +86,9 @@ export interface Resource<Value> {
  * Fetches immediately on creation unless `immediate` is `false`, and again
  * whenever `watch` fires. Every run gets its own `AbortController`, which
  * aborts the previous in-flight run; a sequence-token guard discards results
- * and errors from superseded runs regardless of whether the fetcher honours
- * the signal, since the abort alone cannot force a non-cooperative fetcher to
- * stop. `error` resets to `null` at the start of each run, and `data` is left
+ * and errors from superseded runs regardless of whether the fetcher honours the
+ * signal, since the abort alone cannot force a non-cooperative fetcher to stop.
+ * `error` resets to `null` at the start of each run, and `data` is left
  * untouched while a reload is in flight so the screen can keep showing the
  * stale value. When a run's own signal turns out to be aborted, its rejection
  * is swallowed - a cancel is not an error.

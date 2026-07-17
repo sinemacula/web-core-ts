@@ -1,12 +1,12 @@
 /**
  * Console analytics tracker adapter.
  *
- * Writes every analytics call to the browser console via `console.info` for
- * use during development. Not intended for production - swap in a real
- * provider adapter via the AnalyticsTracker port when deploying.
+ * Writes every analytics call to the browser console via `console.info` for use
+ * during development. Not intended for production - swap in a real provider
+ * adapter via the AnalyticsTracker port when deploying.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { AnalyticsTracker } from './analytics-tracker';
@@ -20,7 +20,9 @@ export class ConsoleAnalyticsTracker implements AnalyticsTracker {
         console.info('[AnalyticsTracker] track', event, ...(properties !== undefined ? [properties] : []));
     }
 
-    /** Write the page name and its properties to the console via `console.info`. */
+    /**
+     * Write the page name and its properties to the console via `console.info`.
+     */
     page(name: string, properties?: Readonly<Record<string, unknown>>): void {
         console.info('[AnalyticsTracker] page', name, ...(properties !== undefined ? [properties] : []));
     }

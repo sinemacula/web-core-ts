@@ -3,14 +3,13 @@
  *
  * Resolves the error reporter, analytics tracker, and logger from the
  * application's optional factories, installs each instance into its kernel
- * service holder, and creates the breadcrumb trail. Without a factory the
- * local environment gets console adapters and every other environment gets
- * the null adapters. The instances and trail are returned so the
- * orchestrator can wire global error handling and page tracking over them
- * without ambient reads.
+ * service holder, and creates the breadcrumb trail. Without a factory the local
+ * environment gets console adapters and every other environment gets the null
+ * adapters. The instances and trail are returned so the orchestrator can wire
+ * global error handling and page tracking over them without ambient reads.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { AnalyticsTracker } from '../analytics/analytics-tracker';

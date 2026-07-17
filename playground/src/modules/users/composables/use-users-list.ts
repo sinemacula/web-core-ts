@@ -1,8 +1,8 @@
 /**
  * Users list screen state - the reference composition of the query layer.
  *
- * This composable is the worked example for building a resource list screen
- * out of the three query-layer primitives, each owning one concern:
+ * This composable is the worked example for building a resource list screen out
+ * of the three query-layer primitives, each owning one concern:
  *
  * 1. `useListQuery(userList)` - the screen-facing query builder. Turns plain
  *    values ("search for 'alice'", "sort by full_name") into a compiled
@@ -13,17 +13,17 @@
  *    validates every row through `mapUserRow`.
  * 3. `useResource(...)` - the execution and lifecycle layer. Re-runs the
  *    client's `list` method whenever `list.parameters` changes, aborting a
- *    superseded run and exposing `data`, `error`, `isLoading` and
- *    `hasLoaded` as reactive state.
+ *    superseded run and exposing `data`, `error`, `isLoading` and `hasLoaded`
+ *    as reactive state.
  *
- * Free-text search is debounced here, not in the view: `searchInput` is the
- * ref the view binds to directly, and every keystroke restarts a 300ms timer
- * before the settled value is committed to the list query via `list.search`.
- * Keeping the timer here (rather than in `users-view.vue`) is what keeps the
- * view a pure template - all behaviour, including timing, lives in this file.
+ * Free-text search is debounced here, not in the view: `searchInput` is the ref
+ * the view binds to directly, and every keystroke restarts a 300ms timer before
+ * the settled value is committed to the list query via `list.search`. Keeping
+ * the timer here (rather than in `users-view.vue`) is what keeps the view a
+ * pure template - all behaviour, including timing, lives in this file.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { PaginationMeta } from '@sinemacula/web-core/query/envelope';
@@ -46,8 +46,8 @@ const SEARCH_DEBOUNCE_MS = 300;
 /**
  * Parse the API's wire-format timestamp (`'YYYY-MM-DD HH:MM:SS'`) as a UTC
  * instant, mirroring the auth module's session-expiry parsing. The view uses
- * this to hand a real `Date` to `useI18n().d()` for locale-aware rendering
- * of a row's `createdAt`.
+ * this to hand a real `Date` to `useI18n().d()` for locale-aware rendering of a
+ * row's `createdAt`.
  *
  * @param wireTimestamp - the wire-format timestamp
  * @returns the parsed instant as a `Date`
@@ -69,38 +69,54 @@ export function parseWireTimestamp(wireTimestamp: string): Date {
 export interface UsersList {
     /** The current page of mapped user rows. */
     readonly rows: ComputedRef<readonly UserListItem[]>;
-    /** Pagination metadata for the current page, or null before the first response. */
+
+    /**
+     * Pagination metadata for the current page, or null before the first
+     * response.
+     */
     readonly meta: ComputedRef<PaginationMeta | null>;
+
     /** True while the latest request is in flight. */
     readonly isLoading: Ref<boolean>;
+
     /** True once a request has resolved successfully at least once. */
     readonly hasLoaded: ComputedRef<boolean>;
+
     /** Whatever the latest request threw, or null when none. */
     readonly error: Ref<unknown>;
+
     /** Two-way bound search field value; debounces into the list query. */
     readonly searchInput: Ref<string>;
+
     /** The search term currently committed to the list query. */
     readonly searchTerm: ComputedRef<string>;
+
     /**
      * Commit a search term immediately, bypassing the debounce.
      *
      * @param term - the search term
      */
     search(term: string): void;
+
     /** The active sort, or null when none is set. */
     readonly sort: ComputedRef<SortDefault | null>;
+
     /**
      * Sort by a column, toggling direction when the column is already active.
      *
      * @param column - the column to sort by
      */
     sortBy(column: string): void;
+
     /** The current 1-based page number. */
     readonly page: ComputedRef<number>;
+
     /** Advance to the next page; a no-op once `meta` reports the last page. */
     next(): void;
+
     /** Go to the previous page, clamped at page 1. */
     previous(): void;
+
     /** Re-run the current request. */
     refetch(): Promise<void>;
 }
@@ -108,11 +124,12 @@ export interface UsersList {
 /**
  * Build the debounced search input ref.
  *
- * Every change to the returned ref restarts a {@link SEARCH_DEBOUNCE_MS}
- * timer before `commit` is called with the settled value. The pending timer
- * is cleared on scope disposal so a stale commit cannot fire after teardown.
+ * Every change to the returned ref restarts a {@link SEARCH_DEBOUNCE_MS} timer
+ * before `commit` is called with the settled value. The pending timer is
+ * cleared on scope disposal so a stale commit cannot fire after teardown.
  *
- * @param commit - called with the settled search term once the debounce window elapses
+ * @param commit - called with the settled search term once the debounce window
+ * elapses
  * @param initial - the initial value of the search input
  * @returns the debounced search input ref
  */
@@ -143,9 +160,11 @@ function useSearchDebounce(commit: (term: string) => void, initial: string): Ref
  * Build a `next()` control guarded against advancing past the last page.
  *
  * @param page - the current 1-based page number
- * @param meta - the latest pagination metadata, or null before the first response
+ * @param meta - the latest pagination metadata, or null before the first
+ * response
  * @param advance - the underlying page-advance function
- * @returns a `next()` function that is a no-op once `meta` reports the last page
+ * @returns a `next()` function that is a no-op once `meta` reports the last
+ * page
  */
 function createGuardedNext(
     page: ComputedRef<number>,

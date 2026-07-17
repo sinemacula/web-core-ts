@@ -1,11 +1,10 @@
 /**
  * Screen-facing list-query composable.
  *
- * `useListQuery` is the primary UI surface for resource lists. Screen
- * developers think in terms of plain values: "set the status filter to
- * 'active'", "search for 'Alice'", "sort by name descending". All wire-
- * protocol knowledge is encapsulated in the {@link ListQueryDefinition}
- * declared once by the module author.
+ * `useListQuery` is the primary UI surface for resource lists. It accepts plain
+ * values - "set the status filter to 'active'", "search for 'Alice'", "sort by
+ * name descending" - and encapsulates all wire-protocol knowledge in the
+ * {@link ListQueryDefinition} declared once by the module author.
  *
  * Compile order (applied on every reactive recomputation):
  * 1. `ApiQuery.create()`
@@ -16,11 +15,11 @@
  * 6. `limit(pageSize ?? 25)` and `page(currentPage)`
  * 7. Each registered refinement, in call order
  *
- * Changing any filter, the search term, or the active sort resets the page to
- * 1 - standard list UX so stale page offsets are never sent to the server.
+ * Changing any filter, the search term, or the active sort resets the page to 1
+ * - standard list UX so stale page offsets are never sent to the server.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef, Ref } from 'vue';
@@ -45,8 +44,8 @@ const MIN_PAGE = 1;
  * bind `parameters` to a data-fetching watcher) and call the mutating methods
  * to respond to user interactions.
  *
- * @typeParam Filters - the named-filter record from the definition; drives
- *   the key- and value-typing of {@link setFilter} and {@link clearFilter}
+ * @typeParam Filters - the named-filter record from the definition; drives the
+ * key- and value-typing of {@link setFilter} and {@link clearFilter}
  */
 export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
     /**
@@ -56,18 +55,22 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
     readonly query: ComputedRef<ApiQuery>;
 
     /**
-     * The flat query-parameter record derived from {@link query}, ready to
-     * pass to an `HttpClient` method.
+     * The flat query-parameter record derived from {@link query}, ready to pass
+     * to an `HttpClient` method.
      */
     readonly parameters: ComputedRef<QueryParameters>;
 
     /**
      * Snapshot of the currently active filter values, keyed by filter name.
-     * `null` entries are not stored; cleared filters are absent from the record.
+     * `null` entries are not stored; cleared filters are absent from the
+     * record.
      */
     readonly filterValues: ComputedRef<Readonly<Partial<Record<keyof Filters & string, unknown>>>>;
 
-    /** The current free-text search term (empty string when no search is active). */
+    /**
+     * The current free-text search term (empty string when no search is
+     * active).
+     */
     readonly searchTerm: ComputedRef<string>;
 
     /**
@@ -101,8 +104,8 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
     clearFilters(): void;
 
     /**
-     * Set the free-text search term. An empty string clears the search.
-     * Resets the page to 1.
+     * Set the free-text search term. An empty string clears the search. Resets
+     * the page to 1.
      *
      * @param term - the search term
      */
@@ -122,7 +125,7 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
      *
      * @param column - the column to sort by
      * @param direction - optional explicit direction; omit to toggle when the
-     *   column is already active
+     * column is already active
      * @throws {Error} when `column` is not in `sortable`
      */
     sortBy(column: string, direction?: 'asc' | 'desc'): void;
@@ -150,13 +153,13 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
      * appends to the existing list; earlier refinements are preserved.
      *
      * @param mutate - a function that receives the partially-built query and
-     *   returns the refined query
+     * returns the refined query
      */
     refine(mutate: (query: ApiQuery) => ApiQuery): void;
 
     /**
-     * Reset everything - filters, search, sort, page, and refinements - back
-     * to the definition's defaults.
+     * Reset everything - filters, search, sort, page, and refinements - back to
+     * the definition's defaults.
      */
     reset(): void;
 }
@@ -174,8 +177,8 @@ export function useListQuery<Filters extends Record<string, ListFilter<never>>>(
     /**
      * Active filter entries in insertion order.
      *
-     * Each entry pairs the screen-vocabulary name (for `filterValues`) with
-     * the typed {@link ListFilter} instance and the concrete value. Storing the
+     * Each entry pairs the screen-vocabulary name (for `filterValues`) with the
+     * typed {@link ListFilter} instance and the concrete value. Storing the
      * instance here avoids a definition lookup at compile time, eliminating a
      * structurally-unreachable guard branch.
      */
@@ -209,7 +212,8 @@ export function useListQuery<Filters extends Record<string, ListFilter<never>>>(
 }
 
 /**
- * The mutable reactive state a {@link useListQuery} instance compiles and mutates.
+ * The mutable reactive state a {@link useListQuery} instance compiles and
+ * mutates.
  */
 interface ListQueryState {
     readonly activeFilters: Ref<Map<string, { filter: ListFilter<unknown>; value: unknown }>>;
@@ -230,7 +234,8 @@ type FilterMutations<Filters extends Record<string, ListFilter<never>>> = Pick<
 >;
 
 /**
- * The sort, pagination, refinement, and reset controls of the {@link ListQuery} contract.
+ * The sort, pagination, refinement, and reset controls of the {@link ListQuery}
+ * contract.
  *
  * @typeParam Filters - the named-filter record from the definition
  */
@@ -396,11 +401,13 @@ function createFilterMutations<Filters extends Record<string, ListFilter<never>>
 }
 
 /**
- * Build the sort, pagination, refinement, and reset controls for a {@link useListQuery} instance.
+ * Build the sort, pagination, refinement, and reset controls for a
+ * {@link useListQuery} instance.
  *
  * @param definition - the frozen definition produced by {@link defineListQuery}
  * @param state - the reactive state the controls mutate
- * @returns the sort, pagination, refinement, and reset half of the {@link ListQuery} contract
+ * @returns the sort, pagination, refinement, and reset half of the
+ * {@link ListQuery} contract
  * @typeParam Filters - the named-filter record from the definition
  */
 function createNavigationMutations<Filters extends Record<string, ListFilter<never>>>(
@@ -411,7 +418,8 @@ function createNavigationMutations<Filters extends Record<string, ListFilter<nev
      * Set or toggle the active sort, rejecting columns outside `sortable`.
      *
      * @param column - the column to sort by
-     * @param direction - explicit direction; omit to toggle an already-active column
+     * @param direction - explicit direction; omit to toggle an already-active
+     * column
      * @throws {@link QueryError} when `column` is not in `sortable`
      */
     function sortBy(column: string, direction?: 'asc' | 'desc'): void {
@@ -463,14 +471,16 @@ function createNavigationMutations<Filters extends Record<string, ListFilter<nev
     /**
      * Append a persistent refinement applied after all standard query steps.
      *
-     * @param mutate - receives the partially-built query and returns the refined query
+     * @param mutate - receives the partially-built query and returns the
+     * refined query
      */
     function refine(mutate: (query: ApiQuery) => ApiQuery): void {
         state.refinements.value = [...state.refinements.value, mutate];
     }
 
     /**
-     * Reset filters, search, sort, page, and refinements to the definition's defaults.
+     * Reset filters, search, sort, page, and refinements to the definition's
+     * defaults.
      */
     function reset(): void {
         state.activeFilters.value = new Map();

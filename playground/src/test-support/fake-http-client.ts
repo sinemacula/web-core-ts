@@ -4,8 +4,8 @@
  * Records every call and replays queued results in order. An empty queue
  * resolves to undefined, matching a 204-style response.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { HttpClient, HttpRequestOptions } from '@sinemacula/web-core/http/http-client';

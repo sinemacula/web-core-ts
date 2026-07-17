@@ -1,8 +1,8 @@
 /**
  * Unit tests for the default session API gateway.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it } from 'vitest';
@@ -110,7 +110,9 @@ function userEnvelope(permissions?: unknown): Record<string, unknown> {
 const CREDENTIALS = { email: 'alice@example.com', password: 'secret' };
 const DEVICE = { uuid: 'device-uuid', os: 'WEB' };
 
-/** The epoch-millisecond instant for the UTC wire timestamp 2026-12-31 23:59:59. */
+/**
+ * The epoch-millisecond instant for the UTC wire timestamp 2026-12-31 23:59:59.
+ */
 const SESSION_EXPIRY_EPOCH_MS = 1_798_761_599_000;
 
 describe('createDefaultSessionApi', () => {

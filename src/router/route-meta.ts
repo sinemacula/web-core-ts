@@ -1,11 +1,11 @@
 /**
  * Route meta augmentation.
  *
- * Declares the shape of `route.meta` across the application so middleware
- * and titles are type-checked at the route definition site.
+ * Declares the shape of `route.meta` across the application so middleware and
+ * titles are type-checked at the route definition site.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { RouteMiddleware } from './middleware';

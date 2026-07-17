@@ -1,12 +1,12 @@
 /**
  * Global error handling installer.
  *
- * Wires the Vue error handler and browser window error/rejection listeners
- * to the provided ErrorReporter so that all unhandled exceptions are captured
- * in one place regardless of their origin.
+ * Wires the Vue error handler and browser window error/rejection listeners to
+ * the provided ErrorReporter so that all unhandled exceptions are captured in
+ * one place regardless of their origin.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { App } from 'vue';
@@ -20,11 +20,20 @@ import type { ErrorReporter } from './error-reporter';
 export interface GlobalErrorHandlingOptions {
     /** The Vue application instance to attach the error handler to. */
     readonly app: App;
+
     /** The reporter that receives every captured error or message. */
     readonly reporter: ErrorReporter;
-    /** Optional breadcrumb trail; when present its snapshot is attached to every report. */
+
+    /**
+     * Optional breadcrumb trail; when present its snapshot is attached to every
+     * report.
+     */
     readonly trail?: BreadcrumbTrail;
-    /** The window to attach native error listeners to (default globalThis.window). */
+
+    /**
+     * The window to attach native error listeners to (default
+     * globalThis.window).
+     */
     readonly targetWindow?: Window;
 }
 
@@ -33,11 +42,12 @@ export interface GlobalErrorHandlingOptions {
  *
  * - `app.config.errorHandler` catches errors thrown inside Vue components.
  * - A `window 'error'` listener catches synchronous script errors.
- * - A `window 'unhandledrejection'` listener catches unhandled Promise rejections.
+ * - A `window 'unhandledrejection'` listener catches unhandled Promise
+ *   rejections.
  *
- * The returned teardown restores the Vue error handler that was in place
- * before installation and removes both window listeners; calling it more
- * than once is a no-op.
+ * The returned teardown restores the Vue error handler that was in place before
+ * installation and removes both window listeners; calling it more than once is
+ * a no-op.
  *
  * @param options - the app, reporter, optional trail and optional window target
  * @returns a teardown that undoes the installation
@@ -68,7 +78,9 @@ export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions):
         reporter.captureError(event.error ?? event.message, context);
     };
 
-    /** Forward an unhandled promise rejection to the reporter with breadcrumbs. */
+    /**
+     * Forward an unhandled promise rejection to the reporter with breadcrumbs.
+     */
     const onUnhandledRejection = (event: PromiseRejectionEvent): void => {
         const context: Record<string, unknown> = { source: 'unhandledrejection' };
 
@@ -91,7 +103,8 @@ export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions):
 
         installed = false;
 
-        // Conditional restore: exactOptionalPropertyTypes forbids assigning undefined back.
+        // Conditional restore: exactOptionalPropertyTypes forbids assigning
+        // undefined back.
         if (previousErrorHandler === undefined) {
             delete app.config.errorHandler;
         } else {

@@ -1,8 +1,8 @@
 /**
  * Unit tests for useFeatureFlag and useVariant composables.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it } from 'vitest';
@@ -139,9 +139,9 @@ describe('useVariant', () => {
 
         flags.replace({ flow: 'checkout-v2' });
 
-        // The computed was cached at checkout-v1; since the onChange subscription
-        // was removed by onScopeDispose, tick is never bumped and the cached
-        // value is returned unchanged.
+        // The computed was cached at checkout-v1; since the onChange
+        // subscription was removed by onScopeDispose, tick is never bumped and
+        // the cached value is returned unchanged.
         expect(result?.value).toBe('checkout-v1');
     });
 });

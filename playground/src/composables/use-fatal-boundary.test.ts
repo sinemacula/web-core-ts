@@ -1,16 +1,16 @@
 /**
  * Unit tests for useFatalBoundary.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ErrorReporter } from '@sinemacula/web-core/reporting/error-reporter';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp, defineComponent, h, nextTick, ref } from 'vue';
 
-import type { FatalBoundary } from '@/modules/errors/composables/use-fatal-boundary';
-import { useFatalBoundary } from '@/modules/errors/composables/use-fatal-boundary';
+import type { FatalBoundary } from '@/composables/use-fatal-boundary';
+import { useFatalBoundary } from '@/composables/use-fatal-boundary';
 import { initialiseReporting, resetReporting } from '@/services/reporting';
 
 /**
@@ -21,8 +21,8 @@ function fakeReporter(): ErrorReporter {
 }
 
 /**
- * A component that throws during `setup()` once `shouldThrow` becomes true,
- * so the surrounding boundary only observes the error on a later render.
+ * A component that throws during `setup()` once `shouldThrow` becomes true, so
+ * the surrounding boundary only observes the error on a later render.
  */
 const Thrower = defineComponent({
     props: { shouldThrow: { type: Boolean, required: true } },
@@ -42,10 +42,11 @@ interface MountedBoundary {
 }
 
 /**
- * Mount a host component that installs {@link useFatalBoundary} around a
- * child whose presence is controlled by the returned `showThrower` setter.
+ * Mount a host component that installs {@link useFatalBoundary} around a child
+ * whose presence is controlled by the returned `showThrower` setter.
  *
- * @returns the boundary state, a setter for the guarded child, and an unmount callback
+ * @returns the boundary state, a setter for the guarded child, and an unmount
+ * callback
  */
 function mountBoundary(): MountedBoundary {
     let boundary!: FatalBoundary;

@@ -11,9 +11,9 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-// biome-ignore-all lint/style/useNamingConvention: ESLint visitor keys are AST node-type names.
+// biome-ignore-all lint/style/useNamingConvention: ESLint AST visitor keys
 
-import { createRule, moduleFolder } from './lib.js';
+import { createRule, moduleFolder, typeReferenceName, unwrapExpression } from './lib.js';
 
 /** Whether a property is the non-computed `name` key of an object. */
 function isNameProperty(property) {
@@ -25,6 +25,25 @@ function isNameProperty(property) {
     );
 }
 
+/**
+ * Whether a declarator asserts module identity - annotated `: ModuleDefinition`
+ * (including a qualified `ns.ModuleDefinition`), `... satisfies ModuleDefinition`,
+ * or an `... as ModuleDefinition` cast.
+ */
+function declaresModule(node) {
+    if (typeReferenceName(node.id?.typeAnnotation?.typeAnnotation) === 'ModuleDefinition') {
+        return true;
+    }
+
+    const init = node.init;
+
+    return (
+        (init?.type === 'TSSatisfiesExpression' || init?.type === 'TSAsExpression') &&
+        typeReferenceName(init.typeAnnotation) === 'ModuleDefinition'
+    );
+}
+
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'module-name-matches-folder',
     meta: {
@@ -38,8 +57,9 @@ export default createRule({
         },
     },
     defaultOptions: [],
+    // Stryker restore all
     create(context) {
-        const filename = (context.filename ?? context.getFilename()).replace(/\\/g, '/');
+        const filename = context.filename.replace(/\\/g, '/');
 
         if (!/(?:^|\/)module\.ts$/.test(filename)) {
             return {};
@@ -53,13 +73,17 @@ export default createRule({
 
         return {
             VariableDeclarator(node) {
-                const annotation = node.id?.typeAnnotation?.typeAnnotation;
-
-                if (annotation?.typeName?.name !== 'ModuleDefinition' || node.init?.type !== 'ObjectExpression') {
+                if (!declaresModule(node)) {
                     return;
                 }
 
-                const nameProperty = node.init.properties.find(isNameProperty);
+                const object = unwrapExpression(node.init);
+
+                if (object?.type !== 'ObjectExpression') {
+                    return;
+                }
+
+                const nameProperty = object.properties.find(isNameProperty);
 
                 if (nameProperty?.value.type !== 'Literal' || typeof nameProperty.value.value !== 'string') {
                     return;

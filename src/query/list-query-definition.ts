@@ -6,8 +6,8 @@
  * Screen developers receive the definition and interact with it only through
  * {@link useListQuery} - they never read these fields directly.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ApiQuery } from './api-query';
@@ -29,6 +29,7 @@ export type FilterValueOf<Filter> = Filter extends ListFilter<infer V> ? V : nev
 export interface SortDefault {
     /** The column name to sort by. */
     readonly column: string;
+
     /** The sort direction. */
     readonly direction: 'asc' | 'desc';
 }
@@ -36,11 +37,11 @@ export interface SortDefault {
 /**
  * The frozen declaration of a resource list's query capabilities.
  *
- * Created by {@link defineListQuery} and passed to {@link useListQuery}.
- * Every field is optional so simple lists need only declare what they use.
+ * Created by {@link defineListQuery} and passed to {@link useListQuery}. Every
+ * field is optional so simple lists need only declare what they use.
  *
  * @typeParam Filters - a record mapping screen-vocabulary filter names to their
- *   typed {@link ListFilter} implementations
+ * typed {@link ListFilter} implementations
  */
 export interface ListQueryDefinition<Filters extends Record<string, ListFilter<never>> = Record<string, never>> {
     /**
@@ -58,9 +59,9 @@ export interface ListQueryDefinition<Filters extends Record<string, ListFilter<n
     readonly search?: ListFilter<string>;
 
     /**
-     * The columns the screen may sort by. When set, `sortBy` rejects any
-     * column not in this list by throwing a descriptive `Error`. When
-     * `undefined`, all columns are accepted.
+     * The columns the screen may sort by. When set, `sortBy` rejects any column
+     * not in this list by throwing a descriptive `Error`. When `undefined`, all
+     * columns are accepted.
      */
     readonly sortable?: readonly string[];
 
@@ -97,7 +98,7 @@ export interface ListQueryDefinition<Filters extends Record<string, ListFilter<n
  * @param definition - the list configuration
  * @returns the same definition, frozen
  * @typeParam Filters - inferred from the `filters` record; flows through to
- *   `useListQuery` so that `setFilter` is key- and value-typed
+ * `useListQuery` so that `setFilter` is key- and value-typed
  */
 export function defineListQuery<Filters extends Record<string, ListFilter<never>>>(
     definition: ListQueryDefinition<Filters>,

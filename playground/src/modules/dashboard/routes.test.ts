@@ -1,8 +1,8 @@
 /**
  * Unit tests for dashboardRoutes.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { MemoryStorage } from '@sinemacula/web-core/storage/memory-storage';

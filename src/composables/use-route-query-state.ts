@@ -14,8 +14,8 @@
  *  - When the key is absent or its value is null/undefined the configured
  *    default is used.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef } from 'vue';

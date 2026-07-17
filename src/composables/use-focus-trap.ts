@@ -15,8 +15,8 @@
  *   is a safe no-op (no listener is installed, no focus attempt is made). This
  *   avoids throwing when a dialog renders with a loading state.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Ref } from 'vue';

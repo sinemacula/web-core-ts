@@ -1,8 +1,8 @@
 /**
  * Unit tests for envelope unwrapping.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it } from 'vitest';
@@ -30,7 +30,8 @@ function wire(entries: ReadonlyArray<readonly [string, unknown]>): Record<string
 }
 
 /**
- * Validate and map a raw record onto a `Widget`, mirroring a real resource mapper.
+ * Validate and map a raw record onto a `Widget`, mirroring a real resource
+ * mapper.
  *
  * @param raw - the raw wire record
  * @returns the mapped widget

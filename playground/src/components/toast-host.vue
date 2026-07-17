@@ -38,7 +38,10 @@ const politeToasts = computed(() =>
 
 <template>
     <div class="toast-host">
-        <!-- Assertive region: error and warning variants interrupt the screen reader immediately -->
+        <!--
+            Assertive region: error and warning variants interrupt the screen
+            reader immediately
+        -->
         <div role="alert" aria-live="assertive" class="toast-host__region">
             <div
                 v-for="toast in assertiveToasts"
@@ -57,7 +60,10 @@ const politeToasts = computed(() =>
             </div>
         </div>
 
-        <!-- Polite region: success and information variants announce at the next opportunity -->
+        <!--
+            Polite region: success and information variants announce at the next
+            opportunity
+        -->
         <div role="status" aria-live="polite" class="toast-host__region">
             <div
                 v-for="toast in politeToasts"

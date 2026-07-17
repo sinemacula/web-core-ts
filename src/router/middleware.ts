@@ -1,13 +1,13 @@
 /**
  * Route middleware contract and pipeline.
  *
- * Laravel-style navigation middleware: each route lists middleware in its
- * meta, the pipeline runs them in order, and the first non-`next` result
+ * Laravel-style navigation middleware: each route lists middleware in its meta,
+ * the pipeline runs them in order, and the first non-`next` result
  * short-circuits navigation. Results are a discriminated union, never an
  * imperative `next()` callback.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import './route-meta';

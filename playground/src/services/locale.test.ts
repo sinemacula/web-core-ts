@@ -1,8 +1,8 @@
 /**
  * Unit tests for the locale-switcher service.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { LocaleSwitcher } from '@sinemacula/web-core/i18n/application-i18n';

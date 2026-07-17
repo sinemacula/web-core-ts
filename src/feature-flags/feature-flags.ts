@@ -16,8 +16,8 @@
  * this call to the auth flow - wire it from a dedicated context-sync layer so
  * coupling stays unidirectional.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**
@@ -47,7 +47,7 @@ export interface FeatureFlags {
      *
      * @param key - the flag key to look up
      * @param fallback - the value returned when the flag is absent or
-     *   non-boolean; defaults to `false`
+     * non-boolean; defaults to `false`
      * @returns the resolved boolean value, or the fallback
      */
     isEnabled(key: string, fallback?: boolean): boolean;
@@ -57,8 +57,8 @@ export interface FeatureFlags {
      * fallback, or a missing key, resolves to the fallback.
      *
      * @param key - the flag key to look up
-     * @param fallback - the value returned when the flag is absent or the
-     *   wrong type; its type pins the return type
+     * @param fallback - the value returned when the flag is absent or the wrong
+     * type; its type pins the return type
      * @returns the resolved value, or the fallback
      */
     variant<Value extends FlagValue>(key: string, fallback: Value): Value;

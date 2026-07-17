@@ -12,16 +12,17 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-// biome-ignore-all lint/style/useNamingConvention: ESLint visitor keys are AST node-type names.
+// biome-ignore-all lint/style/useNamingConvention: ESLint AST visitor keys
 
 import { createRule, isTestPath } from './lib.js';
 
 const SNAKE_CASE = /^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$/;
 
-/** The static name of a non-computed property key, or null. */
+/** The static name of a property key (including a computed string literal), or null. */
 function keyName(property) {
+    // `{ ['refresh_token']: 1 }` still writes a snake_case key.
     if (property.computed) {
-        return null;
+        return property.key.type === 'Literal' && typeof property.key.value === 'string' ? property.key.value : null;
     }
 
     if (property.key.type === 'Identifier') {
@@ -35,6 +36,7 @@ function keyName(property) {
     return null;
 }
 
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'no-snake-case-keys',
     meta: {
@@ -48,8 +50,9 @@ export default createRule({
         },
     },
     defaultOptions: [],
+    // Stryker restore all
     create(context) {
-        const filename = (context.filename ?? context.getFilename()).replace(/\\/g, '/');
+        const filename = context.filename.replace(/\\/g, '/');
 
         if (isTestPath(filename)) {
             return {};

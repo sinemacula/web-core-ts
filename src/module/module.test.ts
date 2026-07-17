@@ -1,8 +1,8 @@
 /**
  * Unit tests for module.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it } from 'vitest';
@@ -15,7 +15,9 @@ import { collectModuleGuards, collectModuleMessages, collectModuleRoutes, create
 
 const EmptyComponent = defineComponent({ render: () => null });
 
-/** Build a distinct pass-through guard so ordering is observable by identity. */
+/**
+ * Build a distinct pass-through guard so ordering is observable by identity.
+ */
 function createGuard(): RouteMiddleware {
     return { handle: () => next() };
 }

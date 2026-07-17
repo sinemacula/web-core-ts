@@ -4,11 +4,11 @@
  * App-typed wrapper over the kernel configuration holder, keeping the
  * Laravel-style accessors used across the application: `config()` for the
  * fully-typed tree, `configValue()` for dot-notation lookups. The bootstrap
- * preset installs the production repository; `initialiseConfiguration` is
- * the equivalent test-time seam over the configuration registry.
+ * preset installs the production repository; `initialiseConfiguration` is the
+ * equivalent test-time seam over the configuration registry.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { appConfig, appConfigRepository, installConfig } from '@sinemacula/web-core/app/services';

@@ -2,13 +2,13 @@
  * Application internationalisation wiring.
  *
  * Wraps vue-i18n behind three operations: building the instance, activating a
- * locale, and switching to a new locale at runtime. Activation lazily loads
- * the shared and per-module translations for that locale, installs them, and
+ * locale, and switching to a new locale at runtime. Activation lazily loads the
+ * shared and per-module translations for that locale, installs them, and
  * synchronises the document `lang`/`dir` attributes. Shared translations are
  * injected by the host application; this package owns the mechanics only.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef } from 'vue';
@@ -23,8 +23,8 @@ import { I18nError } from './i18n-error';
 import type { LocaleService } from './locale-service';
 
 /**
- * Datetime and number formats installed on the i18n instance, keyed by
- * locale. Optional: an application with no formatting needs may omit both.
+ * Datetime and number formats installed on the i18n instance, keyed by locale.
+ * Optional: an application with no formatting needs may omit both.
  */
 export interface LocaleFormats {
     readonly datetime?: IntlDateTimeFormats;
@@ -67,8 +67,8 @@ export interface ActivateLocaleOptions {
     readonly targetDocument?: Document;
 
     /**
-     * Replaces the internal module-message collection for both the active
-     * and fallback locale loads when supplied.
+     * Replaces the internal module-message collection for both the active and
+     * fallback locale loads when supplied.
      */
     readonly messageSource?: ModuleMessageSource;
 
@@ -83,9 +83,9 @@ export interface ActivateLocaleOptions {
 /**
  * Load and activate a locale.
  *
- * When `fallbackLocale` is provided and differs from `locale`, its messages
- * are also loaded and installed so that vue-i18n's fallback chain resolves to
- * real translations rather than raw keys.
+ * When `fallbackLocale` is provided and differs from `locale`, its messages are
+ * also loaded and installed so that vue-i18n's fallback chain resolves to real
+ * translations rather than raw keys.
  *
  * @param options - the i18n instance, translation sources and target locale
  */
@@ -143,11 +143,11 @@ export interface LocaleSwitcher {
  * Build a runtime locale switcher.
  *
  * Reuses {@link activateLocale} for the mechanics of loading and installing
- * translations, so switching a locale after boot follows exactly the same
- * path as activating one at boot.
+ * translations, so switching a locale after boot follows exactly the same path
+ * as activating one at boot.
  *
  * @param options - the i18n instance, module registry, locale service and
- *   supported-locale metadata
+ * supported-locale metadata
  * @returns the locale switcher
  */
 export function createLocaleSwitcher(options: LocaleSwitcherOptions): LocaleSwitcher {
@@ -188,7 +188,7 @@ export function createLocaleSwitcher(options: LocaleSwitcherOptions): LocaleSwit
  * @param options - the activation options
  * @param locale - the locale whose messages are loaded
  * @throws {@link I18nError} when collisions are set to error and a module name
- *   equals a shared top-level message key
+ * equals a shared top-level message key
  */
 async function installLocaleMessages(options: ActivateLocaleOptions, locale: string): Promise<void> {
     const sharedLoader = options.sharedLoaders?.[locale];

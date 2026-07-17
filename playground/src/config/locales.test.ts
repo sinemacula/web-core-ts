@@ -1,8 +1,8 @@
 /**
  * Unit tests for localesConfig.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { Environment } from '@sinemacula/web-core/config/environment';
@@ -54,13 +54,6 @@ describe('localesConfig', () => {
         const result = localesConfig(env);
 
         expect(result.supported['en-US']).toStrictEqual({ name: 'English', direction: 'ltr' });
-    });
-
-    it('includes es-ES in the supported map with ltr direction', () => {
-        const env = new Environment(new ObjectEnvironmentSource({}));
-        const result = localesConfig(env);
-
-        expect(result.supported['es-ES']).toStrictEqual({ name: 'Español', direction: 'ltr' });
     });
 
     it('includes fr-FR in the supported map with ltr direction', () => {

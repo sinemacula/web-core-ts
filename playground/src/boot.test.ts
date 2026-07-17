@@ -2,13 +2,13 @@
  * Boot tests for the application composition.
  *
  * The kernel preset's behaviour is covered by its own suite; these tests pin
- * what is application-specific about the composition the entry point feeds
- * it: the configuration registry resolving the fetched runtime document, the
+ * what is application-specific about the composition the entry point feeds it:
+ * the configuration registry resolving the fetched runtime document, the
  * session module guarding the app routes, and the errors module owning the
  * catch-all through its fallback marker.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { WebCoreApp } from '@sinemacula/web-core/app/create-web-core-app';

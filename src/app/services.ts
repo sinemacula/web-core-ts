@@ -6,8 +6,8 @@
  * module services read them through the accessors. `resetWebCoreServices`
  * clears every holder between tests.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { AnalyticsTracker } from '../analytics/analytics-tracker';
@@ -226,7 +226,8 @@ export function installFeatureFlags(instance: FeatureFlags): void {
  * The active feature-flag adapter.
  *
  * @returns the active feature-flag adapter
- * @throws Error when accessed before {@link installFeatureFlags} has been called
+ * @throws Error when accessed before {@link installFeatureFlags} has been
+ * called
  */
 export function featureFlags(): FeatureFlags {
     return featureFlagsHolder.resolve();
@@ -245,15 +246,16 @@ export function installLocaleSwitcher(instance: LocaleSwitcher): void {
  * The active locale switcher.
  *
  * @returns the active locale switcher
- * @throws Error when accessed before {@link installLocaleSwitcher} has been called
+ * @throws Error when accessed before {@link installLocaleSwitcher} has been
+ * called
  */
 export function localeSwitcher(): LocaleSwitcher {
     return localeSwitcherHolder.resolve();
 }
 
 /**
- * Install the realtime connection. Called once at boot, when the
- * application opts in.
+ * Install the realtime connection. Called once at boot, when the application
+ * opts in.
  *
  * @param instance - the realtime connection to install
  */

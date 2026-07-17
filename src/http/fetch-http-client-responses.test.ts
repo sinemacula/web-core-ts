@@ -1,9 +1,9 @@
 /**
- * Unit tests for FetchHttpClient - response handling (success parsing,
- * error mapping, validation errors, and blob downloads).
+ * Unit tests for FetchHttpClient - response handling (success parsing, error
+ * mapping, validation errors, and blob downloads).
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it, vi } from 'vitest';
@@ -116,7 +116,8 @@ describe('FetchHttpClient - error response mapping', () => {
         const error = await client.get('/fail').catch(error => error);
 
         expect(error).toBeInstanceOf(HttpError);
-        // Cast proven safe: toBeInstanceOf(HttpError) assertion guards the type.
+        // Cast proven safe: toBeInstanceOf(HttpError) assertion guards the
+        // type.
         expect((error as HttpError).message).toBe('custom error');
     });
 
@@ -166,7 +167,8 @@ describe('FetchHttpClient - error response mapping', () => {
         const error = await client.get('/fail').catch(error => error);
 
         expect(error).toBeInstanceOf(HttpValidationError);
-        // Cast proven safe: toBeInstanceOf(HttpValidationError) guards the type.
+        // Cast proven safe: toBeInstanceOf(HttpValidationError) guards the
+        // type.
         expect((error as HttpValidationError).errors).toStrictEqual({ email: ['required'] });
     });
 
@@ -178,7 +180,8 @@ describe('FetchHttpClient - error response mapping', () => {
 
         const error = await client.get('/fail').catch(error => error);
 
-        // Cast proven safe: toBeInstanceOf(HttpValidationError) guards the type.
+        // Cast proven safe: toBeInstanceOf(HttpValidationError) guards the
+        // type.
         expect((error as HttpValidationError).errors).toStrictEqual({ field: ['valid', 'also valid'] });
     });
 
@@ -191,7 +194,8 @@ describe('FetchHttpClient - error response mapping', () => {
         const error = await client.get('/fail').catch(error => error);
 
         expect(error).toBeInstanceOf(HttpValidationError);
-        // Cast proven safe: toBeInstanceOf(HttpValidationError) guards the type.
+        // Cast proven safe: toBeInstanceOf(HttpValidationError) guards the
+        // type.
         expect((error as HttpValidationError).errors).toStrictEqual({ other: ['valid'] });
     });
 

@@ -2,13 +2,13 @@
  * SSE adapter for the {@link RealtimeConnection} port.
  *
  * Wraps the browser's native {@link EventSource} API. Note that native
- * EventSource cannot send custom request headers; the recommended pattern
- * for authenticated streams is to embed the token in the query string via
- * the `url` function form, which is called fresh on every connect so that
- * per-connect credentials are always current.
+ * EventSource cannot send custom request headers; the recommended pattern for
+ * authenticated streams is to embed the token in the query string via the `url`
+ * function form, which is called fresh on every connect so that per-connect
+ * credentials are always current.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { ExponentialBackoff } from './exponential-backoff';
@@ -33,30 +33,39 @@ export type EventSourceFactory = (url: string, init: EventSourceInit) => EventSo
 /** Construction options for {@link EventSourceConnection}. */
 export interface EventSourceConnectionOptions {
     /**
-     * The SSE endpoint URL, or a function that returns it. The function form
-     * is called on every `connect()`, enabling per-connect auth tokens in
-     * the query string - the recommended way to authenticate SSE streams
-     * because native EventSource cannot send custom headers.
+     * The SSE endpoint URL, or a function that returns it. The function form is
+     * called on every `connect()`, enabling per-connect auth tokens in the
+     * query string - the recommended way to authenticate SSE streams because
+     * native EventSource cannot send custom headers.
      */
     readonly url: string | (() => string);
-    /** Pass `true` to include credentials (cookies) in the SSE request. Defaults to `false`. */
+
+    /**
+     * Pass `true` to include credentials (cookies) in the SSE request. Defaults
+     * to `false`.
+     */
     readonly withCredentials?: boolean;
-    /** Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`. */
+
+    /**
+     * Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`.
+     */
     readonly backoff?: ExponentialBackoff;
+
     /**
      * Override the EventSource constructor. Defaults to
      * `(url, init) => new EventSource(url, init)`.
      */
     readonly eventSourceFactory?: EventSourceFactory;
+
     /**
      * Awaited after the backoff delay fires and before each reconnect attempt
      * opens a new EventSource. Never called for the initial `connect()` or a
-     * manual `connect()` call. Wire the application's
-     * `TokenRefreshCoordinator` here so an expired token is refreshed before
-     * each reconnect, and pair it with the `url()` builder reading the fresh
-     * token; without this an expired-token connection retries forever with
-     * stale credentials. Rejection abandons the attempt and the next
-     * reconnect is scheduled through the existing backoff path.
+     * manual `connect()` call. Wire the application's `TokenRefreshCoordinator`
+     * here so an expired token is refreshed before each reconnect, and pair it
+     * with the `url()` builder reading the fresh token; without this an
+     * expired-token connection retries forever with stale credentials.
+     * Rejection abandons the attempt and the next reconnect is scheduled
+     * through the existing backoff path.
      */
     readonly beforeReconnect?: () => Promise<void>;
 }
@@ -64,10 +73,10 @@ export interface EventSourceConnectionOptions {
 /**
  * SSE adapter implementing {@link RealtimeConnection}.
  *
- * Reconnects automatically on error using the provided backoff strategy.
- * All registered event listeners are re-attached to every new EventSource
- * after a reconnect. When `beforeReconnect` is supplied, it is awaited
- * before each reconnect opens a new EventSource.
+ * Reconnects automatically on error using the provided backoff strategy. All
+ * registered event listeners are re-attached to every new EventSource after a
+ * reconnect. When `beforeReconnect` is supplied, it is awaited before each
+ * reconnect opens a new EventSource.
  */
 export class EventSourceConnection implements RealtimeConnection {
     readonly #url: string | (() => string);
@@ -86,7 +95,8 @@ export class EventSourceConnection implements RealtimeConnection {
     /**
      * Construct a new SSE connection.
      *
-     * @param options - URL, credentials, backoff strategy, and optional EventSource factory
+     * @param options - URL, credentials, backoff strategy, and optional
+     * EventSource factory
      */
     constructor(options: EventSourceConnectionOptions) {
         this.#url = options.url;
@@ -190,7 +200,8 @@ export class EventSourceConnection implements RealtimeConnection {
     }
 
     /**
-     * Attach a listener for one event name that fans frames out to its handlers.
+     * Attach a listener for one event name that fans frames out to its
+     * handlers.
      *
      * @param source - the EventSource to attach the listener to
      * @param event - the event name to listen for

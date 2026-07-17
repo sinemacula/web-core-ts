@@ -1,25 +1,33 @@
 /**
  * User-idle detection.
  *
- * Enterprise consumers need to know when a tab has gone untouched for a
- * policy-defined period - most commonly to drive an auto-logout - but that
- * policy is an application decision, not a kernel one. This monitor is the
+ * A tab may go untouched for a policy-defined period - most commonly to trigger
+ * an auto-logout - but that policy is an application decision, not a kernel one.
+ * This monitor is the
  * seam: it arms a countdown on a small set of activity events, resets the
  * countdown whenever activity is observed, and notifies subscribers once the
- * countdown lapses. Applications wire the notification to whatever policy
- * they need (`onIdle` calling into an auth logout, a warning dialog, and so
- * on); the kernel only detects idleness.
+ * countdown lapses. Applications wire the notification to whatever policy they
+ * need (`onIdle` calling into an auth logout, a warning dialog, and so on); the
+ * kernel only detects idleness.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 export interface IdleMonitorOptions {
     /** Milliseconds of inactivity before subscribers are notified. */
     readonly timeoutMs: number;
-    /** Event types treated as activity; defaults to pointer, keyboard, wheel and touch input. */
+
+    /**
+     * Event types treated as activity; defaults to pointer, keyboard, wheel and
+     * touch input.
+     */
     readonly events?: readonly string[];
-    /** The window whose activity events are observed; defaults to the global window. */
+
+    /**
+     * The window whose activity events are observed; defaults to the global
+     * window.
+     */
     readonly targetWindow?: Window;
 }
 
@@ -55,7 +63,8 @@ export class IdleMonitor {
     }
 
     /**
-     * Arm the idle countdown and attach activity listeners. Calling start on a running monitor is a no-op.
+     * Arm the idle countdown and attach activity listeners. Calling start on a
+     * running monitor is a no-op.
      */
     start(): void {
         if (this.#started) {
@@ -89,7 +98,8 @@ export class IdleMonitor {
     }
 
     /**
-     * Signal activity manually, resetting the countdown just as a listened event would.
+     * Signal activity manually, resetting the countdown just as a listened
+     * event would.
      */
     touch(): void {
         this.#rearm();

@@ -1,19 +1,19 @@
 /**
  * Deployed-version monitoring.
  *
- * Static artifacts cannot push "a new release is out" to running tabs, so
- * the monitor polls a small version document (by default the runtime
- * environment document, which deploys rewrite per release) on an interval
- * and whenever the tab regains visibility. When the deployed version
- * differs from the booted version, subscribers are notified once per new
- * version - the application decides what to do (sticky toast, reload, ...).
+ * Static artifacts cannot push "a new release is out" to running tabs, so the
+ * monitor polls a small version document (by default the runtime environment
+ * document, which deploys rewrite per release) on an interval and whenever the
+ * tab regains visibility. When the deployed version differs from the booted
+ * version, subscribers are notified once per new version - the application
+ * decides what to do (sticky toast, reload, ...).
  *
  * No service worker is involved by design: the application has no offline
- * requirement, and a worker's install/activate lifecycle introduces the
- * very stale-version problems this monitor exists to solve.
+ * requirement, and a worker's install/activate lifecycle introduces the very
+ * stale-version problems this monitor exists to solve.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { isRecord } from '../support/is-record';
@@ -23,14 +23,27 @@ export type UpdateHandler = (nextVersion: string) => void;
 export interface UpdateMonitorOptions {
     /** The version the running application was booted with. */
     readonly currentVersion: string;
-    /** The version document location; defaults to the runtime environment document. */
+
+    /**
+     * The version document location; defaults to the runtime environment
+     * document.
+     */
     readonly url?: string;
+
     /** Poll interval in milliseconds; defaults to five minutes. */
     readonly interval?: number;
     readonly fetchFn?: typeof fetch;
-    /** Extract the deployed version from the parsed document; defaults to the APP_VERSION entry. */
+
+    /**
+     * Extract the deployed version from the parsed document; defaults to the
+     * APP_VERSION entry.
+     */
     readonly extractVersion?: (payload: unknown) => string | null;
-    /** The document whose visibility triggers focus checks; defaults to the global document. */
+
+    /**
+     * The document whose visibility triggers focus checks; defaults to the
+     * global document.
+     */
     readonly targetDocument?: Document;
 }
 
@@ -117,8 +130,8 @@ export class UpdateMonitor {
     /**
      * Check the deployed version immediately.
      *
-     * Transport failures and malformed documents are swallowed: a missed
-     * check is harmless because the next tick retries.
+     * Transport failures and malformed documents are swallowed: a missed check
+     * is harmless because the next tick retries.
      */
     async checkNow(): Promise<void> {
         let next: string | null;

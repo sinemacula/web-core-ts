@@ -7,8 +7,8 @@
  * installed fake client after this runs and the session still reaches the
  * current one - mirroring how the session module wires the gateway at boot.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { api } from '@sinemacula/web-core/app/services';

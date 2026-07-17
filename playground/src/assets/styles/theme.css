@@ -1,9 +1,9 @@
 /**
  * Sine Macula design tokens.
  *
- * The single source of truth for colour, typography, spacing, shape and
- * depth across every Sine Macula frontend. Plain CSS custom properties - no
- * utility framework. Components consume tokens; nothing hard-codes a value.
+ * The single source of truth for colour, typography, spacing, shape and depth
+ * across every Sine Macula frontend. Plain CSS custom properties - no utility
+ * framework. Components consume tokens; nothing hard-codes a value.
  */
 
 :root {

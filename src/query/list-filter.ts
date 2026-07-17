@@ -1,24 +1,25 @@
 /**
- * Developer-friendly filter mappers for the list-query layer.
+ * Filter mappers for the list-query layer.
  *
  * Each factory function in the {@link filter} namespace returns a
- * {@link ListFilter} that knows how to apply one kind of filter condition to
- * an {@link ApiQuery}. Screen developers choose a factory by name and provide a
+ * {@link ListFilter} that knows how to apply one kind of filter condition to an
+ * {@link ApiQuery}. Screen developers choose a factory by name and provide a
  * plain value; all wire-protocol knowledge stays here.
  *
  * Dot-path fields (e.g. `'posts.author.name'`) are compiled to nested
  * `whereRelation` calls so the full relation chain is expressed correctly on
  * the wire.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ApiQuery } from './api-query';
 import type { FilterScalar } from './filter-expression';
 
 /**
- * A typed filter that knows how to apply a concrete value to an {@link ApiQuery}.
+ * A typed filter that knows how to apply a concrete value to an
+ * {@link ApiQuery}.
  *
  * Instances are created by the {@link filter} factory namespace and registered
  * in a {@link ListQueryDefinition}. Screen developers never implement this
@@ -65,9 +66,9 @@ function applyDotPath(query: ApiQuery, field: string, applyLeaf: (q: ApiQuery, l
 /**
  * Factory namespace of {@link ListFilter} constructors.
  *
- * Every member accepts an API field path (optionally dot-separated for
- * relation nesting) and returns a {@link ListFilter} for the appropriate
- * value type. Import this object and use `filter.equals(...)` etc. in your
+ * Every member accepts an API field path (optionally dot-separated for relation
+ * nesting) and returns a {@link ListFilter} for the appropriate value type.
+ * Import this object and use `filter.equals(...)` etc. in your
  * {@link ListQueryDefinition}.
  *
  * @example
@@ -166,8 +167,8 @@ export const filter = Object.freeze({
     },
 
     /**
-     * Boolean equality filter. `false` is treated as a real filter value, not
-     * a clear signal.
+     * Boolean equality filter. `false` is treated as a real filter value, not a
+     * clear signal.
      *
      * @param field - the API field path, optionally dot-separated
      * @returns a {@link ListFilter} that emits a boolean equality condition
@@ -183,11 +184,12 @@ export const filter = Object.freeze({
     /**
      * Null-presence filter.
      *
-     * `true` → field must not be null (`$notNull`);
-     * `false` → field must be null (`$null`).
+     * `true` → field must not be null (`$notNull`); `false` → field must be
+     * null (`$null`).
      *
      * @param field - the API field path, optionally dot-separated
-     * @returns a {@link ListFilter} that emits a `$notNull` or `$null` condition
+     * @returns a {@link ListFilter} that emits a `$notNull` or `$null`
+     * condition
      */
     present(field: string): ListFilter<boolean> {
         return {
@@ -217,7 +219,8 @@ export const filter = Object.freeze({
      * per field. Each field may be dot-separated for relation nesting.
      *
      * @param fields - the API field paths to search across
-     * @returns a {@link ListFilter} that emits an `$or` group with `$like` per field
+     * @returns a {@link ListFilter} that emits an `$or` group with `$like` per
+     * field
      */
     searchAcross(fields: readonly string[]): ListFilter<string> {
         return {
@@ -239,7 +242,8 @@ export const filter = Object.freeze({
      * Escape hatch for filters that do not fit the standard factory shapes.
      *
      * @param apply - a function that applies the filter to the query
-     * @returns a {@link ListFilter} delegating directly to the provided function
+     * @returns a {@link ListFilter} delegating directly to the provided
+     * function
      * @typeParam Val - the plain value type the screen passes in
      */
     custom<Val>(apply: (query: ApiQuery, value: Val) => ApiQuery): ListFilter<Val> {

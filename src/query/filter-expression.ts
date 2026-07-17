@@ -40,8 +40,8 @@
  * Mixed form (bare + conditioned): use the object form with `{}` for bare
  * relations - `{ "$has": { "posts": {}, "comments": { "title": "X" } } }`.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /** A primitive scalar value accepted as a filter operand. */
@@ -54,7 +54,7 @@ export type FilterScalar = string | number | boolean;
  * `{ "$ge": 18, "$le": 65 }`.
  */
 export interface FilterOperators {
-    // biome-ignore-start lint/style/useNamingConvention: toolkit wire-protocol operator keys are $-prefixed
+    // biome-ignore-start lint/style/useNamingConvention: toolkit keys
     readonly $eq?: FilterScalar;
     readonly $neq?: FilterScalar;
     readonly $gt?: FilterScalar;
@@ -67,14 +67,14 @@ export interface FilterOperators {
     readonly $contains?: FilterScalar | readonly FilterScalar[];
     readonly $null?: true;
     readonly $notNull?: true;
-    // biome-ignore-end lint/style/useNamingConvention: toolkit wire-protocol operator keys are $-prefixed
+    // biome-ignore-end lint/style/useNamingConvention: toolkit keys
 }
 
 /**
  * The assembled filter tree passed to `JSON.stringify` and sent as the
  * `filters` query parameter.
  *
- * Assembled exclusively by {@link ApiQuery}; callers interact through the
- * typed builder API, not by constructing this record directly.
+ * Assembled exclusively by {@link ApiQuery}; callers interact through the typed
+ * builder API, not by constructing this record directly.
  */
 export type FilterTree = Record<string, unknown>;

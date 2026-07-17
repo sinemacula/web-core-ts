@@ -1,13 +1,15 @@
 /**
  * Vitest test-runner configuration.
  *
- * Tests are colocated with source (`*.test.ts`). Coverage is measured over
- * the plain TypeScript surface only: Vue single-file components are kept thin
+ * Tests are colocated with source (`*.test.ts`). Coverage over the kernel spans
+ * the plain TypeScript surface: Vue single-file components are kept thin
  * (template plus wiring) so every line of behaviour lives in fully-covered
- * `.ts` modules.
+ * `.ts` modules. The eslint preset ships as plain JS with its own RuleTester
+ * suite; it is folded in here so it clears the same coverage and mutation gates
+ * rather than running blind alongside them.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { resolve } from 'node:path';
@@ -25,12 +27,20 @@ export default defineConfig({
     test: {
         environment: 'happy-dom',
         setupFiles: ['playground/src/test-support/setup-network-guard.ts'],
-        include: ['src/**/*.test.ts', 'playground/src/**/*.test.ts'],
+        include: ['src/**/*.test.ts', 'playground/src/**/*.test.ts', 'eslint/**/*.test.js'],
         coverage: {
             provider: 'v8',
             reporter: ['text', 'html', 'lcov'],
-            include: ['src/**/*.ts', 'playground/src/**/*.ts'],
-            exclude: ['**/*.test.ts', 'playground/src/main.ts', 'playground/src/test-support/**', '**/*.d.ts'],
+            include: ['src/**/*.ts', 'playground/src/**/*.ts', 'eslint/**/*.js'],
+            exclude: [
+                '**/*.test.ts',
+                '**/*.test.js',
+                'eslint/**/__tests__/tester.js',
+                'eslint/vitest.config.mjs',
+                'playground/src/main.ts',
+                'playground/src/test-support/**',
+                '**/*.d.ts',
+            ],
             thresholds: {
                 lines: 100,
                 functions: 100,

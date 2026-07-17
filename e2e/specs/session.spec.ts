@@ -3,11 +3,11 @@
  *
  * Exercises the full application - the bearer-token interceptor, the
  * token-refresh coordinator, and the auth store - against a mocked network
- * boundary that rejects one authenticated request so the refresh-and-retry
- * path engages.
+ * boundary that rejects one authenticated request so the refresh-and-retry path
+ * engages.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { expect, test } from '../fixtures/app';

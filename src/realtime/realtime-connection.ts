@@ -3,11 +3,11 @@
  *
  * Server push is a separate concern from request/response. This port sits
  * BESIDE {@link HttpClient}, not on top of it - it models a persistent,
- * server-initiated stream rather than a one-shot request. SSE and WebSocket
- * are the two production adapters; tests substitute an in-memory fake.
+ * server-initiated stream rather than a one-shot request. SSE and WebSocket are
+ * the two production adapters; tests substitute an in-memory fake.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /** The lifecycle state of a realtime connection. */

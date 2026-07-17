@@ -1,8 +1,8 @@
 /**
  * Unit tests for applyServerValidationErrors.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { HttpError, HttpValidationError } from '@sinemacula/web-core/http/http-error';

@@ -10,29 +10,29 @@ real product wires the kernel, and is the template consuming apps follow.
 
 ## What lives here
 
-| Area                 | Contents                                                                                                     |
-|----------------------|--------------------------------------------------------------------------------------------------------------|
-| `src/activity/`      | User-idle detection (`IdleMonitor`) driving policy timeouts such as auto-logout                              |
-| `src/analytics/`     | `AnalyticsTracker` port, console and null adapters, router page-tracking installer                           |
-| `src/app/`           | Bootstrap preset: `createWebCoreApp` phase sequence, per-subsystem wire units, service holders + accessors   |
-| `src/authorization/` | `PermissionSet`: flat permission grants with wildcard-prefix evaluation                                      |
-| `src/composables/`   | Vue composables: focus trap, pagination, route-query state                                                   |
-| `src/config/`        | Environment port + sources (runtime JSON, prefixed Vite vars, chain), web-environment composer, config repo  |
-| `src/connectivity/`  | Network-connectivity monitor over the browser online/offline signals                                         |
-| `src/feature-flags/` | `FeatureFlags` port, static adapter, `useFeatureFlag` composable                                             |
-| `src/http/`          | `HttpClient` port, fetch adapter, error hierarchy, bearer-token interceptor, refresh coordinator             |
-| `src/i18n/`          | Locale detection/persistence, vue-i18n wiring, document-title sync                                           |
-| `src/logging/`       | `Logger` port with console and null adapters                                                                 |
-| `src/module/`        | `ModuleDefinition` contract, registry validation + lifecycle execution, memoised module message source       |
-| `src/notifications/` | Toast and confirmation services: state and lifecycle only, rendering stays application-side                  |
-| `src/query/`         | `ApiQuery` fluent builder, typed `ResourceClient`, response envelope, list-query composables                 |
-| `src/realtime/`      | `RealtimeConnection` port, WebSocket and EventSource adapters, exponential backoff                           |
-| `src/reporting/`     | `ErrorReporter` port, breadcrumb trail, global error-handler installer                                       |
-| `src/router/`        | Middleware contract + pipeline, router factory, route-meta augmentation                                      |
-| `src/session/`       | Opt-in session module: store, guards, token refresh, redirect handling, default API gateway                  |
-| `src/storage/`       | `KeyValueStorage` port with browser and in-memory adapters                                                   |
-| `src/support/`       | Small shared utilities (`deepFreeze`, `isRecord`, clipboard) and the `ServiceHolder` singleton primitive     |
-| `src/updates/`       | Deployed-version monitor polling for new releases                                                            |
+| Area                 | What it provides                                                                                                              | Port / service                    | Vue       |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | --------- |
+| `src/activity/`      | Detects when the user has stopped interacting, for policies like auto-logout                                                  | `IdleMonitor` (no port)           | no        |
+| `src/analytics/`     | Records product events through a swappable tracker (console + no-op adapters)                                                 | `AnalyticsTracker`                | type-only |
+| `src/app/`           | The composition root: `createWebCoreApp` wires every subsystem in order, plus the service holders and accessors               | `createWebCoreApp`                | runtime   |
+| `src/authorization/` | Evaluates flat permission grants with wildcard-prefix matching                                                                | `PermissionSet` (no port)         | no        |
+| `src/composables/`   | Reusable Vue composables: focus trap, pagination, route-query state                                                           | -                                 | runtime   |
+| `src/config/`        | Reads typed configuration from the environment and freezes it into a repository                                               | `EnvironmentSource`               | no        |
+| `src/connectivity/`  | Tracks browser online/offline and notifies subscribers on change                                                              | `ConnectivityMonitor` (no port)   | no        |
+| `src/feature-flags/` | Resolves feature flags through a swappable provider (static adapter + `useFeatureFlag`)                                       | `FeatureFlags`                    | runtime   |
+| `src/http/`          | HTTP client: a fetch adapter behind a port, a typed error hierarchy, and bearer-token attach + refresh-and-retry              | `HttpClient`                      | no        |
+| `src/i18n/`          | Detects and persists the active locale, wires vue-i18n, and syncs the document title                                          | `LocaleSwitcher` (service)        | runtime   |
+| `src/logging/`       | A minimal logging port with console and no-op adapters                                                                        | `Logger`                          | no        |
+| `src/module/`        | The feature-module contract and the registry that validates, orders, boots and collects messages from modules                 | `ModuleDefinition` (contract)     | type-only |
+| `src/notifications/` | Toast and confirm-dialog services - state and lifecycle only; rendering stays app-side                                        | `ToastService` / `ConfirmService` | runtime   |
+| `src/query/`         | Resource queries: the `ApiQuery` builder, a typed filter DSL, envelope mapping, `ResourceClient`, and list-query composables  | `ResourceClient` (service)        | runtime   |
+| `src/realtime/`      | Live connections behind a port: WebSocket and EventSource adapters sharing exponential-backoff reconnect                      | `RealtimeConnection`              | no        |
+| `src/reporting/`     | Error reporting through a swappable reporter, a breadcrumb trail, and a global error-handler installer                        | `ErrorReporter`                   | type-only |
+| `src/router/`        | Navigation: a middleware contract + pipeline, router factory, route-meta typing, chunk-load recovery, and navigation progress | `RouteMiddleware` (contract)      | runtime   |
+| `src/session/`       | The opt-in session module: bearer-auth store, route guards, token refresh, redirect handling, and a default `/auth` gateway   | `SessionApi`                      | runtime   |
+| `src/storage/`       | A synchronous key-value storage port with browser, in-memory and key-namespacing adapters                                     | `KeyValueStorage`                 | no        |
+| `src/support/`       | Small shared utilities (`deepFreeze`, `isRecord`, clipboard) and the `ServiceHolder` singleton primitive                      | -                                 | no        |
+| `src/updates/`       | Polls the deployed runtime document for a new release and notifies when one appears                                           | `UpdateMonitor` (no port)         | no        |
 
 ## Installation
 

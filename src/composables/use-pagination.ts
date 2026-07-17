@@ -7,12 +7,12 @@
  *
  * Clamping note: when `total` shrinks and the current page falls outside the
  * valid range, the consumer is responsible for re-clamping via
- * {@link Pagination.goTo} after reloading data. All navigation helpers
- * ({@link Pagination.next}, {@link Pagination.previous}, and
- * {@link Pagination.goTo}) clamp into `[1, pageCount]` on every call.
+ * {@link Pagination.goTo} after reloading data. All navigation helpers ({@link
+ * Pagination.next}, {@link Pagination.previous}, and {@link Pagination.goTo})
+ * clamp into `[1, pageCount]` on every call.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef, Ref } from 'vue';

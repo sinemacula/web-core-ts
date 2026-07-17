@@ -1,14 +1,14 @@
 /**
  * WebSocket adapter for the {@link RealtimeConnection} port.
  *
- * Wraps the browser's native {@link WebSocket} API. Reconnects automatically
- * on non-client-initiated closes using the provided backoff strategy. Incoming
+ * Wraps the browser's native {@link WebSocket} API. Reconnects automatically on
+ * non-client-initiated closes using the provided backoff strategy. Incoming
  * text frames are dispatched to 'message' subscribers; frames that parse as a
  * JSON envelope `{ event: string, data: unknown }` are additionally dispatched
  * to subscribers for that specific event name.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { ExponentialBackoff } from './exponential-backoff';
@@ -35,28 +35,34 @@ export type WebSocketFactory = (url: string, protocols?: string | readonly strin
 export interface WebSocketConnectionOptions {
     /**
      * The WebSocket endpoint URL, or a function that returns it. The function
-     * form is called on every `connect()`, enabling per-connect auth tokens
-     * in the query string.
+     * form is called on every `connect()`, enabling per-connect auth tokens in
+     * the query string.
      */
     readonly url: string | (() => string);
+
     /** Optional WebSocket subprotocol(s) forwarded to the constructor. */
     readonly protocols?: string | readonly string[];
-    /** Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`. */
+
+    /**
+     * Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`.
+     */
     readonly backoff?: ExponentialBackoff;
+
     /**
      * Override the WebSocket constructor. Defaults to
      * `(url, protocols) => new WebSocket(url, protocols)`.
      */
     readonly webSocketFactory?: WebSocketFactory;
+
     /**
      * Awaited after the backoff delay fires and before each reconnect attempt
      * opens a new WebSocket. Never called for the initial `connect()` or a
-     * manual `connect()` call. Wire the application's
-     * `TokenRefreshCoordinator` here so an expired token is refreshed before
-     * each reconnect, and pair it with the `url()` builder reading the fresh
-     * token; without this an expired-token connection retries forever with
-     * stale credentials. Rejection abandons the attempt and the next
-     * reconnect is scheduled through the existing backoff path.
+     * manual `connect()` call. Wire the application's `TokenRefreshCoordinator`
+     * here so an expired token is refreshed before each reconnect, and pair it
+     * with the `url()` builder reading the fresh token; without this an
+     * expired-token connection retries forever with stale credentials.
+     * Rejection abandons the attempt and the next reconnect is scheduled
+     * through the existing backoff path.
      */
     readonly beforeReconnect?: () => Promise<void>;
 }
@@ -64,11 +70,11 @@ export interface WebSocketConnectionOptions {
 /**
  * WebSocket adapter implementing {@link RealtimeConnection}.
  *
- * Reconnects automatically on non-client-initiated closes. All registered
- * event listeners are re-applied after every reconnect. Provides an
- * additional {@link WebSocketConnection.send} method for outbound messages.
- * When `beforeReconnect` is supplied, it is awaited before each reconnect
- * opens a new WebSocket.
+ * Reconnects automatically on non-client-initiated closes. All registered event
+ * listeners are re-applied after every reconnect. Provides an additional
+ * {@link WebSocketConnection.send} method for outbound messages. When
+ * `beforeReconnect` is supplied, it is awaited before each reconnect opens a
+ * new WebSocket.
  */
 export class WebSocketConnection implements RealtimeConnection {
     readonly #url: string | (() => string);
@@ -87,7 +93,8 @@ export class WebSocketConnection implements RealtimeConnection {
     /**
      * Construct a new WebSocket connection.
      *
-     * @param options - URL, protocols, backoff strategy, and optional WebSocket factory
+     * @param options - URL, protocols, backoff strategy, and optional WebSocket
+     * factory
      */
     constructor(options: WebSocketConnectionOptions) {
         this.#url = options.url;
@@ -350,8 +357,8 @@ function isEnvelopeShape(value: unknown): value is { event: string; data: unknow
  * Attempt to parse a raw text frame as a typed event envelope.
  *
  * @param raw - the raw text frame to parse
- * @returns the envelope when the frame is valid JSON with `event` (string)
- *          and `data` fields, otherwise `null`
+ * @returns the envelope when the frame is valid JSON with `event` (string) and
+ * `data` fields, otherwise `null`
  */
 function tryParseEnvelope(raw: string): { event: string; data: string } | null {
     try {

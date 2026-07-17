@@ -3,14 +3,14 @@
  *
  * Builds the opt-in session module: a plain registry entry that installs the
  * session context, contributes the bearer-token interceptor and the single
- * unauthorized (token-refresh) handler at the register phase, instantiates
- * the session store at the stores phase, and wires cross-tab session
+ * unauthorized (token-refresh) handler at the register phase, instantiates the
+ * session store at the stores phase, and wires cross-tab session
  * synchronisation, proactive token refresh, session-loss redirection and
- * identity fan-out at the boot phase. Login UI, locale copy and the user
- * field mapping stay app-side.
+ * identity fan-out at the boot phase. Login UI, locale copy and the user field
+ * mapping stay app-side.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { watch } from 'vue';
@@ -34,12 +34,11 @@ import type { SessionUser } from './session-user';
  * The storage keys the session persists under.
  *
  * PUBLIC CONTRACT: live user sessions (and e2e suites) seed these exact
- * localStorage keys, so the defaults are load-bearing and versioned -
- * renaming any of them is a breaking change requiring an explicit migration.
- * Keys are matched RAW against cross-tab storage-event keys, so the storage
- * adapter must persist un-namespaced (namespaced wrapping is unsupported
- * here; applications wanting a prefix set it in these options so event keys
- * still match).
+ * localStorage keys, so the defaults are load-bearing and versioned - renaming
+ * any of them is a breaking change requiring an explicit migration. Keys are
+ * matched RAW against cross-tab storage-event keys, so the storage adapter must
+ * persist un-namespaced (namespaced wrapping is unsupported here; applications
+ * wanting a prefix set it in these options so event keys still match).
  */
 export interface SessionStorageKeys {
     /** Default 'auth.access_token'. */
@@ -56,21 +55,27 @@ export interface SessionStorageKeys {
 }
 
 /**
- * Route identity - one configurable source feeding the guards, the
- * session-loss redirect, and the redirect sanitiser's loop guard.
+ * Route identity - one configurable source feeding the guards, the session-loss
+ * redirect, and the redirect sanitiser's loop guard.
  */
 export interface SessionRoutes {
-    /** Where unauthenticated visitors are sent. Default `{ name: 'auth.login' }`. */
+    /**
+     * Where unauthenticated visitors are sent. Default
+     * `{ name: 'auth.login' }`.
+     */
     readonly login: RouteLocationRaw;
 
     /**
-     * The login-path prefix rejected by the redirect sanitiser as a loop
-     * guard. Applications renaming the login path set `login` and
-     * `loginPath` together. Default '/login'.
+     * The login-path prefix rejected by the redirect sanitiser as a loop guard.
+     * Applications renaming the login path set `login` and `loginPath`
+     * together. Default '/login'.
      */
     readonly loginPath: string;
 
-    /** Where authenticated visitors leaving guest-only routes are sent. Default '/'. */
+    /**
+     * Where authenticated visitors leaving guest-only routes are sent. Default
+     * '/'.
+     */
     readonly home: RouteLocationRaw;
 
     /**
@@ -86,13 +91,22 @@ export interface SessionRoutes {
  * feature-flag holders whenever the session user changes.
  */
 export interface SessionIdentityMapping<U extends SessionUser> {
-    /** Maps the user onto the error reporter identity. Default `{ id, email, name }` with null fields omitted. */
+    /**
+     * Maps the user onto the error reporter identity. Default
+     * `{ id, email, name }` with null fields omitted.
+     */
     readonly reporting?: (user: U) => { id: string; email?: string; name?: string };
 
-    /** Maps the user onto the analytics identify() id. Default the stringified user id. */
+    /**
+     * Maps the user onto the analytics identify() id. Default the stringified
+     * user id.
+     */
     readonly analytics?: (user: U) => string;
 
-    /** Maps the user onto the feature-flag evaluation context. Default `{ userId }`. */
+    /**
+     * Maps the user onto the feature-flag evaluation context. Default
+     * `{ userId }`.
+     */
     readonly featureFlags?: (user: U) => Readonly<Record<string, string>>;
 }
 
@@ -101,13 +115,19 @@ export interface SessionIdentityMapping<U extends SessionUser> {
  * organisation's reference application.
  */
 export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = { email: string; password: string }> {
-    /** Registry name (the module has no routes and no locales). Default 'session'. */
+    /**
+     * Registry name (the module has no routes and no locales). Default
+     * 'session'.
+     */
     readonly name?: string;
 
     /** The pinia store id the session store registers under. Default 'auth'. */
     readonly storeId?: string;
 
-    /** Session API factory over the application HTTP client. Default {@link createDefaultSessionApi}. */
+    /**
+     * Session API factory over the application HTTP client. Default
+     * {@link createDefaultSessionApi}.
+     */
     readonly api?: (http: HttpClient) => SessionApi<U, C>;
 
     /** Overrides for the persisted storage keys. */
@@ -116,10 +136,16 @@ export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = {
     /** Overrides for the route identity. */
     readonly routes?: Partial<SessionRoutes>;
 
-    /** How long before expiry the proactive refresh fires, in milliseconds. Default 60 seconds. */
+    /**
+     * How long before expiry the proactive refresh fires, in milliseconds.
+     * Default 60 seconds.
+     */
     readonly refreshSkewMs?: number;
 
-    /** The operating-system label reported in the device fingerprint. Default 'WEB'. */
+    /**
+     * The operating-system label reported in the device fingerprint. Default
+     * 'WEB'.
+     */
     readonly deviceOs?: string;
 
     /** Device uuid factory. Default `crypto.randomUUID()`. */
@@ -133,8 +159,8 @@ export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = {
 
     /**
      * Redirect to the login route when the session transitions from
-     * authenticated to unauthenticated, carrying the sanitised current path
-     * as the redirect query parameter. Default true.
+     * authenticated to unauthenticated, carrying the sanitised current path as
+     * the redirect query parameter. Default true.
      */
     readonly sessionLossRedirect?: boolean;
 
@@ -170,11 +196,11 @@ const MAX_TIMEOUT_DELAY_MS = 2_147_483_647;
  * Create the session module.
  *
  * At register it installs the session context (storage keys, route identity,
- * the lazily-built API gateway over the installed HTTP client, and the
- * single token-refresh coordinator), contributes the bearer-token
- * interceptor, and claims the unauthorized-handler slot with the
- * coordinator. At boot it wires the session lifecycle and returns one
- * teardown removing everything it installed.
+ * the lazily-built API gateway over the installed HTTP client, and the single
+ * token-refresh coordinator), contributes the bearer-token interceptor, and
+ * claims the unauthorized-handler slot with the coordinator. At boot it wires
+ * the session lifecycle and returns one teardown removing everything it
+ * installed.
  *
  * @param options - overrides for the reference-application defaults
  * @returns the module definition for the application registry
@@ -210,7 +236,9 @@ export function createSessionModule<U extends SessionUser = SessionUser, C = { e
     };
 }
 
-/** The resolved register-phase collaborators the session context is built from. */
+/**
+ * The resolved register-phase collaborators the session context is built from.
+ */
 interface RegisterConfig<U extends SessionUser, C> {
     readonly storageKeys: SessionStorageKeys;
     readonly routes: SessionRoutes;
@@ -293,7 +321,8 @@ function bootSessionLifecycle<U extends SessionUser>(
 
     if (store.isAuthenticated) {
         store.rehydrateUser().catch(() => {
-            // Swallowed: a dead session is handled by the 401-refresh flow or the session-loss watcher.
+            // Swallowed: a dead session is handled by the 401-refresh flow or
+            // the session-loss watcher.
         });
     }
 
@@ -313,8 +342,8 @@ function bootSessionLifecycle<U extends SessionUser>(
 }
 
 /**
- * Mirror another tab's session change onto this tab's store for as long as
- * the returned teardown is uncalled.
+ * Mirror another tab's session change onto this tab's store for as long as the
+ * returned teardown is uncalled.
  *
  * @param context - the module boot context
  * @param store - the session store
@@ -399,8 +428,8 @@ function wireIdentityFanOut<U extends SessionUser>(
 }
 
 /**
- * Build the `storage` event handler that mirrors another tab's session
- * change onto this tab's store.
+ * Build the `storage` event handler that mirrors another tab's session change
+ * onto this tab's store.
  *
  * @param store - the session store
  * @param accessTokenKey - the raw storage key carrying the access token
@@ -420,7 +449,8 @@ function createStorageListener(store: SessionStore, accessTokenKey: string): (ev
 
         store.hydrateFromStorage();
         store.rehydrateUser().catch(() => {
-            // Swallowed: a dead session is handled by the 401-refresh flow or the session-loss watcher.
+            // Swallowed: a dead session is handled by the 401-refresh flow or
+            // the session-loss watcher.
         });
     };
 }
@@ -459,11 +489,11 @@ function createRefreshScheduler(
     };
 
     /**
-     * Arm a single proactive refresh ahead of the session expiry, replacing
-     * any previously scheduled attempt.
+     * Arm a single proactive refresh ahead of the session expiry, replacing any
+     * previously scheduled attempt.
      *
      * @param expiresAtEpochMs - the expiry to refresh ahead of, or null to
-     *   cancel without arming a new timer
+     * cancel without arming a new timer
      */
     const schedule = (expiresAtEpochMs: number | null): void => {
         cancel();
@@ -475,7 +505,8 @@ function createRefreshScheduler(
         const delay = Math.max(0, expiresAtEpochMs - clock() - refreshSkewMs);
 
         if (delay > MAX_TIMEOUT_DELAY_MS) {
-            // setTimeout delays beyond the signed 32-bit range fire immediately; re-evaluate at the horizon instead.
+            // setTimeout delays beyond the signed 32-bit range fire
+            // immediately; re-evaluate at the horizon instead.
             timer = setTimeout(() => {
                 schedule(expiresAtEpochMs);
             }, MAX_TIMEOUT_DELAY_MS);
@@ -485,7 +516,8 @@ function createRefreshScheduler(
 
         timer = setTimeout(() => {
             coordinator.refresh().catch(() => {
-                // A failed proactive refresh is handled by the 401-refresh flow or the session-loss watcher.
+                // A failed proactive refresh is handled by the 401-refresh flow
+                // or the session-loss watcher.
             });
         }, delay);
     };
@@ -505,7 +537,8 @@ function redirectToLogin(router: Router, routes: SessionRoutes): void {
     const destination = target === null ? routes.login : appendRedirectTarget(routes.login, target);
 
     router.push(destination).catch(() => {
-        // Swallowed: a rejected navigation must not surface as an unhandled rejection.
+        // Swallowed: a rejected navigation must not surface as an unhandled
+        // rejection.
     });
 }
 
@@ -571,8 +604,8 @@ function applyIdentity<U extends SessionUser>(mapping: Required<SessionIdentityM
 /**
  * Return the stable device fingerprint for this browser.
  *
- * On first call a uuid is generated and persisted; subsequent calls reuse
- * the stored value so the same device always presents the same fingerprint.
+ * On first call a uuid is generated and persisted; subsequent calls reuse the
+ * stored value so the same device always presents the same fingerprint.
  *
  * @param storage - the key-value store the uuid persists in
  * @param key - the storage key the uuid persists under
@@ -600,8 +633,8 @@ function deviceFingerprint(
 }
 
 /**
- * Parse a legacy persisted wire timestamp (`YYYY-MM-DD HH:MM:SS`, assumed
- * UTC) as an epoch-millisecond instant during hydration.
+ * Parse a legacy persisted wire timestamp (`YYYY-MM-DD HH:MM:SS`, assumed UTC)
+ * as an epoch-millisecond instant during hydration.
  *
  * @param value - the persisted legacy timestamp
  * @returns the parsed instant in epoch milliseconds, or null when unparseable

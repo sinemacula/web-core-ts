@@ -1,13 +1,13 @@
 /**
  * Locale detection and persistence.
  *
- * Resolution order: a stored preference wins,
- * then the caller-provided candidates (typically `navigator.languages`),
- * then the configured default. Matching is case-insensitive and falls back
- * from exact region matches (`fr-CA`) to language matches (`fr-FR`).
+ * Resolution order: a stored preference wins, then the caller-provided
+ * candidates (typically `navigator.languages`), then the configured default.
+ * Matching is case-insensitive and falls back from exact region matches
+ * (`fr-CA`) to language matches (`fr-FR`).
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { KeyValueStorage } from '../storage/key-value-storage';

@@ -1,8 +1,8 @@
 /**
  * Unit tests for useUsersList.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -15,8 +15,8 @@ import { FakeHttpClient } from '@/test-support/fake-http-client';
 /**
  * Build a `Record<string, unknown>` from an array of `[key, value]` pairs.
  *
- * Wraps `Object.fromEntries` so callers can write snake_case API field names
- * as plain string literals inside array elements rather than as object-literal
+ * Wraps `Object.fromEntries` so callers can write snake_case API field names as
+ * plain string literals inside array elements rather than as object-literal
  * keys - keeping non-camelCase field names out of any position that Biome's
  * naming-convention or literal-keys rules inspect.
  *

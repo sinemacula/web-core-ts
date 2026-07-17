@@ -1,12 +1,11 @@
 /**
  * End-to-end specs for the application-shell error views.
  *
- * The catch-all not-found route and the forbidden route carry no
- * authentication middleware, so both render directly - with or without a
- * signed-in session.
+ * The catch-all not-found route and the forbidden route carry no authentication
+ * middleware, so both render directly - with or without a signed-in session.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { expect, test } from '../fixtures/app';

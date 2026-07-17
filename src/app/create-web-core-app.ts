@@ -3,17 +3,17 @@
  *
  * `createWebCoreApp` runs a fixed sequence of boot phases over the kernel's
  * primitives: it fetches the runtime environment document, freezes the
- * application configuration, installs every kernel service singleton, runs
- * the module lifecycle (register, stores, boot), and wires i18n, routing,
+ * application configuration, installs every kernel service singleton, runs the
+ * module lifecycle (register, stores, boot), and wires i18n, routing,
  * observability, chunk recovery, realtime and the release monitors. Every
- * subsystem is overridable through the options and every platform dependency
- * is injectable, so applications boot with a declarative options object and
- * tests drive the full sequence through seams. The returned handle mounts
- * the application after the router is ready and disposes everything the
- * boot installed in reverse order.
+ * subsystem is overridable through the options and every platform dependency is
+ * injectable, so applications boot with a declarative options object and tests
+ * drive the full sequence through seams. The returned handle mounts the
+ * application after the router is ready and disposes everything the boot
+ * installed in reverse order.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Pinia } from 'pinia';
@@ -96,8 +96,8 @@ let phaseRecorder: ((phase: BootPhase) => void) | null = null;
 /**
  * Test-only: observe the name of every executed boot phase, in order.
  *
- * Not part of the supported public surface: the phase names and their order
- * are internal and may change without notice.
+ * Not part of the supported public surface: the phase names and their order are
+ * internal and may change without notice.
  *
  * @internal
  * @param recorder - receives each phase name as the boot reaches it
@@ -127,17 +127,19 @@ export interface WebCoreConfigOptions<T extends WebCoreConfig> {
     /**
      * Caller-owned environment construction - the only place build-time
      * variables may appear. Receives the fetched runtime document; throw to
-     * abort boot. Pair with `createWebEnvironment` for the standard
-     * dev-chain and production required-keys behaviour.
+     * abort boot. Pair with `createWebEnvironment` for the standard dev-chain
+     * and production required-keys behaviour.
      */
     readonly createEnvironment: (runtime: Readonly<Record<string, string>>) => Environment;
 
-    /** Configuration definition over the environment; the result is deep-frozen. */
+    /**
+     * Configuration definition over the environment; the result is deep-frozen.
+     */
     readonly define: (environment: Environment) => T;
 
     /**
-     * One URL for both the runtime-environment fetch and the update
-     * monitor's default poll target. Default '/runtime-env.json'.
+     * One URL for both the runtime-environment fetch and the update monitor's
+     * default poll target. Default '/runtime-env.json'.
      */
     readonly runtimeUrl?: string;
 }
@@ -146,13 +148,17 @@ export interface WebCoreConfigOptions<T extends WebCoreConfig> {
  * HTTP client construction options.
  */
 export interface WebCoreHttpOptions<T extends WebCoreConfig> {
-    /** Preset-level interceptors; module contributions are appended after these. */
+    /**
+     * Preset-level interceptors; module contributions are appended after these.
+     */
     readonly interceptors?: readonly RequestInterceptor[];
 
     /** Full replacement of the preset response-error handler. */
     readonly onResponseError?: ResponseErrorHandler;
 
-    /** Arms the default handler's toast; the kernel ships no translation keys. */
+    /**
+     * Arms the default handler's toast; the kernel ships no translation keys.
+     */
     readonly unexpectedErrorToastKey?: string;
 
     /** Full adapter override; receives the resolved construction inputs. */
@@ -169,12 +175,14 @@ export interface WebCoreI18nOptions {
     /** Datetime and number formats installed on the i18n instance. */
     readonly formats?: LocaleFormats;
 
-    /** The storage key the locale preference persists under. Default 'locale'. */
+    /**
+     * The storage key the locale preference persists under. Default 'locale'.
+     */
     readonly localeStorageKey?: string;
 
     /**
-     * Behaviour when a module name shadows a shared top-level translation
-     * key. Default 'error'; 'module-wins' restores the shadowing merge.
+     * Behaviour when a module name shadows a shared top-level translation key.
+     * Default 'error'; 'module-wins' restores the shadowing merge.
      */
     readonly duplicateNamespaceStrategy?: 'error' | 'module-wins';
 }
@@ -217,7 +225,10 @@ export interface WebCoreChunkRecoveryOptions {
 export interface WebCoreMonitorOptions<T extends WebCoreConfig> {
     readonly updates?: UpdateMonitorWiring<T>;
 
-    /** Connectivity monitoring; defaults to on exactly when the update monitor runs. */
+    /**
+     * Connectivity monitoring; defaults to on exactly when the update monitor
+     * runs.
+     */
     readonly connectivity?: { readonly enabled?: boolean };
 
     readonly chunkRecovery?: WebCoreChunkRecoveryOptions;
@@ -241,7 +252,10 @@ export interface WebCorePlatformOptions {
     /** The router history implementation; defaults to web history. */
     readonly history?: RouterHistory;
 
-    /** Preferred locales, most preferred first; defaults to `navigator.languages`. */
+    /**
+     * Preferred locales, most preferred first; defaults to
+     * `navigator.languages`.
+     */
     readonly localeCandidates?: readonly string[];
 }
 
@@ -263,7 +277,10 @@ export interface WebCoreAppOptions<T extends WebCoreConfig> {
     readonly i18n?: WebCoreI18nOptions;
     readonly observability?: WebCoreObservabilityOptions<T>;
 
-    /** Feature-flag provider factory; defaults to the config-driven static adapter. */
+    /**
+     * Feature-flag provider factory; defaults to the config-driven static
+     * adapter.
+     */
     readonly featureFlags?: (settings: Readonly<T>) => FeatureFlags;
 
     /**
@@ -349,7 +366,8 @@ interface AppFoundation<T extends WebCoreConfig> {
 }
 
 /**
- * The HTTP client, eager store handles and locale wiring from the module phases.
+ * The HTTP client, eager store handles and locale wiring from the module
+ * phases.
  */
 interface ModuleLayer {
     readonly http: HttpClient;
@@ -583,8 +601,8 @@ async function wireAppIntegration<T extends WebCoreConfig>(
 }
 
 /**
- * Run the release phases: wire chunk-load recovery, connect realtime, and
- * start the update and connectivity monitors.
+ * Run the release phases: wire chunk-load recovery, connect realtime, and start
+ * the update and connectivity monitors.
  *
  * @param options - the application's modules, configuration and overrides
  * @param platform - the resolved platform seams
@@ -634,7 +652,8 @@ function wireReleaseMonitors<T extends WebCoreConfig>(
  * @param foundation - the services and application from the foundation phases
  * @param moduleLayer - the HTTP client, eager stores and locale wiring
  * @param integration - the router and teardown handles
- * @param release - the realtime connection, monitors and chunk-recovery teardown
+ * @param release - the realtime connection, monitors and chunk-recovery
+ * teardown
  * @returns the assembled application handle, ready to start
  */
 function assembleApp<T extends WebCoreConfig>(
@@ -695,7 +714,8 @@ function assembleApp<T extends WebCoreConfig>(
  *
  * @param moduleLayer - the eager store handles to dispose
  * @param integration - the module boot and page, error and title teardowns
- * @param release - the monitors, realtime connection and chunk-recovery teardown
+ * @param release - the monitors, realtime connection and chunk-recovery
+ * teardown
  */
 function teardownApp(moduleLayer: ModuleLayer, integration: AppIntegration, release: ReleaseLayer): void {
     const { storeHandles } = moduleLayer;

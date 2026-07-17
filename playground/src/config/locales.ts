@@ -1,8 +1,8 @@
 /**
  * Localisation configuration definition.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Environment } from '@sinemacula/web-core/config/environment';
@@ -36,7 +36,6 @@ export function localesConfig(env: Environment): LocalesConfig {
         enabled: env.json<string[]>('ENABLED_LOCALES', ['en-US', 'fr-FR']),
         supported: {
             'en-US': { name: 'English', direction: 'ltr' },
-            'es-ES': { name: 'Español', direction: 'ltr' },
             'fr-FR': { name: 'Français', direction: 'ltr' },
         },
     };

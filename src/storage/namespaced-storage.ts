@@ -1,14 +1,14 @@
 /**
  * Namespace-prefixing decorator for key-value storage.
  *
- * Several applications (or extracted packages) can share one browser
- * origin's storage; without a namespace, one application's keys can collide
- * with, or be overwritten by, another's. This decorates any
- * `KeyValueStorage` - including another `NamespacedStorage` - rewriting
- * every key with a namespace prefix before delegating.
+ * Several applications (or extracted packages) can share one browser origin's
+ * storage; without a namespace, one application's keys can collide with, or be
+ * overwritten by, another's. This decorates any `KeyValueStorage` - including
+ * another `NamespacedStorage` - rewriting every key with a namespace prefix
+ * before delegating.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { KeyValueStorage } from './key-value-storage';
@@ -23,7 +23,8 @@ export class NamespacedStorage implements KeyValueStorage {
     /**
      * Wrap an inner storage, prefixing every key with `namespace`.
      *
-     * @param inner - the storage to delegate to, keyed under the composed prefix
+     * @param inner - the storage to delegate to, keyed under the composed
+     * prefix
      * @param namespace - the prefix composed onto every key, joined with a dot
      */
     constructor(inner: KeyValueStorage, namespace: string) {

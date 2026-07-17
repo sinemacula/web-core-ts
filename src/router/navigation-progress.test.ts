@@ -1,8 +1,8 @@
 /**
  * Unit tests for navigation-progress.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it } from 'vitest';
@@ -16,8 +16,8 @@ import { createNavigationProgress, type NavigationProgress } from './navigation-
 const EmptyComponent = defineComponent({ render: () => null });
 
 /**
- * A lazy route component whose resolution is controlled externally, so a
- * test can assert the in-flight state before letting navigation complete.
+ * A lazy route component whose resolution is controlled externally, so a test
+ * can assert the in-flight state before letting navigation complete.
  */
 interface DeferredComponent {
     readonly load: () => Promise<Component>;
@@ -82,7 +82,8 @@ describe('createNavigationProgress', () => {
         const progress = createNavigationProgress(router);
 
         await router.push('/broken').catch(() => {
-            // The router's own promise rejects alongside the onError handler under test.
+            // The router's own promise rejects alongside the onError handler
+            // under test.
         });
 
         expect(progress.isNavigating.value).toBe(false);

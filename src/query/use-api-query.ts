@@ -6,8 +6,8 @@
  * computed ref re-evaluates automatically and can be fed directly into a data-
  * fetching composable or watcher.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ComputedRef } from 'vue';
@@ -30,14 +30,17 @@ export interface UseApiQueryOptions {
 export interface ApiQueryState {
     /** The current `ApiQuery` instance, updated on every `apply` or `reset`. */
     readonly query: ComputedRef<ApiQuery>;
+
     /** The current `QueryParameters`, recomputed whenever `query` changes. */
     readonly parameters: ComputedRef<QueryParameters>;
+
     /**
      * Replace the held query by applying `mutate` to it.
      *
      * @param mutate - receives the current query and returns the new query
      */
     apply(mutate: (query: ApiQuery) => ApiQuery): void;
+
     /** Reset the query back to the initial state. */
     reset(): void;
 }

@@ -1,8 +1,8 @@
 /**
  * Unit tests for connectivity-monitor.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -10,11 +10,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ConnectivityMonitor } from './connectivity-monitor';
 
 /**
- * Build a fake `Window` whose `online`/`offline` listeners can be triggered
- * and inspected directly, and whose `navigator.onLine` is fixed at creation.
+ * Build a fake `Window` whose `online`/`offline` listeners can be triggered and
+ * inspected directly, and whose `navigator.onLine` is fixed at creation.
  *
  * @param onLine - the initial `navigator.onLine` value
- * @returns the fake window plus test helpers to emit events and inspect listeners
+ * @returns the fake window plus test helpers to emit events and inspect
+ * listeners
  */
 function fakeWindow(onLine: boolean): {
     window: Window;

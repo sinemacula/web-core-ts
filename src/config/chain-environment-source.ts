@@ -5,8 +5,8 @@
  * environment document ahead of Vite's build variables, so a deployed value
  * always beats a local development default.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { EnvironmentSource } from './environment';

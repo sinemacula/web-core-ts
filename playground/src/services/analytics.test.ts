@@ -1,8 +1,8 @@
 /**
  * Unit tests for the analytics service.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { AnalyticsTracker } from '@sinemacula/web-core/analytics/analytics-tracker';

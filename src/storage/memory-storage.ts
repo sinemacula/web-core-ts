@@ -1,11 +1,10 @@
 /**
  * In-memory key-value storage adapter.
  *
- * Used in tests and as a runtime fallback when no browser storage is
- * available.
+ * Used in tests and as a runtime fallback when no browser storage is available.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { KeyValueStorage } from './key-value-storage';

@@ -10,7 +10,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-// biome-ignore-all lint/style/useNamingConvention: ESLint visitor keys are AST node-type names.
+// biome-ignore-all lint/style/useNamingConvention: ESLint AST visitor keys
 
 import { createRule, moduleFolder, toCamelCase, toUpperSnakeCase } from './lib.js';
 
@@ -42,28 +42,31 @@ function declaredNames(node) {
         .map(declarator => declarator.id.name);
 }
 
-/** Names re-exported through an `export { ... }` clause. */
+/** Value names re-exported through an `export { ... }` clause (type specifiers skipped). */
 function specifierNames(node) {
     return node.specifiers
-        .filter(specifier => specifier.exported.type === 'Identifier')
+        .filter(specifier => specifier.exported.type === 'Identifier' && specifier.exportKind !== 'type')
         .map(specifier => specifier.exported.name);
 }
 
-/** Every name exported by a program, whether inline or via an export clause. */
+/** Every runtime-value name exported by a program (type-only exports do not count). */
 function exportedNames(program) {
     const names = new Set();
 
     for (const node of program.body) {
-        if (node.type === 'ExportNamedDeclaration') {
-            for (const name of [...declaredNames(node), ...specifierNames(node)]) {
-                names.add(name);
-            }
+        if (node.type !== 'ExportNamedDeclaration' || node.exportKind === 'type') {
+            continue;
+        }
+
+        for (const name of [...declaredNames(node), ...specifierNames(node)]) {
+            names.add(name);
         }
     }
 
     return names;
 }
 
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'module-export-names',
     meta: {
@@ -77,8 +80,9 @@ export default createRule({
         },
     },
     defaultOptions: [],
+    // Stryker restore all
     create(context) {
-        const filename = (context.filename ?? context.getFilename()).replace(/\\/g, '/');
+        const filename = context.filename.replace(/\\/g, '/');
         const folder = moduleFolder(filename);
 
         if (folder === null) {

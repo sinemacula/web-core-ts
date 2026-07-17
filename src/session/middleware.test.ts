@@ -1,8 +1,8 @@
 /**
  * Unit tests for the session guard factories.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { createPinia, setActivePinia } from 'pinia';

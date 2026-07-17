@@ -5,8 +5,8 @@
  * cannot service it, such as sending on a socket that is not open. Callers
  * branch on `instanceof` rather than inspecting raw transport internals.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 /**

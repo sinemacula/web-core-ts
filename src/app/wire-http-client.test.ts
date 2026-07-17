@@ -1,8 +1,8 @@
 /**
  * Unit tests for the HTTP client wiring unit.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { afterEach, describe, expect, it } from 'vitest';
@@ -82,7 +82,9 @@ function createRecordingReporter(): RecordingReporter {
     };
 }
 
-/** A fetch fake recording every call and replaying queued responses in order. */
+/**
+ * A fetch fake recording every call and replaying queued responses in order.
+ */
 interface FetchStub {
     readonly fetchFn: typeof fetch;
     readonly urls: string[];
@@ -92,8 +94,8 @@ interface FetchStub {
 /**
  * Build a fetch fake replaying one queued response factory per call.
  *
- * @param responses - response factories consumed in call order; exhausted
- *                    calls fall back to an empty 200
+ * @param responses - response factories consumed in call order; exhausted calls
+ * fall back to an empty 200
  * @returns the recording fetch stub
  */
 function createFetchStub(...responses: ReadonlyArray<() => Response>): FetchStub {

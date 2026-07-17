@@ -7,8 +7,8 @@
  * validation errors and the server's 422 field errors are both surfaced as
  * field messages; anything else collapses to a form-level translation key.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { HttpError, HttpValidationError } from '@sinemacula/web-core/http/http-error';
@@ -32,22 +32,32 @@ const loginSchema = z.object({
 export interface LoginForm {
     readonly email: Ref<string>;
     readonly password: Ref<string>;
-    /** Translation key for the email field error, or '' when valid/untouched. */
+
+    /**
+     * Translation key for the email field error, or '' when valid/untouched.
+     */
     readonly emailError: ComputedRef<string>;
-    /** Translation key for the password field error, or '' when valid/untouched. */
+
+    /**
+     * Translation key for the password field error, or '' when valid/untouched.
+     */
     readonly passwordError: ComputedRef<string>;
+
     /** Form-level (API) error translation key, or null when none. */
     readonly error: Ref<string | null>;
     readonly isSubmitting: ComputedRef<boolean> | Ref<boolean>;
-    /** Validates first; returns false when invalid or when the API call fails. */
+
+    /**
+     * Validates first; returns false when invalid or when the API call fails.
+     */
     submit(): Promise<boolean>;
 }
 
 /**
  * Build the login form state and submission behaviour.
  *
- * vee-validate manages field-level validation against the zod schema;
- * `error` carries the form-level API error as a translation key.
+ * vee-validate manages field-level validation against the zod schema; `error`
+ * carries the form-level API error as a translation key.
  *
  * @returns the reactive form
  */
@@ -67,7 +77,8 @@ export function useLoginForm(): LoginForm {
     const inFlight = ref(false);
 
     /**
-     * Validate, then log in; re-entrant calls are ignored while one is in flight.
+     * Validate, then log in; re-entrant calls are ignored while one is in
+     * flight.
      */
     const submit = async (): Promise<boolean> => {
         if (inFlight.value) {
@@ -91,7 +102,9 @@ export function useLoginForm(): LoginForm {
     return { email, password, emailError, passwordError, error, isSubmitting, submit };
 }
 
-/** The callbacks {@link attemptLogin} needs from the form to run one attempt. */
+/**
+ * The callbacks {@link attemptLogin} needs from the form to run one attempt.
+ */
 interface LoginAttempt {
     /** Run field validation and report whether the inputs are valid. */
     readonly validate: () => Promise<{ valid: boolean }>;

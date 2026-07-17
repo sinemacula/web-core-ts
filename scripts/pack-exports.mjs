@@ -1,17 +1,18 @@
 /**
  * Swap the manifest `exports` between its development and published forms.
  *
- * Locally the kernel is consumed straight from TypeScript source, so the tracked
- * manifest points `exports` at `src`. The registry receives compiled output, so
- * the pack lifecycle rewrites `exports` to `dist` before the tarball is built
- * (`prepack`) and restores the source form afterwards (`postpack`). npm does not
- * honour an `exports` override in `publishConfig`, so the swap is done here.
+ * Locally the kernel is consumed straight from TypeScript source, so the
+ * tracked manifest points `exports` at `src`. The registry receives compiled
+ * output, so the pack lifecycle rewrites `exports` to `dist` before the tarball
+ * is built (`prepack`) and restores the source form afterwards (`postpack`).
+ * npm does not honour an `exports` override in `publishConfig`, so the swap is
+ * done here.
  *
  * The swap is an exact-block replacement: it fails loudly rather than publish a
  * manifest whose `exports` it could not confidently rewrite.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';

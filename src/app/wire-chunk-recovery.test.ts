@@ -1,8 +1,8 @@
 /**
  * Unit tests for wire-chunk-recovery.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it, vi } from 'vitest';
@@ -35,7 +35,8 @@ function fakeReporter(): ErrorReporter {
 
 async function navigateToBroken(router: Router): Promise<void> {
     await router.push('/broken').catch(() => {
-        // The router's own promise rejects alongside the onError handler under test.
+        // The router's own promise rejects alongside the onError handler under
+        // test.
     });
 }
 

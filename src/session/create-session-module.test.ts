@@ -1,8 +1,8 @@
 /**
  * Unit tests for createSessionModule.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { Pinia } from 'pinia';
@@ -181,7 +181,10 @@ interface RecordedHttpCall {
     readonly path: string;
 }
 
-/** An in-memory {@link HttpClient} fake recording calls and replaying queued payloads. */
+/**
+ * An in-memory {@link HttpClient} fake recording calls and replaying queued
+ * payloads.
+ */
 class FakeHttpClient implements HttpClient {
     readonly calls: RecordedHttpCall[] = [];
     readonly #queue: unknown[] = [];
@@ -305,13 +308,13 @@ describe('createSessionModule', () => {
     let flags: RecordingFeatureFlags;
 
     /**
-     * Register the module through the real registry path and assemble the
-     * boot context around it.
+     * Register the module through the real registry path and assemble the boot
+     * context around it.
      *
      * @param options - session module options; a fake API is injected unless
-     *   the test supplies its own or opts into the shipped default
-     * @param setup - harness seams: the routed path, a push rejection, and
-     *   the default-gateway opt-in
+     * the test supplies its own or opts into the shipped default
+     * @param setup - harness seams: the routed path, a push rejection, and the
+     * default-gateway opt-in
      * @returns the harness
      */
     function createHarness(

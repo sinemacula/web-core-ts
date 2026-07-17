@@ -7,8 +7,8 @@
  * time by `scripts/generate-runtime-env.mjs` and uploaded alongside the
  * artifact.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { resolve } from 'node:path';

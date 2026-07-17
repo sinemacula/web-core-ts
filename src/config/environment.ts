@@ -6,8 +6,8 @@
  * source with typed, fallback-aware accessors so configuration definitions
  * never hand-roll string coercion.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 const TRUTHY_VALUES = ['1', 'true', 'yes', 'on'];
@@ -73,8 +73,8 @@ export class Environment {
      * resolve to the fallback.
      *
      * @param key - the environment variable name
-     * @param fallback - the value returned when the variable is missing
-     *   or invalid
+     * @param fallback - the value returned when the variable is missing or
+     * invalid
      * @returns the resolved value, or the fallback
      */
     integer(key: string): number | undefined;
@@ -96,8 +96,8 @@ export class Environment {
      * fallback.
      *
      * @param key - the environment variable name
-     * @param fallback - the value returned when the variable is missing
-     *   or invalid
+     * @param fallback - the value returned when the variable is missing or
+     * invalid
      * @returns the parsed value, or the fallback
      */
     json<T>(key: string): T | undefined;

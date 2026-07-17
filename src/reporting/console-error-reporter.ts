@@ -1,12 +1,12 @@
 /**
  * Console error reporter adapter.
  *
- * Writes errors and messages to the browser console for use during
- * development. Not intended for production - swap in a real provider adapter
- * via the ErrorReporter port when deploying.
+ * Writes errors and messages to the browser console for use during development.
+ * Not intended for production - swap in a real provider adapter via the
+ * ErrorReporter port when deploying.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import type { ErrorReporter, ReportedUser } from './error-reporter';

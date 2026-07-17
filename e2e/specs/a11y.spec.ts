@@ -1,11 +1,11 @@
 /**
  * Automated accessibility checks for the application.
  *
- * Runs axe-core against key screens to catch WCAG 2.1 A/AA regressions.
- * Network calls are stubbed at the browser boundary (no real backend needed).
+ * Runs axe-core against key screens to catch WCAG 2.1 A/AA regressions. Network
+ * calls are stubbed at the browser boundary (no real backend needed).
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { expect, test } from '../fixtures/app';

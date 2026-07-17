@@ -11,8 +11,8 @@
  * (`import './x'`, used here for module augmentation) untouched, which strict
  * ESM resolvers reject. The post-pass closes that gap.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';

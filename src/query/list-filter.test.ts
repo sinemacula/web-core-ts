@@ -1,8 +1,8 @@
 /**
  * Unit tests for the list-filter factory namespace.
  *
- * @author Ben Carey <bdmc@sinemacula.co.uk>
- * @copyright 2026 Sine Macula Limited
+ * @author      Ben Carey <bdmc@sinemacula.co.uk>
+ * @copyright   2026 Sine Macula Limited
  */
 
 import { describe, expect, it } from 'vitest';
@@ -24,8 +24,8 @@ function parsedFilters(query: ApiQuery): unknown {
 }
 
 // ---------------------------------------------------------------------------
-// Helper: build wire-style objects from entry tuples (keeps $-prefixed keys
-// out of object-literal key positions where Biome might inspect them).
+// Helper: build wire-style objects from entry tuples (keeps $-prefixed keys out
+// of object-literal key positions where Biome might inspect them).
 // ---------------------------------------------------------------------------
 function wire(entries: ReadonlyArray<readonly [string, unknown]>): Record<string, unknown> {
     return Object.fromEntries(entries);
