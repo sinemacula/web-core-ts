@@ -246,8 +246,15 @@ function hydrateStateFromStorage(state: SessionState): void {
 }
 
 /**
+ * Concurrent user rehydrations, keyed by store state, so the boot-time load and
+ * a route guard awaiting it share one request rather than double-fetching.
+ */
+const inFlightRehydration = new WeakMap<SessionState, Promise<void>>();
+
+/**
  * Fetch and store the current user when a session is present but no user record
- * has been loaded yet. Failures are swallowed.
+ * has been loaded yet. Concurrent callers share the single in-flight request,
+ * and failures are swallowed.
  *
  * @param state - the mutable store state
  */
@@ -256,6 +263,29 @@ async function rehydrateSessionUser(state: SessionState): Promise<void> {
         return;
     }
 
+    const existing = inFlightRehydration.get(state);
+
+    if (existing !== undefined) {
+        return existing;
+    }
+
+    const load = fetchCurrentUser(state);
+
+    inFlightRehydration.set(state, load);
+
+    try {
+        await load;
+    } finally {
+        inFlightRehydration.delete(state);
+    }
+}
+
+/**
+ * Fetch the current user into state, swallowing a dead-session failure.
+ *
+ * @param state - the mutable store state
+ */
+async function fetchCurrentUser(state: SessionState): Promise<void> {
     try {
         state.user = await sessionContext().api.currentUser();
     } catch {

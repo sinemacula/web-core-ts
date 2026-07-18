@@ -30,8 +30,10 @@ function wire(entries: ReadonlyArray<readonly [string, unknown]>): Record<string
  * Stub the GET users/self endpoint with a deterministic user record.
  *
  * @param page - the browser page under test
+ * @param permissions - the permission strings granted to the seeded user;
+ * defaults to the single permission the guarded users route requires
  */
-async function mockGetCurrentUser(page: Page): Promise<void> {
+async function mockGetCurrentUser(page: Page, permissions: readonly string[] = ['users.view']): Promise<void> {
     await page.route('**/users/self', route =>
         route.fulfill({
             status: 200,
@@ -43,6 +45,7 @@ async function mockGetCurrentUser(page: Page): Promise<void> {
                     ['last_name', 'User'],
                     ['full_name', 'E2E User'],
                     ['email', 'e2e@example.com'],
+                    ['permissions', permissions],
                 ]),
             }),
         }),
@@ -199,14 +202,19 @@ export async function mockUsersListServerError(page: Page): Promise<void> {
  * any GET users/self triggered by the seeded session is handled.
  *
  * @param page - the browser page under test
+ * @param permissions - the permission strings granted to the seeded user; pass
+ * an empty list to seed a signed-in user who is denied the guarded routes
  */
-export async function seedAuthenticatedSession(page: Page): Promise<void> {
+export async function seedAuthenticatedSession(
+    page: Page,
+    permissions: readonly string[] = ['users.view'],
+): Promise<void> {
     await page.addInitScript(() => {
         window.localStorage.setItem('auth.access_token', 'e2e-seeded-token');
         window.localStorage.setItem('auth.refresh_token', 'e2e-seeded-refresh-token');
     });
 
-    await mockGetCurrentUser(page);
+    await mockGetCurrentUser(page, permissions);
 }
 
 /**

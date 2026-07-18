@@ -47,7 +47,7 @@ describe('session guards', () => {
      *
      * @param routes - optional route-identity overrides
      */
-    function installTestContext(routes: Partial<SessionRoutes> = {}): void {
+    function installTestContext(routes: Partial<SessionRoutes> = {}, currentUser?: () => Promise<SessionUser>): void {
         installSessionContext({
             storageKeys: {
                 accessToken: ACCESS_TOKEN_KEY,
@@ -64,7 +64,7 @@ describe('session guards', () => {
             },
             storage,
             storeId: 'auth',
-            api: createSessionApiStub(),
+            api: currentUser === undefined ? createSessionApiStub() : { ...createSessionApiStub(), currentUser },
             coordinator: new TokenRefreshCoordinator({ refresh: () => Promise.resolve(false) }),
             parseTimestamp: () => null,
             device: () => ({ uuid: 'device-uuid', os: 'WEB' }),
@@ -167,58 +167,81 @@ describe('session guards', () => {
 
     describe('authorize', () => {
         describe('when the visitor is not authenticated', () => {
-            it('redirects to the context login route, carrying the attempted path', () => {
-                expect(authorize('users.view').handle(context)).toStrictEqual({
+            it('redirects to the context login route, carrying the attempted path', async () => {
+                expect(await authorize('users.view').handle(context)).toStrictEqual({
                     kind: 'redirect',
                     to: { name: 'auth.login', query: { redirect: '/settings/billing' } },
                 });
             });
         });
 
-        describe('when the visitor is authenticated', () => {
+        describe('when the visitor is authenticated with the user already loaded', () => {
             beforeEach(() => {
                 storage.set(ACCESS_TOKEN_KEY, 'valid-token');
                 useSessionStore();
             });
 
-            it('redirects to the context forbidden route when the user lacks the permission', () => {
+            it('redirects to the context forbidden route when the user lacks the permission', async () => {
                 setStoreUser(userWithPermissions([]));
 
-                expect(authorize('users.view').handle(context)).toStrictEqual({
+                expect(await authorize('users.view').handle(context)).toStrictEqual({
                     kind: 'redirect',
                     to: '/forbidden',
                 });
             });
 
-            it('redirects to a custom target when the user lacks the permission', () => {
+            it('redirects to a custom target when the user lacks the permission', async () => {
                 setStoreUser(userWithPermissions([]));
 
-                expect(authorize('users.view', { name: 'forbidden.route' }).handle(context)).toStrictEqual({
+                expect(await authorize('users.view', { name: 'forbidden.route' }).handle(context)).toStrictEqual({
                     kind: 'redirect',
                     to: { name: 'forbidden.route' },
                 });
             });
 
-            it('resolves the default forbidden route from the context lazily at handle time', () => {
+            it('resolves the default forbidden route from the context lazily at handle time', async () => {
                 const guard = authorize('users.view');
 
                 setStoreUser(userWithPermissions([]));
                 resetSessionContext();
                 installTestContext({ forbidden: '/no-access' });
 
-                expect(guard.handle(context)).toStrictEqual({ kind: 'redirect', to: '/no-access' });
+                expect(await guard.handle(context)).toStrictEqual({ kind: 'redirect', to: '/no-access' });
             });
 
-            it('returns next when the user holds the permission', () => {
+            it('returns next when the user holds the permission', async () => {
                 setStoreUser(userWithPermissions(['users.view']));
 
-                expect(authorize('users.view').handle(context)).toStrictEqual({ kind: 'next' });
+                expect(await authorize('users.view').handle(context)).toStrictEqual({ kind: 'next' });
             });
 
-            it('returns next when the user holds the permission via a wildcard grant', () => {
+            it('returns next when the user holds the permission via a wildcard grant', async () => {
                 setStoreUser(userWithPermissions(['users.*']));
 
-                expect(authorize('users.view').handle(context)).toStrictEqual({ kind: 'next' });
+                expect(await authorize('users.view').handle(context)).toStrictEqual({ kind: 'next' });
+            });
+        });
+
+        describe('when the user is not yet loaded', () => {
+            it('waits for the user to load, then admits when the permission is held', async () => {
+                resetSessionContext();
+                installTestContext({}, () => Promise.resolve(userWithPermissions(['users.view'])));
+                storage.set(ACCESS_TOKEN_KEY, 'valid-token');
+                useSessionStore();
+
+                expect(await authorize('users.view').handle(context)).toStrictEqual({ kind: 'next' });
+            });
+
+            it('waits for the user to load, then redirects to forbidden without the permission', async () => {
+                resetSessionContext();
+                installTestContext({}, () => Promise.resolve(userWithPermissions([])));
+                storage.set(ACCESS_TOKEN_KEY, 'valid-token');
+                useSessionStore();
+
+                expect(await authorize('users.view').handle(context)).toStrictEqual({
+                    kind: 'redirect',
+                    to: '/forbidden',
+                });
             });
         });
     });

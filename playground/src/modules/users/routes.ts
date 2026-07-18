@@ -7,7 +7,7 @@
 
 import type { RouteRecordRaw } from 'vue-router';
 
-import { authenticated } from '@/modules/auth';
+import { authorize } from '@/modules/auth';
 
 import { USERS_ROUTE_NAMES } from './route-names';
 
@@ -18,7 +18,7 @@ export const usersRoutes: readonly RouteRecordRaw[] = [
         component: () => import('./views/users-view.vue'),
         meta: {
             title: 'users.index.title',
-            middleware: [authenticated()],
+            middleware: [authorize('users.view')],
         },
     },
 ];
