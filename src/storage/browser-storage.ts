@@ -15,13 +15,16 @@ import type { KeyValueStorage } from './key-value-storage';
  * Persist values in a browser `Storage` area.
  */
 export class BrowserStorage implements KeyValueStorage {
+    /** The underlying Web Storage area. */
     readonly #storage: Storage;
 
     constructor(storage: Storage) {
         this.#storage = storage;
     }
 
-    /** Read from the underlying Web Storage, returning null when it throws. */
+    /**
+     * Read from the underlying Web Storage, returning null when it throws.
+     */
     get(key: string): string | null {
         try {
             return this.#storage.getItem(key);
@@ -30,7 +33,9 @@ export class BrowserStorage implements KeyValueStorage {
         }
     }
 
-    /** Write to the underlying Web Storage; a storage failure is swallowed. */
+    /**
+     * Write to the underlying Web Storage; a storage failure is swallowed.
+     */
     set(key: string, value: string): void {
         try {
             this.#storage.setItem(key, value);

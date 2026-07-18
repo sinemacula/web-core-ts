@@ -22,7 +22,7 @@ describe('ConfirmService', () => {
         it('surfaces the request immediately when no dialog is open', () => {
             const service = new ConfirmService();
 
-            service.confirm({ title: 'title', message: 'msg' });
+            void service.confirm({ title: 'title', message: 'msg' });
 
             expect(service.active.value).toMatchObject({ title: 'title', message: 'msg', id: 'confirm-1' });
         });
@@ -30,13 +30,13 @@ describe('ConfirmService', () => {
         it('assigns incrementing ids to successive requests', () => {
             const service = new ConfirmService();
 
-            service.confirm({ title: 'first', message: 'msg' });
+            void service.confirm({ title: 'first', message: 'msg' });
 
             expect(service.active.value?.id).toBe('confirm-1');
 
             service.settle(true);
 
-            service.confirm({ title: 'second', message: 'msg' });
+            void service.confirm({ title: 'second', message: 'msg' });
 
             expect(service.active.value?.id).toBe('confirm-2');
         });
@@ -44,8 +44,8 @@ describe('ConfirmService', () => {
         it('queues a second request while the first is active', () => {
             const service = new ConfirmService();
 
-            service.confirm({ title: 'first', message: 'msg' });
-            service.confirm({ title: 'second', message: 'msg' });
+            void service.confirm({ title: 'first', message: 'msg' });
+            void service.confirm({ title: 'second', message: 'msg' });
 
             expect(service.active.value?.title).toBe('first');
         });
@@ -71,7 +71,7 @@ describe('ConfirmService', () => {
         it('includes optional labels in the active request', () => {
             const service = new ConfirmService();
 
-            service.confirm({
+            void service.confirm({
                 title: 'title',
                 message: 'msg',
                 confirmLabel: 'confirm.btn',
@@ -106,7 +106,7 @@ describe('ConfirmService', () => {
             const service = new ConfirmService();
 
             const first = service.confirm({ title: 'first', message: 'msg' });
-            service.confirm({ title: 'second', message: 'msg' });
+            void service.confirm({ title: 'second', message: 'msg' });
 
             service.settle(true);
 
@@ -157,7 +157,7 @@ describe('ConfirmService', () => {
             const service = new ConfirmService();
 
             const first = service.confirm({ title: 'first', message: 'msg' });
-            service.confirm({ title: 'second', message: 'msg' });
+            void service.confirm({ title: 'second', message: 'msg' });
 
             expect(service.active.value?.id).toBe('confirm-1');
 

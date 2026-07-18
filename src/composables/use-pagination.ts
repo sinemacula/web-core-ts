@@ -22,8 +22,13 @@ import { computed, ref } from 'vue';
  * Options accepted by {@link usePagination}.
  */
 export interface UsePaginationOptions {
+    /** Reactive total item count the page bounds are derived from. */
     readonly total: Ref<number>;
+
+    /** Items shown per page; defaults to the standard page size. */
     readonly perPage?: number;
+
+    /** Page to start on; defaults to the first page. */
     readonly initialPage?: number;
 }
 
@@ -31,14 +36,39 @@ export interface UsePaginationOptions {
  * The reactive pagination state returned by {@link usePagination}.
  */
 export interface Pagination {
+    /** The current page, counting from one. */
     readonly page: Ref<number>;
+
+    /** The resolved number of items per page. */
     readonly perPage: number;
+
+    /** The total number of pages, always at least one. */
     readonly pageCount: ComputedRef<number>;
+
+    /** Whether a page exists before the current one. */
     readonly hasPrevious: ComputedRef<boolean>;
+
+    /** Whether a page exists after the current one. */
     readonly hasNext: ComputedRef<boolean>;
+
+    /** The zero-based index of the first item on the current page. */
     readonly offset: ComputedRef<number>;
+
+    /**
+     * Advance one page, stopping at the last.
+     */
     next(): void;
+
+    /**
+     * Step back one page, stopping at the first.
+     */
     previous(): void;
+
+    /**
+     * Jump to a page, clamped into the valid range.
+     *
+     * @param page - the requested page number, before clamping
+     */
     goTo(page: number): void;
 }
 

@@ -55,18 +55,43 @@ export type FilterScalar = string | number | boolean;
  */
 export interface FilterOperators {
     // biome-ignore-start lint/style/useNamingConvention: toolkit keys
+
+    /** Equality match. */
     readonly $eq?: FilterScalar;
+
+    /** Inequality match. */
     readonly $neq?: FilterScalar;
+
+    /** Strictly greater than. */
     readonly $gt?: FilterScalar;
+
+    /** Strictly less than. */
     readonly $lt?: FilterScalar;
+
+    /** Greater than or equal. */
     readonly $ge?: FilterScalar;
+
+    /** Less than or equal. */
     readonly $le?: FilterScalar;
+
+    /** Wildcard pattern match. */
     readonly $like?: string;
+
+    /** Value is one of the given set. */
     readonly $in?: readonly FilterScalar[];
+
+    /** Value falls within the inclusive bounds. */
     readonly $between?: readonly [FilterScalar, FilterScalar];
+
+    /** Field contains the given value or values. */
     readonly $contains?: FilterScalar | readonly FilterScalar[];
+
+    /** Field is null. */
     readonly $null?: true;
+
+    /** Field is not null. */
     readonly $notNull?: true;
+
     // biome-ignore-end lint/style/useNamingConvention: toolkit keys
 }
 

@@ -15,7 +15,9 @@ import type { AnalyticsTracker } from './analytics-tracker';
  * An analytics tracker that logs every call with `console.info`.
  */
 export class ConsoleAnalyticsTracker implements AnalyticsTracker {
-    /** Write the event and its properties to the console via `console.info`. */
+    /**
+     * Write the event and its properties to the console via `console.info`.
+     */
     track(event: string, properties?: Readonly<Record<string, unknown>>): void {
         console.info('[AnalyticsTracker] track', event, ...(properties !== undefined ? [properties] : []));
     }
@@ -27,12 +29,16 @@ export class ConsoleAnalyticsTracker implements AnalyticsTracker {
         console.info('[AnalyticsTracker] page', name, ...(properties !== undefined ? [properties] : []));
     }
 
-    /** Write the user id and traits to the console via `console.info`. */
+    /**
+     * Write the user id and traits to the console via `console.info`.
+     */
     identify(id: string, traits?: Readonly<Record<string, unknown>>): void {
         console.info('[AnalyticsTracker] identify', id, ...(traits !== undefined ? [traits] : []));
     }
 
-    /** Write the identity reset to the console via `console.info`. */
+    /**
+     * Write the identity reset to the console via `console.info`.
+     */
     reset(): void {
         console.info('[AnalyticsTracker] reset');
     }

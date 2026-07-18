@@ -11,8 +11,13 @@ import type { Locator, Page } from '@playwright/test';
  * Drives the dashboard home screen.
  */
 export class DashboardPage {
+    /** The Playwright page under test. */
     readonly page: Page;
+
+    /** The dashboard heading. */
     readonly heading: Locator;
+
+    /** The sign out button. */
     readonly signOutButton: Locator;
 
     constructor(page: Page) {

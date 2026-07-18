@@ -20,8 +20,6 @@ export interface SessionTokens {
     /** The token exchanged for a new session; null when not issued. */
     readonly refreshToken: string | null;
 
-    /**
-     * Absolute expiry in epoch milliseconds; null disables proactive refresh.
-     */
+    /** Absolute expiry in epoch milliseconds; null disables proactive refresh. */
     readonly expiresAtEpochMs: number | null;
 }

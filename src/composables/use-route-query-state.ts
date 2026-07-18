@@ -26,6 +26,7 @@ import type { LocationQuery, Router } from 'vue-router';
  * Options accepted by {@link useRouteQueryState}.
  */
 export interface RouteQueryStateOptions {
+    /** Managed keys mapped to the value each falls back to when absent. */
     readonly defaults: Readonly<Record<string, string>>;
 }
 
@@ -34,8 +35,23 @@ export interface RouteQueryStateOptions {
  * {@link useRouteQueryState}.
  */
 export interface RouteQueryState {
+    /** The resolved value of every managed key. */
     readonly values: ComputedRef<Readonly<Record<string, string>>>;
+
+    /**
+     * Read the resolved value of a managed key.
+     *
+     * @param key - the managed key to read
+     * @returns the resolved value, or an empty string when unmanaged
+     */
     get(key: string): string;
+
+    /**
+     * Merge a patch into the URL query, leaving unmanaged parameters intact.
+     *
+     * @param patch - the managed keys to set, or null to clear
+     * @returns a promise that settles once navigation completes
+     */
     set(patch: Readonly<Record<string, string | null>>): Promise<void>;
 }
 

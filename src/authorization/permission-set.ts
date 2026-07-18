@@ -26,6 +26,7 @@
  * An empty granted set allows nothing.
  */
 export class PermissionSet {
+    /** The granted permission strings backing this set. */
     readonly #granted: readonly string[];
 
     constructor(granted: readonly string[]) {

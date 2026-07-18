@@ -59,30 +59,16 @@ export interface SessionStorageKeys {
  * redirect, and the redirect sanitiser's loop guard.
  */
 export interface SessionRoutes {
-    /**
-     * Where unauthenticated visitors are sent. Default
-     * `{ name: 'auth.login' }`.
-     */
+    /** Where unauthenticated visitors are sent. Default `{ name: 'auth.login' }`. */
     readonly login: RouteLocationRaw;
 
-    /**
-     * The login-path prefix rejected by the redirect sanitiser as a loop guard.
-     * Applications renaming the login path set `login` and `loginPath`
-     * together. Default '/login'.
-     */
+    /** The login-path prefix rejected by the redirect sanitiser as a loop guard. Applications renaming the login path set `login` and `loginPath` together. Default '/login'. */
     readonly loginPath: string;
 
-    /**
-     * Where authenticated visitors leaving guest-only routes are sent. Default
-     * '/'.
-     */
+    /** Where authenticated visitors leaving guest-only routes are sent. Default '/'. */
     readonly home: RouteLocationRaw;
 
-    /**
-     * Where authenticated-but-unauthorised visitors are sent. Default
-     * '/forbidden' - a path string by design: the application's fallback or
-     * errors module owns the page.
-     */
+    /** Where authenticated-but-unauthorised visitors are sent. Default '/forbidden' - a path string by design: the application's fallback or errors module owns the page. */
     readonly forbidden: RouteLocationRaw;
 }
 
@@ -91,22 +77,22 @@ export interface SessionRoutes {
  * feature-flag holders whenever the session user changes.
  */
 export interface SessionIdentityMapping<U extends SessionUser> {
-    /**
-     * Maps the user onto the error reporter identity. Default
-     * `{ id, email, name }` with null fields omitted.
-     */
-    readonly reporting?: (user: U) => { id: string; email?: string; name?: string };
+    /** Maps the user onto the error reporter identity. Default `{ id, email, name }` with null fields omitted. */
+    readonly reporting?: (user: U) => {
+        /** The reporter identity id. */
+        id: string;
 
-    /**
-     * Maps the user onto the analytics identify() id. Default the stringified
-     * user id.
-     */
+        /** The reporter identity email; omitted when null. */
+        email?: string;
+
+        /** The reporter identity name; omitted when null. */
+        name?: string;
+    };
+
+    /** Maps the user onto the analytics identify() id. Default the stringified user id. */
     readonly analytics?: (user: U) => string;
 
-    /**
-     * Maps the user onto the feature-flag evaluation context. Default
-     * `{ userId }`.
-     */
+    /** Maps the user onto the feature-flag evaluation context. Default `{ userId }`. */
     readonly featureFlags?: (user: U) => Readonly<Record<string, string>>;
 }
 
@@ -114,20 +100,23 @@ export interface SessionIdentityMapping<U extends SessionUser> {
  * Options for {@link createSessionModule}; every default mirrors the
  * organisation's reference application.
  */
-export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = { email: string; password: string }> {
-    /**
-     * Registry name (the module has no routes and no locales). Default
-     * 'session'.
-     */
+export interface SessionModuleOptions<
+    U extends SessionUser = SessionUser,
+    C = {
+        /** The submitted account email address. */
+        email: string;
+
+        /** The submitted account password. */
+        password: string;
+    },
+> {
+    /** Registry name (the module has no routes and no locales). Default 'session'. */
     readonly name?: string;
 
     /** The pinia store id the session store registers under. Default 'auth'. */
     readonly storeId?: string;
 
-    /**
-     * Session API factory over the application HTTP client. Default
-     * {@link createDefaultSessionApi}.
-     */
+    /** Session API factory over the application HTTP client. Default {@link createDefaultSessionApi}. */
     readonly api?: (http: HttpClient) => SessionApi<U, C>;
 
     /** Overrides for the persisted storage keys. */
@@ -136,16 +125,10 @@ export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = {
     /** Overrides for the route identity. */
     readonly routes?: Partial<SessionRoutes>;
 
-    /**
-     * How long before expiry the proactive refresh fires, in milliseconds.
-     * Default 60 seconds.
-     */
+    /** How long before expiry the proactive refresh fires, in milliseconds. Default 60 seconds. */
     readonly refreshSkewMs?: number;
 
-    /**
-     * The operating-system label reported in the device fingerprint. Default
-     * 'WEB'.
-     */
+    /** The operating-system label reported in the device fingerprint. Default 'WEB'. */
     readonly deviceOs?: string;
 
     /** Device uuid factory. Default `crypto.randomUUID()`. */
@@ -157,18 +140,10 @@ export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = {
     /** Refresh the session ahead of its expiry. Default true. */
     readonly proactiveRefresh?: boolean;
 
-    /**
-     * Redirect to the login route when the session transitions from
-     * authenticated to unauthenticated, carrying the sanitised current path as
-     * the redirect query parameter. Default true.
-     */
+    /** Redirect to the login route when the session transitions from authenticated to unauthenticated, carrying the sanitised current path as the redirect query parameter. Default true. */
     readonly sessionLossRedirect?: boolean;
 
-    /**
-     * Identity fan-out to the reporting, analytics and feature-flag holders;
-     * per-channel overrides merge over the defaults, and false disables the
-     * fan-out entirely.
-     */
+    /** Identity fan-out to the reporting, analytics and feature-flag holders; per-channel overrides merge over the defaults, and false disables the fan-out entirely. */
     readonly identity?: false | SessionIdentityMapping<U>;
 }
 
@@ -205,9 +180,16 @@ const MAX_TIMEOUT_DELAY_MS = 2_147_483_647;
  * @param options - overrides for the reference-application defaults
  * @returns the module definition for the application registry
  */
-export function createSessionModule<U extends SessionUser = SessionUser, C = { email: string; password: string }>(
-    options: SessionModuleOptions<U, C> = {},
-): ModuleDefinition {
+export function createSessionModule<
+    U extends SessionUser = SessionUser,
+    C = {
+        /** The submitted account email address. */
+        email: string;
+
+        /** The submitted account password. */
+        password: string;
+    },
+>(options: SessionModuleOptions<U, C> = {}): ModuleDefinition {
     const storageKeys: SessionStorageKeys = { ...DEFAULT_STORAGE_KEYS, ...options.storageKeys };
     const routes: SessionRoutes = { ...DEFAULT_ROUTES, ...options.routes };
     const storeId = options.storeId ?? DEFAULT_STORE_ID;
@@ -240,11 +222,22 @@ export function createSessionModule<U extends SessionUser = SessionUser, C = { e
  * The resolved register-phase collaborators the session context is built from.
  */
 interface RegisterConfig<U extends SessionUser, C> {
+    /** The resolved storage keys the session persists under. */
     readonly storageKeys: SessionStorageKeys;
+
+    /** The resolved route identity. */
     readonly routes: SessionRoutes;
+
+    /** The pinia store id the session store registers under. */
     readonly storeId: string;
+
+    /** Builds the session API gateway over the application HTTP client. */
     readonly apiFactory: (http: HttpClient) => SessionApi<U, C>;
+
+    /** The device uuid factory. */
     readonly generateUuid: () => string;
+
+    /** The operating-system label reported in the device fingerprint. */
     readonly deviceOs: string;
 }
 
@@ -288,12 +281,25 @@ function registerSession<U extends SessionUser, C>(context: ModuleRegisterContex
 
 /** The resolved boot-phase toggles and collaborator inputs. */
 interface LifecycleOptions<U extends SessionUser> {
+    /** The resolved storage keys the session persists under. */
     readonly storageKeys: SessionStorageKeys;
+
+    /** The resolved route identity. */
     readonly routes: SessionRoutes;
+
+    /** How long before expiry the proactive refresh fires, in milliseconds. */
     readonly refreshSkewMs: number;
+
+    /** Whether to mirror session changes made by other tabs. */
     readonly crossTabSync: boolean;
+
+    /** Whether to refresh the session ahead of its expiry. */
     readonly proactiveRefresh: boolean;
+
+    /** Whether to redirect to login when the session is lost. */
     readonly sessionLossRedirect: boolean;
+
+    /** The resolved identity fan-out mapping, or null when disabled. */
     readonly identity: Required<SessionIdentityMapping<U>> | null;
 }
 
@@ -457,7 +463,10 @@ function createStorageListener(store: SessionStore, accessTokenKey: string): (ev
 
 /** A schedule/cancel pair for the proactive refresh timer. */
 interface RefreshScheduler {
+    /** Arm a proactive refresh ahead of the given expiry, or cancel when null. */
     readonly schedule: (expiresAtEpochMs: number | null) => void;
+
+    /** Cancel any pending proactive refresh. */
     readonly cancel: () => void;
 }
 
@@ -572,7 +581,16 @@ function resolveIdentityMapping<U extends SessionUser>(
  * @param user - the signed-in user
  * @returns the reported identity, with null email and name omitted
  */
-function defaultReportedIdentity(user: SessionUser): { id: string; email?: string; name?: string } {
+function defaultReportedIdentity(user: SessionUser): {
+    /** The reporter identity id. */
+    id: string;
+
+    /** The reporter identity email; omitted when null. */
+    email?: string;
+
+    /** The reporter identity name; omitted when null. */
+    name?: string;
+} {
     return {
         id: String(user.id),
         ...(user.email === null ? {} : { email: user.email }),

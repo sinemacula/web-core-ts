@@ -14,8 +14,13 @@
  * A user identity to attach to subsequent error reports.
  */
 export interface ReportedUser {
+    /** The stable unique identifier for the user. */
     readonly id: string;
+
+    /** The user's email address, when known. */
     readonly email?: string;
+
+    /** The user's display name, when known. */
     readonly name?: string;
 }
 

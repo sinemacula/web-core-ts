@@ -48,35 +48,19 @@ const MIN_PAGE = 1;
  * key- and value-typing of {@link setFilter} and {@link clearFilter}
  */
 export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
-    /**
-     * The compiled `ApiQuery` instance, recomputed whenever any reactive state
-     * changes.
-     */
+    /** The compiled `ApiQuery`, recomputed on any reactive state change. */
     readonly query: ComputedRef<ApiQuery>;
 
-    /**
-     * The flat query-parameter record derived from {@link query}, ready to pass
-     * to an `HttpClient` method.
-     */
+    /** The flat query-parameter record derived from {@link query}, ready to pass to an `HttpClient` method. */
     readonly parameters: ComputedRef<QueryParameters>;
 
-    /**
-     * Snapshot of the currently active filter values, keyed by filter name.
-     * `null` entries are not stored; cleared filters are absent from the
-     * record.
-     */
+    /** Snapshot of the currently active filter values, keyed by filter name. `null` entries are not stored; cleared filters are absent from the record. */
     readonly filterValues: ComputedRef<Readonly<Partial<Record<keyof Filters & string, unknown>>>>;
 
-    /**
-     * The current free-text search term (empty string when no search is
-     * active).
-     */
+    /** The current free-text search term (empty string when no search is active). */
     readonly searchTerm: ComputedRef<string>;
 
-    /**
-     * The active sort, or `null` when neither an explicit sort nor a
-     * `defaultSort` is set.
-     */
+    /** The active sort, or `null` when neither an explicit sort nor a `defaultSort` is set. */
     readonly sort: ComputedRef<SortDefault | null>;
 
     /** The current 1-based page number. */
@@ -100,7 +84,9 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
      */
     clearFilter(name: keyof Filters & string): void;
 
-    /** Clear all active filters. Resets the page to 1. */
+    /**
+     * Clear all active filters. Resets the page to 1.
+     */
     clearFilters(): void;
 
     /**
@@ -130,7 +116,9 @@ export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
      */
     sortBy(column: string, direction?: 'asc' | 'desc'): void;
 
-    /** Advance to the next page. Does not touch filters or sort. */
+    /**
+     * Advance to the next page. Does not touch filters or sort.
+     */
     next(): void;
 
     /**
@@ -182,7 +170,7 @@ export function useListQuery<Filters extends Record<string, ListFilter<never>>>(
      * instance here avoids a definition lookup at compile time, eliminating a
      * structurally-unreachable guard branch.
      */
-    const activeFilters = ref<Map<string, { filter: ListFilter<unknown>; value: unknown }>>(new Map());
+    const activeFilters = ref<Map<string, ActiveFilterEntry>>(new Map());
     const activeSearch = ref('');
     const activeSort = ref<SortDefault | null>(null);
     const currentPage = ref(MIN_PAGE);
@@ -212,14 +200,34 @@ export function useListQuery<Filters extends Record<string, ListFilter<never>>>(
 }
 
 /**
+ * A stored active filter: the typed filter instance and its concrete value.
+ */
+interface ActiveFilterEntry {
+    /** The typed filter instance. */
+    filter: ListFilter<unknown>;
+
+    /** The concrete value applied through the filter. */
+    value: unknown;
+}
+
+/**
  * The mutable reactive state a {@link useListQuery} instance compiles and
  * mutates.
  */
 interface ListQueryState {
-    readonly activeFilters: Ref<Map<string, { filter: ListFilter<unknown>; value: unknown }>>;
+    /** Active filter entries in insertion order, keyed by filter name. */
+    readonly activeFilters: Ref<Map<string, ActiveFilterEntry>>;
+
+    /** The current free-text search term, empty when no search is active. */
     readonly activeSearch: Ref<string>;
+
+    /** The active sort, or null when none is set. */
     readonly activeSort: Ref<SortDefault | null>;
+
+    /** The current 1-based page number. */
     readonly currentPage: Ref<number>;
+
+    /** The registered refinements, applied in call order. */
     readonly refinements: Ref<Array<(query: ApiQuery) => ApiQuery>>;
 }
 
@@ -304,7 +312,7 @@ function compileQuery<Filters extends Record<string, ListFilter<never>>>(
  * @returns the active values keyed by filter name; cleared filters are absent
  */
 function deriveFilterValues<Filters extends Record<string, ListFilter<never>>>(
-    activeFilters: Map<string, { filter: ListFilter<unknown>; value: unknown }>,
+    activeFilters: Map<string, ActiveFilterEntry>,
 ): Readonly<Partial<Record<keyof Filters & string, unknown>>> {
     const result: Partial<Record<string, unknown>> = {};
 

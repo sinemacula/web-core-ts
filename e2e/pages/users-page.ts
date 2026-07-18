@@ -11,12 +11,25 @@ import type { Locator, Page } from '@playwright/test';
  * Drives the users list screen.
  */
 export class UsersPage {
+    /** The Playwright page under test. */
     readonly page: Page;
+
+    /** The users heading. */
     readonly heading: Locator;
+
+    /** The search users field. */
     readonly searchField: Locator;
+
+    /** The table body rows. */
     readonly rows: Locator;
+
+    /** The next page button. */
     readonly nextButton: Locator;
+
+    /** The previous page button. */
     readonly previousButton: Locator;
+
+    /** The full name sort button. */
     readonly sortFullNameButton: Locator;
 
     constructor(page: Page) {

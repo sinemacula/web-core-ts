@@ -22,15 +22,10 @@ export interface WireChunkRecoveryOptions {
     /** The router whose navigation errors are inspected and recovered. */
     readonly router: Router;
 
-    /**
-     * Records the last recovery attempt per path, guarding against reload
-     * loops.
-     */
+    /** Records the last recovery attempt per path, guarding against reload loops. */
     readonly storage: KeyValueStorage;
 
-    /**
-     * Receives non-chunk router errors, and chunk errors a reload did not cure.
-     */
+    /** Receives non-chunk router errors, and chunk errors a reload did not cure. */
     readonly reporter: ErrorReporter;
 
     /** Whether recovery is installed at all. Default true. */

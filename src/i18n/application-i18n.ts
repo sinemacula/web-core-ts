@@ -27,7 +27,10 @@ import type { LocaleService } from './locale-service';
  * Optional: an application with no formatting needs may omit both.
  */
 export interface LocaleFormats {
+    /** Datetime formats installed per locale. */
     readonly datetime?: IntlDateTimeFormats;
+
+    /** Number formats installed per locale. */
     readonly number?: IntlNumberFormats;
 }
 
@@ -38,6 +41,7 @@ export interface LocaleFormats {
  * @param formats - optional datetime/number formats installed per locale
  * @returns the i18n instance, ready to install on the app
  */
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- the vue-i18n legacy:false instance type is not nameable; it is inferred and re-exported as ApplicationI18n
 export function createApplicationI18n(defaultLocale: string, formats?: LocaleFormats) {
     return createI18n({
         fallbackLocale: defaultLocale,
@@ -58,25 +62,31 @@ export type ApplicationI18n = ReturnType<typeof createApplicationI18n>;
  * Options for activating a locale on the running application.
  */
 export interface ActivateLocaleOptions {
+    /** The i18n instance messages are installed on. */
     readonly i18n: ApplicationI18n;
+
+    /** The modules whose per-locale messages are loaded. */
     readonly modules: readonly ModuleDefinition[];
+
+    /** Host-provided loaders for the shared translations, keyed by locale. */
     readonly sharedLoaders?: Readonly<Record<string, () => Promise<LocaleMessages>>>;
+
+    /** The locale to load and activate. */
     readonly locale: string;
+
+    /** The text direction applied to the document element. */
     readonly direction: 'ltr' | 'rtl';
+
+    /** A fallback locale whose messages are also loaded when it differs. */
     readonly fallbackLocale?: string;
+
+    /** The document whose `lang`/`dir` attributes are set. Defaults to the global document. */
     readonly targetDocument?: Document;
 
-    /**
-     * Replaces the internal module-message collection for both the active and
-     * fallback locale loads when supplied.
-     */
+    /** Replaces the internal module-message collection for both the active and fallback locale loads when supplied. */
     readonly messageSource?: ModuleMessageSource;
 
-    /**
-     * Behaviour when a module name equals a shared top-level message key.
-     * Default 'module-wins' keeps the merge where module messages shadow the
-     * shared key; 'error' throws naming the module and the locale.
-     */
+    /** Behaviour when a module name equals a shared top-level message key. Default 'module-wins' keeps the merge where module messages shadow the shared key; 'error' throws naming the module and the locale. */
     readonly onNamespaceCollision?: 'module-wins' | 'error';
 }
 
@@ -108,12 +118,33 @@ export async function activateLocale(options: ActivateLocaleOptions): Promise<vo
  * Options for {@link createLocaleSwitcher}.
  */
 export interface LocaleSwitcherOptions {
+    /** The i18n instance the switcher is bound to. */
     readonly i18n: ApplicationI18n;
+
+    /** The modules whose per-locale messages are loaded. */
     readonly modules: readonly ModuleDefinition[];
+
+    /** Host-provided loaders for the shared translations, keyed by locale. */
     readonly sharedLoaders?: Readonly<Record<string, () => Promise<LocaleMessages>>>;
+
+    /** Resolves, matches and persists the requested locale. */
     readonly localeService: LocaleService;
-    readonly supported: Readonly<Record<string, { readonly direction: 'ltr' | 'rtl' }>>;
+
+    /** Supported locales and their metadata, keyed by locale code. */
+    readonly supported: Readonly<
+        Record<
+            string,
+            {
+                /** The text direction applied to the document for this locale. */
+                readonly direction: 'ltr' | 'rtl';
+            }
+        >
+    >;
+
+    /** The fallback locale whose messages are also loaded. */
     readonly fallbackLocale: string;
+
+    /** The document whose `lang`/`dir` attributes are set. Defaults to the global document. */
     readonly targetDocument?: Document;
 
     /** Forwarded to {@link activateLocale} on every switch. */

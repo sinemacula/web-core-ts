@@ -18,17 +18,23 @@ import type { ErrorReporter, ReportedUser } from './error-reporter';
  * and `setUser` is a no-op (user identity is not relevant in the console).
  */
 export class ConsoleErrorReporter implements ErrorReporter {
-    /** Write the error and its context to the console via `console.error`. */
+    /**
+     * Write the error and its context to the console via `console.error`.
+     */
     captureError(error: unknown, context?: Readonly<Record<string, unknown>>): void {
         console.error('[ErrorReporter]', error, ...(context !== undefined ? [context] : []));
     }
 
-    /** Write the message and its context to the console via `console.warn`. */
+    /**
+     * Write the message and its context to the console via `console.warn`.
+     */
     captureMessage(message: string, context?: Readonly<Record<string, unknown>>): void {
         console.warn('[ErrorReporter]', message, ...(context !== undefined ? [context] : []));
     }
 
-    /** Ignore the user; console output carries no identity. */
+    /**
+     * Ignore the user; console output carries no identity.
+     */
     setUser(_user: ReportedUser | null): void {
         // Intentionally empty: user identity is not surfaced via the console.
     }

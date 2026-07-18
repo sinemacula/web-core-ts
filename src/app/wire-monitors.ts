@@ -23,32 +23,27 @@ const DEV_VERSION_SENTINEL = 'dev';
  * The configuration slice the monitor wiring reads.
  */
 export interface MonitorWiringSettings {
-    readonly app: { readonly version: string };
+    /** Application identity carrying the deployed version. */
+    readonly app: {
+        /** The deployed application version. */
+        readonly version: string;
+    };
 }
 
 /**
  * Update-monitor options accepted by {@link wireMonitors}.
  */
 export interface UpdateMonitorWiring<T> {
-    /**
-     * Whether the update monitor runs. Default: the deployed version is not the
-     * 'dev' sentinel. The monitor arms only when `toastKey` or `onUpdate` is
-     * provided; enabling it explicitly with neither throws a
-     * {@link WebCoreAppError} at boot.
-     */
+    /** Whether the update monitor runs. Default: the deployed version is not 'dev'. */
     readonly enabled?: boolean | ((settings: Readonly<T>) => boolean);
 
-    /**
-     * The version document location. Defaults to the runtime environment URL.
-     */
+    /** The version document location. Defaults to the runtime environment URL. */
     readonly url?: string;
 
     /** Poll interval in milliseconds. */
     readonly pollIntervalMs?: number;
 
-    /**
-     * Application-owned toast key shown sticky (duration 0) on a new version.
-     */
+    /** Application-owned toast key shown sticky (duration 0) on a new version. */
     readonly toastKey?: string;
 
     /** Full handler for new versions; wins over `toastKey`. */
@@ -62,28 +57,28 @@ export interface WireMonitorsOptions<T extends MonitorWiringSettings> {
     /** The frozen application configuration. */
     readonly settings: Readonly<T>;
 
+    /** Update-monitor options; omit to take the version-derived defaults. */
     readonly updates?: UpdateMonitorWiring<T>;
 
-    /**
-     * Connectivity monitoring; defaults to on exactly when the update monitor
-     * runs.
-     */
-    readonly connectivity?: { readonly enabled?: boolean };
+    /** Connectivity monitoring; defaults to on exactly when the update monitor runs. */
+    readonly connectivity?: {
+        /** Whether connectivity monitoring runs. */
+        readonly enabled?: boolean;
+    };
 
-    /**
-     * The runtime environment document URL, the update monitor's default poll
-     * target.
-     */
+    /** The runtime environment document URL, the update monitor's default poll target. */
     readonly runtimeUrl: string;
 
-    /**
-     * Toast service accessor, read lazily per update rather than at wiring
-     * time.
-     */
+    /** Toast service accessor, read lazily per update rather than at wiring time. */
     readonly toasts: () => ToastService;
 
+    /** The fetch seam used to poll the version document. */
     readonly fetchFn?: typeof fetch;
+
+    /** The window whose connectivity events are observed. */
     readonly targetWindow?: Window;
+
+    /** The document the update monitor watches for visibility. */
     readonly targetDocument?: Document;
 }
 
@@ -91,7 +86,10 @@ export interface WireMonitorsOptions<T extends MonitorWiringSettings> {
  * The wired monitors; either is null when disabled.
  */
 export interface WiredMonitors {
+    /** The running update monitor, or null when it does not run. */
     readonly updates: UpdateMonitor | null;
+
+    /** The running connectivity monitor, or null when disabled. */
     readonly connectivity: ConnectivityMonitor | null;
 }
 

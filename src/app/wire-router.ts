@@ -25,9 +25,7 @@ export interface WireRouterOptions {
     /** The registry's ordered module list, the source of routes and guards. */
     readonly modules: readonly ModuleDefinition[];
 
-    /**
-     * The i18n instance translating `meta.title` keys for the document title.
-     */
+    /** The i18n instance translating `meta.title` keys for the document title. */
     readonly i18n: ApplicationI18n;
 
     /** The application name suffixed onto every document title. */
@@ -44,6 +42,7 @@ export interface WireRouterOptions {
  * The wired router and the title-sync teardown.
  */
 export interface WiredRouter {
+    /** The wired application router. */
     readonly router: Router;
 
     /** Removes the document-title synchronisation hook. */

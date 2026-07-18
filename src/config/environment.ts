@@ -29,6 +29,7 @@ export interface EnvironmentSource {
  * Typed reader over an {@link EnvironmentSource}.
  */
 export class Environment {
+    /** The backing source of raw environment values. */
     readonly #source: EnvironmentSource;
 
     constructor(source: EnvironmentSource) {

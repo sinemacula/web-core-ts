@@ -18,16 +18,10 @@ export interface IdleMonitorOptions {
     /** Milliseconds of inactivity before subscribers are notified. */
     readonly timeoutMs: number;
 
-    /**
-     * Event types treated as activity; defaults to pointer, keyboard, wheel and
-     * touch input.
-     */
+    /** Event types treated as activity; defaults to pointer, keyboard, wheel and touch input. */
     readonly events?: readonly string[];
 
-    /**
-     * The window whose activity events are observed; defaults to the global
-     * window.
-     */
+    /** The window whose activity events are observed; defaults to the global window. */
     readonly targetWindow?: Window;
 }
 
@@ -37,14 +31,28 @@ const DEFAULT_EVENTS: readonly string[] = ['pointerdown', 'keydown', 'wheel', 't
  * Detects periods of user inactivity and notifies subscribers once idle.
  */
 export class IdleMonitor {
+    /** Milliseconds of inactivity before subscribers are notified. */
     readonly #timeoutMs: number;
+
+    /** The event types treated as user activity. */
     readonly #events: readonly string[];
+
+    /** The window whose activity events are observed. */
     readonly #targetWindow: Window;
+
+    /** The registered idle subscribers. */
     readonly #handlers = new Set<() => void>();
+
+    /**
+     * Rearms the countdown when activity is observed.
+     */
     readonly #onActivity = (): void => {
         this.#rearm();
     };
 
+    /**
+     * Notifies subscribers once the countdown lapses.
+     */
     readonly #onTimeout = (): void => {
         this.#timer = null;
 
@@ -53,7 +61,10 @@ export class IdleMonitor {
         }
     };
 
+    /** The pending idle timeout handle, or null when disarmed. */
     #timer: ReturnType<typeof setTimeout> | null = null;
+
+    /** Whether the monitor is currently running. */
     #started: boolean = false;
 
     constructor(options: IdleMonitorOptions) {

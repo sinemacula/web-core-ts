@@ -24,16 +24,10 @@ export interface GlobalErrorHandlingOptions {
     /** The reporter that receives every captured error or message. */
     readonly reporter: ErrorReporter;
 
-    /**
-     * Optional breadcrumb trail; when present its snapshot is attached to every
-     * report.
-     */
+    /** Optional breadcrumb trail; when present its snapshot is attached to every report. */
     readonly trail?: BreadcrumbTrail;
 
-    /**
-     * The window to attach native error listeners to (default
-     * globalThis.window).
-     */
+    /** The window to attach native error listeners to (default globalThis.window). */
     readonly targetWindow?: Window;
 }
 

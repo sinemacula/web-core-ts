@@ -21,12 +21,13 @@ import { runMiddlewarePipeline } from './middleware';
  * Options for building the application router.
  */
 export interface RouterFactoryOptions {
+    /** The routes to install on the router. */
     readonly routes: readonly RouteRecordRaw[];
+
+    /** The history implementation; defaults to HTML5 history. */
     readonly history?: RouterHistory;
 
-    /**
-     * Middleware run on every navigation before matched-record meta middleware.
-     */
+    /** Middleware run on every navigation before matched-record meta middleware. */
     readonly globalMiddleware?: readonly RouteMiddleware[];
 }
 

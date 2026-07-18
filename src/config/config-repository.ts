@@ -17,6 +17,7 @@ const MISSING = Symbol('missing');
  * Read-only, dot-notation-addressable configuration store.
  */
 export class ConfigRepository<T extends Record<string, unknown>> {
+    /** The deep-frozen configuration tree. */
     readonly #values: Readonly<T>;
 
     constructor(values: T) {

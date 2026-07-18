@@ -43,7 +43,10 @@ export class CancelledError extends Error {
  * The server responded with a non-success status.
  */
 export class HttpError extends Error {
+    /** The HTTP status code of the response. */
     readonly status: number;
+
+    /** The parsed error response body, or null. */
     readonly payload: unknown;
 
     constructor(status: number, message: string, payload: unknown = null) {
@@ -58,6 +61,7 @@ export class HttpError extends Error {
  * The server rejected the request payload (422) with per-field errors.
  */
 export class HttpValidationError extends HttpError {
+    /** The per-field validation messages. */
     readonly errors: Readonly<Record<string, readonly string[]>>;
 
     constructor(status: number, message: string, payload: unknown, errors: Record<string, readonly string[]>) {

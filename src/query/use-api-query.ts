@@ -41,7 +41,9 @@ export interface ApiQueryState {
      */
     apply(mutate: (query: ApiQuery) => ApiQuery): void;
 
-    /** Reset the query back to the initial state. */
+    /**
+     * Reset the query back to the initial state.
+     */
     reset(): void;
 }
 

@@ -17,7 +17,10 @@ import type { KeyValueStorage } from './key-value-storage';
  * Prefix every key with a namespace before delegating to an inner storage.
  */
 export class NamespacedStorage implements KeyValueStorage {
+    /** The storage the namespaced keys delegate to. */
     readonly #inner: KeyValueStorage;
+
+    /** The prefix composed onto every key. */
     readonly #namespace: string;
 
     /**
@@ -32,17 +35,23 @@ export class NamespacedStorage implements KeyValueStorage {
         this.#namespace = namespace;
     }
 
-    /** Read the namespaced key from the inner storage. */
+    /**
+     * Read the namespaced key from the inner storage.
+     */
     get(key: string): string | null {
         return this.#inner.get(this.#namespacedKey(key));
     }
 
-    /** Write the value under the namespaced key in the inner storage. */
+    /**
+     * Write the value under the namespaced key in the inner storage.
+     */
     set(key: string, value: string): void {
         this.#inner.set(this.#namespacedKey(key), value);
     }
 
-    /** Remove the namespaced key from the inner storage. */
+    /**
+     * Remove the namespaced key from the inner storage.
+     */
     remove(key: string): void {
         this.#inner.remove(this.#namespacedKey(key));
     }

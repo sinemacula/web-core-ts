@@ -15,7 +15,10 @@ export type RealtimeState = 'idle' | 'connecting' | 'open' | 'closed';
 
 /** A single message delivered over the realtime channel. */
 export interface RealtimeMessage {
+    /** The name of the event the message carries. */
     readonly event: string;
+
+    /** The message payload as text. */
     readonly data: string;
 }
 

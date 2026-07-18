@@ -35,17 +35,10 @@ export interface UseResourceOptions<Value> {
     /** Executes a single run of the request. */
     readonly fetcher: ResourceFetcher<Value>;
 
-    /**
-     * One or more reactive sources that trigger a refetch when they change,
-     * e.g. a `useListQuery` `parameters` computed ref.
-     */
+    /** One or more reactive sources that trigger a refetch when they change, e.g. a `useListQuery` `parameters` computed ref. */
     readonly watch?: WatchSource<unknown> | ReadonlyArray<WatchSource<unknown>>;
 
-    /**
-     * Whether to run the fetcher immediately on creation.
-     *
-     * @defaultValue true
-     */
+    /** Whether to run the fetcher immediately on creation; defaults to true. */
     readonly immediate?: boolean;
 }
 
@@ -58,9 +51,7 @@ export interface Resource<Value> {
     /** The most recently resolved value, or `null` before the first success. */
     readonly data: Ref<Value | null>;
 
-    /**
-     * Whatever the fetcher threw on its most recent run, or `null` when none.
-     */
+    /** Whatever the fetcher threw on its most recent run, or `null` when none. */
     readonly error: Ref<unknown>;
 
     /** `true` while the latest run is in flight. */
@@ -76,7 +67,9 @@ export interface Resource<Value> {
      */
     refetch(): Promise<void>;
 
-    /** Abort any in-flight run and stop reacting to the watch source(s). */
+    /**
+     * Abort any in-flight run and stop reacting to the watch source(s).
+     */
     stop(): void;
 }
 
@@ -132,12 +125,12 @@ export function useResource<Value>(options: UseResourceOptions<Value>): Resource
         const sources: ReadonlyArray<WatchSource<unknown>> = Array.isArray(watchSource) ? watchSource : [watchSource];
 
         stopWatch = watch(sources, () => {
-            run();
+            void run();
         });
     }
 
     if (immediate) {
-        run();
+        void run();
     }
 
     if (getCurrentScope() !== undefined) {
@@ -160,10 +153,28 @@ export function useResource<Value>(options: UseResourceOptions<Value>): Resource
  * @typeParam Value - the resolved value type
  */
 interface ResourceState<Value> {
+    /** The most recently resolved value, or null before the first success. */
     readonly data: Ref<Value | null>;
+
+    /** Whatever the fetcher last threw, or null when none. */
     readonly error: Ref<unknown>;
+
+    /** Whether the latest run is in flight. */
     readonly isLoading: Ref<boolean>;
+
+    /** Whether a run has resolved successfully at least once. */
     readonly resolvedOnce: Ref<boolean>;
+}
+
+/**
+ * The run trigger and abort control returned by {@link createRunner}.
+ */
+interface Runner {
+    /** Trigger a run, superseding any run already in flight. */
+    run: () => Promise<void>;
+
+    /** Abort the in-flight run without starting a new one. */
+    abort: () => void;
 }
 
 /**
@@ -178,10 +189,7 @@ interface ResourceState<Value> {
  * @returns the run trigger and an abort control for the in-flight run
  * @typeParam Value - the resolved value type
  */
-function createRunner<Value>(
-    fetcher: ResourceFetcher<Value>,
-    state: ResourceState<Value>,
-): { run: () => Promise<void>; abort: () => void } {
+function createRunner<Value>(fetcher: ResourceFetcher<Value>, state: ResourceState<Value>): Runner {
     let sequence = 0;
     let activeController: AbortController | null = null;
 

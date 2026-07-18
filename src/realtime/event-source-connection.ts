@@ -32,41 +32,19 @@ export type EventSourceFactory = (url: string, init: EventSourceInit) => EventSo
 
 /** Construction options for {@link EventSourceConnection}. */
 export interface EventSourceConnectionOptions {
-    /**
-     * The SSE endpoint URL, or a function that returns it. The function form is
-     * called on every `connect()`, enabling per-connect auth tokens in the
-     * query string - the recommended way to authenticate SSE streams because
-     * native EventSource cannot send custom headers.
-     */
+    /** The SSE endpoint URL, or a function that returns it. The function form is called on every `connect()`, enabling per-connect auth tokens in the query string - the recommended way to authenticate SSE streams because native EventSource cannot send custom headers. */
     readonly url: string | (() => string);
 
-    /**
-     * Pass `true` to include credentials (cookies) in the SSE request. Defaults
-     * to `false`.
-     */
+    /** Pass `true` to include credentials (cookies) in the SSE request. Defaults to `false`. */
     readonly withCredentials?: boolean;
 
-    /**
-     * Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`.
-     */
+    /** Backoff strategy for reconnects. Defaults to `new ExponentialBackoff()`. */
     readonly backoff?: ExponentialBackoff;
 
-    /**
-     * Override the EventSource constructor. Defaults to
-     * `(url, init) => new EventSource(url, init)`.
-     */
+    /** Override the EventSource constructor. Defaults to `(url, init) => new EventSource(url, init)`. */
     readonly eventSourceFactory?: EventSourceFactory;
 
-    /**
-     * Awaited after the backoff delay fires and before each reconnect attempt
-     * opens a new EventSource. Never called for the initial `connect()` or a
-     * manual `connect()` call. Wire the application's `TokenRefreshCoordinator`
-     * here so an expired token is refreshed before each reconnect, and pair it
-     * with the `url()` builder reading the fresh token; without this an
-     * expired-token connection retries forever with stale credentials.
-     * Rejection abandons the attempt and the next reconnect is scheduled
-     * through the existing backoff path.
-     */
+    /** Awaited after the backoff delay fires and before each reconnect attempt opens a new EventSource. Never called for the initial `connect()` or a manual `connect()` call. Wire the application's `TokenRefreshCoordinator` here so an expired token is refreshed before each reconnect, and pair it with the `url()` builder reading the fresh token; without this an expired-token connection retries forever with stale credentials. Rejection abandons the attempt and the next reconnect is scheduled through the existing backoff path. */
     readonly beforeReconnect?: () => Promise<void>;
 }
 
@@ -79,17 +57,37 @@ export interface EventSourceConnectionOptions {
  * reconnect opens a new EventSource.
  */
 export class EventSourceConnection implements RealtimeConnection {
+    /** The endpoint URL, or a factory returning it per connect. */
     readonly #url: string | (() => string);
+
+    /** Whether the SSE request includes credentials. */
     readonly #withCredentials: boolean;
+
+    /** The backoff strategy spacing reconnect attempts. */
     readonly #backoff: ExponentialBackoff;
+
+    /** The factory that constructs each EventSource. */
     readonly #factory: EventSourceFactory;
+
+    /** Optional hook awaited before each reconnect. */
     readonly #beforeReconnect: (() => Promise<void>) | undefined;
+
+    /** Registered message handlers, keyed by event name. */
     readonly #messageHandlers: Map<string, Set<RealtimeMessageHandler>> = new Map();
+
+    /** Registered connection-state change handlers. */
     readonly #stateHandlers: Set<RealtimeStateHandler> = new Set();
 
+    /** The active EventSource, or null when not open. */
     #source: EventSource | null = null;
+
+    /** The current connection lifecycle state. */
     #state: RealtimeState = 'idle';
+
+    /** The current zero-based reconnect attempt counter. */
     #attempt: number = 0;
+
+    /** The pending reconnect timer, or null when none. */
     #reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
     /**
@@ -106,7 +104,9 @@ export class EventSourceConnection implements RealtimeConnection {
         this.#beforeReconnect = options.beforeReconnect;
     }
 
-    /** The current connection lifecycle state. */
+    /**
+     * The current connection lifecycle state.
+     */
     get state(): RealtimeState {
         return this.#state;
     }
@@ -225,7 +225,7 @@ export class EventSourceConnection implements RealtimeConnection {
 
         this.#reconnectTimer = setTimeout(() => {
             this.#reconnectTimer = null;
-            this.#runReconnect();
+            void this.#runReconnect();
         }, delay);
     }
 

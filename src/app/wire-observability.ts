@@ -46,9 +46,16 @@ export interface WireObservabilityOptions<C extends WebCoreConfig> {
  * The installed observability instances plus the breadcrumb trail.
  */
 export interface WiredObservability {
+    /** The installed error reporter. */
     readonly reporter: ErrorReporter;
+
+    /** The installed analytics tracker. */
     readonly analytics: AnalyticsTracker;
+
+    /** The installed logger. */
     readonly logger: Logger;
+
+    /** The breadcrumb trail feeding error handling and page tracking. */
     readonly trail: BreadcrumbTrail;
 }
 

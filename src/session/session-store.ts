@@ -86,9 +86,16 @@ export interface SessionStore<U extends SessionUser = SessionUser> {
 }
 
 interface SessionState {
+    /** The bearer token for the active session, or null when signed out. */
     accessToken: string | null;
+
+    /** The refresh token for the active session, or null when not issued. */
     refreshToken: string | null;
+
+    /** Absolute session expiry in epoch milliseconds, or null when unknown. */
     expiresAtEpochMs: number | null;
+
+    /** The authenticated user record, or null when not yet loaded. */
     user: SessionUser | null;
 }
 
@@ -167,7 +174,16 @@ async function loginWithCredentials(state: SessionState, credentials: unknown): 
 
     // The credential shape is the gateway's concern; the store forwards it
     // opaquely.
-    const session = await context.api.login(credentials as { email: string; password: string }, context.device());
+    const session = await context.api.login(
+        credentials as {
+            /** The submitted account email address. */
+            email: string;
+
+            /** The submitted account password. */
+            password: string;
+        },
+        context.device(),
+    );
 
     applySession(state, context, session);
 

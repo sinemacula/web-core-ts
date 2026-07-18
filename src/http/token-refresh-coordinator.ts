@@ -25,7 +25,10 @@ export interface TokenRefresher {
  * Deduplicates concurrent refresh attempts into a single in-flight call.
  */
 export class TokenRefreshCoordinator {
+    /** The delegate that performs the actual refresh. */
     readonly #refresher: TokenRefresher;
+
+    /** The in-flight refresh shared by concurrent callers, or null. */
     #inFlight: Promise<boolean> | null = null;
 
     constructor(refresher: TokenRefresher) {

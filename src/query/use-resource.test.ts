@@ -112,7 +112,7 @@ describe('useResource', () => {
         it('still fetches once refetch is called', () => {
             const { fetcher, calls } = createFetcherQueue<number>();
 
-            useResource({ fetcher, immediate: false }).refetch();
+            void useResource({ fetcher, immediate: false }).refetch();
 
             expect(calls).toHaveLength(1);
         });
