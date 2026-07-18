@@ -39,7 +39,7 @@ export default defineConfig({
     ],
     webServer: {
         command: IS_CI
-            ? `npm run build && APP_ENV=e2e APP_VERSION=e2e API_URL=http://localhost:8000 APP_URL=${BASE_URL} DEFAULT_LOCALE=en-US ENABLED_LOCALES='["en-US"]' node playground/scripts/generate-runtime-env.mjs > playground/dist/runtime-env.json && npm run preview --workspace playground -- --port ${PORT} --strictPort`
+            ? `npm run build && APP_ENV=e2e APP_VERSION=e2e API_URL=http://localhost:8000 APP_URL=${BASE_URL} DEFAULT_LOCALE=en-US ENABLED_LOCALES='["en-US","fr-FR"]' node playground/scripts/generate-runtime-env.mjs > playground/dist/runtime-env.json && npm run preview --workspace playground -- --port ${PORT} --strictPort`
             : `npm run dev --workspace playground -- --port ${PORT} --strictPort`,
         url: BASE_URL,
         reuseExistingServer: !IS_CI,

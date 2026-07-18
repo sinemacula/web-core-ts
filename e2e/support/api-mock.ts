@@ -170,6 +170,28 @@ export async function mockUsersList(page: Page): Promise<void> {
 }
 
 /**
+ * Stub the GET users endpoint with a 500 server error.
+ *
+ * A 500 is neither a validation failure nor a 401, so the kernel's default
+ * response-error handler raises the application's unexpected-error toast.
+ *
+ * @param page - the browser page under test
+ */
+export async function mockUsersListServerError(page: Page): Promise<void> {
+    await page.route('**/users*', route => {
+        if (route.request().method() !== 'GET' || route.request().resourceType() !== 'fetch') {
+            return route.fallback();
+        }
+
+        return route.fulfill({
+            status: 500,
+            contentType: 'application/json',
+            body: JSON.stringify({ message: 'Server error.' }),
+        });
+    });
+}
+
+/**
  * Seed an authenticated session before the application boots.
  *
  * Writes both tokens to local storage from an init script, so the auth store

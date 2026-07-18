@@ -44,6 +44,24 @@ test.describe('authentication', () => {
         await expect(page).toHaveTitle(/^Dashboard/u);
     });
 
+    test('rejects an empty submit with field errors and sends no request', async ({ page, loginPage }) => {
+        let authRequested = false;
+
+        page.on('request', request => {
+            if (request.method() === 'POST' && request.url().includes('/auth')) {
+                authRequested = true;
+            }
+        });
+
+        await loginPage.goto();
+        await loginPage.submitButton.click();
+
+        await expect(page.getByText('Enter your email address.')).toBeVisible();
+        await expect(page.getByText('Enter your password.')).toBeVisible();
+        await expect(page).toHaveURL(/\/login$/u);
+        expect(authRequested).toBe(false);
+    });
+
     test('surfaces invalid credentials on the form', async ({ page, loginPage }) => {
         await mockLoginFailure(page);
 
