@@ -2,13 +2,18 @@
     "name": "@sinemacula/web-core",
     "version": "1.0.0",
     "description": "Framework-agnostic kernel shared by every Sine Macula frontend: configuration, HTTP, routing, modules, i18n and storage.",
-    "type": "module",
     "license": "Apache-2.0",
-    "author": "Sine Macula Limited",
+    "author": "Ben Carey <bdmc@sinemacula.co.uk>",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/sinemacula/web-core-ts.git"
     },
+    "homepage": "https://github.com/sinemacula/web-core-ts#readme",
+    "bugs": {
+        "url": "https://github.com/sinemacula/web-core-ts/issues"
+    },
+    "keywords": ["sine macula", "vue", "kernel", "frontend", "framework", "typescript", "modular"],
+    "type": "module",
     "engines": {
         "node": ">=22"
     },
@@ -58,6 +63,20 @@
         "vue-i18n": ">=11",
         "vue-router": ">=4"
     },
+    "peerDependenciesMeta": {
+        "@typescript-eslint/utils": {
+            "optional": true
+        },
+        "eslint": {
+            "optional": true
+        },
+        "typescript-eslint": {
+            "optional": true
+        },
+        "vue-eslint-parser": {
+            "optional": true
+        }
+    },
     "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
         "@axe-core/playwright": "^4.11.3",
@@ -85,19 +104,5 @@
     },
     "overrides": {
         "qs": "6.15.2"
-    },
-    "peerDependenciesMeta": {
-        "@typescript-eslint/utils": {
-            "optional": true
-        },
-        "eslint": {
-            "optional": true
-        },
-        "typescript-eslint": {
-            "optional": true
-        },
-        "vue-eslint-parser": {
-            "optional": true
-        }
     }
 }
