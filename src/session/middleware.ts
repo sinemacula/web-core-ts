@@ -74,10 +74,17 @@ export function guestOnly(redirectTo?: RouteLocationRaw): RouteMiddleware {
  */
 export function authorize(permission: string, redirectTo?: RouteLocationRaw): RouteMiddleware {
     return {
-        handle(context: MiddlewareContext): MiddlewareResult {
-            if (!useSessionStore().isAuthenticated) {
+        async handle(context: MiddlewareContext): Promise<MiddlewareResult> {
+            const store = useSessionStore();
+
+            if (!store.isAuthenticated) {
                 return redirect(appendRedirectTarget(sessionContext().routes.login, context.to.fullPath));
             }
+
+            // A cold load carries the token but not yet the user record the
+            // permission check needs, so wait for the in-flight (or a fresh)
+            // user load to settle before deciding.
+            await store.rehydrateUser();
 
             return can(permission) ? next() : redirect(redirectTo ?? sessionContext().routes.forbidden);
         },

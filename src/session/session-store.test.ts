@@ -537,6 +537,18 @@ describe('useSessionStore', () => {
             await expect(store.rehydrateUser()).resolves.toBeUndefined();
             expect(store.user).toBeNull();
         });
+
+        it('shares one request across concurrent rehydrations', async () => {
+            storage.set(ACCESS_TOKEN_KEY, 'tok');
+            fake.queueUser(user());
+
+            const store = useSessionStore();
+
+            await Promise.all([store.rehydrateUser(), store.rehydrateUser()]);
+
+            expect(fake.calls).toStrictEqual(['currentUser']);
+            expect(store.user?.email).toBe('alice@example.com');
+        });
     });
 
     describe('store id', () => {
