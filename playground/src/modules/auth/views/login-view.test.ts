@@ -37,7 +37,6 @@ function wire(entries: ReadonlyArray<readonly [string, unknown]>): Record<string
 }
 
 interface MountedLoginView {
-
     readonly container: HTMLDivElement;
     readonly router: ReturnType<typeof createRouter>;
     readonly unmount: () => void;

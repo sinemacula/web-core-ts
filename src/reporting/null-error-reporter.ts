@@ -15,7 +15,6 @@ import type { ErrorReporter, ReportedUser } from './error-reporter';
  * An error reporter that discards every report without side effects.
  */
 export class NullErrorReporter implements ErrorReporter {
-
     /**
      * Discard the error; the null reporter records nothing.
      */

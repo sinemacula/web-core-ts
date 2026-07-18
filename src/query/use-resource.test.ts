@@ -15,7 +15,6 @@ import { useResource } from './use-resource';
 // Helper: a promise a test can resolve or reject on demand
 // ---------------------------------------------------------------------------
 interface Deferred<Value> {
-
     readonly promise: Promise<Value>;
     readonly resolve: (value: Value) => void;
     readonly reject: (reason: unknown) => void;
@@ -38,7 +37,6 @@ function createDeferred<Value>(): Deferred<Value> {
 // Helper: a fetcher that records every call so a test can drive each run
 // ---------------------------------------------------------------------------
 interface FetcherCall<Value> {
-
     readonly signal: AbortSignal;
     readonly deferred: Deferred<Value>;
 }

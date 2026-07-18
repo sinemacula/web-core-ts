@@ -27,7 +27,6 @@ import type { LocaleService } from './locale-service';
  * Optional: an application with no formatting needs may omit both.
  */
 export interface LocaleFormats {
-
     /** Datetime formats installed per locale. */
     readonly datetime?: IntlDateTimeFormats;
 
@@ -63,7 +62,6 @@ export type ApplicationI18n = ReturnType<typeof createApplicationI18n>;
  * Options for activating a locale on the running application.
  */
 export interface ActivateLocaleOptions {
-
     /** The i18n instance messages are installed on. */
     readonly i18n: ApplicationI18n;
 
@@ -120,7 +118,6 @@ export async function activateLocale(options: ActivateLocaleOptions): Promise<vo
  * Options for {@link createLocaleSwitcher}.
  */
 export interface LocaleSwitcherOptions {
-
     /** The i18n instance the switcher is bound to. */
     readonly i18n: ApplicationI18n;
 
@@ -134,10 +131,15 @@ export interface LocaleSwitcherOptions {
     readonly localeService: LocaleService;
 
     /** Supported locales and their metadata, keyed by locale code. */
-    readonly supported: Readonly<Record<string, {
-        /** The text direction applied to the document for this locale. */
-        readonly direction: 'ltr' | 'rtl';
-    }>>;
+    readonly supported: Readonly<
+        Record<
+            string,
+            {
+                /** The text direction applied to the document for this locale. */
+                readonly direction: 'ltr' | 'rtl';
+            }
+        >
+    >;
 
     /** The fallback locale whose messages are also loaded. */
     readonly fallbackLocale: string;
@@ -156,7 +158,6 @@ export interface LocaleSwitcherOptions {
  * A runtime locale switcher bound to one i18n instance.
  */
 export interface LocaleSwitcher {
-
     /** The active locale, reactive to changes made through {@link switchTo}. */
     readonly current: ComputedRef<string>;
 

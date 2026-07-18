@@ -28,7 +28,6 @@ const DEFAULT_USER_ENDPOINT = 'users/self';
  * conventions ship as the defaults.
  */
 export interface DefaultSessionApiOptions<U extends SessionUser = SessionUser> {
-
     /** Resource paths. Defaults: session `auth`, user `users/self`. */
     readonly endpoints?: {
         /** Override for the session resource path. */

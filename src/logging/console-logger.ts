@@ -27,7 +27,6 @@ const LEVEL_ORDER: Readonly<Record<LogLevel, number>> = {
  * their matching console method.
  */
 export class ConsoleLogger implements Logger {
-
     /** The lowest level written to the console. */
     readonly #minimumLevel: LogLevel;
 

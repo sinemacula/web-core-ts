@@ -42,7 +42,6 @@ export type ModuleTeardown = () => void;
  * module hook.
  */
 export interface ResolvedPlatform {
-
     /** The fetch implementation threaded to every module hook. */
     readonly fetchFn: typeof fetch;
 
@@ -61,7 +60,6 @@ export interface ResolvedPlatform {
  * construction of the application HTTP client.
  */
 export interface ModuleHttpRegistrar {
-
     /**
      * Appended after preset-level interceptors, in registry order.
      */
@@ -84,7 +82,6 @@ export interface ModuleHttpRegistrar {
  * Synchronous by design.
  */
 export interface ModuleRegisterContext {
-
     /** The application configuration repository. */
     readonly config: ConfigRepository<Record<string, unknown>>;
 
@@ -109,7 +106,6 @@ export interface ModuleRegisterContext {
  * router exist; runs before mount.
  */
 export interface ModuleBootContext {
-
     /** The Vue application instance. */
     readonly app: App;
 
@@ -151,7 +147,6 @@ export type ModuleStoreFactory = (pinia: Pinia) => {
  * A self-contained feature area of the application.
  */
 export interface ModuleDefinition {
-
     /** Unique module name; also the namespace for its translations. Uniqueness is enforced by the registry. */
     readonly name: string;
 

@@ -14,7 +14,6 @@ import type { Locator, Page } from '@playwright/test';
  * Drives the login screen.
  */
 export class LoginPage {
-
     /** The Playwright page under test. */
     readonly page: Page;
 

@@ -12,7 +12,6 @@
 
 /** The transport-specific callbacks one reconnect attempt drives. */
 export interface ReconnectSteps {
-
     /** The optional pre-reconnect hook, for example a token refresh. */
     readonly beforeReconnect: (() => Promise<void>) | undefined;
 

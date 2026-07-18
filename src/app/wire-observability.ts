@@ -29,7 +29,6 @@ import type { WebCoreConfig } from './web-core-config';
  * Inputs for {@link wireObservability}.
  */
 export interface WireObservabilityOptions<C extends WebCoreConfig> {
-
     /** The frozen application configuration. */
     readonly config: Readonly<C>;
 
@@ -47,7 +46,6 @@ export interface WireObservabilityOptions<C extends WebCoreConfig> {
  * The installed observability instances plus the breadcrumb trail.
  */
 export interface WiredObservability {
-
     /** The installed error reporter. */
     readonly reporter: ErrorReporter;
 

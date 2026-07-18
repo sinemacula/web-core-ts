@@ -11,7 +11,6 @@ import type { Environment } from '@sinemacula/web-core/config/environment';
  * Configuration for the API HTTP client.
  */
 export interface ApiConfig {
-
     /** The base URL of the API client. */
     readonly baseUrl: string;
 

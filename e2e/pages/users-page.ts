@@ -11,7 +11,6 @@ import type { Locator, Page } from '@playwright/test';
  * Drives the users list screen.
  */
 export class UsersPage {
-
     /** The Playwright page under test. */
     readonly page: Page;
 

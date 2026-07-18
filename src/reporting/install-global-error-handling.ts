@@ -18,7 +18,6 @@ import type { ErrorReporter } from './error-reporter';
  * Options for installing global error handling.
  */
 export interface GlobalErrorHandlingOptions {
-
     /** The Vue application instance to attach the error handler to. */
     readonly app: App;
 

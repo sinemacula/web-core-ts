@@ -14,7 +14,6 @@
  * A query-layer operation received malformed data or an unsupported argument.
  */
 export class QueryError extends Error {
-
     constructor(message: string, options?: ErrorOptions) {
         super(message, options);
         this.name = 'QueryError';

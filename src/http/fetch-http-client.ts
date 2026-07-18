@@ -39,7 +39,6 @@ import { CancelledError, HttpError, HttpValidationError, NetworkError } from './
  * {@link CancelledError} is never retried.
  */
 export interface FetchHttpClientRetryOptions {
-
     /** Number of retries attempted after the first try. Defaults to 2. */
     readonly attempts?: number;
 
@@ -49,7 +48,6 @@ export interface FetchHttpClientRetryOptions {
 
 /** Construction options for {@link FetchHttpClient}. */
 export interface FetchHttpClientOptions {
-
     /** Base URL that every request path is resolved against. */
     readonly baseUrl: string;
 
@@ -86,7 +84,6 @@ const TRANSIENT_STATUSES: ReadonlySet<number> = new Set([502, 503, 504]);
  * dispatch method.
  */
 interface SendRequest {
-
     /** The HTTP method to dispatch. */
     readonly method: HttpMethod;
 
@@ -114,7 +111,6 @@ interface SendRequest {
  * error notification.
  */
 interface AttemptContext {
-
     /** The most recently resolved request, or null before dispatch. */
     request: HttpRequest | null;
 }
@@ -141,7 +137,6 @@ type UnauthorizedRetryResult<T> =
  * The production {@link HttpClient} adapter, built on the Fetch API.
  */
 export class FetchHttpClient implements HttpClient {
-
     /** The normalised base URL, without a trailing slash. */
     readonly #baseUrl: string;
 

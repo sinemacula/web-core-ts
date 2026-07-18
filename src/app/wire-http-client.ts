@@ -27,7 +27,6 @@ import type { WebCoreConfig } from './web-core-config';
  * The resolved construction inputs handed to a client-factory override.
  */
 export interface WireHttpClientTools<C extends WebCoreConfig> {
-
     /** The frozen application configuration. */
     readonly config: Readonly<C>;
 
@@ -48,7 +47,6 @@ export interface WireHttpClientTools<C extends WebCoreConfig> {
  * Inputs for {@link wireHttpClient}.
  */
 export interface WireHttpClientOptions<C extends WebCoreConfig> {
-
     /** The frozen application configuration. */
     readonly config: Readonly<C>;
 

@@ -12,7 +12,6 @@ import type { RouteMiddleware } from './middleware';
 
 declare module 'vue-router' {
     interface RouteMeta {
-
         /** Translation key for the document title. */
         title?: string;
 

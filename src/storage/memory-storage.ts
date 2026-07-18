@@ -13,7 +13,6 @@ import type { KeyValueStorage } from './key-value-storage';
  * Persist values in a process-local map.
  */
 export class MemoryStorage implements KeyValueStorage {
-
     /** The backing in-memory map. */
     readonly #values = new Map<string, string>();
 

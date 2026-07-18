@@ -16,7 +16,6 @@ import type { FlagValue } from '../feature-flags/feature-flags';
  * The configuration slice the preset requires from the application.
  */
 export interface WebCoreConfig {
-
     /** HTTP client construction inputs. */
     readonly api: {
         /** The base URL every request is resolved against. */
@@ -53,9 +52,14 @@ export interface WebCoreConfig {
         readonly enabled: readonly string[];
 
         /** Per-locale metadata keyed by locale tag. */
-        readonly supported: Readonly<Record<string, {
-            /** The locale's text direction. */
-            readonly direction: 'ltr' | 'rtl';
-        }>>;
+        readonly supported: Readonly<
+            Record<
+                string,
+                {
+                    /** The locale's text direction. */
+                    readonly direction: 'ltr' | 'rtl';
+                }
+            >
+        >;
     };
 }

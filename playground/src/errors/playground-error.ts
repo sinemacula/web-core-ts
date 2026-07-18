@@ -14,7 +14,6 @@
  * A failure raised by the playground application's own code.
  */
 export class PlaygroundError extends Error {
-
     constructor(message: string, options?: ErrorOptions) {
         super(message, options);
         this.name = 'PlaygroundError';

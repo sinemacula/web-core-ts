@@ -15,7 +15,6 @@
  */
 
 export interface IdleMonitorOptions {
-
     /** Milliseconds of inactivity before subscribers are notified. */
     readonly timeoutMs: number;
 
@@ -32,7 +31,6 @@ const DEFAULT_EVENTS: readonly string[] = ['pointerdown', 'keydown', 'wheel', 't
  * Detects periods of user inactivity and notifies subscribers once idle.
  */
 export class IdleMonitor {
-
     /** Milliseconds of inactivity before subscribers are notified. */
     readonly #timeoutMs: number;
 
@@ -45,12 +43,16 @@ export class IdleMonitor {
     /** The registered idle subscribers. */
     readonly #handlers = new Set<() => void>();
 
-    /** Rearms the countdown when activity is observed. */
+    /**
+     * Rearms the countdown when activity is observed.
+     */
     readonly #onActivity = (): void => {
         this.#rearm();
     };
 
-    /** Notifies subscribers once the countdown lapses. */
+    /**
+     * Notifies subscribers once the countdown lapses.
+     */
     readonly #onTimeout = (): void => {
         this.#timer = null;
 

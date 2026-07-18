@@ -48,7 +48,6 @@ const MIN_PAGE = 1;
  * key- and value-typing of {@link setFilter} and {@link clearFilter}
  */
 export interface ListQuery<Filters extends Record<string, ListFilter<never>>> {
-
     /** The compiled `ApiQuery`, recomputed on any reactive state change. */
     readonly query: ComputedRef<ApiQuery>;
 
@@ -171,7 +170,7 @@ export function useListQuery<Filters extends Record<string, ListFilter<never>>>(
      * instance here avoids a definition lookup at compile time, eliminating a
      * structurally-unreachable guard branch.
      */
-    const activeFilters = ref<Map<string, { filter: ListFilter<unknown>; value: unknown }>>(new Map());
+    const activeFilters = ref<Map<string, ActiveFilterEntry>>(new Map());
     const activeSearch = ref('');
     const activeSort = ref<SortDefault | null>(null);
     const currentPage = ref(MIN_PAGE);
@@ -201,13 +200,23 @@ export function useListQuery<Filters extends Record<string, ListFilter<never>>>(
 }
 
 /**
+ * A stored active filter: the typed filter instance and its concrete value.
+ */
+interface ActiveFilterEntry {
+    /** The typed filter instance. */
+    filter: ListFilter<unknown>;
+
+    /** The concrete value applied through the filter. */
+    value: unknown;
+}
+
+/**
  * The mutable reactive state a {@link useListQuery} instance compiles and
  * mutates.
  */
 interface ListQueryState {
-
     /** Active filter entries in insertion order, keyed by filter name. */
-    readonly activeFilters: Ref<Map<string, { filter: ListFilter<unknown>; value: unknown }>>;
+    readonly activeFilters: Ref<Map<string, ActiveFilterEntry>>;
 
     /** The current free-text search term, empty when no search is active. */
     readonly activeSearch: Ref<string>;
@@ -303,7 +312,7 @@ function compileQuery<Filters extends Record<string, ListFilter<never>>>(
  * @returns the active values keyed by filter name; cleared filters are absent
  */
 function deriveFilterValues<Filters extends Record<string, ListFilter<never>>>(
-    activeFilters: Map<string, { filter: ListFilter<unknown>; value: unknown }>,
+    activeFilters: Map<string, ActiveFilterEntry>,
 ): Readonly<Partial<Record<keyof Filters & string, unknown>>> {
     const result: Partial<Record<string, unknown>> = {};
 

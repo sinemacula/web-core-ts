@@ -22,7 +22,6 @@ import { computed, ref } from 'vue';
  * Options accepted by {@link usePagination}.
  */
 export interface UsePaginationOptions {
-
     /** Reactive total item count the page bounds are derived from. */
     readonly total: Ref<number>;
 
@@ -37,7 +36,6 @@ export interface UsePaginationOptions {
  * The reactive pagination state returned by {@link usePagination}.
  */
 export interface Pagination {
-
     /** The current page, counting from one. */
     readonly page: Ref<number>;
 

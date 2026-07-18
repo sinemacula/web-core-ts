@@ -15,7 +15,6 @@ import type { EnvironmentSource } from './environment';
  * Read environment values from a record whose keys carry a fixed prefix.
  */
 export class PrefixedEnvironmentSource implements EnvironmentSource {
-
     /** The backing record whose keys carry the prefix. */
     readonly #values: Readonly<Record<string, unknown>>;
 

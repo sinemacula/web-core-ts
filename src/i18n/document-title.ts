@@ -16,7 +16,6 @@ import type { ApplicationI18n } from './application-i18n';
  * Options for installing the document title synchronisation hook.
  */
 export interface DocumentTitleOptions {
-
     /** The router whose navigations drive the title. */
     readonly router: Router;
 

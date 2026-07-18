@@ -26,7 +26,6 @@ import { computed, ref } from 'vue';
  * before display.
  */
 export interface ConfirmRequest {
-
     /** Translation key for the dialog title. */
     readonly title: string;
 
@@ -45,13 +44,11 @@ export interface ConfirmRequest {
  * (i.e. waiting for the user to settle it).
  */
 export interface ActiveConfirm extends ConfirmRequest {
-
     /** The unique id assigned when the request became active. */
     readonly id: string;
 }
 
 interface PendingEntry {
-
     /** The confirmation content awaiting display. */
     readonly request: ConfirmRequest;
 
@@ -67,7 +64,6 @@ interface PendingEntry {
  * component that reads {@link active} to render the modal.
  */
 export class ConfirmService {
-
     /** Pending confirmations awaiting their turn, in FIFO order. */
     readonly #queue: PendingEntry[] = [];
 

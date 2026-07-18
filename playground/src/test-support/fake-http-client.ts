@@ -11,7 +11,6 @@
 import type { HttpClient, HttpRequestOptions } from '@sinemacula/web-core/http/http-client';
 
 interface RecordedCall {
-
     /** The HTTP method invoked. */
     readonly method: string;
 
@@ -42,7 +41,6 @@ type QueuedResult =
  * A scriptable, call-recording HTTP client.
  */
 export class FakeHttpClient implements HttpClient {
-
     /** Every call made against this client, in order. */
     readonly calls: RecordedCall[] = [];
 

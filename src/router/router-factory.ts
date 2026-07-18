@@ -21,7 +21,6 @@ import { runMiddlewarePipeline } from './middleware';
  * Options for building the application router.
  */
 export interface RouterFactoryOptions {
-
     /** The routes to install on the router. */
     readonly routes: readonly RouteRecordRaw[];
 

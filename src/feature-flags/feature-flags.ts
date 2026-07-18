@@ -41,7 +41,6 @@ export type FlagsChangeHandler = () => void;
  * Contract that every feature-flag adapter must satisfy.
  */
 export interface FeatureFlags {
-
     /**
      * Resolve a boolean flag; non-boolean or missing values resolve to the
      * fallback.

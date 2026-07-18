@@ -21,7 +21,6 @@ import { isRecord } from '../support/is-record';
 export type UpdateHandler = (nextVersion: string) => void;
 
 export interface UpdateMonitorOptions {
-
     /** The version the running application was booted with. */
     readonly currentVersion: string;
 
@@ -48,7 +47,6 @@ const DEFAULT_INTERVAL = 300_000;
  * Polls the deployed version and notifies subscribers when it changes.
  */
 export class UpdateMonitor {
-
     /** The version the running application was booted with. */
     readonly #currentVersion: string;
 
@@ -70,14 +68,18 @@ export class UpdateMonitor {
     /** The registered update subscribers. */
     readonly #handlers = new Set<UpdateHandler>();
 
-    /** Polls when the tab regains visibility. */
+    /**
+     * Polls when the tab regains visibility.
+     */
     readonly #onVisibilityChange = (): void => {
         if (this.#targetDocument.visibilityState === 'visible') {
             this.#poll();
         }
     };
 
-    /** Runs a check, guarding against throwing subscriber callbacks. */
+    /**
+     * Runs a check, guarding against throwing subscriber callbacks.
+     */
     readonly #poll = (): void => {
         this.checkNow().catch(() => {
             // checkNow swallows transport errors itself; this guards against

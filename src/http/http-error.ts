@@ -16,7 +16,6 @@
  * The request never produced a response (DNS failure, refused connection).
  */
 export class NetworkError extends Error {
-
     constructor(message: string, options?: ErrorOptions) {
         super(message, options);
         this.name = 'NetworkError';
@@ -34,7 +33,6 @@ export class NetworkError extends Error {
  * retried.
  */
 export class CancelledError extends Error {
-
     constructor(message: string, options?: ErrorOptions) {
         super(message, options);
         this.name = 'CancelledError';
@@ -45,7 +43,6 @@ export class CancelledError extends Error {
  * The server responded with a non-success status.
  */
 export class HttpError extends Error {
-
     /** The HTTP status code of the response. */
     readonly status: number;
 
@@ -64,7 +61,6 @@ export class HttpError extends Error {
  * The server rejected the request payload (422) with per-field errors.
  */
 export class HttpValidationError extends HttpError {
-
     /** The per-field validation messages. */
     readonly errors: Readonly<Record<string, readonly string[]>>;
 

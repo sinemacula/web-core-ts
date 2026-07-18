@@ -34,7 +34,6 @@ type ScalarOperator = '$eq' | '$neq' | '$gt' | '$lt' | '$ge' | '$le' | '$like';
 
 /** An entry in the order list: column name and sort direction. */
 interface OrderEntry {
-
     /** The column name to sort by. */
     readonly column: string;
 
@@ -48,7 +47,6 @@ interface OrderEntry {
  * All collections are readonly arrays/records; mutations produce new objects.
  */
 interface QueryState {
-
     /** The assembled filter tree. */
     readonly filters: FilterTree;
 
@@ -163,7 +161,6 @@ function mergeGroup(existing: unknown, patch: FilterTree): FilterTree {
 // Splitting this fluent immutable query builder would break method chaining.
 // eslint-disable-next-line @sinemacula/max-methods-per-class -- fluent API
 export class ApiQuery {
-
     /** The immutable state bag shared between derived instances. */
     readonly #state: QueryState;
 

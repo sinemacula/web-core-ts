@@ -18,7 +18,6 @@ import type { ErrorReporter, ReportedUser } from './error-reporter';
  * and `setUser` is a no-op (user identity is not relevant in the console).
  */
 export class ConsoleErrorReporter implements ErrorReporter {
-
     /**
      * Write the error and its context to the console via `console.error`.
      */

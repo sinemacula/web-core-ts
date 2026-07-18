@@ -11,7 +11,6 @@ import type { Environment } from '@sinemacula/web-core/config/environment';
  * Display metadata for a single supported locale.
  */
 export interface LocaleDefinition {
-
     /** The human-readable locale name. */
     readonly name: string;
 
@@ -23,7 +22,6 @@ export interface LocaleDefinition {
  * Localisation configuration resolved from the environment.
  */
 export interface LocalesConfig {
-
     /** The default locale. */
     readonly default: string;
 

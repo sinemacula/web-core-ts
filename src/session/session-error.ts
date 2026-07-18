@@ -14,7 +14,6 @@
  * A session or user response that did not match the expected shape.
  */
 export class SessionError extends Error {
-
     constructor(message: string, options?: ErrorOptions) {
         super(message, options);
         this.name = 'SessionError';

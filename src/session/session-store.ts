@@ -25,7 +25,6 @@ import type { SessionUser } from './session-user';
  * session module's lifecycle wiring.
  */
 export interface SessionStore<U extends SessionUser = SessionUser> {
-
     /** The bearer token for the active session, or null when signed out. */
     readonly accessToken: string | null;
 
@@ -87,7 +86,6 @@ export interface SessionStore<U extends SessionUser = SessionUser> {
 }
 
 interface SessionState {
-
     /** The bearer token for the active session, or null when signed out. */
     accessToken: string | null;
 
@@ -176,13 +174,16 @@ async function loginWithCredentials(state: SessionState, credentials: unknown): 
 
     // The credential shape is the gateway's concern; the store forwards it
     // opaquely.
-    const session = await context.api.login(credentials as {
-        /** The submitted account email address. */
-        email: string;
+    const session = await context.api.login(
+        credentials as {
+            /** The submitted account email address. */
+            email: string;
 
-        /** The submitted account password. */
-        password: string;
-    }, context.device());
+            /** The submitted account password. */
+            password: string;
+        },
+        context.device(),
+    );
 
     applySession(state, context, session);
 

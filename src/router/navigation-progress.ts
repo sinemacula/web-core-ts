@@ -18,7 +18,6 @@ import type { Router } from 'vue-router';
  * {@link createNavigationProgress}.
  */
 export interface NavigationProgress {
-
     /** `true` while a navigation is in flight. */
     readonly isNavigating: Ref<boolean>;
 

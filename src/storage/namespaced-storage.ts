@@ -17,7 +17,6 @@ import type { KeyValueStorage } from './key-value-storage';
  * Prefix every key with a namespace before delegating to an inner storage.
  */
 export class NamespacedStorage implements KeyValueStorage {
-
     /** The storage the namespaced keys delegate to. */
     readonly #inner: KeyValueStorage;
 

@@ -33,7 +33,6 @@ export type WebSocketFactory = (url: string, protocols?: string | readonly strin
 
 /** Construction options for {@link WebSocketConnection}. */
 export interface WebSocketConnectionOptions {
-
     /** The WebSocket endpoint URL, or a function that returns it. The function form is called on every `connect()`, enabling per-connect auth tokens in the query string. */
     readonly url: string | (() => string);
 
@@ -60,7 +59,6 @@ export interface WebSocketConnectionOptions {
  * new WebSocket.
  */
 export class WebSocketConnection implements RealtimeConnection {
-
     /** The endpoint URL, or a factory returning it per connect. */
     readonly #url: string | (() => string);
 

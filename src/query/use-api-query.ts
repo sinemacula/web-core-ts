@@ -20,7 +20,6 @@ import { ApiQuery } from './api-query';
  * Options accepted by {@link useApiQuery}.
  */
 export interface UseApiQueryOptions {
-
     /** An optional builder that seeds the initial query state. */
     readonly initial?: (query: ApiQuery) => ApiQuery;
 }
@@ -29,7 +28,6 @@ export interface UseApiQueryOptions {
  * The reactive query state returned by {@link useApiQuery}.
  */
 export interface ApiQueryState {
-
     /** The current `ApiQuery` instance, updated on every `apply` or `reset`. */
     readonly query: ComputedRef<ApiQuery>;
 

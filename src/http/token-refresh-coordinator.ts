@@ -13,7 +13,6 @@
  * Performs the actual token refresh.
  */
 export interface TokenRefresher {
-
     /**
      * Attempt to refresh the session.
      *
@@ -26,7 +25,6 @@ export interface TokenRefresher {
  * Deduplicates concurrent refresh attempts into a single in-flight call.
  */
 export class TokenRefreshCoordinator {
-
     /** The delegate that performs the actual refresh. */
     readonly #refresher: TokenRefresher;
 

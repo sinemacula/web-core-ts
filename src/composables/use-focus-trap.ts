@@ -29,7 +29,6 @@ const FOCUSABLE_SELECTOR =
  * Controls returned by {@link useFocusTrap}.
  */
 export interface FocusTrapControls {
-
     /**
      * Activate the focus trap.
      *

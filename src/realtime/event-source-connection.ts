@@ -32,7 +32,6 @@ export type EventSourceFactory = (url: string, init: EventSourceInit) => EventSo
 
 /** Construction options for {@link EventSourceConnection}. */
 export interface EventSourceConnectionOptions {
-
     /** The SSE endpoint URL, or a function that returns it. The function form is called on every `connect()`, enabling per-connect auth tokens in the query string - the recommended way to authenticate SSE streams because native EventSource cannot send custom headers. */
     readonly url: string | (() => string);
 
@@ -58,7 +57,6 @@ export interface EventSourceConnectionOptions {
  * reconnect opens a new EventSource.
  */
 export class EventSourceConnection implements RealtimeConnection {
-
     /** The endpoint URL, or a factory returning it per connect. */
     readonly #url: string | (() => string);
 

@@ -53,7 +53,6 @@ function wire(entries: ReadonlyArray<readonly [string, string]>): Record<string,
 }
 
 interface MountedDashboardView {
-
     readonly container: HTMLDivElement;
     readonly router: ReturnType<typeof createRouter>;
     readonly unmount: () => void;

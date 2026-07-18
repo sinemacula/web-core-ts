@@ -41,7 +41,6 @@ import type { SessionUser } from './session-user';
  * wanting a prefix set it in these options so event keys still match).
  */
 export interface SessionStorageKeys {
-
     /** Default 'auth.access_token'. */
     readonly accessToken: string;
 
@@ -60,7 +59,6 @@ export interface SessionStorageKeys {
  * redirect, and the redirect sanitiser's loop guard.
  */
 export interface SessionRoutes {
-
     /** Where unauthenticated visitors are sent. Default `{ name: 'auth.login' }`. */
     readonly login: RouteLocationRaw;
 
@@ -79,7 +77,6 @@ export interface SessionRoutes {
  * feature-flag holders whenever the session user changes.
  */
 export interface SessionIdentityMapping<U extends SessionUser> {
-
     /** Maps the user onto the error reporter identity. Default `{ id, email, name }` with null fields omitted. */
     readonly reporting?: (user: U) => {
         /** The reporter identity id. */
@@ -103,14 +100,16 @@ export interface SessionIdentityMapping<U extends SessionUser> {
  * Options for {@link createSessionModule}; every default mirrors the
  * organisation's reference application.
  */
-export interface SessionModuleOptions<U extends SessionUser = SessionUser, C = {
-    /** The submitted account email address. */
-    email: string;
+export interface SessionModuleOptions<
+    U extends SessionUser = SessionUser,
+    C = {
+        /** The submitted account email address. */
+        email: string;
 
-    /** The submitted account password. */
-    password: string;
-}> {
-
+        /** The submitted account password. */
+        password: string;
+    },
+> {
     /** Registry name (the module has no routes and no locales). Default 'session'. */
     readonly name?: string;
 
@@ -181,15 +180,16 @@ const MAX_TIMEOUT_DELAY_MS = 2_147_483_647;
  * @param options - overrides for the reference-application defaults
  * @returns the module definition for the application registry
  */
-export function createSessionModule<U extends SessionUser = SessionUser, C = {
-    /** The submitted account email address. */
-    email: string;
+export function createSessionModule<
+    U extends SessionUser = SessionUser,
+    C = {
+        /** The submitted account email address. */
+        email: string;
 
-    /** The submitted account password. */
-    password: string;
-}>(
-    options: SessionModuleOptions<U, C> = {},
-): ModuleDefinition {
+        /** The submitted account password. */
+        password: string;
+    },
+>(options: SessionModuleOptions<U, C> = {}): ModuleDefinition {
     const storageKeys: SessionStorageKeys = { ...DEFAULT_STORAGE_KEYS, ...options.storageKeys };
     const routes: SessionRoutes = { ...DEFAULT_ROUTES, ...options.routes };
     const storeId = options.storeId ?? DEFAULT_STORE_ID;
@@ -222,7 +222,6 @@ export function createSessionModule<U extends SessionUser = SessionUser, C = {
  * The resolved register-phase collaborators the session context is built from.
  */
 interface RegisterConfig<U extends SessionUser, C> {
-
     /** The resolved storage keys the session persists under. */
     readonly storageKeys: SessionStorageKeys;
 
@@ -282,7 +281,6 @@ function registerSession<U extends SessionUser, C>(context: ModuleRegisterContex
 
 /** The resolved boot-phase toggles and collaborator inputs. */
 interface LifecycleOptions<U extends SessionUser> {
-
     /** The resolved storage keys the session persists under. */
     readonly storageKeys: SessionStorageKeys;
 
@@ -465,7 +463,6 @@ function createStorageListener(store: SessionStore, accessTokenKey: string): (ev
 
 /** A schedule/cancel pair for the proactive refresh timer. */
 interface RefreshScheduler {
-
     /** Arm a proactive refresh ahead of the given expiry, or cancel when null. */
     readonly schedule: (expiresAtEpochMs: number | null) => void;
 

@@ -14,7 +14,6 @@ import type { EnvironmentSource } from './environment';
  * Read environment values from an in-memory record.
  */
 export class ObjectEnvironmentSource implements EnvironmentSource {
-
     /** The backing record of environment values. */
     readonly #values: Readonly<Record<string, string>>;
 

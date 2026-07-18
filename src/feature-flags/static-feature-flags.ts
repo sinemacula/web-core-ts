@@ -20,7 +20,6 @@ import type { FeatureFlags, FlagEvaluationContext, FlagsChangeHandler, FlagValue
  * {@link FeatureFlags} port when live targeting is needed.
  */
 export class StaticFeatureFlags implements FeatureFlags {
-
     /** The current flag set. */
     #flags: Readonly<Record<string, FlagValue>>;
 

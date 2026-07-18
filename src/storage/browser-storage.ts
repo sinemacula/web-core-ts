@@ -15,7 +15,6 @@ import type { KeyValueStorage } from './key-value-storage';
  * Persist values in a browser `Storage` area.
  */
 export class BrowserStorage implements KeyValueStorage {
-
     /** The underlying Web Storage area. */
     readonly #storage: Storage;
 

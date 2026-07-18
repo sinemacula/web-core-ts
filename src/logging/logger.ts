@@ -25,7 +25,6 @@ export type LogFields = Readonly<Record<string, unknown>>;
  * Contract that every logging adapter must satisfy.
  */
 export interface Logger {
-
     /**
      * Record a diagnostic message useful only during development.
      *

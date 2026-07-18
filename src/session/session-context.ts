@@ -23,7 +23,6 @@ import type { SessionUser } from './session-user';
  * The resolved collaborators shared across the session module's units.
  */
 export interface SessionContext<U extends SessionUser = SessionUser> {
-
     /** The resolved storage keys the session persists under. */
     readonly storageKeys: SessionStorageKeys;
 

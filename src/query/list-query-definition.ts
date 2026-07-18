@@ -27,7 +27,6 @@ export type FilterValueOf<Filter> = Filter extends ListFilter<infer V> ? V : nev
  * The default sort column and direction applied when no explicit sort is set.
  */
 export interface SortDefault {
-
     /** The column name to sort by. */
     readonly column: string;
 
@@ -45,7 +44,6 @@ export interface SortDefault {
  * typed {@link ListFilter} implementations
  */
 export interface ListQueryDefinition<Filters extends Record<string, ListFilter<never>> = Record<string, never>> {
-
     /** Named filters the screen may set, keyed by the screen's vocabulary. */
     readonly filters?: Filters;
 

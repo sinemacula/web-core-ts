@@ -54,7 +54,6 @@ export type FilterScalar = string | number | boolean;
  * `{ "$ge": 18, "$le": 65 }`.
  */
 export interface FilterOperators {
-
     // biome-ignore-start lint/style/useNamingConvention: toolkit keys
 
     /** Equality match. */

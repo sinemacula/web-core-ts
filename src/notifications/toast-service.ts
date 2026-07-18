@@ -30,7 +30,6 @@ export type ToastVariant = 'success' | 'error' | 'information' | 'warning';
  * responsible for translating it before display.
  */
 export interface Toast {
-
     /** The unique id assigned when the toast was shown. */
     readonly id: string;
 
@@ -48,7 +47,6 @@ export interface Toast {
  * Options accepted by the per-show methods.
  */
 export interface ShowToastOptions {
-
     /** Auto-dismiss duration in milliseconds; 0 disables it. */
     readonly duration?: number;
 }
@@ -63,7 +61,6 @@ const DEFAULT_DURATION = 5_000;
  * to render the list.
  */
 export class ToastService {
-
     /** Fallback auto-dismiss duration in milliseconds. */
     readonly #defaultDuration: number;
 

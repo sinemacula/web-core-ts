@@ -14,7 +14,6 @@ import type { Environment } from '@sinemacula/web-core/config/environment';
  * Third-party service configuration resolved from the environment.
  */
 export interface ServicesConfig {
-
     /** Segment analytics configuration. */
     readonly segment: {
         /** The Segment write key, or null when unconfigured. */

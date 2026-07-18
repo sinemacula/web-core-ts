@@ -16,7 +16,6 @@ import type { SessionUser } from './session-user';
  * The device fingerprint submitted alongside login credentials.
  */
 export interface SessionDevice {
-
     /** The stable per-device identifier. */
     readonly uuid: string;
 
@@ -27,14 +26,16 @@ export interface SessionDevice {
 /**
  * Typed access to the session endpoints.
  */
-export interface SessionApi<U extends SessionUser = SessionUser, C = {
-    /** The submitted account email address. */
-    email: string;
+export interface SessionApi<
+    U extends SessionUser = SessionUser,
+    C = {
+        /** The submitted account email address. */
+        email: string;
 
-    /** The submitted account password. */
-    password: string;
-}> {
-
+        /** The submitted account password. */
+        password: string;
+    },
+> {
     /**
      * Exchange credentials and a device fingerprint for a session.
      *

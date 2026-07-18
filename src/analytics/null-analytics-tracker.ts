@@ -15,7 +15,6 @@ import type { AnalyticsTracker } from './analytics-tracker';
  * An analytics tracker that discards every call without side effects.
  */
 export class NullAnalyticsTracker implements AnalyticsTracker {
-
     /**
      * Discard the event; the null tracker records nothing.
      */

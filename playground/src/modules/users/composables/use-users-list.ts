@@ -67,7 +67,6 @@ export function parseWireTimestamp(wireTimestamp: string): Date {
  * Reactive state and controls for the users list screen.
  */
 export interface UsersList {
-
     /** The current page of mapped user rows. */
     readonly rows: ComputedRef<readonly UserListItem[]>;
 

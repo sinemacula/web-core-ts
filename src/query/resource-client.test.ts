@@ -14,14 +14,12 @@ import { ResourceClient } from './resource-client';
 
 /** A minimal domain type used to exercise the resource client. */
 interface Widget {
-
     readonly id: string;
     readonly name: string;
 }
 
 /** The shape of a single call recorded by {@link FakeHttpClient}. */
 interface RecordedCall {
-
     readonly method: string;
     readonly path: string;
     readonly body: unknown;
@@ -33,7 +31,6 @@ interface RecordedCall {
  * queued response payloads in order.
  */
 class FakeHttpClient implements HttpClient {
-
     readonly calls: RecordedCall[] = [];
     readonly #queue: unknown[] = [];
 

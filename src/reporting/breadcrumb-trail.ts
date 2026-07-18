@@ -13,7 +13,6 @@
  * A single trail entry before it is stamped with a timestamp.
  */
 export interface Breadcrumb {
-
     /** The event category (e.g. navigation, click, request). */
     readonly category: string;
 
@@ -28,7 +27,6 @@ export interface Breadcrumb {
  * A breadcrumb that has been stored in the trail, extended with its timestamp.
  */
 export interface RecordedBreadcrumb extends Breadcrumb {
-
     /** When the breadcrumb was recorded, in epoch milliseconds. */
     readonly timestamp: number;
 }
@@ -39,7 +37,6 @@ const DEFAULT_CAPACITY = 50;
  * A fixed-capacity FIFO queue of timestamped breadcrumbs.
  */
 export class BreadcrumbTrail {
-
     /** Maximum number of breadcrumbs retained. */
     readonly #capacity: number;
 

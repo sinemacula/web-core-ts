@@ -19,7 +19,6 @@ export type QueryParameters = Readonly<Record<string, string | number | boolean 
 
 /** Per-request options forwarded to every HTTP method. */
 export interface HttpRequestOptions {
-
     /** Query parameters appended to the request URL. */
     readonly query?: QueryParameters;
 
@@ -40,7 +39,6 @@ export interface HttpRequestOptions {
  * A fully-resolved outgoing request, as seen by request interceptors.
  */
 export interface HttpRequest {
-
     /** The HTTP method to send. */
     readonly method: HttpMethod;
 
@@ -81,7 +79,6 @@ export type ResponseErrorHandler = (error: unknown, request: HttpRequest) => voi
  * A typed, JSON-first HTTP client.
  */
 export interface HttpClient {
-
     /**
      * Send a GET request.
      *

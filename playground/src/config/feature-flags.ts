@@ -18,7 +18,6 @@ import type { FlagValue } from '@sinemacula/web-core/feature-flags/feature-flags
  * Feature-flag configuration resolved from the environment.
  */
 export interface FeatureFlagsConfig {
-
     /** The resolved feature-flag set. */
     readonly flags: Readonly<Record<string, FlagValue>>;
 }

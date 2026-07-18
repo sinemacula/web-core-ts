@@ -11,7 +11,6 @@ import { createServiceHolder } from './service-holder';
 import { SupportError } from './support-error';
 
 interface Widget {
-
     readonly label: string;
 }
 

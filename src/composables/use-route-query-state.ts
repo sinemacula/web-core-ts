@@ -26,7 +26,6 @@ import type { LocationQuery, Router } from 'vue-router';
  * Options accepted by {@link useRouteQueryState}.
  */
 export interface RouteQueryStateOptions {
-
     /** Managed keys mapped to the value each falls back to when absent. */
     readonly defaults: Readonly<Record<string, string>>;
 }
@@ -36,7 +35,6 @@ export interface RouteQueryStateOptions {
  * {@link useRouteQueryState}.
  */
 export interface RouteQueryState {
-
     /** The resolved value of every managed key. */
     readonly values: ComputedRef<Readonly<Record<string, string>>>;
 

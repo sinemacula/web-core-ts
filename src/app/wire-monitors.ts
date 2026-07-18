@@ -23,7 +23,6 @@ const DEV_VERSION_SENTINEL = 'dev';
  * The configuration slice the monitor wiring reads.
  */
 export interface MonitorWiringSettings {
-
     /** Application identity carrying the deployed version. */
     readonly app: {
         /** The deployed application version. */
@@ -35,7 +34,6 @@ export interface MonitorWiringSettings {
  * Update-monitor options accepted by {@link wireMonitors}.
  */
 export interface UpdateMonitorWiring<T> {
-
     /** Whether the update monitor runs. Default: the deployed version is not 'dev'. */
     readonly enabled?: boolean | ((settings: Readonly<T>) => boolean);
 
@@ -56,7 +54,6 @@ export interface UpdateMonitorWiring<T> {
  * Options for {@link wireMonitors}.
  */
 export interface WireMonitorsOptions<T extends MonitorWiringSettings> {
-
     /** The frozen application configuration. */
     readonly settings: Readonly<T>;
 
@@ -89,7 +86,6 @@ export interface WireMonitorsOptions<T extends MonitorWiringSettings> {
  * The wired monitors; either is null when disabled.
  */
 export interface WiredMonitors {
-
     /** The running update monitor, or null when it does not run. */
     readonly updates: UpdateMonitor | null;
 

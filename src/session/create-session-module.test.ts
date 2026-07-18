@@ -53,7 +53,6 @@ const DEVICE_UUID_KEY = 'auth.device_uuid';
  * queued outcomes in order.
  */
 class FakeSessionApi implements SessionApi {
-
     readonly calls: string[] = [];
     readonly loginCalls: Array<{ credentials: unknown; device: SessionDevice }> = [];
     readonly refreshCalls: string[] = [];
@@ -141,7 +140,6 @@ type StorageListener = (event: StorageEvent) => void;
 
 /** A minimal fake window recording `storage` listeners for direct dispatch. */
 interface FakeWindow {
-
     addEventListener(type: string, listener: EventListenerOrEventListenerObject): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject): void;
     listenerCount(): number;
@@ -179,7 +177,6 @@ function createHttpClientStub(): HttpClient {
 
 /** A recorded call made against {@link FakeHttpClient}. */
 interface RecordedHttpCall {
-
     readonly method: string;
     readonly path: string;
 }
@@ -189,7 +186,6 @@ interface RecordedHttpCall {
  * payloads.
  */
 class FakeHttpClient implements HttpClient {
-
     readonly calls: RecordedHttpCall[] = [];
     readonly #queue: unknown[] = [];
 
@@ -235,7 +231,6 @@ class FakeHttpClient implements HttpClient {
 
 /** A recording {@link ErrorReporter} capturing identity changes. */
 class RecordingReporter implements ErrorReporter {
-
     readonly users: Array<ReportedUser | null> = [];
 
     captureError(): void {
@@ -253,7 +248,6 @@ class RecordingReporter implements ErrorReporter {
 
 /** A recording {@link AnalyticsTracker} capturing identify and reset calls. */
 class RecordingAnalytics implements AnalyticsTracker {
-
     readonly identified: string[] = [];
     resets = 0;
 
@@ -276,7 +270,6 @@ class RecordingAnalytics implements AnalyticsTracker {
 
 /** A recording {@link FeatureFlags} capturing evaluation contexts. */
 class RecordingFeatureFlags implements FeatureFlags {
-
     readonly contexts: FlagEvaluationContext[] = [];
 
     isEnabled(): boolean {
@@ -298,7 +291,6 @@ class RecordingFeatureFlags implements FeatureFlags {
 
 /** Everything a test needs after registering the module. */
 interface Harness {
-
     readonly module: ModuleDefinition;
     readonly storage: MemoryStorage;
     readonly pinia: Pinia;

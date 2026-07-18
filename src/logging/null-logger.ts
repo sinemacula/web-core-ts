@@ -15,7 +15,6 @@ import type { LogFields, Logger } from './logger';
  * A logger that discards every entry without side effects.
  */
 export class NullLogger implements Logger {
-
     /**
      * Discard the entry; the null logger writes nothing.
      */

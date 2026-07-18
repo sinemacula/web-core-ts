@@ -124,7 +124,6 @@ function recordPhase(phase: BootPhase): void {
  * Configuration construction options.
  */
 export interface WebCoreConfigOptions<T extends WebCoreConfig> {
-
     /** Caller-owned environment construction - the only place build-time variables may appear. Receives the fetched runtime document; throw to abort boot. Pair with `createWebEnvironment` for the standard dev-chain and production required-keys behaviour. */
     readonly createEnvironment: (runtime: Readonly<Record<string, string>>) => Environment;
 
@@ -139,7 +138,6 @@ export interface WebCoreConfigOptions<T extends WebCoreConfig> {
  * HTTP client construction options.
  */
 export interface WebCoreHttpOptions<T extends WebCoreConfig> {
-
     /** Preset-level interceptors; module contributions are appended after these. */
     readonly interceptors?: readonly RequestInterceptor[];
 
@@ -157,7 +155,6 @@ export interface WebCoreHttpOptions<T extends WebCoreConfig> {
  * Internationalisation options.
  */
 export interface WebCoreI18nOptions {
-
     /** Shared (non-module) translation loaders keyed by locale. */
     readonly sharedLoaders?: Readonly<Record<string, () => Promise<LocaleMessages>>>;
 
@@ -176,7 +173,6 @@ export interface WebCoreI18nOptions {
  * console adapters and every other environment gets the null adapters.
  */
 export interface WebCoreObservabilityOptions<T extends WebCoreConfig> {
-
     /** Error-reporter factory; wins over the environment default. */
     readonly reporter?: (settings: Readonly<T>) => ErrorReporter;
 
@@ -191,7 +187,6 @@ export interface WebCoreObservabilityOptions<T extends WebCoreConfig> {
  * State-only notification services; rendering hosts stay application-side.
  */
 export interface WebCoreNotificationOptions {
-
     /** Replacement toast service; defaults to a fresh state-only service. */
     readonly toasts?: ToastService;
 
@@ -203,7 +198,6 @@ export interface WebCoreNotificationOptions {
  * Chunk-load-failure recovery tuning.
  */
 export interface WebCoreChunkRecoveryOptions {
-
     /** Whether recovery is installed at all. Default true. */
     readonly enabled?: boolean;
 
@@ -218,7 +212,6 @@ export interface WebCoreChunkRecoveryOptions {
  * Release monitoring options.
  */
 export interface WebCoreMonitorOptions<T extends WebCoreConfig> {
-
     /** Update-monitor options; omit to take the version-derived defaults. */
     readonly updates?: UpdateMonitorWiring<T>;
 
@@ -236,7 +229,6 @@ export interface WebCoreMonitorOptions<T extends WebCoreConfig> {
  * Platform seams threaded to every subsystem that accepts them.
  */
 export interface WebCorePlatformOptions {
-
     /** The fetch implementation; defaults to the global `fetch`. */
     readonly fetchFn?: typeof fetch;
 
@@ -263,7 +255,6 @@ export interface WebCorePlatformOptions {
  * Options accepted by {@link createWebCoreApp}.
  */
 export interface WebCoreAppOptions<T extends WebCoreConfig> {
-
     /** Root component mounted by {@link WebCoreApp.start}. */
     readonly root: Component;
 
@@ -305,7 +296,6 @@ export interface WebCoreAppOptions<T extends WebCoreConfig> {
  * Direct typed references to every service the preset installed.
  */
 export interface WebCoreServices<T> {
-
     /** The application configuration repository. */
     readonly config: ConfigRepository<T & Record<string, unknown>>;
 
@@ -344,7 +334,6 @@ export interface WebCoreServices<T> {
  * The assembled application handle returned by {@link createWebCoreApp}.
  */
 export interface WebCoreApp<T extends WebCoreConfig> {
-
     /** The Vue application instance. */
     readonly app: App<Element>;
 
@@ -394,7 +383,6 @@ export interface WebCoreApp<T extends WebCoreConfig> {
  * The kernel services and Vue application produced by the foundation phases.
  */
 interface AppFoundation<T extends WebCoreConfig> {
-
     /** The constructed runtime environment. */
     readonly environment: Environment;
 
@@ -434,7 +422,6 @@ interface AppFoundation<T extends WebCoreConfig> {
  * phases.
  */
 interface ModuleLayer {
-
     /** The installed HTTP client. */
     readonly http: HttpClient;
 
@@ -452,7 +439,6 @@ interface ModuleLayer {
  * The router and teardown handles from the app-integration phases.
  */
 interface AppIntegration {
-
     /** The wired application router. */
     readonly router: Router;
 
@@ -474,7 +460,6 @@ interface AppIntegration {
  * release phases.
  */
 interface ReleaseLayer {
-
     /** Removes the chunk-recovery error handler, or null when disabled. */
     readonly chunkRecoveryTeardown: (() => void) | null;
 

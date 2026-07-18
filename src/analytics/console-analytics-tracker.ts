@@ -15,7 +15,6 @@ import type { AnalyticsTracker } from './analytics-tracker';
  * An analytics tracker that logs every call with `console.info`.
  */
 export class ConsoleAnalyticsTracker implements AnalyticsTracker {
-
     /**
      * Write the event and its properties to the console via `console.info`.
      */

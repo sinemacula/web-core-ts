@@ -13,7 +13,6 @@
  * A minimal string key-value store.
  */
 export interface KeyValueStorage {
-
     /**
      * Resolve the value for `key`.
      *

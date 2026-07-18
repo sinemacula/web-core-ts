@@ -32,7 +32,6 @@ export type ResourceFetcher<Value> = (signal: AbortSignal) => Promise<Value>;
  * @typeParam Value - the resolved value type
  */
 export interface UseResourceOptions<Value> {
-
     /** Executes a single run of the request. */
     readonly fetcher: ResourceFetcher<Value>;
 
@@ -49,7 +48,6 @@ export interface UseResourceOptions<Value> {
  * @typeParam Value - the resolved value type
  */
 export interface Resource<Value> {
-
     /** The most recently resolved value, or `null` before the first success. */
     readonly data: Ref<Value | null>;
 
@@ -155,7 +153,6 @@ export function useResource<Value>(options: UseResourceOptions<Value>): Resource
  * @typeParam Value - the resolved value type
  */
 interface ResourceState<Value> {
-
     /** The most recently resolved value, or null before the first success. */
     readonly data: Ref<Value | null>;
 
@@ -170,6 +167,17 @@ interface ResourceState<Value> {
 }
 
 /**
+ * The run trigger and abort control returned by {@link createRunner}.
+ */
+interface Runner {
+    /** Trigger a run, superseding any run already in flight. */
+    run: () => Promise<void>;
+
+    /** Abort the in-flight run without starting a new one. */
+    abort: () => void;
+}
+
+/**
  * Drive sequential runs of a fetcher, settling `state` for the latest run only.
  *
  * Owns the sequence token and the active `AbortController` so a superseded or
@@ -181,10 +189,7 @@ interface ResourceState<Value> {
  * @returns the run trigger and an abort control for the in-flight run
  * @typeParam Value - the resolved value type
  */
-function createRunner<Value>(
-    fetcher: ResourceFetcher<Value>,
-    state: ResourceState<Value>,
-): { run: () => Promise<void>; abort: () => void } {
+function createRunner<Value>(fetcher: ResourceFetcher<Value>, state: ResourceState<Value>): Runner {
     let sequence = 0;
     let activeController: AbortController | null = null;
 

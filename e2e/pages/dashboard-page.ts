@@ -11,7 +11,6 @@ import type { Locator, Page } from '@playwright/test';
  * Drives the dashboard home screen.
  */
 export class DashboardPage {
-
     /** The Playwright page under test. */
     readonly page: Page;
 

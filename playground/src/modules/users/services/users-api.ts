@@ -20,7 +20,6 @@ import { PlaygroundError } from '@/errors/playground-error';
  * A row in the users list.
  */
 export interface UserListItem {
-
     /** The user's unique identifier. */
     readonly id: string;
 

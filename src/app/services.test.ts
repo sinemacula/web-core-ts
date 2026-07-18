@@ -73,7 +73,6 @@ function createRealtimeConnectionStub(): RealtimeConnection {
 }
 
 interface ServiceCase {
-
     readonly accessorName: string;
     readonly message: string;
     readonly install: () => unknown;

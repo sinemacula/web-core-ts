@@ -18,7 +18,6 @@ const DEFAULT_STORAGE_KEY = 'locale';
  * Construction options for {@link LocaleService}.
  */
 export interface LocaleServiceOptions {
-
     /** The locale used when nothing else matches. */
     readonly defaultLocale: string;
 
@@ -36,7 +35,6 @@ export interface LocaleServiceOptions {
  * Detects, matches and persists the active locale.
  */
 export class LocaleService {
-
     /** The locale used when nothing else matches. */
     readonly #defaultLocale: string;
 

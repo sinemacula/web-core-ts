@@ -19,7 +19,6 @@ import type { KeyValueStorage } from '../storage/key-value-storage';
  * Options for {@link wireChunkRecovery}.
  */
 export interface WireChunkRecoveryOptions {
-
     /** The router whose navigation errors are inspected and recovered. */
     readonly router: Router;
 

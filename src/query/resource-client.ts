@@ -18,7 +18,6 @@ import { unwrapItem, unwrapList } from './envelope';
 
 /** Construction options for {@link ResourceClient}. */
 export interface ResourceClientOptions<Value> {
-
     /** The HTTP client used to issue requests. */
     readonly client: HttpClient;
 
@@ -34,7 +33,6 @@ export interface ResourceClientOptions<Value> {
  * and the laravel-api-toolkit response envelope.
  */
 export class ResourceClient<Value> {
-
     /** The HTTP client used to issue requests. */
     readonly #client: HttpClient;
 

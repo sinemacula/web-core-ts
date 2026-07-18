@@ -175,7 +175,6 @@ function makeConfig(runtimeUrl?: string): WebCoreAppOptions<TestConfiguration>['
 }
 
 interface Seams {
-
     readonly fetchFn: ReturnType<typeof makeFetch>;
     readonly storage: MemoryStorage;
     readonly targetWindow: TestWindow;

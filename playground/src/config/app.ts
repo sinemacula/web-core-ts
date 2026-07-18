@@ -11,7 +11,6 @@ import type { Environment } from '@sinemacula/web-core/config/environment';
  * Top-level application configuration resolved from the environment.
  */
 export interface AppConfig {
-
     /** The application environment name. */
     readonly environment: string;
 
