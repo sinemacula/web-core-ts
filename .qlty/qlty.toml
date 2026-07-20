@@ -83,11 +83,11 @@ config_files = [".qlty/configs/biome.json"]
 
 [plugins.definitions.biome.drivers.lint]
 script = "biome lint --reporter=json ${config_script} ${target}"
-config_script = "--config-path ${config_file}"
+config_script = "--config-path .qlty/configs"
 
 [plugins.definitions.biome.drivers.format]
 script = "biome format --write ${config_script} ${target}"
-config_script = "--config-path ${config_file}"
+config_script = "--config-path .qlty/configs"
 output = "rewrite"
 batch = true
 cache_results = true
@@ -95,7 +95,7 @@ suggested = "targets"
 
 [[plugin]]
 name = "biome"
-version = "2.0.0"
+version = "2.3.15"
 mode = "comment"
 
 # ESLint runs the shared @sinemacula/coding-standards flat config alongside
