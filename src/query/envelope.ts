@@ -63,11 +63,11 @@ export interface ListResult<Value> {
  * @throws {@link QueryError} when the envelope is absent or malformed
  */
 export function unwrapItem<Value>(payload: unknown, map: ResourceMapper<Value>): Value {
-    if (!isRecord(payload) || !isRecord(payload.data)) {
+    if (!isRecord(payload) || !isRecord(payload['data'])) {
         throw new QueryError('The response did not match the expected envelope shape.');
     }
 
-    return map(payload.data);
+    return map(payload['data']);
 }
 
 /**
@@ -81,11 +81,11 @@ export function unwrapItem<Value>(payload: unknown, map: ResourceMapper<Value>):
  * @throws {@link QueryError} when the envelope is absent or malformed
  */
 export function unwrapList<Value>(payload: unknown, map: ResourceMapper<Value>): ListResult<Value> {
-    if (!isRecord(payload) || !Array.isArray(payload.data)) {
+    if (!isRecord(payload) || !Array.isArray(payload['data'])) {
         throw new QueryError('The response did not match the expected envelope shape.');
     }
 
-    const items = payload.data.map(entry => {
+    const items = payload['data'].map(entry => {
         if (!isRecord(entry)) {
             throw new QueryError('The response did not match the expected envelope shape.');
         }
@@ -93,7 +93,7 @@ export function unwrapList<Value>(payload: unknown, map: ResourceMapper<Value>):
         return map(entry);
     });
 
-    return { items, meta: mapPaginationMeta(payload.meta) };
+    return { items, meta: mapPaginationMeta(payload['meta']) };
 }
 
 /**
@@ -108,10 +108,10 @@ function mapPaginationMeta(raw: unknown): PaginationMeta | null {
         return null;
     }
 
-    const currentPage = raw.current_page;
-    const lastPage = raw.last_page;
-    const perPage = raw.per_page;
-    const total = raw.total;
+    const currentPage = raw['current_page'];
+    const lastPage = raw['last_page'];
+    const perPage = raw['per_page'];
+    const total = raw['total'];
 
     if (
         typeof currentPage !== 'number' ||

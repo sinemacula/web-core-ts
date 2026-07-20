@@ -16,11 +16,11 @@ import { filter } from './list-filter';
 function parsedFilters(query: ApiQuery): unknown {
     const params = query.toQueryParameters();
 
-    if (params.filters === undefined) {
+    if (params['filters'] === undefined) {
         return {};
     }
 
-    return JSON.parse(String(params.filters));
+    return JSON.parse(String(params['filters']));
 }
 
 // ---------------------------------------------------------------------------

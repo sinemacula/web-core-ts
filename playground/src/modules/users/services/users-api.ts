@@ -42,19 +42,19 @@ export interface UserListItem {
  */
 export const mapUserRow: ResourceMapper<UserListItem> = (raw: RawRecord): UserListItem => {
     if (
-        typeof raw.id !== 'string' ||
-        typeof raw.full_name !== 'string' ||
-        typeof raw.email !== 'string' ||
-        typeof raw.created_at !== 'string'
+        typeof raw['id'] !== 'string' ||
+        typeof raw['full_name'] !== 'string' ||
+        typeof raw['email'] !== 'string' ||
+        typeof raw['created_at'] !== 'string'
     ) {
         throw new PlaygroundError('The user row did not match the expected shape.');
     }
 
     return {
-        id: raw.id,
-        fullName: raw.full_name,
-        email: raw.email,
-        createdAt: raw.created_at,
+        id: raw['id'],
+        fullName: raw['full_name'],
+        email: raw['email'],
+        createdAt: raw['created_at'],
     };
 };
 

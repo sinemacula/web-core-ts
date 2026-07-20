@@ -133,7 +133,7 @@ describe('UpdateMonitor', () => {
         );
         const extractVersion = (payload: unknown): string | null =>
             typeof payload === 'object' && payload !== null && 'release' in payload
-                ? String((payload as Record<string, unknown>).release)
+                ? String((payload as Record<string, unknown>)['release'])
                 : null;
         const monitor = new UpdateMonitor({
             currentVersion: '1',

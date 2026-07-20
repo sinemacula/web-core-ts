@@ -78,6 +78,6 @@ describe('FilterTree', () => {
             // biome-ignore-end lint/style/useNamingConvention: toolkit keys
         };
 
-        expect(tree.name).toBe('Alice');
+        expect(tree['name']).toBe('Alice');
     });
 });

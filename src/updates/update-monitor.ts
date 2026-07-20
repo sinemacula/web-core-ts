@@ -186,7 +186,7 @@ export class UpdateMonitor {
  * @returns the deployed version, or null when absent
  */
 function extractAppVersion(payload: unknown): string | null {
-    const version = isRecord(payload) ? payload.APP_VERSION : null;
+    const version = isRecord(payload) ? payload['APP_VERSION'] : null;
 
     return typeof version === 'string' ? version : null;
 }

@@ -99,7 +99,7 @@ describe('activateLocale', () => {
 
         const messages = i18n.global.getLocaleMessage('en-GB');
 
-        expect((messages as Record<string, Record<string, string>>).auth?.login).toBe('Sign in');
+        expect((messages as Record<string, Record<string, string>>)['auth']?.['login']).toBe('Sign in');
     });
 
     it('switches the locale ref to the activated locale', async () => {
@@ -233,8 +233,8 @@ describe('activateLocale', () => {
         // Fallback locale messages are loaded
         const fallbackMessages = i18n.global.getLocaleMessage('en-GB') as Record<string, unknown>;
 
-        expect(fallbackMessages.welcome).toBe('Welcome');
-        expect((fallbackMessages.auth as Record<string, string>).login).toBe('Sign in');
+        expect(fallbackMessages['welcome']).toBe('Welcome');
+        expect((fallbackMessages['auth'] as Record<string, string>)['login']).toBe('Sign in');
     });
 
     it('does not load fallback messages when fallbackLocale is undefined', async () => {
@@ -256,7 +256,7 @@ describe('activateLocale', () => {
         // called
         const enMessages = i18n.global.getLocaleMessage('en-GB') as Record<string, unknown>;
 
-        expect(enMessages.hello).toBeUndefined();
+        expect(enMessages['hello']).toBeUndefined();
         expect(i18n.global.locale.value).toBe('fr-FR');
     });
 
@@ -283,7 +283,7 @@ describe('activateLocale', () => {
 
         const fallbackMessages = i18n.global.getLocaleMessage('en-GB') as Record<string, unknown>;
 
-        expect((fallbackMessages.auth as Record<string, string>).login).toBe('Sign in');
+        expect((fallbackMessages['auth'] as Record<string, string>)['login']).toBe('Sign in');
     });
 
     it('uses the message source instead of module loaders for the active locale', async () => {
@@ -321,7 +321,7 @@ describe('activateLocale', () => {
 
         const messages = i18n.global.getLocaleMessage('en-GB') as Record<string, Record<string, string>>;
 
-        expect(messages.auth?.login).toBe('From source');
+        expect(messages['auth']?.['login']).toBe('From source');
     });
 
     it('uses the message source for the fallback locale load as well', async () => {
@@ -350,8 +350,8 @@ describe('activateLocale', () => {
         const active = i18n.global.getLocaleMessage('es-ES') as Record<string, Record<string, string>>;
         const fallback = i18n.global.getLocaleMessage('en-GB') as Record<string, Record<string, string>>;
 
-        expect(active.auth?.login).toBe('Iniciar sesión');
-        expect(fallback.auth?.login).toBe('Sign in');
+        expect(active['auth']?.['login']).toBe('Iniciar sesión');
+        expect(fallback['auth']?.['login']).toBe('Sign in');
     });
 
     it('requests the message source once when fallbackLocale equals the active locale', async () => {
@@ -399,7 +399,7 @@ describe('activateLocale', () => {
 
         const messages = i18n.global.getLocaleMessage('en-GB') as Record<string, Record<string, string>>;
 
-        expect(messages.common?.greeting).toBe('From module');
+        expect(messages['common']?.['greeting']).toBe('From module');
         expect(i18n.global.t('welcome')).toBe('Hello');
     });
 
@@ -425,7 +425,7 @@ describe('activateLocale', () => {
 
         const messages = i18n.global.getLocaleMessage('en-GB') as Record<string, Record<string, string>>;
 
-        expect(messages.common?.greeting).toBe('From module');
+        expect(messages['common']?.['greeting']).toBe('From module');
         expect(i18n.global.t('welcome')).toBe('Hello');
     });
 
@@ -551,7 +551,7 @@ describe('activateLocale', () => {
 
         const messages = i18n.global.getLocaleMessage('en-GB') as Record<string, Record<string, string>>;
 
-        expect(messages.auth?.login).toBe('Sign in');
+        expect(messages['auth']?.['login']).toBe('Sign in');
         expect(i18n.global.t('welcome')).toBe('Hello');
         expect(i18n.global.locale.value).toBe('en-GB');
     });
@@ -723,7 +723,7 @@ describe('createLocaleSwitcher', () => {
 
         const messages = i18n.global.getLocaleMessage('fr-FR') as Record<string, Record<string, string>>;
 
-        expect(messages.auth?.login).toBe('fr-FR');
+        expect(messages['auth']?.['login']).toBe('fr-FR');
     });
 
     it('forwards the collision strategy through to activation', async () => {

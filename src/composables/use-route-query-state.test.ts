@@ -64,7 +64,7 @@ describe('useRouteQueryState', () => {
 
             const state = useRouteQueryState(router, { defaults: { tag: 'all' } });
 
-            expect(state.values.value.tag).toBe('alpha');
+            expect(state.values.value['tag']).toBe('alpha');
         });
 
         it('falls back to the default when the array is empty-like (all null elements)', async () => {
@@ -76,7 +76,7 @@ describe('useRouteQueryState', () => {
 
             const state = useRouteQueryState(router, { defaults: { tag: 'all' } });
 
-            expect(state.values.value.tag).toBe('all');
+            expect(state.values.value['tag']).toBe('all');
         });
 
         it('reacts to route changes', async () => {
@@ -85,11 +85,11 @@ describe('useRouteQueryState', () => {
 
             const state = useRouteQueryState(router, { defaults: { page: '1' } });
 
-            expect(state.values.value.page).toBe('1');
+            expect(state.values.value['page']).toBe('1');
 
             await router.push({ query: { page: '5' } });
 
-            expect(state.values.value.page).toBe('5');
+            expect(state.values.value['page']).toBe('5');
         });
     });
 
@@ -131,7 +131,7 @@ describe('useRouteQueryState', () => {
 
             await state.set({ page: '3' });
 
-            expect(router.currentRoute.value.query.page).toBe('3');
+            expect(router.currentRoute.value.query['page']).toBe('3');
         });
 
         it('merges the patch over existing query params', async () => {
@@ -142,8 +142,8 @@ describe('useRouteQueryState', () => {
 
             await state.set({ page: '4' });
 
-            expect(router.currentRoute.value.query.page).toBe('4');
-            expect(router.currentRoute.value.query.sort).toBe('date');
+            expect(router.currentRoute.value.query['page']).toBe('4');
+            expect(router.currentRoute.value.query['sort']).toBe('date');
         });
 
         it('removes the key from the URL when set to null', async () => {
@@ -154,7 +154,7 @@ describe('useRouteQueryState', () => {
 
             await state.set({ page: null });
 
-            expect(router.currentRoute.value.query.page).toBeUndefined();
+            expect(router.currentRoute.value.query['page']).toBeUndefined();
         });
 
         it('preserves foreign (unmanaged) query parameters', async () => {
@@ -165,8 +165,8 @@ describe('useRouteQueryState', () => {
 
             await state.set({ page: '3' });
 
-            expect(router.currentRoute.value.query.foreign).toBe('kept');
-            expect(router.currentRoute.value.query.page).toBe('3');
+            expect(router.currentRoute.value.query['foreign']).toBe('kept');
+            expect(router.currentRoute.value.query['page']).toBe('3');
         });
 
         it('silently ignores patch keys that are not in defaults', async () => {
@@ -177,8 +177,8 @@ describe('useRouteQueryState', () => {
 
             await state.set({ unknown: 'value' });
 
-            expect(router.currentRoute.value.query.unknown).toBeUndefined();
-            expect(router.currentRoute.value.query.page).toBe('1');
+            expect(router.currentRoute.value.query['unknown']).toBeUndefined();
+            expect(router.currentRoute.value.query['page']).toBe('1');
         });
 
         it('can set multiple keys in a single call', async () => {
@@ -189,9 +189,9 @@ describe('useRouteQueryState', () => {
 
             await state.set({ page: '2', sort: 'date', dir: 'desc' });
 
-            expect(router.currentRoute.value.query.page).toBe('2');
-            expect(router.currentRoute.value.query.sort).toBe('date');
-            expect(router.currentRoute.value.query.dir).toBe('desc');
+            expect(router.currentRoute.value.query['page']).toBe('2');
+            expect(router.currentRoute.value.query['sort']).toBe('date');
+            expect(router.currentRoute.value.query['dir']).toBe('desc');
         });
     });
 });

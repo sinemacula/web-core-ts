@@ -108,11 +108,11 @@ function widgetEnvelope(id: string, name: string): Record<string, unknown> {
  * @throws Error when required fields are missing or of the wrong type
  */
 function mapWidget(raw: RawRecord): Widget {
-    if (typeof raw.id !== 'string' || typeof raw.name !== 'string') {
+    if (typeof raw['id'] !== 'string' || typeof raw['name'] !== 'string') {
         throw new Error('The widget response did not match the expected shape.');
     }
 
-    return { id: raw.id, name: raw.name };
+    return { id: raw['id'], name: raw['name'] };
 }
 
 /** Build a `ResourceClient<Widget>` wired against a fresh `FakeHttpClient`. */

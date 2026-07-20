@@ -274,7 +274,7 @@ describe('FetchHttpClient - download interceptors and 401 handling', () => {
 
         // Cast proven safe: #buildRequestInit always writes a plain object
         // literal.
-        expect((lastInit(fetchFn).headers as Record<string, string>).authorization).toBe('Bearer token-123');
+        expect((lastInit(fetchFn).headers as Record<string, string>)['authorization']).toBe('Bearer token-123');
     });
 
     it('retries a download exactly once when onUnauthorized returns true', async () => {
