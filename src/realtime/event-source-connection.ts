@@ -210,7 +210,9 @@ export class EventSourceConnection implements RealtimeConnection {
         source.addEventListener(event, (messageEvent: MessageEvent) => {
             const message: RealtimeMessage = { event, data: String(messageEvent.data) };
 
-            this.#messageHandlers.get(event)?.forEach(handler => handler(message));
+            this.#messageHandlers.get(event)?.forEach(handler => {
+                handler(message);
+            });
         });
     }
 
