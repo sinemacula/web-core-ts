@@ -15,11 +15,11 @@ import { useListQuery } from './use-list-query';
 // Helper: parse `filters` parameter back to an object
 // ---------------------------------------------------------------------------
 function parsedFilters(params: Record<string, unknown>): unknown {
-    if (params.filters === undefined) {
+    if (params['filters'] === undefined) {
         return {};
     }
 
-    return JSON.parse(String(params.filters));
+    return JSON.parse(String(params['filters']));
 }
 
 // ---------------------------------------------------------------------------
@@ -83,31 +83,31 @@ describe('useListQuery', () => {
         it('applies default pageSize of 25 when not specified', () => {
             const { parameters } = useListQuery(defineListQuery({}));
 
-            expect(parameters.value.limit).toBe(25);
+            expect(parameters.value['limit']).toBe(25);
         });
 
         it('applies the definition pageSize', () => {
             const { parameters } = useListQuery(sharedDefinition);
 
-            expect(parameters.value.limit).toBe(10);
+            expect(parameters.value['limit']).toBe(10);
         });
 
         it('applies the defaultSort when no explicit sort is set', () => {
             const { parameters } = useListQuery(sharedDefinition);
 
-            expect(parameters.value.order).toBe('name');
+            expect(parameters.value['order']).toBe('name');
         });
 
         it('emits page 1 initially', () => {
             const { parameters } = useListQuery(sharedDefinition);
 
-            expect(parameters.value.page).toBe(1);
+            expect(parameters.value['page']).toBe(1);
         });
 
         it('emits no filters parameter when no filters are set', () => {
             const { parameters } = useListQuery(defineListQuery({}));
 
-            expect(parameters.value.filters).toBeUndefined();
+            expect(parameters.value['filters']).toBeUndefined();
         });
     });
 
@@ -121,7 +121,7 @@ describe('useListQuery', () => {
             });
             const { parameters } = useListQuery(definition);
 
-            expect(parameters.value.fields).toBe('id,name');
+            expect(parameters.value['fields']).toBe('id,name');
         });
 
         it('applies base before filters', () => {
@@ -443,13 +443,13 @@ describe('useListQuery', () => {
             search('');
 
             expect(searchTerm.value).toBe('');
-            expect(parameters.value.filters).toBeUndefined();
+            expect(parameters.value['filters']).toBeUndefined();
         });
 
         it('does not emit the search filter when the term is empty', () => {
             const { parameters } = useListQuery(sharedDefinition);
 
-            expect(parameters.value.filters).toBeUndefined();
+            expect(parameters.value['filters']).toBeUndefined();
         });
     });
 
@@ -460,14 +460,14 @@ describe('useListQuery', () => {
         it('emits defaultSort when no explicit sort has been set', () => {
             const { parameters } = useListQuery(sharedDefinition);
 
-            expect(parameters.value.order).toBe('name');
+            expect(parameters.value['order']).toBe('name');
         });
 
         it('emits no order when there is no defaultSort and no explicit sort', () => {
             const definition = defineListQuery({ sortable: ['name'] });
             const { parameters } = useListQuery(definition);
 
-            expect(parameters.value.order).toBeUndefined();
+            expect(parameters.value['order']).toBeUndefined();
         });
     });
 
@@ -480,7 +480,7 @@ describe('useListQuery', () => {
 
             sortBy('createdAt', 'asc');
 
-            expect(parameters.value.order).toBe('createdAt');
+            expect(parameters.value['order']).toBe('createdAt');
         });
 
         it('sets an explicit descending sort', () => {
@@ -488,7 +488,7 @@ describe('useListQuery', () => {
 
             sortBy('createdAt', 'desc');
 
-            expect(parameters.value.order).toBe('createdAt:desc');
+            expect(parameters.value['order']).toBe('createdAt:desc');
         });
 
         it('updates the sort computed ref', () => {
@@ -504,7 +504,7 @@ describe('useListQuery', () => {
 
             sortBy('age', 'desc');
 
-            expect(parameters.value.order).toBe('age:desc');
+            expect(parameters.value['order']).toBe('age:desc');
         });
 
         it('resets page to 1', () => {
@@ -584,7 +584,7 @@ describe('useListQuery', () => {
 
             sortBy('anyColumn', 'asc');
 
-            expect(parameters.value.order).toBe('anyColumn');
+            expect(parameters.value['order']).toBe('anyColumn');
         });
     });
 
@@ -711,7 +711,7 @@ describe('useListQuery', () => {
 
             refine(q => q.counts(['posts']));
 
-            expect(parameters.value.counts).toBe('posts');
+            expect(parameters.value['counts']).toBe('posts');
         });
 
         it('multiple refinements are applied in call order', () => {
@@ -720,8 +720,8 @@ describe('useListQuery', () => {
             refine(q => q.counts(['posts']));
             refine(q => q.fields(['id', 'name']));
 
-            expect(parameters.value.counts).toBe('posts');
-            expect(parameters.value.fields).toBe('id,name');
+            expect(parameters.value['counts']).toBe('posts');
+            expect(parameters.value['fields']).toBe('id,name');
         });
 
         it('refinements persist across filter changes', () => {
@@ -730,7 +730,7 @@ describe('useListQuery', () => {
             refine(q => q.counts(['posts']));
             setFilter('status', 'active');
 
-            expect(parameters.value.counts).toBe('posts');
+            expect(parameters.value['counts']).toBe('posts');
         });
 
         it('refinements are applied after sort and pagination', () => {
@@ -791,7 +791,7 @@ describe('useListQuery', () => {
             refine(q => q.counts(['posts']));
             reset();
 
-            expect(parameters.value.counts).toBeUndefined();
+            expect(parameters.value['counts']).toBeUndefined();
         });
 
         it('restores defaultSort after reset', () => {
@@ -801,7 +801,7 @@ describe('useListQuery', () => {
             reset();
 
             // After reset, defaultSort ('name' asc) is in effect again
-            expect(parameters.value.order).toBe('name');
+            expect(parameters.value['order']).toBe('name');
         });
 
         it('restores no filters, no search, no order when definition has no defaults', () => {
@@ -812,8 +812,8 @@ describe('useListQuery', () => {
             sortBy('anyCol');
             reset();
 
-            expect(parameters.value.filters).toBeUndefined();
-            expect(parameters.value.order).toBeUndefined();
+            expect(parameters.value['filters']).toBeUndefined();
+            expect(parameters.value['order']).toBeUndefined();
         });
     });
 
@@ -829,8 +829,8 @@ describe('useListQuery', () => {
 
             const filters = parsedFilters(parameters.value) as Record<string, unknown>;
 
-            expect(filters.status).toBe('active');
-            expect(filters.$or).toBeDefined();
+            expect(filters['status']).toBe('active');
+            expect(filters['$or']).toBeDefined();
         });
 
         it('applies search before sort (both present in output)', () => {
@@ -839,15 +839,15 @@ describe('useListQuery', () => {
             search('alice');
             sortBy('createdAt', 'desc');
 
-            expect(parameters.value.order).toBe('createdAt:desc');
-            expect(parameters.value.filters).toBeDefined();
+            expect(parameters.value['order']).toBe('createdAt:desc');
+            expect(parameters.value['filters']).toBeDefined();
         });
 
         it('emits limit and page after filters/sort', () => {
             const { parameters } = useListQuery(sharedDefinition);
 
-            expect(parameters.value.limit).toBe(10);
-            expect(parameters.value.page).toBe(1);
+            expect(parameters.value['limit']).toBe(10);
+            expect(parameters.value['page']).toBe(1);
         });
     });
 
@@ -857,20 +857,20 @@ describe('useListQuery', () => {
     describe('reactivity', () => {
         it('parameters.value changes after setFilter', () => {
             const { parameters, setFilter } = useListQuery(sharedDefinition);
-            const before = parameters.value.filters;
+            const before = parameters.value['filters'];
 
             setFilter('status', 'active');
 
-            expect(parameters.value.filters).not.toBe(before);
+            expect(parameters.value['filters']).not.toBe(before);
         });
 
         it('parameters.value changes after search', () => {
             const { parameters, search } = useListQuery(sharedDefinition);
-            const before = parameters.value.filters;
+            const before = parameters.value['filters'];
 
             search('alice');
 
-            expect(parameters.value.filters).not.toBe(before);
+            expect(parameters.value['filters']).not.toBe(before);
         });
 
         it('parameters.value changes after sortBy', () => {
@@ -878,7 +878,7 @@ describe('useListQuery', () => {
 
             sortBy('age', 'desc');
 
-            expect(parameters.value.order).toBe('age:desc');
+            expect(parameters.value['order']).toBe('age:desc');
         });
 
         it('parameters.value changes after goTo', () => {
@@ -886,7 +886,7 @@ describe('useListQuery', () => {
 
             goTo(3);
 
-            expect(parameters.value.page).toBe(3);
+            expect(parameters.value['page']).toBe(3);
         });
 
         it('parameters.value changes after refine', () => {
@@ -894,7 +894,7 @@ describe('useListQuery', () => {
 
             refine(q => q.counts(['posts']));
 
-            expect(parameters.value.counts).toBe('posts');
+            expect(parameters.value['counts']).toBe('posts');
         });
 
         it('parameters.value changes after reset', () => {
@@ -902,11 +902,11 @@ describe('useListQuery', () => {
 
             setFilter('status', 'active');
 
-            const before = parameters.value.filters;
+            const before = parameters.value['filters'];
 
             reset();
 
-            expect(parameters.value.filters).not.toBe(before);
+            expect(parameters.value['filters']).not.toBe(before);
         });
     });
 
@@ -962,14 +962,14 @@ describe('useListQuery', () => {
             const definition = defineListQuery({ filters: { status: filter.equals('status') } });
             const { parameters } = useListQuery(definition);
 
-            expect(parameters.value.limit).toBe(25);
+            expect(parameters.value['limit']).toBe(25);
         });
 
         it('uses the explicit pageSize from the definition', () => {
             const definition = defineListQuery({ pageSize: 50 });
             const { parameters } = useListQuery(definition);
 
-            expect(parameters.value.limit).toBe(50);
+            expect(parameters.value['limit']).toBe(50);
         });
     });
 
@@ -993,7 +993,7 @@ describe('useListQuery', () => {
             setFilter('status', 'active');
 
             expect(parsedFilters(parameters.value)).toEqual({ status: 'active' });
-            expect(parameters.value.limit).toBe(5);
+            expect(parameters.value['limit']).toBe(5);
         });
     });
 
@@ -1013,7 +1013,7 @@ describe('useListQuery', () => {
 
             setFilterUnsafe('nonExistentKey', 'value');
 
-            expect(parameters.value.filters).toBeUndefined();
+            expect(parameters.value['filters']).toBeUndefined();
         });
 
         it('does not emit a search filter when search term is set but definition has no search', () => {
@@ -1025,7 +1025,7 @@ describe('useListQuery', () => {
 
             search('alice');
 
-            expect(parameters.value.filters).toBeUndefined();
+            expect(parameters.value['filters']).toBeUndefined();
         });
     });
 

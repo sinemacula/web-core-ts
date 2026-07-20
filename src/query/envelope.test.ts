@@ -38,11 +38,11 @@ function wire(entries: ReadonlyArray<readonly [string, unknown]>): Record<string
  * @throws Error when required fields are missing or of the wrong type
  */
 function mapWidget(raw: RawRecord): Widget {
-    if (typeof raw.id !== 'string' || typeof raw.name !== 'string') {
+    if (typeof raw['id'] !== 'string' || typeof raw['name'] !== 'string') {
         throw new Error('The widget response did not match the expected shape.');
     }
 
-    return { id: raw.id, name: raw.name };
+    return { id: raw['id'], name: raw['name'] };
 }
 
 describe('unwrapItem', () => {

@@ -33,8 +33,8 @@ describe('useApiQuery', () => {
 
             const params = query.value.toQueryParameters();
 
-            expect(JSON.parse(String(params.filters))).toEqual({ status: 'active' });
-            expect(params.page).toBe(1);
+            expect(JSON.parse(String(params['filters']))).toEqual({ status: 'active' });
+            expect(params['page']).toBe(1);
         });
 
         it('reflects the initial state in parameters', () => {
@@ -42,7 +42,7 @@ describe('useApiQuery', () => {
                 initial: q => q.limit(10),
             });
 
-            expect(parameters.value.limit).toBe(10);
+            expect(parameters.value['limit']).toBe(10);
         });
     });
 
@@ -52,7 +52,7 @@ describe('useApiQuery', () => {
 
             apply(q => q.where('name', 'Alice'));
 
-            expect(JSON.parse(String(query.value.toQueryParameters().filters))).toEqual({ name: 'Alice' });
+            expect(JSON.parse(String(query.value.toQueryParameters()['filters']))).toEqual({ name: 'Alice' });
         });
 
         it('recomputes parameters after apply', () => {
@@ -60,8 +60,8 @@ describe('useApiQuery', () => {
 
             apply(q => q.page(5).limit(20));
 
-            expect(parameters.value.page).toBe(5);
-            expect(parameters.value.limit).toBe(20);
+            expect(parameters.value['page']).toBe(5);
+            expect(parameters.value['limit']).toBe(20);
         });
 
         it('receives the current query as the argument to the mutate callback', () => {
@@ -72,7 +72,7 @@ describe('useApiQuery', () => {
             apply(q => q.where('role', 'admin'));
 
             const params = query.value.toQueryParameters();
-            const filters = JSON.parse(String(params.filters));
+            const filters = JSON.parse(String(params['filters']));
 
             expect(filters).toEqual({ status: 'active', role: 'admin' });
         });
@@ -83,7 +83,7 @@ describe('useApiQuery', () => {
             apply(q => q.where('a', 1));
             apply(q => q.where('b', 2));
 
-            const filters = JSON.parse(String(query.value.toQueryParameters().filters));
+            const filters = JSON.parse(String(query.value.toQueryParameters()['filters']));
 
             expect(filters).toEqual({ a: 1, b: 2 });
         });
@@ -98,10 +98,10 @@ describe('useApiQuery', () => {
             apply(q => q.where('role', 'admin'));
             reset();
 
-            const filters = JSON.parse(String(query.value.toQueryParameters().filters));
+            const filters = JSON.parse(String(query.value.toQueryParameters()['filters']));
 
             expect(filters).toEqual({ status: 'active' });
-            expect(query.value.toQueryParameters().role).toBeUndefined();
+            expect(query.value.toQueryParameters()['role']).toBeUndefined();
         });
 
         it('restores to an empty query when no initial option was given', () => {
@@ -120,11 +120,11 @@ describe('useApiQuery', () => {
 
             apply(q => q.limit(99));
 
-            expect(parameters.value.limit).toBe(99);
+            expect(parameters.value['limit']).toBe(99);
 
             reset();
 
-            expect(parameters.value.limit).toBe(10);
+            expect(parameters.value['limit']).toBe(10);
         });
 
         it('uses the same initial ApiQuery instance on every reset (referential identity)', () => {
@@ -155,11 +155,11 @@ describe('useApiQuery', () => {
         it('parameters ComputedRef updates when the query changes', () => {
             const { parameters, apply } = useApiQuery();
 
-            expect(parameters.value.page).toBeUndefined();
+            expect(parameters.value['page']).toBeUndefined();
 
             apply(q => q.page(3));
 
-            expect(parameters.value.page).toBe(3);
+            expect(parameters.value['page']).toBe(3);
         });
 
         it('returns a fresh ApiQuery instance from apply - not mutated original', () => {

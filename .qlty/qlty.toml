@@ -43,6 +43,9 @@ name = "sinemacula"
 repository = "https://github.com/sinemacula/coding-standards"
 tag = "v1.13.0"
 
+[runtimes.enabled]
+node = "24.18.0"
+
 [[plugin]]
 name = "markdownlint"
 mode = "comment"

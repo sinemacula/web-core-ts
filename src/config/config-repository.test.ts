@@ -22,7 +22,7 @@ describe('ConfigRepository', () => {
             const all = config.all();
 
             expect(Object.isFrozen(all)).toBe(true);
-            expect(Object.isFrozen((all as Record<string, unknown>).app)).toBe(true);
+            expect(Object.isFrozen((all as Record<string, unknown>)['app'])).toBe(true);
         });
     });
 

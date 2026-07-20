@@ -150,7 +150,7 @@ describe('application boot', () => {
     it('fails closed in production when a required runtime key is missing', async () => {
         const runtime = runtimeDocument();
 
-        delete runtime.API_URL;
+        delete runtime['API_URL'];
 
         await expect(boot({ dev: false, runtime })).rejects.toBeInstanceOf(ConfigurationError);
         await expect(boot({ dev: false, runtime })).rejects.toThrow('API_URL');

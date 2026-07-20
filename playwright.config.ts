@@ -12,7 +12,7 @@
 
 import { defineConfig, devices } from '@playwright/test';
 
-const IS_CI = process.env.CI !== undefined;
+const IS_CI = process.env['CI'] !== undefined;
 const PORT = IS_CI ? 4173 : 5173;
 const BASE_URL = `http://localhost:${PORT}`;
 
