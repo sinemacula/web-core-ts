@@ -1,5 +1,12 @@
 # Web Core
 
+[![Latest Stable Version](https://img.shields.io/npm/v/@sinemacula/web-core.svg)](https://www.npmjs.com/package/@sinemacula/web-core)
+[![Build Status](https://github.com/sinemacula/web-core-ts/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/sinemacula/web-core-ts/actions/workflows/tests.yml)
+[![Quality Gates](https://github.com/sinemacula/web-core-ts/actions/workflows/quality-gates.yml/badge.svg?branch=master)](https://github.com/sinemacula/web-core-ts/actions/workflows/quality-gates.yml)
+[![Maintainability](https://qlty.sh/gh/sinemacula/projects/web-core-ts/maintainability.svg)](https://qlty.sh/gh/sinemacula/projects/web-core-ts)
+[![Code Coverage](https://qlty.sh/gh/sinemacula/projects/web-core-ts/coverage.svg)](https://qlty.sh/gh/sinemacula/projects/web-core-ts)
+[![Total Downloads](https://img.shields.io/npm/dt/@sinemacula/web-core.svg)](https://www.npmjs.com/package/@sinemacula/web-core)
+
 `@sinemacula/web-core` is the framework-agnostic kernel on which Sine Macula web applications are built. It
 provides the cross-cutting concerns every frontend needs - configuration, HTTP, routing, modules, i18n, storage
 and more - as small, port-driven TypeScript units with no product code and no UI.
@@ -384,6 +391,16 @@ The package is published to npm from CI - never by hand.
 - **Local checks**: `npm run build:dist` compiles the package; `npm run check:pkg` packs it and validates the
   published surface with publint and are-the-types-wrong.
 
-## Licence
+## Contributing
 
-Apache-2.0. Copyright Sine Macula Limited.
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on branching, commits, code
+quality, and pull requests.
+
+## Security
+
+If you discover a security vulnerability, please report it responsibly. See [SECURITY.md](SECURITY.md) for the
+disclosure policy and contact details.
+
+## License
+
+Licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
