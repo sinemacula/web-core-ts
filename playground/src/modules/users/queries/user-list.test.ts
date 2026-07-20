@@ -35,7 +35,7 @@ describe('userList', () => {
 
         search('alice');
 
-        const filters = JSON.parse(String(parameters.value.filters));
+        const filters = JSON.parse(String(parameters.value['filters']));
 
         expect(filters).toEqual(
             wire([

@@ -15,11 +15,11 @@ import { ApiQuery } from './api-query';
 function parsedFilters(query: ApiQuery): unknown {
     const params = query.toQueryParameters();
 
-    if (params.filters === undefined) {
+    if (params['filters'] === undefined) {
         return {};
     }
 
-    return JSON.parse(String(params.filters));
+    return JSON.parse(String(params['filters']));
 }
 
 // ---------------------------------------------------------------------------
@@ -534,19 +534,19 @@ describe('ApiQuery', () => {
         it('emits a single column with implicit asc direction', () => {
             const params = ApiQuery.create().orderBy('name').toQueryParameters();
 
-            expect(params.order).toBe('name');
+            expect(params['order']).toBe('name');
         });
 
         it('emits a single column with explicit asc direction', () => {
             const params = ApiQuery.create().orderBy('name', 'asc').toQueryParameters();
 
-            expect(params.order).toBe('name');
+            expect(params['order']).toBe('name');
         });
 
         it('emits a single column with explicit desc direction', () => {
             const params = ApiQuery.create().orderBy('name', 'desc').toQueryParameters();
 
-            expect(params.order).toBe('name:desc');
+            expect(params['order']).toBe('name:desc');
         });
 
         it('emits multiple columns as a comma-separated list', () => {
@@ -555,7 +555,7 @@ describe('ApiQuery', () => {
                 .orderBy('firstName', 'desc')
                 .toQueryParameters();
 
-            expect(params.order).toBe('lastName,firstName:desc');
+            expect(params['order']).toBe('lastName,firstName:desc');
         });
 
         it('replaces a column already in the list and appends it at the end', () => {
@@ -565,7 +565,7 @@ describe('ApiQuery', () => {
                 .orderBy('name', 'desc')
                 .toQueryParameters();
 
-            expect(params.order).toBe('age:desc,name:desc');
+            expect(params['order']).toBe('age:desc,name:desc');
         });
     });
 
@@ -573,13 +573,13 @@ describe('ApiQuery', () => {
         it('emits "random" in the order list', () => {
             const params = ApiQuery.create().orderByRandom().toQueryParameters();
 
-            expect(params.order).toBe('random');
+            expect(params['order']).toBe('random');
         });
 
         it('appends random after other order entries', () => {
             const params = ApiQuery.create().orderBy('name').orderByRandom().toQueryParameters();
 
-            expect(params.order).toBe('name,random');
+            expect(params['order']).toBe('name,random');
         });
     });
 
@@ -590,7 +590,7 @@ describe('ApiQuery', () => {
         it('emits the page number', () => {
             const params = ApiQuery.create().page(3).toQueryParameters();
 
-            expect(params.page).toBe(3);
+            expect(params['page']).toBe(3);
         });
     });
 
@@ -598,7 +598,7 @@ describe('ApiQuery', () => {
         it('emits the limit', () => {
             const params = ApiQuery.create().limit(25).toQueryParameters();
 
-            expect(params.limit).toBe(25);
+            expect(params['limit']).toBe(25);
         });
     });
 
@@ -606,7 +606,7 @@ describe('ApiQuery', () => {
         it('emits the cursor token', () => {
             const params = ApiQuery.create().cursor('abc123').toQueryParameters();
 
-            expect(params.cursor).toBe('abc123');
+            expect(params['cursor']).toBe('abc123');
         });
     });
 
@@ -614,13 +614,13 @@ describe('ApiQuery', () => {
         it('emits pagination=cursor', () => {
             const params = ApiQuery.create().useCursorPagination().toQueryParameters();
 
-            expect(params.pagination).toBe('cursor');
+            expect(params['pagination']).toBe('cursor');
         });
 
         it('does not emit pagination=cursor when not called', () => {
             const params = ApiQuery.create().toQueryParameters();
 
-            expect(params.pagination).toBeUndefined();
+            expect(params['pagination']).toBeUndefined();
         });
     });
 
@@ -628,10 +628,10 @@ describe('ApiQuery', () => {
         it('emits page, limit, cursor, and pagination together', () => {
             const params = ApiQuery.create().page(1).limit(20).cursor('tok').useCursorPagination().toQueryParameters();
 
-            expect(params.page).toBe(1);
-            expect(params.limit).toBe(20);
-            expect(params.cursor).toBe('tok');
-            expect(params.pagination).toBe('cursor');
+            expect(params['page']).toBe(1);
+            expect(params['limit']).toBe(20);
+            expect(params['cursor']).toBe('tok');
+            expect(params['pagination']).toBe('cursor');
         });
     });
 
@@ -642,7 +642,7 @@ describe('ApiQuery', () => {
         it('emits a comma-joined global fields parameter', () => {
             const params = ApiQuery.create().fields(['name', 'email']).toQueryParameters();
 
-            expect(params.fields).toBe('name,email');
+            expect(params['fields']).toBe('name,email');
         });
     });
 
@@ -671,7 +671,7 @@ describe('ApiQuery', () => {
         it('emits a comma-joined global counts parameter', () => {
             const params = ApiQuery.create().counts(['posts', 'comments']).toQueryParameters();
 
-            expect(params.counts).toBe('posts,comments');
+            expect(params['counts']).toBe('posts,comments');
         });
     });
 
@@ -723,13 +723,13 @@ describe('ApiQuery', () => {
         it('does not emit a filters key when no filters are set', () => {
             const params = ApiQuery.create().toQueryParameters();
 
-            expect(params.filters).toBeUndefined();
+            expect(params['filters']).toBeUndefined();
         });
 
         it('does not emit an order key when no ordering is set', () => {
             const params = ApiQuery.create().toQueryParameters();
 
-            expect(params.order).toBeUndefined();
+            expect(params['order']).toBeUndefined();
         });
     });
 

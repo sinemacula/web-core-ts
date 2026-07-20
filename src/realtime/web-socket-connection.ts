@@ -360,7 +360,7 @@ function isEnvelopeShape(value: unknown): value is {
         return false;
     }
 
-    return typeof (value as Record<string, unknown>).event === 'string';
+    return typeof (value as Record<string, unknown>)['event'] === 'string';
 }
 
 /**

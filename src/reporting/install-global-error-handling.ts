@@ -55,7 +55,7 @@ export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions):
         const context: Record<string, unknown> = { source: 'vue', info };
 
         if (trail !== undefined) {
-            context.breadcrumbs = trail.list();
+            context['breadcrumbs'] = trail.list();
         }
 
         reporter.captureError(err, context);
@@ -66,7 +66,7 @@ export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions):
         const context: Record<string, unknown> = { source: 'window' };
 
         if (trail !== undefined) {
-            context.breadcrumbs = trail.list();
+            context['breadcrumbs'] = trail.list();
         }
 
         reporter.captureError(event.error ?? event.message, context);
@@ -79,7 +79,7 @@ export function installGlobalErrorHandling(options: GlobalErrorHandlingOptions):
         const context: Record<string, unknown> = { source: 'unhandledrejection' };
 
         if (trail !== undefined) {
-            context.breadcrumbs = trail.list();
+            context['breadcrumbs'] = trail.list();
         }
 
         reporter.captureError(event.reason, context);

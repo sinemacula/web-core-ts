@@ -36,14 +36,14 @@ describe('localeFormats', () => {
     });
 
     it('defines a USD currency format for en-US and a EUR currency format for fr-FR', () => {
-        expect(localeFormats.number?.['en-US']?.currency).toEqual({ style: 'currency', currency: 'USD' });
-        expect(localeFormats.number?.['fr-FR']?.currency).toEqual({ style: 'currency', currency: 'EUR' });
+        expect(localeFormats.number?.['en-US']?.['currency']).toEqual({ style: 'currency', currency: 'USD' });
+        expect(localeFormats.number?.['fr-FR']?.['currency']).toEqual({ style: 'currency', currency: 'EUR' });
     });
 
     it('defines decimal and percent formats for both locales', () => {
-        expect(localeFormats.number?.['en-US']?.decimal).toEqual({ style: 'decimal' });
-        expect(localeFormats.number?.['en-US']?.percent).toEqual({ style: 'percent' });
-        expect(localeFormats.number?.['fr-FR']?.decimal).toEqual({ style: 'decimal' });
-        expect(localeFormats.number?.['fr-FR']?.percent).toEqual({ style: 'percent' });
+        expect(localeFormats.number?.['en-US']?.['decimal']).toEqual({ style: 'decimal' });
+        expect(localeFormats.number?.['en-US']?.['percent']).toEqual({ style: 'percent' });
+        expect(localeFormats.number?.['fr-FR']?.['decimal']).toEqual({ style: 'decimal' });
+        expect(localeFormats.number?.['fr-FR']?.['percent']).toEqual({ style: 'percent' });
     });
 });

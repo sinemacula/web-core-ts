@@ -641,8 +641,8 @@ async function parsePayload(response: Response): Promise<unknown> {
  * @returns the payload's message when present, else a generic status message
  */
 function resolveErrorMessage(payload: unknown, status: number): string {
-    if (isRecord(payload) && typeof payload.message === 'string') {
-        return payload.message;
+    if (isRecord(payload) && typeof payload['message'] === 'string') {
+        return payload['message'];
     }
 
     return `Request failed with status ${status}.`;
@@ -655,13 +655,13 @@ function resolveErrorMessage(payload: unknown, status: number): string {
  * @returns the normalised error map, or null when the payload carries none
  */
 function resolveValidationErrors(payload: unknown): Record<string, readonly string[]> | null {
-    if (!isRecord(payload) || !isRecord(payload.errors)) {
+    if (!isRecord(payload) || !isRecord(payload['errors'])) {
         return null;
     }
 
     const errors: Record<string, readonly string[]> = {};
 
-    for (const [field, messages] of Object.entries(payload.errors)) {
+    for (const [field, messages] of Object.entries(payload['errors'])) {
         if (Array.isArray(messages)) {
             errors[field] = messages.filter((message): message is string => typeof message === 'string');
         }

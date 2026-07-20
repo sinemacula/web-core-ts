@@ -148,7 +148,7 @@ describe('installGlobalErrorHandling', () => {
 
             const ctx = reporter.captureErrorCalls[0]?.context as Record<string, unknown>;
 
-            expect(ctx.breadcrumbs).toStrictEqual(trail.list());
+            expect(ctx['breadcrumbs']).toStrictEqual(trail.list());
         });
     });
 
@@ -205,7 +205,7 @@ describe('installGlobalErrorHandling', () => {
 
             const ctx = reporter.captureErrorCalls[0]?.context as Record<string, unknown>;
 
-            expect(ctx.breadcrumbs).toStrictEqual(trail.list());
+            expect(ctx['breadcrumbs']).toStrictEqual(trail.list());
         });
     });
 
@@ -250,7 +250,7 @@ describe('installGlobalErrorHandling', () => {
 
             const ctx = reporter.captureErrorCalls[0]?.context as Record<string, unknown>;
 
-            expect(ctx.breadcrumbs).toStrictEqual(trail.list());
+            expect(ctx['breadcrumbs']).toStrictEqual(trail.list());
         });
     });
 

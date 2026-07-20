@@ -85,9 +85,9 @@ export function createDefaultSessionApi<U extends SessionUser = SessionUser>(
             throw new SessionError('The session response did not match the expected shape.');
         }
 
-        const token = data.token;
-        const refreshToken = data.refresh_token;
-        const expiresAt = data.expires_at;
+        const token = data['token'];
+        const refreshToken = data['refresh_token'];
+        const expiresAt = data['expires_at'];
 
         if (typeof token !== 'string' || typeof refreshToken !== 'string' || typeof expiresAt !== 'string') {
             throw new SessionError('The session response did not match the expected shape.');
@@ -161,11 +161,11 @@ function parseWireTimestamp(value: string): number | null {
  * @throws {@link SessionError} when the envelope is absent or malformed
  */
 function unwrapDataEnvelope(payload: unknown): unknown {
-    if (!isRecord(payload) || !isRecord(payload.data)) {
+    if (!isRecord(payload) || !isRecord(payload['data'])) {
         throw new SessionError('The response did not match the expected envelope shape.');
     }
 
-    return payload.data;
+    return payload['data'];
 }
 
 /**
@@ -185,7 +185,7 @@ function mapDefaultUser(payload: unknown): SessionUser {
         throw new SessionError('The user response did not match the expected shape.');
     }
 
-    const id = payload.id;
+    const id = payload['id'];
 
     if (typeof id !== 'string' && typeof id !== 'number') {
         throw new SessionError('The user response did not match the expected shape.');
@@ -193,9 +193,9 @@ function mapDefaultUser(payload: unknown): SessionUser {
 
     return {
         id,
-        email: typeof payload.email === 'string' ? payload.email : null,
-        name: composeName(payload.first_name, payload.last_name),
-        permissions: mapPermissions(payload.permissions),
+        email: typeof payload['email'] === 'string' ? payload['email'] : null,
+        name: composeName(payload['first_name'], payload['last_name']),
+        permissions: mapPermissions(payload['permissions']),
     };
 }
 

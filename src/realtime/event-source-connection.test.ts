@@ -227,18 +227,18 @@ describe('EventSourceConnection', () => {
             // minimal constructible shim on globalThis to exercise the default
             // factory path.
             const globals = globalThis as Record<string, unknown>;
-            const OriginalEventSource = globals.EventSource;
+            const OriginalEventSource = globals['EventSource'];
 
             class FakeEventSourceShim extends FakeEventSource {}
 
-            globals.EventSource = FakeEventSourceShim;
+            globals['EventSource'] = FakeEventSourceShim;
 
             try {
                 const conn = new EventSourceConnection({ url: 'http://localhost/sse' });
 
                 expect(() => conn.connect()).not.toThrow();
             } finally {
-                globals.EventSource = OriginalEventSource;
+                globals['EventSource'] = OriginalEventSource;
             }
         });
 

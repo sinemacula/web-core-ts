@@ -333,7 +333,7 @@ export class ApiQuery {
      */
     andWhere(build: (query: ApiQuery) => ApiQuery): ApiQuery {
         const sub = build(ApiQuery.create());
-        const merged = mergeGroup(this.#state.filters.$and, sub.#state.filters);
+        const merged = mergeGroup(this.#state.filters['$and'], sub.#state.filters);
 
         return this.#withFilter('$and', merged);
     }
@@ -350,7 +350,7 @@ export class ApiQuery {
      */
     orWhere(build: (query: ApiQuery) => ApiQuery): ApiQuery {
         const sub = build(ApiQuery.create());
-        const merged = mergeGroup(this.#state.filters.$or, sub.#state.filters);
+        const merged = mergeGroup(this.#state.filters['$or'], sub.#state.filters);
 
         return this.#withFilter('$or', merged);
     }
@@ -595,7 +595,7 @@ export class ApiQuery {
      */
     #applyFilterParam(params: Record<string, string | number | boolean>): void {
         if (Object.keys(this.#state.filters).length > 0) {
-            params.filters = JSON.stringify(this.#state.filters);
+            params['filters'] = JSON.stringify(this.#state.filters);
         }
     }
 
@@ -606,7 +606,7 @@ export class ApiQuery {
      */
     #applyOrderParam(params: Record<string, string | number | boolean>): void {
         if (this.#state.order.length > 0) {
-            params.order = this.#state.order
+            params['order'] = this.#state.order
                 .map(e => (e.direction === 'asc' ? e.column : `${e.column}:desc`))
                 .join(',');
         }
@@ -619,19 +619,19 @@ export class ApiQuery {
      */
     #applyPaginationParams(params: Record<string, string | number | boolean>): void {
         if (this.#state.pageNumber !== undefined) {
-            params.page = this.#state.pageNumber;
+            params['page'] = this.#state.pageNumber;
         }
 
         if (this.#state.limitNumber !== undefined) {
-            params.limit = this.#state.limitNumber;
+            params['limit'] = this.#state.limitNumber;
         }
 
         if (this.#state.cursorToken !== undefined) {
-            params.cursor = this.#state.cursorToken;
+            params['cursor'] = this.#state.cursorToken;
         }
 
         if (this.#state.cursorPagination) {
-            params.pagination = 'cursor';
+            params['pagination'] = 'cursor';
         }
     }
 
@@ -642,7 +642,7 @@ export class ApiQuery {
      */
     #applyShapingParams(params: Record<string, string | number | boolean>): void {
         if (this.#state.fieldsList !== undefined) {
-            params.fields = this.#state.fieldsList.join(',');
+            params['fields'] = this.#state.fieldsList.join(',');
         }
 
         for (const [resource, names] of Object.entries(this.#state.fieldsMap)) {
@@ -650,7 +650,7 @@ export class ApiQuery {
         }
 
         if (this.#state.countsList !== undefined) {
-            params.counts = this.#state.countsList.join(',');
+            params['counts'] = this.#state.countsList.join(',');
         }
 
         for (const [resource, relations] of Object.entries(this.#state.countsMap)) {
