@@ -10,9 +10,10 @@
  * colour-scheme preference and the OS scheme through the same mechanism the app
  * uses (the pre-paint boot script plus the token stylesheet's media query).
  *
- * 404 is excluded on purpose: it rewrites to the app, which renders its own
- * not-found view inside the layout. The set otherwise follows the codes a
- * static host can serve a custom page for.
+ * The set follows the codes a static host can serve a custom page for,
+ * including 404: a deep link is normally rewritten to the app and its in-layout
+ * not-found view handles it, but the static page is the fallback for when the
+ * application script itself fails to load.
  *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright   2026 Sine Macula Limited
@@ -33,6 +34,7 @@ const bootScript = `try{var t=localStorage.getItem('theme');if(t==='light'||t===
 const errorPages = {
     400: { title: 'Bad Request', message: 'The server could not understand the request.' },
     403: { title: 'Forbidden', message: 'You do not have permission to view this page.' },
+    404: { title: 'Not Found', message: 'The page you are looking for could not be found.' },
     405: { title: 'Method Not Allowed', message: 'That request method is not allowed here.' },
     414: { title: 'URI Too Long', message: 'The request address is too long to process.' },
     416: { title: 'Range Not Satisfiable', message: 'The requested range cannot be served.' },
