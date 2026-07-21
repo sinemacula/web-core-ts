@@ -23,12 +23,14 @@ ruleTester.run('route-name-namespacing', rule, {
             filename: 'src/modules/auth/module.ts',
             code: "const config = { key: 'anything' };",
         },
-        // A sibling whose name merely ends in `route-names.ts` is not the contract file.
+        // A sibling whose name merely ends in `route-names.ts` is not the
+        // contract file.
         {
             filename: 'src/modules/auth/sub-route-names.ts',
             code: "export const AUTH_ROUTE_NAMES = { login: 'login' } as const;",
         },
-        // A route-names.ts directly under modules/ has no folder namespace to enforce.
+        // A route-names.ts directly under modules/ has no folder namespace to
+        // enforce.
         {
             filename: 'src/modules/route-names.ts',
             code: "export const ROUTE_NAMES = { login: 'anything' } as const;",
@@ -64,7 +66,8 @@ ruleTester.run('route-name-namespacing', rule, {
             filename: 'src/modules/auth/route-names.ts',
             code: "export const AUTH_ROUTE_NAMES = { profile: { view: 'auth.profile.view' } } as const;",
         },
-        // Non-string values (a number, a reference) carry no route name to check.
+        // Non-string values (a number, a reference) carry no route name to
+        // check.
         {
             filename: 'src/modules/auth/route-names.ts',
             code: 'export const AUTH_ROUTE_NAMES = { count: 1, dynamic: build() } as const;',

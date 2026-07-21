@@ -31,12 +31,14 @@ ruleTester.run('module-export-names', rule, {
             filename: 'src/modules/auth/composables/use-login-form.ts',
             code: 'export const anything = 1;',
         },
-        // A sibling whose name merely ends in a contract name is not the contract file.
+        // A sibling whose name merely ends in a contract name is not the
+        // contract file.
         {
             filename: 'src/modules/auth/submodule.ts',
             code: 'export const whatever = 1;',
         },
-        // A contract file directly under modules/ has no folder to derive a name from.
+        // A contract file directly under modules/ has no folder to derive a
+        // name from.
         {
             filename: 'src/modules/module.ts',
             code: 'export const anyModule = {};',
@@ -81,7 +83,8 @@ ruleTester.run('module-export-names', rule, {
             code: 'export type { authModule } from "./internal";',
             errors: [{ messageId: 'missing', data: { name: 'authModule', file: 'module.ts' } }],
         },
-        // Previously bypassed: an inline `type` specifier does not count as a value export.
+        // Previously bypassed: an inline `type` specifier does not count as a
+        // value export.
         {
             filename: 'src/modules/auth/module.ts',
             code: 'type authModule = number; export { type authModule };',

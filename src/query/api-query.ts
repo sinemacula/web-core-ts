@@ -292,9 +292,8 @@ export class ApiQuery {
      * Assert that the relation exists, optionally with conditions.
      *
      * Bare form (no build): adds the relation to the `$has` array (or object
-     * with `{}` when a conditioned `$has` entry already exists).
-     * Conditioned form: adds the relation with its filter tree to the `$has`
-     * object.
+     * with `{}` when a conditioned `$has` entry already exists). Conditioned
+     * form: adds the relation with its filter tree to the `$has` object.
      *
      * @param relation - the relation name
      * @param build - optional callback to add filter conditions on the relation

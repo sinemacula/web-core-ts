@@ -71,12 +71,14 @@ test.describe('users list', () => {
 
         await usersPage.goto();
 
-        // The view renders the error state inline (inside <main>, with a retry).
+        // The view renders the error state inline (inside <main>, with a
+        // retry).
         await expect(page.getByRole('main').getByText('Something went wrong. Please try again.')).toBeVisible();
         await expect(page.getByRole('button', { name: 'Retry' })).toBeVisible();
 
-        // The same message is also announced in the assertive toast region - the
-        // toast host sits outside <main>, so role=alert proves the toast fired.
+        // The same message is also announced in the assertive toast region -
+        // the toast host sits outside <main>, so role=alert proves the toast
+        // fired.
         await expect(page.getByRole('alert')).toContainText('Something went wrong. Please try again.');
     });
 });

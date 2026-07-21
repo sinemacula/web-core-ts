@@ -27,8 +27,8 @@ function isNameProperty(property) {
 
 /**
  * Whether a declarator asserts module identity - annotated `: ModuleDefinition`
- * (including a qualified `ns.ModuleDefinition`), `... satisfies ModuleDefinition`,
- * or an `... as ModuleDefinition` cast.
+ * (including a qualified `ns.ModuleDefinition`),
+ * `... satisfies ModuleDefinition`, or an `... as ModuleDefinition` cast.
  */
 function declaresModule(node) {
     if (typeReferenceName(node.id?.typeAnnotation?.typeAnnotation) === 'ModuleDefinition') {
@@ -43,7 +43,8 @@ function declaresModule(node) {
     );
 }
 
-// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
+// Stryker disable all: declarative rule metadata, not behaviour (verified via
+// messageId and data)
 export default createRule({
     name: 'module-name-matches-folder',
     meta: {
