@@ -33,4 +33,30 @@ describe('en-us locale messages', () => {
         expect(typeof states['error']).toBe('string');
         expect(typeof states['loading']).toBe('string');
     });
+
+    it('contains httpErrors copy for every status-page key', () => {
+        const httpErrors = (messages as Record<string, unknown>)['httpErrors'] as Record<string, unknown>;
+        const keys = [
+            'badRequest',
+            'forbidden',
+            'notFound',
+            'methodNotAllowed',
+            'uriTooLong',
+            'rangeNotSatisfiable',
+            'internalServerError',
+            'notImplemented',
+            'badGateway',
+            'serviceUnavailable',
+            'gatewayTimeout',
+        ];
+
+        for (const key of keys) {
+            const entry = httpErrors[key] as Record<string, unknown>;
+
+            expect(typeof entry['title']).toBe('string');
+            expect(typeof entry['message']).toBe('string');
+        }
+
+        expect(typeof httpErrors['home']).toBe('string');
+    });
 });

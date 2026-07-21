@@ -9,6 +9,7 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
+        "postbuild": "node scripts/generate-error-pages.mjs",
         "preview": "vite preview",
         "size": "size-limit"
     },

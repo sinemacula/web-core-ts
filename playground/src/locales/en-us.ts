@@ -42,6 +42,23 @@ const messages: LocaleMessages = {
             available: 'A new version is available. Refresh to update.',
         },
     },
+    httpErrors: {
+        badRequest: { title: 'Bad Request', message: 'The server could not understand the request.' },
+        forbidden: { title: 'Forbidden', message: 'You do not have permission to view this page.' },
+        notFound: { title: 'Not Found', message: 'The page you are looking for could not be found.' },
+        methodNotAllowed: { title: 'Method Not Allowed', message: 'That request method is not allowed here.' },
+        uriTooLong: { title: 'URI Too Long', message: 'The request address is too long to process.' },
+        rangeNotSatisfiable: { title: 'Range Not Satisfiable', message: 'The requested range cannot be served.' },
+        internalServerError: { title: 'Internal Server Error', message: 'Something went wrong on our end.' },
+        notImplemented: { title: 'Not Implemented', message: 'The server does not support this request.' },
+        badGateway: { title: 'Bad Gateway', message: 'The server received an invalid response upstream.' },
+        serviceUnavailable: {
+            title: 'Service Unavailable',
+            message: 'The service is temporarily unavailable. Please try again shortly.',
+        },
+        gatewayTimeout: { title: 'Gateway Timeout', message: 'The upstream server took too long to respond.' },
+        home: 'Return to the homepage',
+    },
 };
 
 export default messages;
