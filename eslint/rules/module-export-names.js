@@ -66,8 +66,7 @@ function exportedNames(program) {
     return names;
 }
 
-// Stryker disable all: declarative rule metadata, not behaviour (verified via
-// messageId and data)
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'module-export-names',
     meta: {

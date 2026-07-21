@@ -23,8 +23,7 @@ const KERNEL_BARREL = '@sinemacula/web-core';
 // allowed.
 const MODULE_INTERNAL = /^@\/modules\/([^/]+)\/.+/;
 
-// Stryker disable all: declarative rule metadata, not behaviour (verified via
-// messageId and data)
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'module-import-boundary',
     meta: {

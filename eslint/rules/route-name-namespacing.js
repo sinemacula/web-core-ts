@@ -46,8 +46,7 @@ function routeNameValues(objectExpression) {
     return values;
 }
 
-// Stryker disable all: declarative rule metadata, not behaviour (verified via
-// messageId and data)
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'route-name-namespacing',
     meta: {

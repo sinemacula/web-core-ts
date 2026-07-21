@@ -55,8 +55,7 @@ function inlineName(value) {
     return null;
 }
 
-// Stryker disable all: declarative rule metadata, not behaviour (verified via
-// messageId and data)
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'route-name-via-constant',
     meta: {

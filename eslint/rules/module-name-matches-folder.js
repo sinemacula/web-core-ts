@@ -43,8 +43,7 @@ function declaresModule(node) {
     );
 }
 
-// Stryker disable all: declarative rule metadata, not behaviour (verified via
-// messageId and data)
+// Stryker disable all: declarative rule metadata, not behaviour (verified via messageId and data)
 export default createRule({
     name: 'module-name-matches-folder',
     meta: {
