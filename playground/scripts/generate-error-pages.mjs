@@ -143,21 +143,13 @@ function fileToTag(file) {
 }
 
 /**
- * The client-side locale swap, embedded inline in every page. It reads the
- * stored locale then the browser languages, upgrades the default-locale copy
- * already in the document to the visitor's language when available, and syncs
- * the document title and `lang`.
- *
- * @param code - the HTTP status code
- * @param variants - the per-locale copy, keyed by locale tag
- * @returns the inline script body
+ * The client-side locale swap. It is a constant - no code is built from the
+ * copy; instead it reads the inert data island (`#e-data`), then the stored
+ * locale and browser languages, upgrades the default-locale copy already in the
+ * document to the visitor's language when available, and syncs the document
+ * title and `lang`.
  */
-function swapScript(code, variants) {
-    const data = JSON.stringify(variants);
-    const prefix = JSON.stringify(`${code} `);
-
-    return `(function(){var v=${data},d=${JSON.stringify(defaultLocale)};function b(l){return String(l).slice(0,2).toLowerCase()}function m(){var c=[];try{c.push(localStorage.getItem('locale'))}catch(e){}var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language];for(var j=0;j<n.length;j++)c.push(n[j]);for(var i=0;i<c.length;i++){var l=c[i];if(!l)continue;if(v[l])return l;var base=b(l);for(var k in v){if(b(k)===base)return k}}return d}var key=m(),p=v[key];var t=document.getElementById('e-title');if(t)t.textContent=p.t;var msg=document.getElementById('e-message');if(msg)msg.textContent=p.m;var h=document.getElementById('e-home');if(h)h.textContent=p.h;document.documentElement.lang=key;document.title=${prefix}+p.t})()`;
-}
+const swapScript = `(function(){var raw;try{raw=JSON.parse(document.getElementById('e-data').textContent)}catch(e){return}var v=raw.v,d=raw.d;function b(l){return String(l).slice(0,2).toLowerCase()}function m(){var c=[];try{c.push(localStorage.getItem('locale'))}catch(e){}var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language];for(var j=0;j<n.length;j++)c.push(n[j]);for(var i=0;i<c.length;i++){var l=c[i];if(!l)continue;if(v[l])return l;var base=b(l);for(var k in v){if(b(k)===base)return k}}return d}var key=m(),p=v[key];var t=document.getElementById('e-title');if(t)t.textContent=p.t;var msg=document.getElementById('e-message');if(msg)msg.textContent=p.m;var h=document.getElementById('e-home');if(h)h.textContent=p.h;document.documentElement.lang=key;document.title=raw.code+' '+p.t})()`;
 
 /**
  * Render one self-contained, localised error page.
@@ -169,6 +161,7 @@ function swapScript(code, variants) {
  */
 function renderErrorPage(code, variants, tokens) {
     const fallback = variants[defaultLocale];
+    const data = escapeHtml(JSON.stringify({ v: variants, d: defaultLocale, code: String(code) }));
 
     return `<!doctype html>
 <html lang="${defaultLocale.slice(0, 2)}">
@@ -190,7 +183,8 @@ ${layoutStyles}
             <p class="error__message" id="e-message">${escapeHtml(fallback.m)}</p>
             <a class="error__home" id="e-home" href="/">${escapeHtml(fallback.h)}</a>
         </main>
-        <script>${swapScript(code, variants)}</script>
+        <div id="e-data" hidden>${data}</div>
+        <script>${swapScript}</script>
     </body>
 </html>
 `;
