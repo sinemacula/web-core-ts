@@ -108,6 +108,28 @@ modules and rethrows), followed by each store's `$dispose`, all folded into the 
 `collectModuleRoutes`, `collectModuleGuards` and `createModuleMessageSource` (parallel, memoised per locale)
 flatten a registry's contributions; the preset threads them so applications rarely call them directly.
 
+### Splitting a module's translations
+
+A module's `locales` loader only has to resolve to a `LocaleMessages` (`Record<string, unknown>`) for each
+locale, so a large translation tree can be split across files with no kernel change: point the loader at a
+directory whose `index.ts` composes the parts, and `module.ts` stays untouched.
+
+```ts
+// modules/users/locales/en-us/index.ts
+import detail from './detail';
+import list from './list';
+
+export default { list, detail };
+```
+
+Compose statically. The kernel loads every module's messages once at boot, so there is no per-view deferral
+seam - splitting organises source, it does not lazy-load. Three constraints hold: keep message keys camelCase
+as elsewhere; never name a part `module.ts`, `routes.ts` or `route-names.ts`, because the module-contract lint
+matches those basenames anywhere beneath `modules/<name>/` and would demand the module's canonical exports from
+your translation file; and reserve the directory's `index.ts` for the composition entry, giving each message
+group its own descriptively named file. Keep a single flat `<locale>.ts` per module as the default, and split
+only the locales that have grown large.
+
 ## Bootstrapping an application
 
 `createWebCoreApp` (`src/app/create-web-core-app.ts`) assembles a complete application from the kernel: it
