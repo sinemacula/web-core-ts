@@ -7,7 +7,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ExponentialBackoff } from './exponential-backoff';
+import { describeRealtimeContract, type RealtimeContractHarness } from './test-support/realtime-connection-contract';
 import { WebSocketConnection, type WebSocketFactory } from './web-socket-connection';
 
 /** Minimal fake WebSocket for injection via the factory. */
@@ -72,30 +72,45 @@ function makeFactory(): { sockets: FakeWebSocket[]; factory: WebSocketFactory } 
     return { sockets, factory };
 }
 
-/** Fixed-delay backoff for deterministic reconnect assertions. */
-function fixedBackoff(delay: number): ExponentialBackoff {
-    return new ExponentialBackoff({ initialDelay: delay, multiplier: 1, maxDelay: delay });
+/** Adapts the WebSocket adapter and its fake to the shared realtime contract. */
+function makeWsContractHarness(): RealtimeContractHarness {
+    return {
+        create(options) {
+            const { sockets, factory } = makeFactory();
+            const connection = new WebSocketConnection({ ...options, webSocketFactory: factory });
+
+            return {
+                connection,
+                transports: {
+                    get length() {
+                        return sockets.length;
+                    },
+                    at(index) {
+                        const socket = sockets.at(index);
+
+                        if (socket === undefined) {
+                            return undefined;
+                        }
+
+                        return {
+                            get url() {
+                                return socket.url;
+                            },
+                            get closeCalls() {
+                                return socket.closeCalls;
+                            },
+                            open: () => socket.emitOpen(),
+                            fail: () => socket.emitClose(),
+                            message: (event, data) => socket.emitMessage(JSON.stringify({ event, data })),
+                        };
+                    },
+                },
+            };
+        },
+    };
 }
 
-/** A promise plus its externally callable settlement functions. */
-interface Deferred<T> {
-    readonly promise: Promise<T>;
-    readonly resolve: (value: T) => void;
-    readonly reject: (reason: unknown) => void;
-}
-
-/** Creates a promise whose settlement is controlled from the test body. */
-function deferred<T = void>(): Deferred<T> {
-    let resolve!: (value: T) => void;
-    let reject!: (reason: unknown) => void;
-
-    const promise = new Promise<T>((res, rej) => {
-        resolve = res;
-        reject = rej;
-    });
-
-    return { promise, resolve, reject };
-}
+describeRealtimeContract(makeWsContractHarness());
 
 describe('WebSocketConnection', () => {
     beforeEach(() => {
@@ -106,51 +121,7 @@ describe('WebSocketConnection', () => {
         vi.useRealTimers();
     });
 
-    describe('initial state', () => {
-        it('starts in the idle state', () => {
-            const { factory } = makeFactory();
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-            expect(conn.state).toBe('idle');
-        });
-    });
-
     describe('connect()', () => {
-        it('transitions to connecting and creates a WebSocket', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-            conn.connect();
-
-            expect(conn.state).toBe('connecting');
-            expect(sockets).toHaveLength(1);
-        });
-
-        it('passes the url string to the factory', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({ url: 'ws://test/path', webSocketFactory: factory });
-
-            conn.connect();
-
-            const socket = sockets.at(0);
-
-            expect(socket).toBeDefined();
-            expect(socket?.url).toBe('ws://test/path');
-        });
-
-        it('resolves a url function on each connect', () => {
-            const { sockets, factory } = makeFactory();
-            const token = 'a';
-            const conn = new WebSocketConnection({ url: () => `ws://test?t=${token}`, webSocketFactory: factory });
-
-            conn.connect();
-
-            const socket = sockets.at(0);
-
-            expect(socket).toBeDefined();
-            expect(socket?.url).toBe('ws://test?t=a');
-        });
-
         it('passes protocols to the factory', () => {
             const { sockets, factory } = makeFactory();
             const conn = new WebSocketConnection({ url: 'ws://test', protocols: 'v1', webSocketFactory: factory });
@@ -161,52 +132,6 @@ describe('WebSocketConnection', () => {
 
             expect(socket).toBeDefined();
             expect(socket?.protocols).toBe('v1');
-        });
-
-        it('is a no-op when already connecting', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-            conn.connect();
-            conn.connect();
-
-            expect(sockets).toHaveLength(1);
-        });
-
-        it('is a no-op when already open', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-            conn.connect();
-            sockets.at(0)?.emitOpen();
-            conn.connect();
-
-            expect(sockets).toHaveLength(1);
-        });
-
-        it('transitions to open when onopen fires', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-            conn.connect();
-            sockets.at(0)?.emitOpen();
-
-            expect(conn.state).toBe('open');
-        });
-
-        it('uses a default ExponentialBackoff when none is provided', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-
-            // Default backoff: first attempt delay is 1 000 ms.
-            vi.advanceTimersByTime(999);
-            expect(sockets).toHaveLength(1);
-
-            vi.advanceTimersByTime(1);
-            expect(sockets).toHaveLength(2);
         });
 
         it('exercises the default WebSocket factory with no protocols', () => {
@@ -227,324 +152,11 @@ describe('WebSocketConnection', () => {
         });
 
         it('exercises the default WebSocket factory with an array of protocols', () => {
-            // Covers the readonly string[] → string[] cast branch in the
+            // Covers the readonly string[] -> string[] cast branch in the
             // default factory.
             const conn = new WebSocketConnection({ url: 'ws://localhost', protocols: ['v1', 'v2'] });
 
             expect(() => conn.connect()).not.toThrow();
-        });
-    });
-
-    describe('disconnect()', () => {
-        it('transitions to closed', () => {
-            const { factory } = makeFactory();
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-            conn.connect();
-            conn.disconnect();
-
-            expect(conn.state).toBe('closed');
-        });
-
-        it('closes the underlying WebSocket', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-            conn.connect();
-            conn.disconnect();
-
-            const socket = sockets.at(0);
-
-            expect(socket).toBeDefined();
-            expect(socket?.closeCalls).toBe(1);
-        });
-
-        it('cancels a pending reconnect timer', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: fixedBackoff(500),
-                webSocketFactory: factory,
-            });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-            conn.disconnect();
-
-            vi.advanceTimersByTime(1_000);
-
-            expect(sockets).toHaveLength(1);
-        });
-
-        it('does not reconnect after disconnect because onclose is cleared before close', () => {
-            // disconnect() clears socket.onclose before calling close(), so the
-            // close event cannot trigger a reconnect even if the underlying
-            // transport delivers it synchronously.
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: fixedBackoff(100),
-                webSocketFactory: factory,
-            });
-
-            conn.connect();
-            conn.disconnect();
-
-            vi.advanceTimersByTime(5_000);
-
-            expect(sockets).toHaveLength(1);
-        });
-    });
-
-    describe('reconnect on close', () => {
-        it('schedules a reconnect when the server closes the connection', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: fixedBackoff(200),
-                webSocketFactory: factory,
-            });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-
-            expect(sockets).toHaveLength(1);
-
-            vi.advanceTimersByTime(200);
-
-            expect(sockets).toHaveLength(2);
-        });
-
-        it('advances the backoff delay on successive closes', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: new ExponentialBackoff({ initialDelay: 100, multiplier: 2, maxDelay: 10_000 }),
-                webSocketFactory: factory,
-            });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-
-            // attempt=0 → 100 ms
-            vi.advanceTimersByTime(100);
-            expect(sockets).toHaveLength(2);
-
-            sockets.at(1)?.emitClose();
-
-            // attempt=1 → 200 ms
-            vi.advanceTimersByTime(199);
-            expect(sockets).toHaveLength(2);
-
-            vi.advanceTimersByTime(1);
-            expect(sockets).toHaveLength(3);
-        });
-
-        it('resets the attempt counter after a successful open', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: new ExponentialBackoff({ initialDelay: 100, multiplier: 2, maxDelay: 10_000 }),
-                webSocketFactory: factory,
-            });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-            vi.advanceTimersByTime(100);
-
-            sockets.at(1)?.emitClose();
-            vi.advanceTimersByTime(200);
-
-            // Open successfully → attempt resets.
-            sockets.at(2)?.emitOpen();
-            sockets.at(2)?.emitClose();
-
-            // Next delay should be 100 ms again.
-            vi.advanceTimersByTime(99);
-            expect(sockets).toHaveLength(3);
-
-            vi.advanceTimersByTime(1);
-            expect(sockets).toHaveLength(4);
-        });
-
-        it('uses the url function on each reconnect', () => {
-            const { sockets, factory } = makeFactory();
-            let n = 0;
-            const conn = new WebSocketConnection({
-                url: () => `ws://test?n=${++n}`,
-                backoff: fixedBackoff(50),
-                webSocketFactory: factory,
-            });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-
-            vi.advanceTimersByTime(50);
-
-            const first = sockets.at(0);
-            const second = sockets.at(1);
-
-            expect(first).toBeDefined();
-            expect(second).toBeDefined();
-            expect(first?.url).toBe('ws://test?n=1');
-            expect(second?.url).toBe('ws://test?n=2');
-        });
-    });
-
-    describe('beforeReconnect', () => {
-        it('is not invoked for the initial connect()', () => {
-            const { factory } = makeFactory();
-            const beforeReconnect = vi.fn(() => Promise.resolve());
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory, beforeReconnect });
-
-            conn.connect();
-
-            expect(beforeReconnect).not.toHaveBeenCalled();
-        });
-
-        it('is not invoked for a manual connect() call', () => {
-            const { sockets, factory } = makeFactory();
-            const beforeReconnect = vi.fn(() => Promise.resolve());
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory, beforeReconnect });
-
-            conn.connect();
-            conn.disconnect();
-            conn.connect();
-
-            expect(beforeReconnect).not.toHaveBeenCalled();
-            expect(sockets).toHaveLength(2);
-        });
-
-        it('is invoked after the backoff delay fires, not immediately on close', async () => {
-            const { sockets, factory } = makeFactory();
-            const beforeReconnect = vi.fn(() => Promise.resolve());
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: fixedBackoff(100),
-                webSocketFactory: factory,
-                beforeReconnect,
-            });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-
-            expect(beforeReconnect).not.toHaveBeenCalled();
-
-            await vi.advanceTimersByTimeAsync(100);
-
-            expect(beforeReconnect).toHaveBeenCalledTimes(1);
-        });
-
-        it('creates the new WebSocket only after the hook resolves', async () => {
-            const { sockets, factory } = makeFactory();
-            const gate = deferred<void>();
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: fixedBackoff(100),
-                webSocketFactory: factory,
-                beforeReconnect: () => gate.promise,
-            });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-
-            await vi.advanceTimersByTimeAsync(100);
-
-            // Hook is pending: no second socket yet.
-            expect(sockets).toHaveLength(1);
-
-            gate.resolve();
-            await gate.promise;
-
-            expect(sockets).toHaveLength(2);
-        });
-
-        it('schedules the next backoff attempt without creating a transport when the hook rejects', async () => {
-            const { sockets, factory } = makeFactory();
-            let calls = 0;
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: fixedBackoff(100),
-                webSocketFactory: factory,
-                beforeReconnect: () =>
-                    ++calls === 1 ? Promise.reject(new Error('token refresh failed')) : Promise.resolve(),
-            });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-
-            await vi.advanceTimersByTimeAsync(100);
-
-            // First hook call rejected: attempt abandoned, no transport
-            // created.
-            expect(sockets).toHaveLength(1);
-            expect(conn.state).toBe('connecting');
-
-            await vi.advanceTimersByTimeAsync(100);
-
-            // Next backoff attempt: hook resolves, transport is created.
-            expect(sockets).toHaveLength(2);
-            expect(calls).toBe(2);
-        });
-
-        it('does not create a transport when disconnected while the hook is pending and it resolves', async () => {
-            const { sockets, factory } = makeFactory();
-            const gate = deferred<void>();
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: fixedBackoff(100),
-                webSocketFactory: factory,
-                beforeReconnect: () => gate.promise,
-            });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-
-            await vi.advanceTimersByTimeAsync(100);
-
-            conn.disconnect();
-            gate.resolve();
-            await gate.promise;
-
-            expect(sockets).toHaveLength(1);
-            expect(conn.state).toBe('closed');
-
-            // No further reconnect is ever scheduled.
-            await vi.advanceTimersByTimeAsync(10_000);
-
-            expect(sockets).toHaveLength(1);
-            expect(conn.state).toBe('closed');
-        });
-
-        it('does not schedule anything when disconnected while the hook is pending and it rejects', async () => {
-            const { sockets, factory } = makeFactory();
-            const gate = deferred<void>();
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: fixedBackoff(100),
-                webSocketFactory: factory,
-                beforeReconnect: () => gate.promise,
-            });
-
-            conn.connect();
-            sockets.at(0)?.emitClose();
-
-            await vi.advanceTimersByTimeAsync(100);
-
-            conn.disconnect();
-            gate.reject(new Error('token refresh failed'));
-            await gate.promise.catch(() => {
-                // Rejection is expected here; the abandonment is asserted
-                // below.
-            });
-
-            expect(sockets).toHaveLength(1);
-            expect(conn.state).toBe('closed');
-
-            await vi.advanceTimersByTimeAsync(10_000);
-
-            expect(sockets).toHaveLength(1);
-            expect(conn.state).toBe('closed');
         });
     });
 
@@ -687,41 +299,24 @@ describe('WebSocketConnection', () => {
             expect(() => sockets.at(0)?.emitMessage('hello')).not.toThrow();
         });
 
-        describe('unsubscribe', () => {
-            it('stops delivery after unsubscribe is called', () => {
-                const { sockets, factory } = makeFactory();
-                const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
+        it('does not treat a JSON primitive frame as an envelope', () => {
+            const { sockets, factory } = makeFactory();
+            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
 
-                const received: string[] = [];
-                const unsub = conn.on('message', msg => received.push(msg.data));
+            const namedReceived: string[] = [];
+            const messageReceived: string[] = [];
 
-                conn.connect();
-                sockets.at(0)?.emitOpen();
-                sockets.at(0)?.emitMessage('first');
-                unsub();
-                sockets.at(0)?.emitMessage('second');
+            conn.on('update', msg => namedReceived.push(msg.data));
+            conn.on('message', msg => messageReceived.push(msg.data));
+            conn.connect();
+            sockets.at(0)?.emitOpen();
 
-                expect(received).toEqual(['first']);
-            });
+            // A frame that is valid JSON but not an object is not an envelope;
+            // it is delivered only as the raw message frame.
+            sockets.at(0)?.emitMessage('42');
 
-            it('does not affect other handlers for the same event', () => {
-                const { sockets, factory } = makeFactory();
-                const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-                const a: string[] = [];
-                const b: string[] = [];
-                const unsubA = conn.on('message', msg => a.push(msg.data));
-
-                conn.on('message', msg => b.push(msg.data));
-                conn.connect();
-                sockets.at(0)?.emitOpen();
-                sockets.at(0)?.emitMessage('1');
-                unsubA();
-                sockets.at(0)?.emitMessage('2');
-
-                expect(a).toEqual(['1']);
-                expect(b).toEqual(['1', '2']);
-            });
+            expect(namedReceived).toEqual([]);
+            expect(messageReceived).toEqual(['42']);
         });
     });
 
@@ -765,57 +360,6 @@ describe('WebSocketConnection', () => {
             conn.disconnect();
 
             expect(() => conn.send('msg')).toThrow('Cannot send: WebSocket is not open.');
-        });
-    });
-
-    describe('onStateChange()', () => {
-        it('notifies on state transitions', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-            const states: string[] = [];
-
-            conn.onStateChange(s => states.push(s));
-            conn.connect();
-            sockets.at(0)?.emitOpen();
-            conn.disconnect();
-
-            expect(states).toEqual(['connecting', 'open', 'closed']);
-        });
-
-        it('does not emit duplicate states', () => {
-            const { sockets, factory } = makeFactory();
-            const conn = new WebSocketConnection({
-                url: 'ws://test',
-                backoff: fixedBackoff(50),
-                webSocketFactory: factory,
-            });
-
-            const states: string[] = [];
-
-            conn.onStateChange(s => states.push(s));
-            conn.connect();
-            // Close → reconnect pending → already 'connecting', should not
-            // re-emit.
-            sockets.at(0)?.emitClose();
-
-            expect(states).toEqual(['connecting']);
-        });
-
-        describe('unsubscribe', () => {
-            it('stops state notifications after unsubscribe', () => {
-                const { sockets, factory } = makeFactory();
-                const conn = new WebSocketConnection({ url: 'ws://test', webSocketFactory: factory });
-
-                const states: string[] = [];
-                const unsub = conn.onStateChange(s => states.push(s));
-
-                conn.connect();
-                unsub();
-                sockets.at(0)?.emitOpen();
-
-                expect(states).toEqual(['connecting']);
-            });
         });
     });
 });

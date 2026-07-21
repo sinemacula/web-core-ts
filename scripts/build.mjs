@@ -26,7 +26,7 @@ const { writtenFiles } = await mkdist({
     cleanDist: true,
     format: 'esm',
     ext: 'js',
-    pattern: ['**/*.ts', '!**/*.test.ts'],
+    pattern: ['**/*.ts', '!**/*.test.ts', '!**/test-support/**'],
     declaration: true,
     addRelativeDeclarationExtensions: true,
 });
