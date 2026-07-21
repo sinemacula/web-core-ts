@@ -38,7 +38,7 @@ export default defineConfig({
                 'eslint/**/__tests__/tester.js',
                 'eslint/vitest.config.mjs',
                 'playground/src/main.ts',
-                'playground/src/test-support/**',
+                '**/test-support/**',
                 '**/*.d.ts',
             ],
             thresholds: {
