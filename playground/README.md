@@ -175,5 +175,8 @@ APP_VERSION=$(git rev-parse --short HEAD) \
 aws s3 cp runtime-env.json "s3://${BUCKET}/runtime-env.json" --cache-control no-store
 ```
 
-Hidden source maps are emitted (`build.sourcemap: 'hidden'`) for upload to an error reporter; they are never
-referenced from the bundle, so readable source is not published.
+Source maps are disabled (`build.sourcemap: false`): even a hidden map writes readable source into the promoted
+artifact, so they stay off until an error reporter both uploads and strips them. The build targets Vite's
+`baseline-widely-available` floor (pinned explicitly) - roughly Chrome 111 / Edge 111 / Firefox 114 / Safari
+16.4 / iOS 16.4. The other Vite 8 defaults (oxc minify, asset hashing, css code-split) are deliberate;
+`manualChunks` must not be added - it hard-fails the Rolldown build.

@@ -24,8 +24,10 @@ export default defineConfig({
         },
     },
     build: {
-        // Hidden: maps are emitted for upload to an error reporter but never
-        // referenced from the bundle, so readable source is not published.
-        sourcemap: 'hidden',
+        // Pinned explicitly; Vite has shifted this default floor before.
+        target: 'baseline-widely-available',
+        // Off until an error reporter uploads them: even 'hidden' writes
+        // readable .map files into the artifact promoted to S3.
+        sourcemap: false,
     },
 });
