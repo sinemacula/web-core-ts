@@ -54,13 +54,15 @@ ruleTester.run('module-import-boundary', rule, {
             code: "import { thing } from '@/modules/users/composables/use-thing';",
             errors: [{ messageId: 'crossModule', data: { module: 'users' } }],
         },
-        // A non-module file reaching into a module's internals is still a breach.
+        // A non-module file reaching into a module's internals is still a
+        // breach.
         {
             filename: 'src/app.ts',
             code: "import { thing } from '@/modules/users/composables/use-thing';",
             errors: [{ messageId: 'crossModule', data: { module: 'users' } }],
         },
-        // Every import/export form is covered: dynamic import, re-export, star re-export.
+        // Every import/export form is covered: dynamic import, re-export, star
+        // re-export.
         {
             filename: 'src/modules/auth/routes.ts',
             code: "export const load = () => import('@/modules/users/views/list-view.vue');",

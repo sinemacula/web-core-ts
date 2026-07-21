@@ -2,13 +2,12 @@
  * User-idle detection.
  *
  * A tab may go untouched for a policy-defined period - most commonly to trigger
- * an auto-logout - but that policy is an application decision, not a kernel one.
- * This monitor is the
- * seam: it arms a countdown on a small set of activity events, resets the
- * countdown whenever activity is observed, and notifies subscribers once the
- * countdown lapses. Applications wire the notification to whatever policy they
- * need (`onIdle` calling into an auth logout, a warning dialog, and so on); the
- * kernel only detects idleness.
+ * an auto-logout - but that policy is an application decision, not a kernel
+ * one. This monitor is the seam: it arms a countdown on a small set of activity
+ * events, resets the countdown whenever activity is observed, and notifies
+ * subscribers once the countdown lapses. Applications wire the notification to
+ * whatever policy they need (`onIdle` calling into an auth logout, a warning
+ * dialog, and so on); the kernel only detects idleness.
  *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright   2026 Sine Macula Limited

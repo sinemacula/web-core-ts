@@ -25,7 +25,8 @@ export function isTestPath(filename) {
 
 /**
  * The feature-module folder a file belongs to (the segment after `modules/`),
- * or null when the file sits outside a module tree or directly under `modules/`.
+ * or null when the file sits outside a module tree or directly under
+ * `modules/`.
  */
 export function moduleFolder(filename) {
     const parts = filename.replace(/\\/g, '/').split('/');

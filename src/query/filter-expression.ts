@@ -35,10 +35,13 @@
  * ```
  *
  * ### Relation existence
- * Bare array form: `{ "$has": ["posts", "comments"] }`
- * Conditioned form: `{ "$has": { "posts": { "published": true } } }`
- * Mixed form (bare + conditioned): use the object form with `{}` for bare
- * relations - `{ "$has": { "posts": {}, "comments": { "title": "X" } } }`.
+ * ```json
+ * { "$has": ["posts", "comments"] }
+ * { "$has": { "posts": { "published": true } } }
+ * { "$has": { "posts": {}, "comments": { "title": "X" } } }
+ * ```
+ * The three forms are a bare array, a conditioned object, and a mix - use `{}`
+ * for a bare relation inside the object form.
  *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright   2026 Sine Macula Limited
