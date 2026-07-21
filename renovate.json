@@ -1,4 +1,59 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["github>sinemacula/coding-standards"]
+    "extends": ["github>sinemacula/coding-standards"],
+    "description": [
+        "Local override on top of the shared preset. Dependabot owns security remediation (its automated security-fix PRs stay on), so Renovate cedes vulnerability PRs and handles routine version currency only - the two tools never open a PR for the same fix.",
+        "General updates are scoped to this repo's own manifests so the qlty ESLint tool sandbox keeps taking its versions from the standard alone."
+    ],
+    "vulnerabilityAlerts": {
+        "enabled": false
+    },
+    "packageRules": [
+        {
+            "description": "Re-enable general dependency updates that the shared preset's catch-all disables. Scoped to this repo's own manifests so the qlty tool sandbox keeps taking its versions from the standard alone.",
+            "matchFileNames": ["package.json", "playground/package.json"],
+            "matchDepTypes": ["dependencies", "devDependencies", "peerDependencies"],
+            "enabled": true
+        },
+        {
+            "description": "Default catch-all: one grouped non-major PR.",
+            "matchFileNames": ["package.json", "playground/package.json"],
+            "matchDepTypes": ["dependencies", "devDependencies"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "groupName": "dependencies (non-major)"
+        },
+        {
+            "description": "Vue ecosystem moves together.",
+            "matchFileNames": ["package.json", "playground/package.json"],
+            "matchDepTypes": ["dependencies", "devDependencies"],
+            "matchPackageNames": ["vue", "vue-router", "vue-i18n", "pinia", "vee-validate", "vue-tsc", "@vitejs/plugin-vue"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "groupName": "vue ecosystem"
+        },
+        {
+            "description": "Build and test tooling moves together.",
+            "matchFileNames": ["package.json"],
+            "matchDepTypes": ["devDependencies"],
+            "matchPackageNames": ["vite", "vitest", "@vitest/**", "typescript", "typescript-eslint", "@typescript-eslint/**", "eslint", "knip", "mkdist", "publint", "size-limit", "@size-limit/**", "@stryker-mutator/**", "@playwright/test", "@axe-core/playwright", "happy-dom", "@arethetypeswrong/cli", "@types/node"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "groupName": "build and test tooling"
+        },
+        {
+            "description": "Peer ranges are the published contract: widen rather than replace, and never open a PR without approval.",
+            "matchFileNames": ["package.json"],
+            "matchDepTypes": ["peerDependencies"],
+            "groupName": "peer dependency ranges",
+            "rangeStrategy": "widen",
+            "dependencyDashboardApproval": true,
+            "automerge": false
+        },
+        {
+            "description": "Majors are reviewed one at a time, behind dashboard approval.",
+            "matchFileNames": ["package.json", "playground/package.json"],
+            "matchDepTypes": ["dependencies", "devDependencies"],
+            "matchUpdateTypes": ["major"],
+            "dependencyDashboardApproval": true,
+            "automerge": false
+        }
+    ]
 }
