@@ -82,7 +82,7 @@ onUnmounted(() => {
     background: none;
     border: none;
     border-radius: var(--sm-radius-sm);
-    color: var(--sm-text-muted);
+    color: var(--sm-text-body);
     font-size: var(--sm-text-sm);
     font-weight: 500;
     line-height: 1.25rem;

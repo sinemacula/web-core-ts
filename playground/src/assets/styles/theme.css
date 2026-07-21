@@ -81,6 +81,7 @@
     --sm-border-strong: var(--sm-neutral-300);
     --sm-accent: var(--sm-primary-500);
     --sm-accent-emphasis: var(--sm-primary-900);
+    --sm-accent-emphasis-hover: var(--sm-primary-700);
     --sm-accent-hover: var(--sm-primary-700);
     --sm-accent-subtle: var(--sm-primary-50);
     --sm-accent-secondary: var(--sm-secondary-600);
@@ -124,9 +125,10 @@
     --sm-surface-sunken: var(--sm-neutral-900);
     --sm-border: var(--sm-neutral-700);
     --sm-border-strong: var(--sm-neutral-600);
-    --sm-accent: var(--sm-primary-400);
+    --sm-accent: var(--sm-primary-300);
     --sm-accent-emphasis: var(--sm-primary-500);
-    --sm-accent-hover: var(--sm-primary-400);
+    --sm-accent-emphasis-hover: var(--sm-primary-600);
+    --sm-accent-hover: var(--sm-primary-300);
     --sm-accent-subtle: var(--sm-primary-800);
     --sm-accent-secondary: var(--sm-secondary-500);
     --sm-accent-secondary-hover: var(--sm-secondary-400);
@@ -151,9 +153,10 @@
         --sm-surface-sunken: var(--sm-neutral-900);
         --sm-border: var(--sm-neutral-700);
         --sm-border-strong: var(--sm-neutral-600);
-        --sm-accent: var(--sm-primary-400);
+        --sm-accent: var(--sm-primary-300);
         --sm-accent-emphasis: var(--sm-primary-500);
-        --sm-accent-hover: var(--sm-primary-400);
+        --sm-accent-emphasis-hover: var(--sm-primary-600);
+        --sm-accent-hover: var(--sm-primary-300);
         --sm-accent-subtle: var(--sm-primary-800);
         --sm-accent-secondary: var(--sm-secondary-500);
         --sm-accent-secondary-hover: var(--sm-secondary-400);

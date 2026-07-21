@@ -72,7 +72,7 @@ const props = withDefaults(defineProps<Props>(), {
 }
 
 .sm-button--primary:hover:not(:disabled) {
-    background: var(--sm-accent-hover);
+    background: var(--sm-accent-emphasis-hover);
 }
 
 .sm-button--secondary {

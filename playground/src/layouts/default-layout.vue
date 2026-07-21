@@ -53,8 +53,10 @@ const appName = config().app.name;
 
 .default-layout__header-inner {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    gap: var(--sm-space-4);
     max-width: 72rem;
     margin-inline: auto;
     padding: var(--sm-space-4) var(--sm-space-6);
@@ -89,6 +91,7 @@ const appName = config().app.name;
 
 .default-layout__header-actions {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--sm-space-4);
 }
