@@ -8,10 +8,12 @@
  * @copyright   2026 Sine Macula Limited
  */
 
+import { installColorScheme } from '@sinemacula/web-core/app/services';
 import { Environment } from '@sinemacula/web-core/config/environment';
 import { ObjectEnvironmentSource } from '@sinemacula/web-core/config/object-environment-source';
 import type { LocaleSwitcher } from '@sinemacula/web-core/i18n/application-i18n';
 import { MemoryStorage } from '@sinemacula/web-core/storage/memory-storage';
+import type { ColorSchemeService } from '@sinemacula/web-core/theme/color-scheme-service';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { computed, createApp } from 'vue';
@@ -37,6 +39,17 @@ const stubLocaleSwitcher: LocaleSwitcher = {
     current: computed(() => 'en-US'),
     switchTo: async () => undefined,
 };
+
+/**
+ * Minimal no-op stub for the colour-scheme service, required because
+ * DashboardView renders DefaultLayout's colour-scheme switcher.
+ */
+const stubColorScheme = {
+    preference: () => 'system',
+    resolved: () => 'light',
+    setPreference: () => undefined,
+    subscribe: () => () => undefined,
+} as unknown as ColorSchemeService;
 
 /**
  * Build a `Record<string, string>` from an array of `[key, value]` pairs.
@@ -104,6 +117,7 @@ describe('DashboardView', () => {
         initialiseApi(new FakeHttpClient());
         initialiseConfiguration(new Environment(new ObjectEnvironmentSource(wire([['APP_NAME', 'TestApp']]))));
         initialiseLocaleSwitcher(stubLocaleSwitcher);
+        installColorScheme(stubColorScheme);
         setActivePinia(createPinia());
     });
 
@@ -136,7 +150,7 @@ describe('DashboardView', () => {
 
         const pushSpy = vi.spyOn(router, 'push');
 
-        const signOutButton = container.querySelector('button');
+        const signOutButton = container.querySelector('.sm-button');
 
         if (signOutButton === null) {
             throw new Error('sign-out button not found');

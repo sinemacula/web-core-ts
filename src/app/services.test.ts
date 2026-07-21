@@ -19,16 +19,19 @@ import { ToastService } from '../notifications/toast-service';
 import type { RealtimeConnection } from '../realtime/realtime-connection';
 import { NullErrorReporter } from '../reporting/null-error-reporter';
 import { MemoryStorage } from '../storage/memory-storage';
+import type { ColorSchemeService } from '../theme/color-scheme-service';
 import {
     analytics,
     api,
     appConfig,
     appConfigRepository,
     appStorage,
+    colorScheme,
     confirmDialogs,
     featureFlags,
     installAnalytics,
     installApi,
+    installColorScheme,
     installConfig,
     installConfirm,
     installFeatureFlags,
@@ -59,6 +62,11 @@ function createLocaleSwitcherStub(): LocaleSwitcher {
         current: computed(() => 'en'),
         switchTo: () => Promise.resolve(),
     };
+}
+
+/** Build an inert colour-scheme service stand-in. */
+function createColorSchemeStub(): ColorSchemeService {
+    return { dispose: () => undefined } as unknown as ColorSchemeService;
 }
 
 /** Build an inert realtime connection stand-in. */
@@ -201,6 +209,18 @@ const serviceCases: readonly ServiceCase[] = [
         accessor: localeSwitcher,
     },
     {
+        accessorName: 'colorScheme',
+        message: 'colour scheme service accessed before initialisation',
+        install: () => {
+            const service = createColorSchemeStub();
+
+            installColorScheme(service);
+
+            return service;
+        },
+        accessor: colorScheme,
+    },
+    {
         accessorName: 'realtime',
         message: 'realtime connection accessed before initialisation',
         install: () => {
@@ -232,7 +252,7 @@ describe('web core services', () => {
     }
 
     it('runs the expected number of service pairs', () => {
-        expect(serviceCases).toHaveLength(11);
+        expect(serviceCases).toHaveLength(12);
     });
 
     it('keeps every other accessor uninstalled when one service is installed', () => {

@@ -12,6 +12,7 @@
 import { useI18n } from 'vue-i18n';
 
 import LocaleSwitcher from '@/components/locale-switcher.vue';
+import SmColorSchemeSwitcher from '@/components/theme/sm-color-scheme-switcher.vue';
 import { config } from '@/services/config';
 
 const { t } = useI18n();
@@ -29,6 +30,7 @@ const appName = config().app.name;
                 </nav>
                 <div class="default-layout__header-actions">
                     <LocaleSwitcher />
+                    <SmColorSchemeSwitcher />
                     <slot name="actions" />
                 </div>
             </div>
@@ -51,8 +53,10 @@ const appName = config().app.name;
 
 .default-layout__header-inner {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    gap: var(--sm-space-4);
     max-width: 72rem;
     margin-inline: auto;
     padding: var(--sm-space-4) var(--sm-space-6);
@@ -81,12 +85,13 @@ const appName = config().app.name;
 }
 
 .default-layout__nav-link.router-link-active {
-    color: var(--sm-primary-700);
+    color: var(--sm-accent-hover);
     font-weight: 700;
 }
 
 .default-layout__header-actions {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--sm-space-4);
 }

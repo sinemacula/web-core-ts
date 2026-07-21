@@ -32,6 +32,12 @@ const messages: LocaleMessages = {
             error: "Une erreur s'est produite. Veuillez réessayer.",
             loading: 'Chargement…',
         },
+        theme: {
+            label: 'Thème',
+            light: 'Clair',
+            dark: 'Sombre',
+            system: 'Système',
+        },
         updates: {
             available: 'Une nouvelle version est disponible. Actualisez pour la mettre à jour.',
         },

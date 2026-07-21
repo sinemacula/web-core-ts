@@ -9,9 +9,11 @@
  * @copyright   2026 Sine Macula Limited
  */
 
+import { installColorScheme } from '@sinemacula/web-core/app/services';
 import { Environment } from '@sinemacula/web-core/config/environment';
 import { ObjectEnvironmentSource } from '@sinemacula/web-core/config/object-environment-source';
 import type { LocaleSwitcher } from '@sinemacula/web-core/i18n/application-i18n';
+import type { ColorSchemeService } from '@sinemacula/web-core/theme/color-scheme-service';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { computed, createApp } from 'vue';
@@ -32,6 +34,17 @@ const stubLocaleSwitcher: LocaleSwitcher = {
     current: computed(() => 'en-US'),
     switchTo: async () => undefined,
 };
+
+/**
+ * Minimal no-op stub for the colour-scheme service, required because UsersView
+ * renders DefaultLayout's colour-scheme switcher.
+ */
+const stubColorScheme = {
+    preference: () => 'system',
+    resolved: () => 'light',
+    setPreference: () => undefined,
+    subscribe: () => () => undefined,
+} as unknown as ColorSchemeService;
 
 /**
  * Build a `Record<string, unknown>` from an array of `[key, value]` pairs.
@@ -126,6 +139,7 @@ describe('UsersView', () => {
     beforeEach(() => {
         initialiseConfiguration(new Environment(new ObjectEnvironmentSource(wireEnv([['APP_NAME', 'TestApp']]))));
         initialiseLocaleSwitcher(stubLocaleSwitcher);
+        installColorScheme(stubColorScheme);
         setActivePinia(createPinia());
     });
 
@@ -208,7 +222,7 @@ describe('UsersView', () => {
 
         await flushAll();
 
-        const retryButton = container.querySelector('button');
+        const retryButton = container.querySelector('.sm-button');
 
         if (retryButton === null) {
             throw new Error('retry button not found');

@@ -74,7 +74,7 @@ const handleSubmit = async (): Promise<void> => {
 }
 
 .login-form__error {
-    color: var(--sm-error);
+    color: var(--sm-danger);
     font-size: var(--sm-text-sm);
 }
 </style>

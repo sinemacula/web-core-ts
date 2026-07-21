@@ -32,6 +32,12 @@ const messages: LocaleMessages = {
             error: 'Something went wrong. Please try again.',
             loading: 'Loading…',
         },
+        theme: {
+            label: 'Theme',
+            light: 'Light',
+            dark: 'Dark',
+            system: 'System',
+        },
         updates: {
             available: 'A new version is available. Refresh to update.',
         },

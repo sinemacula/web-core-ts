@@ -46,3 +46,43 @@ test.describe('accessibility', () => {
         await expectNoA11yViolations(page);
     });
 });
+
+test.describe('accessibility (dark mode)', () => {
+    test('login screen has no axe violations in dark mode', async ({ page }) => {
+        await page.emulateMedia({ colorScheme: 'dark' });
+
+        await page.goto('/login');
+
+        await expect(page).toHaveURL(/\/login$/u);
+
+        await expectNoA11yViolations(page);
+    });
+
+    test('dashboard has no axe violations in dark mode', async ({ page, dashboardPage }) => {
+        await page.emulateMedia({ colorScheme: 'dark' });
+
+        await seedAuthenticatedSession(page);
+        await mockLoginSuccess(page);
+
+        await dashboardPage.goto();
+
+        await expect(dashboardPage.heading).toBeVisible();
+
+        await expectNoA11yViolations(page);
+    });
+
+    test('users screen has no axe violations in dark mode', async ({ page }) => {
+        await page.emulateMedia({ colorScheme: 'dark' });
+
+        await seedAuthenticatedSession(page);
+        await mockUsersList(page);
+
+        const usersPage = new UsersPage(page);
+
+        await usersPage.goto();
+
+        await expect(usersPage.heading).toBeVisible();
+
+        await expectNoA11yViolations(page);
+    });
+});

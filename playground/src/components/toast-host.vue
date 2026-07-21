@@ -116,19 +116,19 @@ const politeToasts = computed(() =>
 }
 
 .toast-host__toast--success {
-    border-left-color: var(--sm-success);
+    border-left-color: var(--sm-status-success);
 }
 
 .toast-host__toast--error {
-    border-left-color: var(--sm-error);
+    border-left-color: var(--sm-status-error);
 }
 
 .toast-host__toast--information {
-    border-left-color: var(--sm-information);
+    border-left-color: var(--sm-status-information);
 }
 
 .toast-host__toast--warning {
-    border-left-color: var(--sm-warning);
+    border-left-color: var(--sm-status-warning);
 }
 
 .toast-host__dismiss {
