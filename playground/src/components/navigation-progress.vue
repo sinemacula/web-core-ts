@@ -35,7 +35,7 @@ const progress = createNavigationProgress(useRouter());
     z-index: 100;
     width: 100%;
     height: 3px;
-    background: var(--sm-primary-500);
+    background: var(--sm-accent);
     animation: navigation-progress-indeterminate 1.2s ease-in-out infinite;
 }
 

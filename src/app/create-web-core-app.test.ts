@@ -35,6 +35,7 @@ import {
     api,
     appConfig,
     appStorage,
+    colorScheme,
     confirmDialogs,
     featureFlags,
     localeSwitcher,
@@ -51,6 +52,7 @@ const BOOT_PHASE_ORDER = [
     'runtime-environment',
     'configuration',
     'storage',
+    'color-scheme',
     'module-registry',
     'application',
     'feature-flags',
@@ -114,6 +116,11 @@ function makeWindow(languages: readonly string[] = ['en-US']): TestWindow {
 
     return {
         navigator: { onLine: true, languages },
+        matchMedia: () => ({
+            matches: false,
+            addEventListener: () => undefined,
+            removeEventListener: () => undefined,
+        }),
         addEventListener(type: string, listener: EventListenerOrEventListenerObject) {
             const existing = listeners.get(type) ?? [];
 
@@ -712,6 +719,69 @@ describe('createWebCoreApp', () => {
             expect(seams.targetDocument.documentElement.getAttribute('lang')).toBe('fr-FR');
 
             app.dispose();
+        });
+    });
+
+    describe('colour-scheme wiring', () => {
+        it('wires the colour-scheme service through the seams and exposes it on the handle', async () => {
+            const seams = makeSeams();
+
+            seams.storage.set('theme', 'dark');
+
+            const app = await bootApp({ platform: seams });
+
+            expect(app.services.colorScheme.preference()).toBe('dark');
+            expect(app.services.colorScheme.resolved()).toBe('dark');
+            expect(colorScheme()).toBe(app.services.colorScheme);
+            expect(seams.targetDocument.documentElement.getAttribute('data-theme')).toBe('dark');
+
+            app.dispose();
+        });
+
+        it('applies the configured default preference when nothing is stored', async () => {
+            const seams = makeSeams();
+
+            const app = await bootApp({ colorScheme: { defaultPreference: 'dark' }, platform: seams });
+
+            expect(app.services.colorScheme.preference()).toBe('dark');
+            expect(seams.targetDocument.documentElement.getAttribute('data-theme')).toBe('dark');
+
+            app.dispose();
+        });
+
+        it('honours the colour-scheme storage key and theme colours', async () => {
+            const seams = makeSeams();
+
+            seams.storage.set('app.theme', 'light');
+
+            const app = await bootApp({
+                colorScheme: { storageKey: 'app.theme', themeColors: { light: '#ffffff', dark: '#000000' } },
+                platform: seams,
+            });
+
+            expect(app.services.colorScheme.preference()).toBe('light');
+            expect(seams.targetDocument.querySelector('meta[name="theme-color"]')?.getAttribute('content')).toBe(
+                '#ffffff',
+            );
+
+            app.dispose();
+        });
+
+        it('defaults the preference to system when no option or stored value is present', async () => {
+            const app = await bootApp();
+
+            expect(app.services.colorScheme.preference()).toBe('system');
+
+            app.dispose();
+        });
+
+        it('disposes the colour-scheme service on teardown', async () => {
+            const app = await bootApp();
+            const disposeSpy = vi.spyOn(app.services.colorScheme, 'dispose');
+
+            app.dispose();
+
+            expect(disposeSpy).toHaveBeenCalledTimes(1);
         });
     });
 

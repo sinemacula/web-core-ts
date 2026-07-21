@@ -67,38 +67,38 @@ const props = withDefaults(defineProps<Props>(), {
 }
 
 .sm-button--primary {
-    background: var(--sm-primary-900);
-    color: var(--sm-neutral-0);
+    background: var(--sm-accent-emphasis);
+    color: var(--sm-on-accent);
 }
 
 .sm-button--primary:hover:not(:disabled) {
-    background: var(--sm-primary-700);
+    background: var(--sm-accent-hover);
 }
 
 .sm-button--secondary {
-    background: var(--sm-secondary-600);
-    color: var(--sm-neutral-0);
+    background: var(--sm-accent-secondary);
+    color: var(--sm-on-accent);
 }
 
 .sm-button--secondary:hover:not(:disabled) {
-    background: var(--sm-secondary-500);
+    background: var(--sm-accent-secondary-hover);
 }
 
 .sm-button--ghost {
     background: transparent;
-    color: var(--sm-primary-700);
+    color: var(--sm-accent-hover);
 }
 
 .sm-button--ghost:hover:not(:disabled) {
-    background: var(--sm-primary-50);
+    background: var(--sm-accent-subtle);
 }
 
 .sm-button--danger {
-    background: var(--sm-error);
-    color: var(--sm-neutral-0);
+    background: var(--sm-danger);
+    color: var(--sm-on-accent);
 }
 
 .sm-button--danger:hover:not(:disabled) {
-    background: var(--sm-error-strong);
+    background: var(--sm-danger-hover);
 }
 </style>

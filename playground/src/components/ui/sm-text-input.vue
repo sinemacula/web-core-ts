@@ -72,7 +72,7 @@ const id = useId();
 .sm-text-input__control {
     padding: var(--sm-space-2) var(--sm-space-3);
     background: var(--sm-surface-raised);
-    border: 1px solid var(--sm-neutral-300);
+    border: 1px solid var(--sm-border-strong);
     border-radius: var(--sm-radius-md);
     color: var(--sm-text-strong);
     font-size: var(--sm-text-sm);
@@ -80,16 +80,16 @@ const id = useId();
 }
 
 .sm-text-input__control:disabled {
-    background: var(--sm-neutral-100);
+    background: var(--sm-surface-sunken);
     cursor: not-allowed;
 }
 
 .sm-text-input__control--invalid {
-    border-color: var(--sm-error);
+    border-color: var(--sm-danger);
 }
 
 .sm-text-input__error {
-    color: var(--sm-error);
+    color: var(--sm-danger);
     font-size: var(--sm-text-sm);
 }
 </style>

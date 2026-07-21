@@ -43,6 +43,8 @@ import type { ErrorReporter } from '../reporting/error-reporter';
 import { installGlobalErrorHandling } from '../reporting/install-global-error-handling';
 import { BrowserStorage } from '../storage/browser-storage';
 import type { KeyValueStorage } from '../storage/key-value-storage';
+import type { ColorSchemePreference } from '../theme/color-scheme';
+import type { ColorSchemeService } from '../theme/color-scheme-service';
 import type { UpdateMonitor } from '../updates/update-monitor';
 import {
     installConfig,
@@ -55,6 +57,7 @@ import {
 } from './services';
 import type { WebCoreConfig } from './web-core-config';
 import { wireChunkRecovery } from './wire-chunk-recovery';
+import { wireColorScheme } from './wire-color-scheme';
 import type { WireHttpClientTools } from './wire-http-client';
 import { wireHttpClient } from './wire-http-client';
 import type { WiredLocale } from './wire-locale';
@@ -72,6 +75,7 @@ const BOOT_PHASES = [
     'runtime-environment',
     'configuration',
     'storage',
+    'color-scheme',
     'module-registry',
     'application',
     'feature-flags',
@@ -166,6 +170,26 @@ export interface WebCoreI18nOptions {
 
     /** Behaviour when a module name shadows a shared top-level translation key. Default 'error'; 'module-wins' restores the shadowing merge. */
     readonly duplicateNamespaceStrategy?: 'error' | 'module-wins';
+}
+
+/**
+ * Colour-scheme options.
+ */
+export interface WebCoreColorSchemeOptions {
+    /** The preference applied when nothing is stored. Default 'system'. */
+    readonly defaultPreference?: ColorSchemePreference;
+
+    /** The storage key the preference persists under. Default 'theme'. */
+    readonly storageKey?: string;
+
+    /** The surface-page colours applied to the `theme-color` meta tag. */
+    readonly themeColors?: {
+        /** The colour applied in the light scheme. */
+        readonly light: string;
+
+        /** The colour applied in the dark scheme. */
+        readonly dark: string;
+    };
 }
 
 /**
@@ -273,6 +297,9 @@ export interface WebCoreAppOptions<T extends WebCoreConfig> {
     /** Internationalisation options. */
     readonly i18n?: WebCoreI18nOptions;
 
+    /** Colour-scheme options. */
+    readonly colorScheme?: WebCoreColorSchemeOptions;
+
     /** Observability adapter factories. */
     readonly observability?: WebCoreObservabilityOptions<T>;
 
@@ -325,6 +352,9 @@ export interface WebCoreServices<T> {
 
     /** The runtime locale switcher. */
     readonly localeSwitcher: LocaleSwitcher;
+
+    /** The colour-scheme service. */
+    readonly colorScheme: ColorSchemeService;
 
     /** The realtime connection, or null when none was installed. */
     readonly realtime: RealtimeConnection | null;
@@ -394,6 +424,9 @@ interface AppFoundation<T extends WebCoreConfig> {
 
     /** The installed storage adapter. */
     readonly storage: KeyValueStorage;
+
+    /** The installed colour-scheme service. */
+    readonly colorScheme: ColorSchemeService;
 
     /** The validated module registry. */
     readonly registry: ModuleRegistry;
@@ -523,6 +556,10 @@ async function bootFoundation<T extends WebCoreConfig>(
 
     installStorage(storage);
 
+    recordPhase('color-scheme');
+
+    const colorScheme = resolveColorScheme(storage, platform, options);
+
     recordPhase('module-registry');
 
     const registry = createModuleRegistry(options.modules);
@@ -557,6 +594,7 @@ async function bootFoundation<T extends WebCoreConfig>(
         repository,
         settings,
         storage,
+        colorScheme,
         registry,
         app,
         pinia,
@@ -735,7 +773,7 @@ function assembleApp<T extends WebCoreConfig>(
     integration: AppIntegration,
     release: ReleaseLayer,
 ): WebCoreApp<T> {
-    const { app, pinia, settings, repository, storage, toastService, confirmService, observability, flags } =
+    const { app, pinia, settings, repository, storage, colorScheme, toastService, confirmService, observability, flags } =
         foundation;
     const { http, switcher, i18n } = moduleLayer;
     const { router } = integration;
@@ -760,6 +798,7 @@ function assembleApp<T extends WebCoreConfig>(
             logger: observability.logger,
             featureFlags: flags,
             localeSwitcher: switcher,
+            colorScheme,
             realtime: realtimeConnection,
         },
         monitors,
@@ -775,7 +814,7 @@ function assembleApp<T extends WebCoreConfig>(
 
             disposed = true;
 
-            teardownApp(moduleLayer, integration, release);
+            teardownApp(moduleLayer, integration, release, colorScheme);
         },
     };
 }
@@ -783,14 +822,21 @@ function assembleApp<T extends WebCoreConfig>(
 /**
  * Tear down everything the boot installed, in reverse order: monitors,
  * realtime, chunk recovery, module boots, stores, then the page-tracking,
- * error-handling and title-sync uninstalls.
+ * error-handling and title-sync uninstalls, and finally the colour-scheme
+ * OS-change listener.
  *
  * @param moduleLayer - the eager store handles to dispose
  * @param integration - the module boot and page, error and title teardowns
  * @param release - the monitors, realtime connection and chunk-recovery
  * teardown
+ * @param colorScheme - the colour-scheme service to dispose
  */
-function teardownApp(moduleLayer: ModuleLayer, integration: AppIntegration, release: ReleaseLayer): void {
+function teardownApp(
+    moduleLayer: ModuleLayer,
+    integration: AppIntegration,
+    release: ReleaseLayer,
+    colorScheme: ColorSchemeService,
+): void {
     const { storeHandles } = moduleLayer;
     const { moduleTeardown, titleSyncTeardown, errorHandlingTeardown, pageTrackingTeardown } = integration;
     const { chunkRecoveryTeardown, realtimeConnection, monitors } = release;
@@ -808,6 +854,7 @@ function teardownApp(moduleLayer: ModuleLayer, integration: AppIntegration, rele
     pageTrackingTeardown();
     errorHandlingTeardown();
     titleSyncTeardown();
+    colorScheme.dispose();
 }
 
 /**
@@ -841,6 +888,31 @@ function resolveObservability<T extends WebCoreConfig>(
         ...(factories?.reporter === undefined ? {} : { reporter: factories.reporter }),
         ...(factories?.analytics === undefined ? {} : { analytics: factories.analytics }),
         ...(factories?.logger === undefined ? {} : { logger: factories.logger }),
+    });
+}
+
+/**
+ * Wire and install the colour-scheme service.
+ *
+ * @param storage - the application storage adapter
+ * @param platform - the resolved platform seams
+ * @param options - the full boot options carrying the colour-scheme seams
+ * @returns the installed colour-scheme service
+ */
+function resolveColorScheme<T extends WebCoreConfig>(
+    storage: KeyValueStorage,
+    platform: ResolvedPlatform,
+    options: WebCoreAppOptions<T>,
+): ColorSchemeService {
+    const colorScheme = options.colorScheme;
+
+    return wireColorScheme({
+        config: { colorScheme: { default: colorScheme?.defaultPreference ?? 'system' } },
+        storage,
+        ...(colorScheme?.storageKey === undefined ? {} : { colorSchemeStorageKey: colorScheme.storageKey }),
+        ...(colorScheme?.themeColors === undefined ? {} : { themeColors: colorScheme.themeColors }),
+        targetWindow: platform.targetWindow,
+        targetDocument: platform.targetDocument,
     });
 }
 

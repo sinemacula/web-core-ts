@@ -22,6 +22,7 @@ import type { RealtimeConnection } from '../realtime/realtime-connection';
 import type { ErrorReporter } from '../reporting/error-reporter';
 import type { KeyValueStorage } from '../storage/key-value-storage';
 import { createServiceHolder } from '../support/service-holder';
+import type { ColorSchemeService } from '../theme/color-scheme-service';
 
 const configHolder = createServiceHolder<ConfigRepository<Record<string, unknown>>>('configuration');
 const httpHolder = createServiceHolder<HttpClient>('http client');
@@ -33,6 +34,7 @@ const analyticsHolder = createServiceHolder<AnalyticsTracker>('analytics tracker
 const loggerHolder = createServiceHolder<Logger>('logger');
 const featureFlagsHolder = createServiceHolder<FeatureFlags>('feature-flag adapter');
 const localeSwitcherHolder = createServiceHolder<LocaleSwitcher>('locale switcher');
+const colorSchemeHolder = createServiceHolder<ColorSchemeService>('colour scheme service');
 const realtimeHolder = createServiceHolder<RealtimeConnection>('realtime connection');
 
 const holders = [
@@ -46,6 +48,7 @@ const holders = [
     loggerHolder,
     featureFlagsHolder,
     localeSwitcherHolder,
+    colorSchemeHolder,
     realtimeHolder,
 ] as const;
 
@@ -251,6 +254,25 @@ export function installLocaleSwitcher(instance: LocaleSwitcher): void {
  */
 export function localeSwitcher(): LocaleSwitcher {
     return localeSwitcherHolder.resolve();
+}
+
+/**
+ * Install the colour-scheme service. Called once at boot.
+ *
+ * @param instance - the colour-scheme service to install
+ */
+export function installColorScheme(instance: ColorSchemeService): void {
+    colorSchemeHolder.install(instance);
+}
+
+/**
+ * The active colour-scheme service.
+ *
+ * @returns the active colour-scheme service
+ * @throws Error when accessed before {@link installColorScheme} has been called
+ */
+export function colorScheme(): ColorSchemeService {
+    return colorSchemeHolder.resolve();
 }
 
 /**
