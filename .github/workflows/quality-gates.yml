@@ -61,6 +61,21 @@ jobs:
                 with:
                     persist-credentials: false
 
+            # The preset rule tests and mutation gate only need to run when the
+            # preset itself, or a dependency that could change rule behaviour,
+            # changes. The structure lint validates all source and runs always.
+            -   name: Detect preset changes
+                id: changes
+                uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590  # v3.0.3
+                with:
+                    filters: |
+                        preset:
+                            - 'eslint/**'
+                            - 'eslint.structure.mjs'
+                            - 'stryker.eslint.config.json'
+                            - 'package.json'
+                            - 'package-lock.json'
+
             -   name: Setup Node.js
                 uses: actions/setup-node@v7
                 with:
@@ -71,9 +86,11 @@ jobs:
                 run: npm ci
 
             -   name: Preset unit tests
+                if: ${{ steps.changes.outputs.preset == 'true' || github.event_name == 'workflow_dispatch' }}
                 run: npm run test:eslint
 
             -   name: Preset mutation gate
+                if: ${{ steps.changes.outputs.preset == 'true' || github.event_name == 'workflow_dispatch' }}
                 run: npm run test:mutation:eslint
 
             -   name: Structure lint
