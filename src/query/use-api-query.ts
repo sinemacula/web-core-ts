@@ -14,7 +14,7 @@ import type { ComputedRef } from 'vue';
 import { computed, shallowRef } from 'vue';
 
 import type { QueryParameters } from '@sinemacula/foundation/http/http-client';
-import { ApiQuery } from './api-query';
+import { ApiQuery } from '@sinemacula/foundation/query/api-query';
 
 /**
  * Options accepted by {@link useApiQuery}.

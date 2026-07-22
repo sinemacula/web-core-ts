@@ -26,8 +26,8 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { PaginationMeta } from '@sinemacula/web-core/query/envelope';
-import type { SortDefault } from '@sinemacula/web-core/query/list-query-definition';
+import type { PaginationMeta } from '@sinemacula/foundation/query/envelope';
+import type { SortDefault } from '@sinemacula/foundation/query/list-query-definition';
 import { useListQuery } from '@sinemacula/web-core/query/use-list-query';
 import { useResource } from '@sinemacula/web-core/query/use-resource';
 import type { ComputedRef, Ref } from 'vue';

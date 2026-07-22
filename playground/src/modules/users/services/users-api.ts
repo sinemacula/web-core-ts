@@ -11,8 +11,8 @@
  */
 
 import type { HttpClient } from '@sinemacula/foundation/http/http-client';
-import type { RawRecord, ResourceMapper } from '@sinemacula/web-core/query/envelope';
-import { ResourceClient } from '@sinemacula/web-core/query/resource-client';
+import type { RawRecord, ResourceMapper } from '@sinemacula/foundation/query/envelope';
+import { ResourceClient } from '@sinemacula/foundation/query/resource-client';
 
 import { PlaygroundError } from '@/errors/playground-error';
 

@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import type { ApiQuery } from './api-query';
+import type { ApiQuery } from '@sinemacula/foundation/query/api-query';
 import { useApiQuery } from './use-api-query';
 
 describe('useApiQuery', () => {

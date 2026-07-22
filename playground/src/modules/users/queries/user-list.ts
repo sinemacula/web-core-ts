@@ -10,8 +10,8 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { filter } from '@sinemacula/web-core/query/list-filter';
-import { defineListQuery } from '@sinemacula/web-core/query/list-query-definition';
+import { filter } from '@sinemacula/foundation/query/list-filter';
+import { defineListQuery } from '@sinemacula/foundation/query/list-query-definition';
 
 /**
  * The users list query definition, passed to `useListQuery` by

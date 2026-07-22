@@ -7,8 +7,8 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { filter } from './list-filter';
-import { defineListQuery } from './list-query-definition';
+import { filter } from '@sinemacula/foundation/query/list-filter';
+import { defineListQuery } from '@sinemacula/foundation/query/list-query-definition';
 import { useListQuery } from './use-list-query';
 
 // ---------------------------------------------------------------------------
