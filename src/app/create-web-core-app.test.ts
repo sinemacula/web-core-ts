@@ -27,7 +27,7 @@ import { NullErrorReporter } from '../reporting/null-error-reporter';
 import type { RouteMiddleware } from '../router/middleware';
 import { next } from '../router/middleware';
 import { BrowserStorage } from '../storage/browser-storage';
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { WebCoreApp, WebCoreAppOptions } from './create-web-core-app';
 import { createWebCoreApp, observeBootPhases } from './create-web-core-app';
 import {

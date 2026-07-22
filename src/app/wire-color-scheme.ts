@@ -10,7 +10,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { KeyValueStorage } from '../storage/key-value-storage';
+import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import type { ColorSchemePreference } from '../theme/color-scheme';
 import type { ThemeColors } from '../theme/color-scheme-service';
 import { ColorSchemeService } from '../theme/color-scheme-service';

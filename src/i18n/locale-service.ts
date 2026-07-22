@@ -10,7 +10,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { KeyValueStorage } from '../storage/key-value-storage';
+import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 
 const DEFAULT_STORAGE_KEY = 'locale';
 

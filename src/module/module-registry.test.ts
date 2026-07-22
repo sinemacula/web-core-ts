@@ -15,7 +15,7 @@ import { Environment } from '../config/environment';
 import type { HttpClient } from '../http/http-client';
 import { createApplicationI18n } from '../i18n/application-i18n';
 import { createApplicationRouter } from '../router/router-factory';
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type {
     LocaleMessages,
     ModuleBootContext,

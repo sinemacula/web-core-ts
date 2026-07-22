@@ -5,7 +5,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { MemoryStorage } from '@sinemacula/web-core/storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { appStorage, initialiseStorage, resetStorage } from '@/services/storage';

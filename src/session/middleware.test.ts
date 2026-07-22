@@ -10,7 +10,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
 import type { MiddlewareContext } from '../router/middleware';
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { SessionRoutes } from './create-session-module';
 import { authenticated, authorize, guestOnly } from './middleware';
 import type { SessionApi } from './session-api';

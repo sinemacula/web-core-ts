@@ -28,7 +28,7 @@ import type { ModuleBootContext, ModuleDefinition, ModuleTeardown, ResolvedPlatf
 import type { ModuleHttpContributions } from '../module/module-registry';
 import { registerModules } from '../module/module-registry';
 import type { ErrorReporter, ReportedUser } from '../reporting/error-reporter';
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { SessionModuleOptions } from './create-session-module';
 import { createSessionModule } from './create-session-module';
 import type { SessionApi, SessionDevice } from './session-api';

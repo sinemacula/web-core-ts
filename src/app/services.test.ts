@@ -18,7 +18,7 @@ import { ConfirmService } from '../notifications/confirm-service';
 import { ToastService } from '../notifications/toast-service';
 import type { RealtimeConnection } from '../realtime/realtime-connection';
 import { NullErrorReporter } from '../reporting/null-error-reporter';
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { ColorSchemeService } from '../theme/color-scheme-service';
 import {
     analytics,

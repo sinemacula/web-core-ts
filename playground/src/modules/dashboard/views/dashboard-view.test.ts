@@ -12,7 +12,7 @@ import { installColorScheme } from '@sinemacula/web-core/app/services';
 import { Environment } from '@sinemacula/web-core/config/environment';
 import { ObjectEnvironmentSource } from '@sinemacula/web-core/config/object-environment-source';
 import type { LocaleSwitcher } from '@sinemacula/web-core/i18n/application-i18n';
-import { MemoryStorage } from '@sinemacula/web-core/storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { ColorSchemeService } from '@sinemacula/web-core/theme/color-scheme-service';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';

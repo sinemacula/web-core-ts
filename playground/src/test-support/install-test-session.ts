@@ -16,7 +16,7 @@ import { TokenRefreshCoordinator } from '@sinemacula/web-core/http/token-refresh
 import { createDefaultSessionApi } from '@sinemacula/web-core/session/default-session-api';
 import type { SessionApi } from '@sinemacula/web-core/session/session-api';
 import { installSessionContext } from '@sinemacula/web-core/session/session-context';
-import type { KeyValueStorage } from '@sinemacula/web-core/storage/key-value-storage';
+import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 
 export { resetSessionContext } from '@sinemacula/web-core/session/session-context';
 

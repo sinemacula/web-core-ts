@@ -8,7 +8,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { LocaleMessageLoader, ModuleDefinition } from '../module/module';
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { localeSwitcher, resetWebCoreServices } from './services';
 import type { LocaleWiringConfig, WireLocaleOptions } from './wire-locale';
 import { wireLocale } from './wire-locale';

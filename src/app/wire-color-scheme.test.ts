@@ -7,7 +7,7 @@
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { colorScheme, resetWebCoreServices } from './services';
 import type { ColorSchemeWiringConfig, WireColorSchemeOptions } from './wire-color-scheme';
 import { wireColorScheme } from './wire-color-scheme';

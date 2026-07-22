@@ -9,7 +9,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { KeyValueStorage } from './key-value-storage';
+import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 
 /**
  * Persist values in a browser `Storage` area.

@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { LocaleService } from './locale-service';
 
 function makeService(options?: {

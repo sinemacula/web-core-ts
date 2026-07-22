@@ -20,7 +20,7 @@ import type { Environment } from '../config/environment';
 import type { HttpClient, RequestInterceptor, ResponseErrorHandler, UnauthorizedHandler } from '../http/http-client';
 import type { ApplicationI18n } from '../i18n/application-i18n';
 import type { RouteMiddleware } from '../router/middleware';
-import type { KeyValueStorage } from '../storage/key-value-storage';
+import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 
 /**
  * A flat or nested bag of translation key/value pairs for one locale.

@@ -22,7 +22,7 @@
 import type { Router } from 'vue-router';
 
 import type { ErrorReporter } from '../reporting/error-reporter';
-import type { KeyValueStorage } from '../storage/key-value-storage';
+import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 
 const CHUNK_ERROR_MESSAGE_PATTERN =
     /failed to fetch dynamically imported module|error loading dynamically imported module|importing a module script failed/i;

@@ -11,7 +11,7 @@ import type { RouteRecordRaw, Router } from 'vue-router';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
 import type { ErrorReporter } from '../reporting/error-reporter';
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { wireChunkRecovery } from './wire-chunk-recovery';
 
 const EmptyComponent = defineComponent({ render: () => null });

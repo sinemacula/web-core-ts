@@ -9,7 +9,7 @@ import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { SessionApi, SessionDevice } from './session-api';
 import { installSessionContext, resetSessionContext } from './session-context';
 import { useSessionStore } from './session-store';

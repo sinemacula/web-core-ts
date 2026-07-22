@@ -16,7 +16,7 @@ import { activateLocale, createApplicationI18n, createLocaleSwitcher } from '../
 import { LocaleService } from '../i18n/locale-service';
 import type { LocaleMessages, ModuleDefinition } from '../module/module';
 import { createModuleMessageSource } from '../module/module-registry';
-import type { KeyValueStorage } from '../storage/key-value-storage';
+import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import { installLocaleSwitcher } from './services';
 
 /**

@@ -9,7 +9,7 @@
  */
 
 import { HttpError } from '@sinemacula/web-core/http/http-error';
-import { MemoryStorage } from '@sinemacula/web-core/storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp } from 'vue';

@@ -17,7 +17,7 @@ import { resetWebCoreServices } from '@sinemacula/web-core/app/services';
 import { ConfigurationError, createWebEnvironment } from '@sinemacula/web-core/config/web-environment';
 import { createSessionModule } from '@sinemacula/web-core/session/create-session-module';
 import { resetSessionContext } from '@sinemacula/web-core/session/session-context';
-import { MemoryStorage } from '@sinemacula/web-core/storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createMemoryHistory } from 'vue-router';
 

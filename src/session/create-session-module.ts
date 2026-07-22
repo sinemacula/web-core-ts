@@ -21,7 +21,7 @@ import { createBearerTokenInterceptor } from '../http/bearer-token-interceptor';
 import type { HttpClient } from '../http/http-client';
 import { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
 import type { ModuleBootContext, ModuleDefinition, ModuleRegisterContext, ModuleTeardown } from '../module/module';
-import type { KeyValueStorage } from '../storage/key-value-storage';
+import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import { createDefaultSessionApi } from './default-session-api';
 import { appendRedirectTarget, sanitiseRedirectTarget } from './redirect';
 import type { SessionApi, SessionDevice } from './session-api';

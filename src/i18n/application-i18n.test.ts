@@ -9,7 +9,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import type { ModuleDefinition } from '../module/module';
 import type { ModuleMessageSource } from '../module/module-registry';
-import { MemoryStorage } from '../storage/memory-storage';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { activateLocale, createApplicationI18n, createLocaleSwitcher } from './application-i18n';
 import { LocaleService } from './locale-service';
 
