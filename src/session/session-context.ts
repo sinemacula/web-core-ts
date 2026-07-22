@@ -13,40 +13,26 @@
  */
 
 import type { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
-import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import { createServiceHolder } from '@sinemacula/foundation/support/service-holder';
-import type { SessionStorageKeys } from '@sinemacula/foundation/session/session-storage-keys';
-import type { SessionRoutes } from './create-session-module';
-import type { SessionApi, SessionDevice } from '@sinemacula/foundation/session/session-api';
+import type { SessionCoreContext } from '@sinemacula/foundation/session/session-core';
 import type { SessionUser } from '@sinemacula/foundation/session/session-user';
+import type { SessionRoutes } from './create-session-module';
 
 /**
- * The resolved collaborators shared across the session module's units.
+ * The resolved collaborators shared across the session module's units: the
+ * foundation core slice (storage, storage keys, the lazily-built API gateway,
+ * the device fingerprint and the legacy timestamp parser) extended with the
+ * web-owned route identity, store id and refresh authority.
  */
-export interface SessionContext<U extends SessionUser = SessionUser> {
-    /** The resolved storage keys the session persists under. */
-    readonly storageKeys: SessionStorageKeys;
-
+export interface SessionContext<U extends SessionUser = SessionUser> extends SessionCoreContext<U> {
     /** The resolved route identity feeding guards and redirects. */
     readonly routes: SessionRoutes;
-
-    /** The storage adapter session state persists to. */
-    readonly storage: KeyValueStorage;
 
     /** The pinia store id the session store registers under. */
     readonly storeId: string;
 
-    /** Lazily constructed over the installed HTTP client on first access. */
-    readonly api: SessionApi<U>;
-
     /** The single refresh authority: both the reactive 401 path and the proactive refresh timer route through it, so concurrent refresh attempts collapse into one in-flight call. */
     readonly coordinator: TokenRefreshCoordinator;
-
-    /** Convert a legacy persisted wire timestamp to epoch milliseconds during hydration; returns null for unparseable values. */
-    readonly parseTimestamp: (value: string) => number | null;
-
-    /** Resolve the stable device fingerprint, generating and persisting the uuid on first use. */
-    readonly device: () => SessionDevice;
 }
 
 const holder = createServiceHolder<SessionContext>('session context');

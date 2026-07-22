@@ -1,6 +1,10 @@
 /**
  * Unit tests for useSessionStore.
  *
+ * The transition behaviour itself is covered by the foundation session-core
+ * suite; these cases prove the pinia binding - state seeding, getter, action
+ * delegation with the installed context, store id wiring and disposal.
+ *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright   2026 Sine Macula Limited
  */
@@ -9,12 +13,12 @@ import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
-import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { SessionApi, SessionDevice } from '@sinemacula/foundation/session/session-api';
-import { installSessionContext, resetSessionContext } from './session-context';
-import { useSessionStore } from './session-store';
 import type { SessionTokens } from '@sinemacula/foundation/session/session-tokens';
 import type { SessionUser } from '@sinemacula/foundation/session/session-user';
+import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
+import { installSessionContext, resetSessionContext } from './session-context';
+import { useSessionStore } from './session-store';
 
 const ACCESS_TOKEN_KEY = 'auth.access_token';
 const REFRESH_TOKEN_KEY = 'auth.refresh_token';
@@ -31,12 +35,9 @@ const SESSION_EXPIRY_EPOCH_MS = 1_798_761_599_000;
  */
 class FakeSessionApi implements SessionApi {
     readonly calls: string[] = [];
-    readonly loginCalls: Array<{ credentials: unknown; device: SessionDevice }> = [];
-    readonly refreshCalls: string[] = [];
 
     readonly #sessions: Array<SessionTokens | Error> = [];
     readonly #users: Array<SessionUser | Error> = [];
-    #logoutError: Error | null = null;
 
     /**
      * Queue an outcome for the next login or refresh call.
@@ -56,25 +57,14 @@ class FakeSessionApi implements SessionApi {
         this.#users.push(outcome);
     }
 
-    /**
-     * Make the next logout call reject.
-     *
-     * @param error - the error to reject with
-     */
-    failLogout(error: Error): void {
-        this.#logoutError = error;
-    }
-
-    login(credentials: unknown, device: SessionDevice): Promise<SessionTokens> {
+    login(_credentials: unknown, _device: SessionDevice): Promise<SessionTokens> {
         this.calls.push('login');
-        this.loginCalls.push({ credentials, device });
 
         return take(this.#sessions);
     }
 
-    refresh(refreshToken: string): Promise<SessionTokens> {
+    refresh(_refreshToken: string): Promise<SessionTokens> {
         this.calls.push('refresh');
-        this.refreshCalls.push(refreshToken);
 
         return take(this.#sessions);
     }
@@ -82,7 +72,7 @@ class FakeSessionApi implements SessionApi {
     logout(): Promise<void> {
         this.calls.push('logout');
 
-        return this.#logoutError === null ? Promise.resolve() : Promise.reject(this.#logoutError);
+        return Promise.resolve();
     }
 
     currentUser(): Promise<SessionUser> {
@@ -109,12 +99,11 @@ function take<T>(queue: Array<T | Error>): Promise<T> {
 }
 
 /** A valid token bundle as returned by the gateway. */
-function tokens(overrides: Partial<SessionTokens> = {}): SessionTokens {
+function tokens(): SessionTokens {
     return {
         accessToken: 'new-token',
         refreshToken: 'new-refresh-token',
         expiresAtEpochMs: SESSION_EXPIRY_EPOCH_MS,
-        ...overrides,
     };
 }
 
@@ -126,7 +115,6 @@ function user(): SessionUser {
 describe('useSessionStore', () => {
     let storage: MemoryStorage;
     let fake: FakeSessionApi;
-    let parseCalls: string[];
 
     /**
      * Install a test session context over fresh collaborators.
@@ -148,13 +136,7 @@ describe('useSessionStore', () => {
             storeId: overrides.storeId ?? 'auth',
             api: fake,
             coordinator: new TokenRefreshCoordinator({ refresh: () => Promise.resolve(false) }),
-            parseTimestamp:
-                overrides.parseTimestamp ??
-                ((value: string): null => {
-                    parseCalls.push(value);
-
-                    return null;
-                }),
+            parseTimestamp: overrides.parseTimestamp ?? ((): null => null),
             device: () => ({ uuid: 'device-uuid-1', os: 'WEB' }),
         });
     }
@@ -162,7 +144,6 @@ describe('useSessionStore', () => {
     beforeEach(() => {
         storage = new MemoryStorage();
         fake = new FakeSessionApi();
-        parseCalls = [];
         setActivePinia(createPinia());
         installTestContext();
     });
@@ -177,39 +158,21 @@ describe('useSessionStore', () => {
         expect(() => useSessionStore()).toThrowError('session context accessed before initialisation');
     });
 
-    describe('initial state', () => {
-        it('reads a persisted access token from storage', () => {
+    describe('state seeding', () => {
+        it('hydrates the initial state from the context storage', () => {
             storage.set(ACCESS_TOKEN_KEY, 'persisted-token');
-
-            expect(useSessionStore().accessToken).toBe('persisted-token');
-        });
-
-        it('reads a persisted refresh token from storage', () => {
             storage.set(REFRESH_TOKEN_KEY, 'persisted-refresh');
-
-            expect(useSessionStore().refreshToken).toBe('persisted-refresh');
-        });
-
-        it('initialises accessToken as null when storage is empty', () => {
-            expect(useSessionStore().accessToken).toBeNull();
-        });
-
-        it('initialises refreshToken as null when storage is empty', () => {
-            expect(useSessionStore().refreshToken).toBeNull();
-        });
-
-        it('initialises the user as null', () => {
-            expect(useSessionStore().user).toBeNull();
-        });
-
-        it('hydrates a digits-only persisted expiry as epoch milliseconds', () => {
             storage.set(EXPIRES_AT_KEY, '1782820800000');
 
-            expect(useSessionStore().expiresAtEpochMs).toBe(1_782_820_800_000);
-            expect(parseCalls).toStrictEqual([]);
+            const store = useSessionStore();
+
+            expect(store.accessToken).toBe('persisted-token');
+            expect(store.refreshToken).toBe('persisted-refresh');
+            expect(store.expiresAtEpochMs).toBe(1_782_820_800_000);
+            expect(store.user).toBeNull();
         });
 
-        it('delegates a legacy non-numeric expiry to the configured parser', () => {
+        it('delegates a legacy persisted expiry to the context parser', () => {
             resetSessionContext();
             installTestContext({
                 parseTimestamp: value => (value === '2026-06-30 12:00:00' ? 1_782_820_800_000 : null),
@@ -217,18 +180,6 @@ describe('useSessionStore', () => {
             storage.set(EXPIRES_AT_KEY, '2026-06-30 12:00:00');
 
             expect(useSessionStore().expiresAtEpochMs).toBe(1_782_820_800_000);
-        });
-
-        it('hydrates expiry as null when the legacy value is unparseable', () => {
-            storage.set(EXPIRES_AT_KEY, 'not-a-timestamp');
-
-            expect(useSessionStore().expiresAtEpochMs).toBeNull();
-            expect(parseCalls).toStrictEqual(['not-a-timestamp']);
-        });
-
-        it('initialises expiresAtEpochMs as null when storage is empty', () => {
-            expect(useSessionStore().expiresAtEpochMs).toBeNull();
-            expect(parseCalls).toStrictEqual([]);
         });
     });
 
@@ -244,47 +195,8 @@ describe('useSessionStore', () => {
         });
     });
 
-    describe('login action', () => {
-        it('sets the tokens and user after a successful login', async () => {
-            fake.queueSession(tokens());
-            fake.queueUser(user());
-
-            const store = useSessionStore();
-
-            await store.login({ email: 'alice@example.com', password: 'secret' });
-
-            expect(store.accessToken).toBe('new-token');
-            expect(store.refreshToken).toBe('new-refresh-token');
-            expect(store.expiresAtEpochMs).toBe(SESSION_EXPIRY_EPOCH_MS);
-            expect(store.user).toStrictEqual(user());
-        });
-
-        it('forwards the credentials and device fingerprint to the gateway', async () => {
-            fake.queueSession(tokens());
-            fake.queueUser(user());
-
-            await useSessionStore().login({ email: 'alice@example.com', password: 'secret' });
-
-            expect(fake.loginCalls).toStrictEqual([
-                {
-                    credentials: { email: 'alice@example.com', password: 'secret' },
-                    device: { uuid: 'device-uuid-1', os: 'WEB' },
-                },
-            ]);
-        });
-
-        it('persists every session key, with expiry as an epoch-ms string', async () => {
-            fake.queueSession(tokens({ accessToken: 'stored-token', refreshToken: 'stored-refresh' }));
-            fake.queueUser(user());
-
-            await useSessionStore().login({ email: 'alice@example.com', password: 'secret' });
-
-            expect(storage.get(ACCESS_TOKEN_KEY)).toBe('stored-token');
-            expect(storage.get(REFRESH_TOKEN_KEY)).toBe('stored-refresh');
-            expect(storage.get(EXPIRES_AT_KEY)).toBe('1798761599000');
-        });
-
-        it('fetches the current user after the session is applied', async () => {
+    describe('action delegation', () => {
+        it('login runs the core transition against the installed context', async () => {
             fake.queueSession(tokens());
             fake.queueUser(user());
 
@@ -293,210 +205,56 @@ describe('useSessionStore', () => {
             await store.login({ email: 'alice@example.com', password: 'secret' });
 
             expect(fake.calls).toStrictEqual(['login', 'currentUser']);
-            expect(store.user?.name).toBe('Alice Smith');
+            expect(store.accessToken).toBe('new-token');
+            expect(store.user).toStrictEqual(user());
+            expect(storage.get(ACCESS_TOKEN_KEY)).toBe('new-token');
         });
 
-        it('removes the persisted expiry when the session has none', async () => {
-            storage.set(EXPIRES_AT_KEY, '1782820800000');
-            fake.queueSession(tokens({ expiresAtEpochMs: null }));
-            fake.queueUser(user());
-
-            const store = useSessionStore();
-
-            await store.login({ email: 'alice@example.com', password: 'secret' });
-
-            expect(store.expiresAtEpochMs).toBeNull();
-            expect(storage.get(EXPIRES_AT_KEY)).toBeNull();
-        });
-
-        it('removes the persisted refresh token when the session has none', async () => {
+        it('refresh runs the core transition and reports the outcome', async () => {
             storage.set(REFRESH_TOKEN_KEY, 'old-refresh');
-            fake.queueSession(tokens({ refreshToken: null }));
-            fake.queueUser(user());
-
-            const store = useSessionStore();
-
-            await store.login({ email: 'alice@example.com', password: 'secret' });
-
-            expect(store.refreshToken).toBeNull();
-            expect(storage.get(REFRESH_TOKEN_KEY)).toBeNull();
-        });
-    });
-
-    describe('refresh action', () => {
-        it('returns false immediately when no refresh token is stored', async () => {
-            const store = useSessionStore();
-
-            const result = await store.refresh();
-
-            expect(result).toBe(false);
-            expect(fake.calls).toStrictEqual([]);
-        });
-
-        it('updates tokens and returns true on a successful refresh', async () => {
-            storage.set(REFRESH_TOKEN_KEY, 'old-refresh');
-            fake.queueSession(tokens({ accessToken: 'fresh-token', refreshToken: 'fresh-refresh' }));
-
-            const store = useSessionStore();
-            const result = await store.refresh();
-
-            expect(result).toBe(true);
-            expect(fake.refreshCalls).toStrictEqual(['old-refresh']);
-            expect(store.accessToken).toBe('fresh-token');
-            expect(store.refreshToken).toBe('fresh-refresh');
-            expect(store.expiresAtEpochMs).toBe(SESSION_EXPIRY_EPOCH_MS);
-            expect(storage.get(ACCESS_TOKEN_KEY)).toBe('fresh-token');
-            expect(storage.get(REFRESH_TOKEN_KEY)).toBe('fresh-refresh');
-            expect(storage.get(EXPIRES_AT_KEY)).toBe('1798761599000');
-        });
-
-        it('clears the session and returns false when the refresh request fails', async () => {
-            storage.set(ACCESS_TOKEN_KEY, 'old-token');
-            storage.set(REFRESH_TOKEN_KEY, 'old-refresh');
-            storage.set(EXPIRES_AT_KEY, '1782820800000');
-            fake.queueSession(new Error('401 Unauthorized'));
-
-            const store = useSessionStore();
-            const result = await store.refresh();
-
-            expect(result).toBe(false);
-            expect(store.accessToken).toBeNull();
-            expect(store.refreshToken).toBeNull();
-            expect(store.expiresAtEpochMs).toBeNull();
-            expect(store.user).toBeNull();
-            expect(storage.get(ACCESS_TOKEN_KEY)).toBeNull();
-            expect(storage.get(REFRESH_TOKEN_KEY)).toBeNull();
-            expect(storage.get(EXPIRES_AT_KEY)).toBeNull();
-        });
-    });
-
-    describe('logout action', () => {
-        it('clears the session state on a successful logout', async () => {
             fake.queueSession(tokens());
-            fake.queueUser(user());
 
             const store = useSessionStore();
 
-            await store.login({ email: 'alice@example.com', password: 'secret' });
+            await expect(store.refresh()).resolves.toBe(true);
+            expect(store.accessToken).toBe('new-token');
+        });
+
+        it('logout clears the session through the core transition', async () => {
+            storage.set(ACCESS_TOKEN_KEY, 'tok');
+
+            const store = useSessionStore();
+
             await store.logout();
 
-            expect(fake.calls).toStrictEqual(['login', 'currentUser', 'logout']);
+            expect(fake.calls).toStrictEqual(['logout']);
             expect(store.accessToken).toBeNull();
-            expect(store.refreshToken).toBeNull();
-            expect(store.expiresAtEpochMs).toBeNull();
-            expect(store.user).toBeNull();
-        });
-
-        it('removes the persisted session keys on logout', async () => {
-            fake.queueSession(tokens());
-            fake.queueUser(user());
-
-            const store = useSessionStore();
-
-            await store.login({ email: 'alice@example.com', password: 'secret' });
-            await store.logout();
-
             expect(storage.get(ACCESS_TOKEN_KEY)).toBeNull();
-            expect(storage.get(REFRESH_TOKEN_KEY)).toBeNull();
-            expect(storage.get(EXPIRES_AT_KEY)).toBeNull();
         });
 
-        it('still clears local state when the logout API call rejects', async () => {
-            fake.queueSession(tokens());
-            fake.queueUser(user());
-            fake.failLogout(new Error('network failure'));
-
-            const store = useSessionStore();
-
-            await store.login({ email: 'alice@example.com', password: 'secret' });
-            await store.logout();
-
-            expect(store.accessToken).toBeNull();
-            expect(store.user).toBeNull();
-            expect(storage.get(ACCESS_TOKEN_KEY)).toBeNull();
-            expect(storage.get(REFRESH_TOKEN_KEY)).toBeNull();
-        });
-    });
-
-    describe('hydrateFromStorage action', () => {
-        it('re-reads all three persisted keys into state', () => {
+        it('hydrateFromStorage re-reads the persisted keys into state', () => {
             const store = useSessionStore();
 
             storage.set(ACCESS_TOKEN_KEY, 'other-tab-token');
-            storage.set(REFRESH_TOKEN_KEY, 'other-tab-refresh');
-            storage.set(EXPIRES_AT_KEY, '1786752000000');
-
             store.hydrateFromStorage();
 
             expect(store.accessToken).toBe('other-tab-token');
-            expect(store.refreshToken).toBe('other-tab-refresh');
-            expect(store.expiresAtEpochMs).toBe(1_786_752_000_000);
-        });
-
-        it('delegates a legacy expiry to the configured parser on hydration', () => {
-            resetSessionContext();
-            installTestContext({ parseTimestamp: () => 1_782_820_800_000 });
-
-            const store = useSessionStore();
-
-            storage.set(EXPIRES_AT_KEY, '2026-06-30 12:00:00');
-            store.hydrateFromStorage();
-
-            expect(store.expiresAtEpochMs).toBe(1_782_820_800_000);
-        });
-
-        it('resets state to null when storage has no persisted keys', () => {
-            storage.set(ACCESS_TOKEN_KEY, 'stale-token');
-
-            const store = useSessionStore();
-
-            storage.remove(ACCESS_TOKEN_KEY);
-            store.hydrateFromStorage();
-
-            expect(store.accessToken).toBeNull();
-        });
-
-        it('does not call the API', () => {
-            useSessionStore().hydrateFromStorage();
-
             expect(fake.calls).toStrictEqual([]);
         });
-    });
 
-    describe('clearLocal action', () => {
-        it('clears the session without calling the logout endpoint', async () => {
-            fake.queueSession(tokens());
-            fake.queueUser(user());
+        it('clearLocal clears the session without calling the API', () => {
+            storage.set(ACCESS_TOKEN_KEY, 'tok');
 
             const store = useSessionStore();
 
-            await store.login({ email: 'alice@example.com', password: 'secret' });
             store.clearLocal();
 
-            expect(fake.calls).toStrictEqual(['login', 'currentUser']);
+            expect(fake.calls).toStrictEqual([]);
             expect(store.accessToken).toBeNull();
-            expect(store.refreshToken).toBeNull();
-            expect(store.expiresAtEpochMs).toBeNull();
-            expect(store.user).toBeNull();
-        });
-
-        it('removes the persisted session keys from storage', async () => {
-            fake.queueSession(tokens());
-            fake.queueUser(user());
-
-            const store = useSessionStore();
-
-            await store.login({ email: 'alice@example.com', password: 'secret' });
-            store.clearLocal();
-
             expect(storage.get(ACCESS_TOKEN_KEY)).toBeNull();
-            expect(storage.get(REFRESH_TOKEN_KEY)).toBeNull();
-            expect(storage.get(EXPIRES_AT_KEY)).toBeNull();
         });
-    });
 
-    describe('rehydrateUser action', () => {
-        it('fetches and stores the current user when a token is present but no user is loaded', async () => {
+        it('rehydrateUser fetches the user through the core transition', async () => {
             storage.set(ACCESS_TOKEN_KEY, 'tok');
             fake.queueUser(user());
 
@@ -504,49 +262,6 @@ describe('useSessionStore', () => {
 
             await store.rehydrateUser();
 
-            expect(store.user?.email).toBe('alice@example.com');
-        });
-
-        it('does nothing when no access token is present', async () => {
-            const store = useSessionStore();
-
-            await store.rehydrateUser();
-
-            expect(store.user).toBeNull();
-            expect(fake.calls).toStrictEqual([]);
-        });
-
-        it('does nothing when a user is already loaded', async () => {
-            storage.set(ACCESS_TOKEN_KEY, 'tok');
-            fake.queueUser(user());
-
-            const store = useSessionStore();
-
-            await store.rehydrateUser();
-            await store.rehydrateUser();
-
-            expect(fake.calls).toStrictEqual(['currentUser']);
-        });
-
-        it('swallows failures and leaves the user unset', async () => {
-            storage.set(ACCESS_TOKEN_KEY, 'tok');
-            fake.queueUser(new Error('network failure'));
-
-            const store = useSessionStore();
-
-            await expect(store.rehydrateUser()).resolves.toBeUndefined();
-            expect(store.user).toBeNull();
-        });
-
-        it('shares one request across concurrent rehydrations', async () => {
-            storage.set(ACCESS_TOKEN_KEY, 'tok');
-            fake.queueUser(user());
-
-            const store = useSessionStore();
-
-            await Promise.all([store.rehydrateUser(), store.rehydrateUser()]);
-
-            expect(fake.calls).toStrictEqual(['currentUser']);
             expect(store.user?.email).toBe('alice@example.com');
         });
     });
