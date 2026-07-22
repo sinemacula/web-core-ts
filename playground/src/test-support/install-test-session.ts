@@ -13,7 +13,7 @@
 
 import { api } from '@sinemacula/web-core/app/services';
 import { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
-import { createDefaultSessionApi } from '@sinemacula/web-core/session/default-session-api';
+import { createDefaultSessionApi } from '@sinemacula/foundation/session/default-session-api';
 import type { SessionApi } from '@sinemacula/foundation/session/session-api';
 import { installSessionContext } from '@sinemacula/web-core/session/session-context';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';

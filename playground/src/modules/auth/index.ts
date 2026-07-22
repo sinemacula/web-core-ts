@@ -13,13 +13,10 @@
  * @copyright   2026 Sine Macula Limited
  */
 
+export { REDIRECT_QUERY_KEY, sanitiseRedirectTarget } from '@sinemacula/foundation/session/redirect';
 export { can, useCan } from '@sinemacula/web-core/session/authorization';
 export { authenticated, authorize, guestOnly } from '@sinemacula/web-core/session/middleware';
-export {
-    appendRedirectTarget,
-    REDIRECT_QUERY_KEY,
-    sanitiseRedirectTarget,
-} from '@sinemacula/web-core/session/redirect';
+export { appendRedirectTarget } from '@sinemacula/web-core/session/redirect';
 export { useSessionStore as useAuthStore } from '@sinemacula/web-core/session/session-store';
 export { authModule } from './module';
 export { AUTH_ROUTE_NAMES } from './route-names';

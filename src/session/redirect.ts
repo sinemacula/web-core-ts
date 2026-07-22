@@ -1,10 +1,9 @@
 /**
- * Post-login redirect target handling.
+ * Post-login redirect target attachment.
  *
- * Guarded navigations attach the originally-requested path as a query parameter
- * so the login screen can return the visitor there once signed in. Only
- * same-origin, relative paths are ever honoured; anything else is treated as
- * untrusted input and discarded.
+ * The vue-router half of redirect handling: attaching a sanitised return path
+ * to a route location. Validation itself lives in the foundation's
+ * `session/redirect` sanitiser.
  *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright   2026 Sine Macula Limited
@@ -12,51 +11,7 @@
 
 import type { RouteLocationRaw } from 'vue-router';
 
-import { isSessionContextInstalled, sessionContext } from './session-context';
-
-const DEFAULT_LOGIN_PATH = '/login';
-
-/**
- * Resolve the login-path prefix that guards against a redirect loop.
- *
- * @returns the installed session context's configured login path, or the
- * built-in default when no session context is installed
- */
-function defaultLoginPath(): string {
-    return isSessionContextInstalled() ? sessionContext().routes.loginPath : DEFAULT_LOGIN_PATH;
-}
-
-/**
- * Query parameter under which the post-login redirect target is carried.
- */
-export const REDIRECT_QUERY_KEY = 'redirect';
-
-/**
- * Validate an untrusted value as a safe post-login redirect target.
- *
- * Only a same-origin, relative path is accepted: it must start with a single
- * `/` (protocol-relative `//` targets are rejected), must not contain a
- * backslash, and must not point back at the login screen (which would bounce
- * the visitor in a loop).
- *
- * @param target - the untrusted candidate, typically a route query value
- * @param loginPath - the login-path prefix rejected as a loop guard; defaults
- * to the installed session context's configured login path, else `/login`
- * @returns the sanitised path, or `null` when the value is not a safe target
- */
-export function sanitiseRedirectTarget(target: unknown, loginPath?: string): string | null {
-    if (typeof target !== 'string') {
-        return null;
-    }
-
-    const guard = loginPath ?? defaultLoginPath();
-
-    if (!target.startsWith('/') || target.startsWith('//') || target.includes('\\') || target.startsWith(guard)) {
-        return null;
-    }
-
-    return target;
-}
+import { REDIRECT_QUERY_KEY } from '@sinemacula/foundation/session/redirect';
 
 /**
  * Attach a redirect target to a route location as a query parameter.

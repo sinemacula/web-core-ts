@@ -57,15 +57,6 @@ export function sessionContext<U extends SessionUser = SessionUser>(): SessionCo
 }
 
 /**
- * Determine whether the session context has been installed.
- *
- * @returns true when a session context is installed
- */
-export function isSessionContextInstalled(): boolean {
-    return holder.isInstalled();
-}
-
-/**
  * Clear the session context back to its uninstalled state. Test-only.
  */
 export function resetSessionContext(): void {

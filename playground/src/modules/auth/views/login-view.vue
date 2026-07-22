@@ -17,7 +17,8 @@ import { useRoute, useRouter } from 'vue-router';
 
 import GuestLayout from '@/layouts/guest-layout.vue';
 import { useLoginForm } from '@/modules/auth/composables/use-login-form';
-import { REDIRECT_QUERY_KEY, sanitiseRedirectTarget } from '@sinemacula/web-core/session/redirect';
+import { REDIRECT_QUERY_KEY, sanitiseRedirectTarget } from '@sinemacula/foundation/session/redirect';
+import { sessionContext } from '@sinemacula/web-core/session/session-context';
 
 const { t } = useI18n();
 const route = useRoute();
@@ -26,7 +27,7 @@ const form = useLoginForm();
 
 const handleSubmit = async (): Promise<void> => {
     if (await form.submit()) {
-        await router.push(sanitiseRedirectTarget(route.query[REDIRECT_QUERY_KEY]) ?? '/');
+        await router.push(sanitiseRedirectTarget(route.query[REDIRECT_QUERY_KEY], sessionContext().routes.loginPath) ?? '/');
     }
 };
 </script>
