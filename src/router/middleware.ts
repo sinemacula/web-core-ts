@@ -19,7 +19,6 @@ import type {
     RouteMiddleware as BaseRouteMiddleware,
 } from '@sinemacula/foundation/router/middleware';
 
-export { next, redirect, runMiddlewarePipeline } from '@sinemacula/foundation/router/middleware';
 
 /**
  * The navigation being evaluated, over vue-router routes.

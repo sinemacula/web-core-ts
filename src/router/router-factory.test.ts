@@ -11,7 +11,7 @@ import type { RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue
 import { createMemoryHistory } from 'vue-router';
 
 import type { RouteMiddleware } from './middleware';
-import { next, redirect } from './middleware';
+import { next, redirect } from '@sinemacula/foundation/router/middleware';
 import { createApplicationRouter, resolveScrollPosition } from './router-factory';
 
 const EmptyComponent = defineComponent({ render: () => null });

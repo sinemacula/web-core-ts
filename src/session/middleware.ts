@@ -14,7 +14,7 @@
 import type { RouteLocationRaw } from 'vue-router';
 
 import type { MiddlewareContext, MiddlewareResult, RouteMiddleware } from '../router/middleware';
-import { next, redirect } from '../router/middleware';
+import { next, redirect } from '@sinemacula/foundation/router/middleware';
 import { can } from './authorization';
 import { appendRedirectTarget } from './redirect';
 import { sessionContext } from './session-context';

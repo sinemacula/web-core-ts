@@ -13,7 +13,7 @@ import type { ApplicationI18n } from '../i18n/application-i18n';
 import { createApplicationI18n } from '../i18n/application-i18n';
 import type { ModuleDefinition } from '../module/module';
 import type { RouteMiddleware } from '../router/middleware';
-import { next, redirect } from '../router/middleware';
+import { next, redirect } from '@sinemacula/foundation/router/middleware';
 import type { WireRouterOptions } from './wire-router';
 import { wireRouter } from './wire-router';
 

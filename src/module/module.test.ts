@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { defineComponent } from 'vue';
 
 import type { RouteMiddleware } from '../router/middleware';
-import { next } from '../router/middleware';
+import { next } from '@sinemacula/foundation/router/middleware';
 import type { ModuleDefinition } from './module';
 import { collectModuleGuards, collectModuleMessages, collectModuleRoutes, createLocaleLoader } from './module';
 

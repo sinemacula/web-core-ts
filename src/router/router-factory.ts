@@ -15,7 +15,7 @@ import type { RouteLocationNormalized, RouteRecordRaw, Router, RouterHistory, Ro
 import { createRouter, createWebHistory } from 'vue-router';
 
 import type { RouteMiddleware } from './middleware';
-import { runMiddlewarePipeline } from './middleware';
+import { runMiddlewarePipeline } from '@sinemacula/foundation/router/middleware';
 
 /**
  * Options for building the application router.

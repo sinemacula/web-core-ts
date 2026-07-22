@@ -25,7 +25,7 @@ import { ToastService } from '../notifications/toast-service';
 import type { RealtimeConnection } from '@sinemacula/foundation/realtime/realtime-connection';
 import { NullErrorReporter } from '@sinemacula/foundation/reporting/null-error-reporter';
 import type { RouteMiddleware } from '../router/middleware';
-import { next } from '../router/middleware';
+import { next } from '@sinemacula/foundation/router/middleware';
 import { BrowserStorage } from '../storage/browser-storage';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { WebCoreApp, WebCoreAppOptions } from './create-web-core-app';
