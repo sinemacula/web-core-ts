@@ -10,7 +10,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { FlagValue } from '../feature-flags/feature-flags';
+import type { FlagValue } from '@sinemacula/foundation/feature-flags/feature-flags';
 
 /**
  * The configuration slice the preset requires from the application.

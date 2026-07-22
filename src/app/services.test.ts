@@ -10,7 +10,7 @@ import { computed } from 'vue';
 
 import { NullAnalyticsTracker } from '@sinemacula/foundation/analytics/null-analytics-tracker';
 import { ConfigRepository } from '../config/config-repository';
-import { StaticFeatureFlags } from '../feature-flags/static-feature-flags';
+import { StaticFeatureFlags } from '@sinemacula/foundation/feature-flags/static-feature-flags';
 import type { HttpClient } from '../http/http-client';
 import type { LocaleSwitcher } from '../i18n/application-i18n';
 import { NullLogger } from '@sinemacula/foundation/logging/null-logger';

@@ -16,7 +16,7 @@
 import type { ComputedRef } from 'vue';
 import { computed, onScopeDispose, ref } from 'vue';
 
-import type { FeatureFlags, FlagValue } from './feature-flags';
+import type { FeatureFlags, FlagValue } from '@sinemacula/foundation/feature-flags/feature-flags';
 
 /**
  * Return a reactive boolean computed ref that re-evaluates whenever the flag

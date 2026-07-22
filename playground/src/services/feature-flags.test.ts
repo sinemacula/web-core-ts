@@ -5,7 +5,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { FeatureFlags } from '@sinemacula/web-core/feature-flags/feature-flags';
+import type { FeatureFlags } from '@sinemacula/foundation/feature-flags/feature-flags';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { featureFlags, initialiseFeatureFlags, resetFeatureFlags } from '@/services/feature-flags';

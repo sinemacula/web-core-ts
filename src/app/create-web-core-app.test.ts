@@ -15,7 +15,7 @@ import { createMemoryHistory } from 'vue-router';
 import { NullAnalyticsTracker } from '@sinemacula/foundation/analytics/null-analytics-tracker';
 import type { Environment } from '../config/environment';
 import { createWebEnvironment } from '../config/web-environment';
-import { StaticFeatureFlags } from '../feature-flags/static-feature-flags';
+import { StaticFeatureFlags } from '@sinemacula/foundation/feature-flags/static-feature-flags';
 import type { HttpClient, RequestInterceptor, UnauthorizedHandler } from '../http/http-client';
 import { NullLogger } from '@sinemacula/foundation/logging/null-logger';
 import type { ModuleBootContext, ModuleDefinition, ModuleRegisterContext } from '../module/module';

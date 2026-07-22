@@ -8,7 +8,7 @@
 import { describe, expect, it } from 'vitest';
 import { effectScope } from 'vue';
 
-import { StaticFeatureFlags } from './static-feature-flags';
+import { StaticFeatureFlags } from '@sinemacula/foundation/feature-flags/static-feature-flags';
 import { useFeatureFlag, useVariant } from './use-feature-flag';
 
 describe('useFeatureFlag', () => {
