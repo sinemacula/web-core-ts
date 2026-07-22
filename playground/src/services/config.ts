@@ -12,8 +12,8 @@
  */
 
 import { appConfig, appConfigRepository, installConfig } from '@sinemacula/web-core/app/services';
-import { ConfigRepository } from '@sinemacula/web-core/config/config-repository';
-import type { Environment } from '@sinemacula/web-core/config/environment';
+import { ConfigRepository } from '@sinemacula/foundation/config/config-repository';
+import type { Environment } from '@sinemacula/foundation/config/environment';
 
 import type { Configuration } from '@/config';
 import { defineConfiguration } from '@/config';

@@ -8,7 +8,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { Environment } from '@sinemacula/web-core/config/environment';
+import type { Environment } from '@sinemacula/foundation/config/environment';
 
 /**
  * Third-party service configuration resolved from the environment.

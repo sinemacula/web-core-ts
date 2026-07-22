@@ -11,7 +11,7 @@
  */
 
 import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytics-tracker';
-import type { ConfigRepository } from '../config/config-repository';
+import type { ConfigRepository } from '@sinemacula/foundation/config/config-repository';
 import type { FeatureFlags } from '@sinemacula/foundation/feature-flags/feature-flags';
 import type { HttpClient } from '../http/http-client';
 import type { LocaleSwitcher } from '../i18n/application-i18n';

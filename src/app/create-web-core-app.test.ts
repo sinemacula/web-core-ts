@@ -13,7 +13,7 @@ import type { RouterHistory } from 'vue-router';
 import { createMemoryHistory } from 'vue-router';
 
 import { NullAnalyticsTracker } from '@sinemacula/foundation/analytics/null-analytics-tracker';
-import type { Environment } from '../config/environment';
+import type { Environment } from '@sinemacula/foundation/config/environment';
 import { createWebEnvironment } from '../config/web-environment';
 import { StaticFeatureFlags } from '@sinemacula/foundation/feature-flags/static-feature-flags';
 import type { HttpClient, RequestInterceptor, UnauthorizedHandler } from '../http/http-client';

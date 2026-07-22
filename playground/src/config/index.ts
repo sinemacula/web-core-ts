@@ -10,7 +10,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { Environment } from '@sinemacula/web-core/config/environment';
+import type { Environment } from '@sinemacula/foundation/config/environment';
 
 import { apiConfig } from './api';
 import { appConfig } from './app';

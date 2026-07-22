@@ -10,8 +10,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { createApp, defineComponent } from 'vue';
 import { createMemoryHistory } from 'vue-router';
 
-import { ConfigRepository } from '../config/config-repository';
-import { Environment } from '../config/environment';
+import { ConfigRepository } from '@sinemacula/foundation/config/config-repository';
+import { Environment } from '@sinemacula/foundation/config/environment';
 import type { HttpClient } from '../http/http-client';
 import { createApplicationI18n } from '../i18n/application-i18n';
 import { createApplicationRouter } from '../router/router-factory';

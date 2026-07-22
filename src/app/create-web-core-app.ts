@@ -24,8 +24,8 @@ import type { Router, RouterHistory } from 'vue-router';
 
 import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytics-tracker';
 import { installPageTracking } from '../analytics/install-page-tracking';
-import { ConfigRepository } from '../config/config-repository';
-import type { Environment } from '../config/environment';
+import { ConfigRepository } from '@sinemacula/foundation/config/config-repository';
+import type { Environment } from '@sinemacula/foundation/config/environment';
 import { RUNTIME_ENVIRONMENT_URL, fetchRuntimeEnvironment } from '../config/runtime-environment';
 import type { ConnectivityMonitor } from '../connectivity/connectivity-monitor';
 import type { FeatureFlags } from '@sinemacula/foundation/feature-flags/feature-flags';

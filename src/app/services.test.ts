@@ -9,7 +9,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { computed } from 'vue';
 
 import { NullAnalyticsTracker } from '@sinemacula/foundation/analytics/null-analytics-tracker';
-import { ConfigRepository } from '../config/config-repository';
+import { ConfigRepository } from '@sinemacula/foundation/config/config-repository';
 import { StaticFeatureFlags } from '@sinemacula/foundation/feature-flags/static-feature-flags';
 import type { HttpClient } from '../http/http-client';
 import type { LocaleSwitcher } from '../i18n/application-i18n';

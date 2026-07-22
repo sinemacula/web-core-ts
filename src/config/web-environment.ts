@@ -14,10 +14,10 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { ChainEnvironmentSource } from './chain-environment-source';
-import { Environment } from './environment';
-import { ObjectEnvironmentSource } from './object-environment-source';
-import { PrefixedEnvironmentSource } from './prefixed-environment-source';
+import { ChainEnvironmentSource } from '@sinemacula/foundation/config/chain-environment-source';
+import { Environment } from '@sinemacula/foundation/config/environment';
+import { ObjectEnvironmentSource } from '@sinemacula/foundation/config/object-environment-source';
+import { PrefixedEnvironmentSource } from '@sinemacula/foundation/config/prefixed-environment-source';
 
 const DEFAULT_BUILD_TIME_PREFIX = 'VITE_';
 

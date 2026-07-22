@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { Environment } from './environment';
+import { Environment } from '@sinemacula/foundation/config/environment';
 import { ConfigurationError, createWebEnvironment } from './web-environment';
 
 /**

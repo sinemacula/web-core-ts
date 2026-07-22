@@ -5,8 +5,8 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { Environment } from '@sinemacula/web-core/config/environment';
-import { ObjectEnvironmentSource } from '@sinemacula/web-core/config/object-environment-source';
+import { Environment } from '@sinemacula/foundation/config/environment';
+import { ObjectEnvironmentSource } from '@sinemacula/foundation/config/object-environment-source';
 import { describe, expect, it } from 'vitest';
 
 import { servicesConfig } from '@/config/services';

@@ -10,8 +10,8 @@
  */
 
 import { installColorScheme } from '@sinemacula/web-core/app/services';
-import { Environment } from '@sinemacula/web-core/config/environment';
-import { ObjectEnvironmentSource } from '@sinemacula/web-core/config/object-environment-source';
+import { Environment } from '@sinemacula/foundation/config/environment';
+import { ObjectEnvironmentSource } from '@sinemacula/foundation/config/object-environment-source';
 import type { LocaleSwitcher } from '@sinemacula/web-core/i18n/application-i18n';
 import type { ColorSchemeService } from '@sinemacula/web-core/theme/color-scheme-service';
 import { createPinia, setActivePinia } from 'pinia';
