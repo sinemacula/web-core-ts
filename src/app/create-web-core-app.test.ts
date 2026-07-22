@@ -49,12 +49,12 @@ import { FoundationBootError } from '@sinemacula/foundation/app/foundation-boot-
 import type { WireHttpClientTools } from '@sinemacula/foundation/app/wire-http-client';
 
 const BOOT_PHASE_ORDER = [
+    'module-registry',
+    'application',
+    'color-scheme',
     'runtime-environment',
     'configuration',
     'storage',
-    'color-scheme',
-    'module-registry',
-    'application',
     'feature-flags',
     'notifications',
     'observability',
