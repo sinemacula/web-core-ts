@@ -11,15 +11,15 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { ExponentialBackoff } from './exponential-backoff';
-import { runReconnect } from './reconnect';
+import { ExponentialBackoff } from '@sinemacula/foundation/realtime/exponential-backoff';
+import { runReconnect } from '@sinemacula/foundation/realtime/reconnect';
 import type {
     RealtimeConnection,
     RealtimeMessage,
     RealtimeMessageHandler,
     RealtimeState,
     RealtimeStateHandler,
-} from './realtime-connection';
+} from '@sinemacula/foundation/realtime/realtime-connection';
 
 /**
  * Injectable factory for {@link EventSource} instances.

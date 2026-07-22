@@ -8,7 +8,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { EventSourceConnection, type EventSourceFactory } from './event-source-connection';
-import { describeRealtimeContract, type RealtimeContractHarness } from './test-support/realtime-connection-contract';
+import { describeRealtimeContract, type RealtimeContractHarness } from '@sinemacula/foundation/realtime/test-support/realtime-connection-contract';
 
 /** Minimal fake EventSource for injection via the factory. */
 class FakeEventSource {

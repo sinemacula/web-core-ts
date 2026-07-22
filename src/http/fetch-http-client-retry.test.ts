@@ -7,7 +7,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ExponentialBackoff } from '../realtime/exponential-backoff';
+import { ExponentialBackoff } from '@sinemacula/foundation/realtime/exponential-backoff';
 import { FetchHttpClient } from './fetch-http-client';
 import { CancelledError, HttpError } from './http-error';
 

@@ -18,7 +18,7 @@ import type { LocaleSwitcher } from '../i18n/application-i18n';
 import type { Logger } from '@sinemacula/foundation/logging/logger';
 import type { ConfirmService } from '../notifications/confirm-service';
 import type { ToastService } from '../notifications/toast-service';
-import type { RealtimeConnection } from '../realtime/realtime-connection';
+import type { RealtimeConnection } from '@sinemacula/foundation/realtime/realtime-connection';
 import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import { createServiceHolder } from '@sinemacula/foundation/support/service-holder';

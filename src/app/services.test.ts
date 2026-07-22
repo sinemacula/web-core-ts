@@ -16,7 +16,7 @@ import type { LocaleSwitcher } from '../i18n/application-i18n';
 import { NullLogger } from '@sinemacula/foundation/logging/null-logger';
 import { ConfirmService } from '../notifications/confirm-service';
 import { ToastService } from '../notifications/toast-service';
-import type { RealtimeConnection } from '../realtime/realtime-connection';
+import type { RealtimeConnection } from '@sinemacula/foundation/realtime/realtime-connection';
 import { NullErrorReporter } from '@sinemacula/foundation/reporting/null-error-reporter';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { ColorSchemeService } from '../theme/color-scheme-service';

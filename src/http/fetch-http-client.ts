@@ -18,7 +18,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { ExponentialBackoff } from '../realtime/exponential-backoff';
+import { ExponentialBackoff } from '@sinemacula/foundation/realtime/exponential-backoff';
 import { isRecord } from '@sinemacula/foundation/support/is-record';
 import type {
     HttpClient,

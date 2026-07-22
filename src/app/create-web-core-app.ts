@@ -38,7 +38,7 @@ import type { ModuleHttpContributions, ModuleRegistry } from '../module/module-r
 import { bootModules, createModuleRegistry, registerModules } from '../module/module-registry';
 import { ConfirmService } from '../notifications/confirm-service';
 import { ToastService } from '../notifications/toast-service';
-import type { RealtimeConnection } from '../realtime/realtime-connection';
+import type { RealtimeConnection } from '@sinemacula/foundation/realtime/realtime-connection';
 import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import { installGlobalErrorHandling } from '../reporting/install-global-error-handling';
 import { BrowserStorage } from '../storage/browser-storage';

@@ -22,7 +22,7 @@ import type { ModuleBootContext, ModuleDefinition, ModuleRegisterContext } from 
 import { ModuleRegistryError } from '../module/module-registry';
 import { ConfirmService } from '../notifications/confirm-service';
 import { ToastService } from '../notifications/toast-service';
-import type { RealtimeConnection } from '../realtime/realtime-connection';
+import type { RealtimeConnection } from '@sinemacula/foundation/realtime/realtime-connection';
 import { NullErrorReporter } from '@sinemacula/foundation/reporting/null-error-reporter';
 import type { RouteMiddleware } from '../router/middleware';
 import { next } from '../router/middleware';
