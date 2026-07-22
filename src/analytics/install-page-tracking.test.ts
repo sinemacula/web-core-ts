@@ -9,7 +9,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { defineComponent } from 'vue';
 import { createMemoryHistory } from 'vue-router';
 
-import { BreadcrumbTrail } from '../reporting/breadcrumb-trail';
+import { BreadcrumbTrail } from '@sinemacula/foundation/reporting/breadcrumb-trail';
 import { createApplicationRouter } from '../router/router-factory';
 import type { AnalyticsTracker } from './analytics-tracker';
 import { installPageTracking } from './install-page-tracking';

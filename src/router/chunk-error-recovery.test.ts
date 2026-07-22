@@ -10,7 +10,7 @@ import { defineComponent } from 'vue';
 import type { RouteRecordRaw, Router } from 'vue-router';
 import { createMemoryHistory, createRouter } from 'vue-router';
 
-import type { ErrorReporter } from '../reporting/error-reporter';
+import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { installChunkErrorRecovery, isChunkLoadError } from './chunk-error-recovery';
 

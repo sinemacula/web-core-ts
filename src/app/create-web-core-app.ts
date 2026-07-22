@@ -39,7 +39,7 @@ import { bootModules, createModuleRegistry, registerModules } from '../module/mo
 import { ConfirmService } from '../notifications/confirm-service';
 import { ToastService } from '../notifications/toast-service';
 import type { RealtimeConnection } from '../realtime/realtime-connection';
-import type { ErrorReporter } from '../reporting/error-reporter';
+import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import { installGlobalErrorHandling } from '../reporting/install-global-error-handling';
 import { BrowserStorage } from '../storage/browser-storage';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';

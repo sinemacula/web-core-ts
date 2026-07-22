@@ -11,8 +11,8 @@
 
 import type { App } from 'vue';
 
-import type { BreadcrumbTrail } from './breadcrumb-trail';
-import type { ErrorReporter } from './error-reporter';
+import type { BreadcrumbTrail } from '@sinemacula/foundation/reporting/breadcrumb-trail';
+import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 
 /**
  * Options for installing global error handling.

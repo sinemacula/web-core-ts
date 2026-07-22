@@ -11,9 +11,9 @@ import { ConsoleAnalyticsTracker } from '../analytics/console-analytics-tracker'
 import { NullAnalyticsTracker } from '../analytics/null-analytics-tracker';
 import { ConsoleLogger } from '@sinemacula/foundation/logging/console-logger';
 import { NullLogger } from '@sinemacula/foundation/logging/null-logger';
-import { BreadcrumbTrail } from '../reporting/breadcrumb-trail';
-import { ConsoleErrorReporter } from '../reporting/console-error-reporter';
-import { NullErrorReporter } from '../reporting/null-error-reporter';
+import { BreadcrumbTrail } from '@sinemacula/foundation/reporting/breadcrumb-trail';
+import { ConsoleErrorReporter } from '@sinemacula/foundation/reporting/console-error-reporter';
+import { NullErrorReporter } from '@sinemacula/foundation/reporting/null-error-reporter';
 import { analytics, logger, reporting, resetWebCoreServices } from './services';
 import type { WebCoreConfig } from './web-core-config';
 import { wireObservability } from './wire-observability';

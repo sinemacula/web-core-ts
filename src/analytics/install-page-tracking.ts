@@ -11,7 +11,7 @@
 
 import type { Router } from 'vue-router';
 
-import type { BreadcrumbTrail } from '../reporting/breadcrumb-trail';
+import type { BreadcrumbTrail } from '@sinemacula/foundation/reporting/breadcrumb-trail';
 import type { AnalyticsTracker } from './analytics-tracker';
 
 /**

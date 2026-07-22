@@ -8,8 +8,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createApp, defineComponent } from 'vue';
 
-import { BreadcrumbTrail } from './breadcrumb-trail';
-import type { ErrorReporter, ReportedUser } from './error-reporter';
+import { BreadcrumbTrail } from '@sinemacula/foundation/reporting/breadcrumb-trail';
+import type { ErrorReporter, ReportedUser } from '@sinemacula/foundation/reporting/error-reporter';
 import { installGlobalErrorHandling } from './install-global-error-handling';
 
 const Stub = defineComponent({ render: () => null });

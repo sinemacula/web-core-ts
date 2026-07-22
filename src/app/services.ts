@@ -19,7 +19,7 @@ import type { Logger } from '@sinemacula/foundation/logging/logger';
 import type { ConfirmService } from '../notifications/confirm-service';
 import type { ToastService } from '../notifications/toast-service';
 import type { RealtimeConnection } from '../realtime/realtime-connection';
-import type { ErrorReporter } from '../reporting/error-reporter';
+import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import { createServiceHolder } from '@sinemacula/foundation/support/service-holder';
 import type { ColorSchemeService } from '../theme/color-scheme-service';

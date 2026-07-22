@@ -21,7 +21,7 @@
 
 import type { Router } from 'vue-router';
 
-import type { ErrorReporter } from '../reporting/error-reporter';
+import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 
 const CHUNK_ERROR_MESSAGE_PATTERN =

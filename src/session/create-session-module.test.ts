@@ -27,7 +27,7 @@ import { createApplicationI18n } from '../i18n/application-i18n';
 import type { ModuleBootContext, ModuleDefinition, ModuleTeardown, ResolvedPlatform } from '../module/module';
 import type { ModuleHttpContributions } from '../module/module-registry';
 import { registerModules } from '../module/module-registry';
-import type { ErrorReporter, ReportedUser } from '../reporting/error-reporter';
+import type { ErrorReporter, ReportedUser } from '@sinemacula/foundation/reporting/error-reporter';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { SessionModuleOptions } from './create-session-module';
 import { createSessionModule } from './create-session-module';

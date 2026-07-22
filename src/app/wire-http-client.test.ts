@@ -12,7 +12,7 @@ import type { HttpClient, HttpRequest, RequestInterceptor, UnauthorizedHandler }
 import { HttpError, HttpValidationError, NetworkError } from '../http/http-error';
 import type { ModuleHttpContributions } from '../module/module-registry';
 import { ToastService } from '../notifications/toast-service';
-import type { ErrorReporter } from '../reporting/error-reporter';
+import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import { api, installReporting, installToasts, resetWebCoreServices } from './services';
 import type { WebCoreConfig } from './web-core-config';
 import type { WireHttpClientOptions, WireHttpClientTools } from './wire-http-client';

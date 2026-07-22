@@ -5,7 +5,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { ErrorReporter } from '@sinemacula/web-core/reporting/error-reporter';
+import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp, defineComponent, h, nextTick, ref } from 'vue';
 
