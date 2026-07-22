@@ -46,7 +46,7 @@ import {
     toasts,
 } from './services';
 import { FoundationBootError } from '@sinemacula/foundation/app/foundation-boot-error';
-import type { WireHttpClientTools } from './wire-http-client';
+import type { WireHttpClientTools } from '@sinemacula/foundation/app/wire-http-client';
 
 const BOOT_PHASE_ORDER = [
     'runtime-environment',

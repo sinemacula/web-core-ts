@@ -59,14 +59,14 @@ import {
 import type { FoundationConfig } from '@sinemacula/foundation/app/foundation-config';
 import { wireChunkRecovery } from './wire-chunk-recovery';
 import { wireColorScheme } from './wire-color-scheme';
-import type { WireHttpClientTools } from './wire-http-client';
-import { wireHttpClient } from './wire-http-client';
+import type { WireHttpClientTools } from '@sinemacula/foundation/app/wire-http-client';
+import { wireHttpClient } from '@sinemacula/foundation/app/wire-http-client';
 import type { WiredLocale } from './wire-locale';
 import { wireLocale } from './wire-locale';
 import type { UpdateMonitorWiring, WiredMonitors } from './wire-monitors';
 import { wireMonitors } from './wire-monitors';
-import type { WiredObservability } from './wire-observability';
-import { wireObservability } from './wire-observability';
+import type { WiredObservability } from '@sinemacula/foundation/app/wire-observability';
+import { wireObservability } from '@sinemacula/foundation/app/wire-observability';
 import { wireRouter } from './wire-router';
 
 const DEFAULT_MOUNT_SELECTOR = '#app';
