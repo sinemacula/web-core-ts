@@ -7,7 +7,7 @@
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { ConnectivityMonitor } from './connectivity-monitor';
+import { BrowserConnectivityMonitor } from './browser-connectivity-monitor';
 
 /**
  * Build a fake `Window` whose `online`/`offline` listeners can be triggered and
@@ -48,28 +48,28 @@ function fakeWindow(onLine: boolean): {
     };
 }
 
-describe('ConnectivityMonitor', () => {
+describe('BrowserConnectivityMonitor', () => {
     afterEach(() => {
         vi.unstubAllGlobals();
     });
 
     it('reflects navigator.onLine at construction when online', () => {
         const fake = fakeWindow(true);
-        const monitor = new ConnectivityMonitor({ targetWindow: fake.window });
+        const monitor = new BrowserConnectivityMonitor({ targetWindow: fake.window });
 
         expect(monitor.online).toBe(true);
     });
 
     it('reflects navigator.onLine at construction when offline', () => {
         const fake = fakeWindow(false);
-        const monitor = new ConnectivityMonitor({ targetWindow: fake.window });
+        const monitor = new BrowserConnectivityMonitor({ targetWindow: fake.window });
 
         expect(monitor.online).toBe(false);
     });
 
     it('notifies once per actual state change and dedupes repeated events', () => {
         const fake = fakeWindow(true);
-        const monitor = new ConnectivityMonitor({ targetWindow: fake.window });
+        const monitor = new BrowserConnectivityMonitor({ targetWindow: fake.window });
         const handler = vi.fn();
 
         monitor.onChange(handler);
@@ -93,7 +93,7 @@ describe('ConnectivityMonitor', () => {
 
     it('stops delivering to unsubscribed handlers', () => {
         const fake = fakeWindow(true);
-        const monitor = new ConnectivityMonitor({ targetWindow: fake.window });
+        const monitor = new BrowserConnectivityMonitor({ targetWindow: fake.window });
         const handler = vi.fn();
 
         const unsubscribe = monitor.onChange(handler);
@@ -109,7 +109,7 @@ describe('ConnectivityMonitor', () => {
 
     it('is idempotent across repeated start and stop calls', () => {
         const fake = fakeWindow(true);
-        const monitor = new ConnectivityMonitor({ targetWindow: fake.window });
+        const monitor = new BrowserConnectivityMonitor({ targetWindow: fake.window });
 
         monitor.start();
         monitor.start();
@@ -126,7 +126,7 @@ describe('ConnectivityMonitor', () => {
 
     it('detaches listeners after stop so no further notifications occur', () => {
         const fake = fakeWindow(true);
-        const monitor = new ConnectivityMonitor({ targetWindow: fake.window });
+        const monitor = new BrowserConnectivityMonitor({ targetWindow: fake.window });
         const handler = vi.fn();
 
         monitor.onChange(handler);
@@ -144,7 +144,7 @@ describe('ConnectivityMonitor', () => {
 
         vi.stubGlobal('window', fake.window);
 
-        const monitor = new ConnectivityMonitor();
+        const monitor = new BrowserConnectivityMonitor();
 
         expect(monitor.online).toBe(false);
     });

@@ -12,7 +12,8 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { ConnectivityMonitor } from '../connectivity/connectivity-monitor';
+import { BrowserConnectivityMonitor } from '../connectivity/browser-connectivity-monitor';
+import type { ConnectivityMonitor } from '@sinemacula/foundation/connectivity/connectivity-monitor';
 import type { ToastService } from '../notifications/toast-service';
 import { UpdateMonitor } from '../updates/update-monitor';
 import { WebCoreAppError } from './web-core-app-error';
@@ -210,7 +211,7 @@ function wireConnectivity<T extends MonitorWiringSettings>(
         return null;
     }
 
-    const monitor = new ConnectivityMonitor({
+    const monitor = new BrowserConnectivityMonitor({
         ...(options.targetWindow === undefined ? {} : { targetWindow: options.targetWindow }),
     });
 

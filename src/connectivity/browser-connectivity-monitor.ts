@@ -14,7 +14,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-export type ConnectivityHandler = (online: boolean) => void;
+import type { ConnectivityHandler, ConnectivityMonitor } from '@sinemacula/foundation/connectivity/connectivity-monitor';
 
 export interface ConnectivityMonitorOptions {
     /** The window whose connectivity events are observed; defaults to the global window. */
@@ -24,7 +24,7 @@ export interface ConnectivityMonitorOptions {
 /**
  * Tracks browser network connectivity and notifies subscribers on change.
  */
-export class ConnectivityMonitor {
+export class BrowserConnectivityMonitor implements ConnectivityMonitor {
     /** The window whose connectivity events are observed. */
     readonly #targetWindow: Window;
 
