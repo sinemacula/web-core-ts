@@ -10,7 +10,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { HttpClient } from '@sinemacula/web-core/http/http-client';
+import type { HttpClient } from '@sinemacula/foundation/http/http-client';
 import type { RawRecord, ResourceMapper } from '@sinemacula/web-core/query/envelope';
 import { ResourceClient } from '@sinemacula/web-core/query/resource-client';
 

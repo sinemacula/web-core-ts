@@ -13,7 +13,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { HttpClient } from '../http/http-client';
+import type { HttpClient } from '@sinemacula/foundation/http/http-client';
 import { isRecord } from '@sinemacula/foundation/support/is-record';
 import type { SessionApi } from './session-api';
 import { SessionError } from './session-error';

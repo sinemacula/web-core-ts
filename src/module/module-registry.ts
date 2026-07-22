@@ -14,7 +14,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { RequestInterceptor, ResponseErrorHandler, UnauthorizedHandler } from '../http/http-client';
+import type { RequestInterceptor, ResponseErrorHandler, UnauthorizedHandler } from '@sinemacula/foundation/http/http-client';
 import type {
     LocaleMessages,
     ModuleBootContext,

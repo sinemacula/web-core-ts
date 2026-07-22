@@ -23,7 +23,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { QueryParameters } from '../http/http-client';
+import type { QueryParameters } from '@sinemacula/foundation/http/http-client';
 import type { FilterOperators, FilterScalar, FilterTree } from './filter-expression';
 
 /**

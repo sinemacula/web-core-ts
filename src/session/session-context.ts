@@ -12,7 +12,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
+import type { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import { createServiceHolder } from '@sinemacula/foundation/support/service-holder';
 import type { SessionRoutes, SessionStorageKeys } from './create-session-module';

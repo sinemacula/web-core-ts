@@ -11,7 +11,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { HttpError, HttpValidationError } from '@sinemacula/web-core/http/http-error';
+import { HttpError, HttpValidationError } from '@sinemacula/foundation/http/http-error';
 import { useSessionStore } from '@sinemacula/web-core/session/session-store';
 import { useForm } from 'vee-validate';
 import type { ComputedRef, Ref } from 'vue';

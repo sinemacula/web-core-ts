@@ -13,7 +13,7 @@
 import type { ComputedRef } from 'vue';
 import { computed, shallowRef } from 'vue';
 
-import type { QueryParameters } from '../http/http-client';
+import type { QueryParameters } from '@sinemacula/foundation/http/http-client';
 import { ApiQuery } from './api-query';
 
 /**

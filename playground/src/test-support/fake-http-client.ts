@@ -8,7 +8,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { HttpClient, HttpRequestOptions } from '@sinemacula/web-core/http/http-client';
+import type { HttpClient, HttpRequestOptions } from '@sinemacula/foundation/http/http-client';
 
 interface RecordedCall {
     /** The HTTP method invoked. */

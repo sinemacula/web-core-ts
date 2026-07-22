@@ -7,9 +7,9 @@
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { FetchHttpClient } from '../http/fetch-http-client';
-import type { HttpClient, HttpRequest, RequestInterceptor, UnauthorizedHandler } from '../http/http-client';
-import { HttpError, HttpValidationError, NetworkError } from '../http/http-error';
+import { FetchHttpClient } from '@sinemacula/foundation/http/fetch-http-client';
+import type { HttpClient, HttpRequest, RequestInterceptor, UnauthorizedHandler } from '@sinemacula/foundation/http/http-client';
+import { HttpError, HttpValidationError, NetworkError } from '@sinemacula/foundation/http/http-error';
 import type { ModuleHttpContributions } from '../module/module-registry';
 import { ToastService } from '../notifications/toast-service';
 import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';

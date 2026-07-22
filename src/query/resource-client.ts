@@ -11,7 +11,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { HttpClient, HttpRequestOptions, QueryParameters } from '../http/http-client';
+import type { HttpClient, HttpRequestOptions, QueryParameters } from '@sinemacula/foundation/http/http-client';
 import type { ApiQuery } from './api-query';
 import type { ListResult, ResourceMapper } from './envelope';
 import { unwrapItem, unwrapList } from './envelope';

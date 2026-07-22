@@ -12,7 +12,7 @@ import { createMemoryHistory } from 'vue-router';
 
 import { ConfigRepository } from '@sinemacula/foundation/config/config-repository';
 import { Environment } from '@sinemacula/foundation/config/environment';
-import type { HttpClient } from '../http/http-client';
+import type { HttpClient } from '@sinemacula/foundation/http/http-client';
 import { createApplicationI18n } from '../i18n/application-i18n';
 import { createApplicationRouter } from '../router/router-factory';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';

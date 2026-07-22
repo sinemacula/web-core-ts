@@ -30,7 +30,7 @@ import { RUNTIME_ENVIRONMENT_URL, fetchRuntimeEnvironment } from '../config/runt
 import type { ConnectivityMonitor } from '../connectivity/connectivity-monitor';
 import type { FeatureFlags } from '@sinemacula/foundation/feature-flags/feature-flags';
 import { StaticFeatureFlags } from '@sinemacula/foundation/feature-flags/static-feature-flags';
-import type { HttpClient, RequestInterceptor, ResponseErrorHandler } from '../http/http-client';
+import type { HttpClient, RequestInterceptor, ResponseErrorHandler } from '@sinemacula/foundation/http/http-client';
 import type { ApplicationI18n, LocaleFormats, LocaleSwitcher } from '../i18n/application-i18n';
 import type { Logger } from '@sinemacula/foundation/logging/logger';
 import type { LocaleMessages, ModuleDefinition, ModuleStoreFactory, ResolvedPlatform } from '../module/module';

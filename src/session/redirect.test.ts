@@ -7,7 +7,7 @@
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
+import { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { appendRedirectTarget, REDIRECT_QUERY_KEY, sanitiseRedirectTarget } from './redirect';
 import type { SessionApi } from './session-api';

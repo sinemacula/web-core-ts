@@ -5,7 +5,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { HttpError, HttpValidationError } from '@sinemacula/web-core/http/http-error';
+import { HttpError, HttpValidationError } from '@sinemacula/foundation/http/http-error';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';

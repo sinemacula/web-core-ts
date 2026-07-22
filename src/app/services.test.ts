@@ -11,7 +11,7 @@ import { computed } from 'vue';
 import { NullAnalyticsTracker } from '@sinemacula/foundation/analytics/null-analytics-tracker';
 import { ConfigRepository } from '@sinemacula/foundation/config/config-repository';
 import { StaticFeatureFlags } from '@sinemacula/foundation/feature-flags/static-feature-flags';
-import type { HttpClient } from '../http/http-client';
+import type { HttpClient } from '@sinemacula/foundation/http/http-client';
 import type { LocaleSwitcher } from '../i18n/application-i18n';
 import { NullLogger } from '@sinemacula/foundation/logging/null-logger';
 import { ConfirmService } from '../notifications/confirm-service';

@@ -22,7 +22,7 @@ import {
 import { ConfigRepository } from '@sinemacula/foundation/config/config-repository';
 import { Environment } from '@sinemacula/foundation/config/environment';
 import type { FeatureFlags, FlagEvaluationContext, FlagValue } from '@sinemacula/foundation/feature-flags/feature-flags';
-import type { HttpClient, HttpRequest } from '../http/http-client';
+import type { HttpClient, HttpRequest } from '@sinemacula/foundation/http/http-client';
 import { createApplicationI18n } from '../i18n/application-i18n';
 import type { ModuleBootContext, ModuleDefinition, ModuleTeardown, ResolvedPlatform } from '../module/module';
 import type { ModuleHttpContributions } from '../module/module-registry';

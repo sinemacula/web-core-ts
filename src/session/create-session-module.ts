@@ -17,9 +17,9 @@ import { watch } from 'vue';
 import type { RouteLocationRaw, Router } from 'vue-router';
 
 import { analytics, api, featureFlags, reporting } from '../app/services';
-import { createBearerTokenInterceptor } from '../http/bearer-token-interceptor';
-import type { HttpClient } from '../http/http-client';
-import { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
+import { createBearerTokenInterceptor } from '@sinemacula/foundation/http/bearer-token-interceptor';
+import type { HttpClient } from '@sinemacula/foundation/http/http-client';
+import { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
 import type { ModuleBootContext, ModuleDefinition, ModuleRegisterContext, ModuleTeardown } from '../module/module';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import { createDefaultSessionApi } from './default-session-api';

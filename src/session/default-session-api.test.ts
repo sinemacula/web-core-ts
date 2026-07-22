@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import type { HttpClient, HttpRequestOptions } from '../http/http-client';
+import type { HttpClient, HttpRequestOptions } from '@sinemacula/foundation/http/http-client';
 import { createDefaultSessionApi } from './default-session-api';
 import type { SessionUser } from './session-user';
 

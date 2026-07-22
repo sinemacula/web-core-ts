@@ -8,7 +8,7 @@
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
+import { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { can, useCan } from './authorization';
 import type { SessionApi } from './session-api';

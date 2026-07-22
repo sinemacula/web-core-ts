@@ -11,7 +11,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { HttpValidationError } from '@sinemacula/web-core/http/http-error';
+import { HttpValidationError } from '@sinemacula/foundation/http/http-error';
 
 /**
  * Applies a field-name-to-message map to a form.

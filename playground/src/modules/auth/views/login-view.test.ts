@@ -8,7 +8,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { HttpError } from '@sinemacula/web-core/http/http-error';
+import { HttpError } from '@sinemacula/foundation/http/http-error';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
