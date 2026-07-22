@@ -127,3 +127,11 @@ file_patterns = [".qlty/**"]
 # which outranks knip.ts in knip's own config resolution. Dead-code detection is
 # enforced as a blocking CI gate instead - see `npm run deadcode` in
 # .github/workflows/quality-gates.yml.
+
+# qlty Cloud does a bare checkout with no node_modules, so type-aware ESLint
+# (projectService) resolved no project types and posted false positives (e.g.
+# dot-notation on index-signature brackets). Installing before the lint run
+# restores type resolution; vendor-added support for prepare_script on the
+# version-matched eslint driver ships this.
+[plugins.definitions.eslint.drivers.lint]
+prepare_script = "npm install"
