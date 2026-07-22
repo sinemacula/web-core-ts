@@ -25,7 +25,7 @@ import type { FeatureFlags, FlagEvaluationContext, FlagValue } from '@sinemacula
 import type { HttpClient, HttpRequest } from '@sinemacula/foundation/http/http-client';
 import { createApplicationI18n } from '../i18n/application-i18n';
 import type { ModuleBootContext, ModuleDefinition, ModuleTeardown, ResolvedPlatform } from '../module/module';
-import type { ModuleHttpContributions } from '../module/module-registry';
+import type { ModuleHttpContributions } from '@sinemacula/foundation/http/module-http-contributions';
 import { registerModules } from '../module/module-registry';
 import type { ErrorReporter, ReportedUser } from '@sinemacula/foundation/reporting/error-reporter';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';

@@ -19,7 +19,7 @@
 import { FetchHttpClient } from '@sinemacula/foundation/http/fetch-http-client';
 import type { HttpClient, RequestInterceptor, ResponseErrorHandler, UnauthorizedHandler } from '@sinemacula/foundation/http/http-client';
 import { HttpError, HttpValidationError } from '@sinemacula/foundation/http/http-error';
-import type { ModuleHttpContributions } from '../module/module-registry';
+import type { ModuleHttpContributions } from '@sinemacula/foundation/http/module-http-contributions';
 import { installApi, reporting, toasts } from './services';
 import type { WebCoreConfig } from './web-core-config';
 

@@ -15,6 +15,7 @@
  */
 
 import type { RequestInterceptor, ResponseErrorHandler, UnauthorizedHandler } from '@sinemacula/foundation/http/http-client';
+import type { ModuleHttpContributions } from '@sinemacula/foundation/http/module-http-contributions';
 import type {
     LocaleMessages,
     ModuleBootContext,
@@ -85,20 +86,6 @@ export function createModuleRegistry(modules: readonly ModuleDefinition[]): Modu
     const ordered = [...modules.filter(definition => definition.fallback !== true), ...fallbacks];
 
     return Object.freeze({ modules: Object.freeze(ordered) });
-}
-
-/**
- * The HTTP machinery collected from every module's register phase.
- */
-export interface ModuleHttpContributions {
-    /** Request interceptors gathered in registry order. */
-    readonly requestInterceptors: readonly RequestInterceptor[];
-
-    /** The single unauthorized handler, or null when none was set. */
-    readonly onUnauthorized: UnauthorizedHandler | null;
-
-    /** Response-error handlers gathered in registry order. */
-    readonly responseErrorHandlers: readonly ResponseErrorHandler[];
 }
 
 /**

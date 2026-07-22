@@ -34,7 +34,8 @@ import type { HttpClient, RequestInterceptor, ResponseErrorHandler } from '@sine
 import type { ApplicationI18n, LocaleFormats, LocaleSwitcher } from '../i18n/application-i18n';
 import type { Logger } from '@sinemacula/foundation/logging/logger';
 import type { LocaleMessages, ModuleDefinition, ModuleStoreFactory, ResolvedPlatform } from '../module/module';
-import type { ModuleHttpContributions, ModuleRegistry } from '../module/module-registry';
+import type { ModuleRegistry } from '../module/module-registry';
+import type { ModuleHttpContributions } from '@sinemacula/foundation/http/module-http-contributions';
 import { bootModules, createModuleRegistry, registerModules } from '../module/module-registry';
 import { ConfirmService } from '../notifications/confirm-service';
 import { ToastService } from '../notifications/toast-service';
