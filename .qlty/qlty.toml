@@ -134,4 +134,4 @@ file_patterns = [".qlty/**"]
 # restores type resolution; vendor-added support for prepare_script on the
 # version-matched eslint driver ships this.
 [plugins.definitions.eslint.drivers.lint]
-prepare_script = "npm install"
+prepare_script = "npm ci"
