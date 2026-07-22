@@ -23,12 +23,12 @@ import { ConsoleErrorReporter } from '@sinemacula/foundation/reporting/console-e
 import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import { NullErrorReporter } from '@sinemacula/foundation/reporting/null-error-reporter';
 import { installAnalytics, installLogger, installReporting } from './services';
-import type { WebCoreConfig } from './web-core-config';
+import type { FoundationConfig } from '@sinemacula/foundation/app/foundation-config';
 
 /**
  * Inputs for {@link wireObservability}.
  */
-export interface WireObservabilityOptions<C extends WebCoreConfig> {
+export interface WireObservabilityOptions<C extends FoundationConfig> {
     /** The frozen application configuration. */
     readonly config: Readonly<C>;
 
@@ -65,7 +65,7 @@ export interface WiredObservability {
  * @param options - the frozen configuration and optional adapter factories
  * @returns the installed instances plus the breadcrumb trail
  */
-export function wireObservability<C extends WebCoreConfig>(options: WireObservabilityOptions<C>): WiredObservability {
+export function wireObservability<C extends FoundationConfig>(options: WireObservabilityOptions<C>): WiredObservability {
     const isLocal = options.config.app.environment === 'local';
 
     const reporter: ErrorReporter =

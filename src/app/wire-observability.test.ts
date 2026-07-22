@@ -15,7 +15,7 @@ import { BreadcrumbTrail } from '@sinemacula/foundation/reporting/breadcrumb-tra
 import { ConsoleErrorReporter } from '@sinemacula/foundation/reporting/console-error-reporter';
 import { NullErrorReporter } from '@sinemacula/foundation/reporting/null-error-reporter';
 import { analytics, logger, reporting, resetWebCoreServices } from './services';
-import type { WebCoreConfig } from './web-core-config';
+import type { FoundationConfig } from '@sinemacula/foundation/app/foundation-config';
 import { wireObservability } from './wire-observability';
 
 /**
@@ -24,7 +24,7 @@ import { wireObservability } from './wire-observability';
  * @param environment - the application environment name
  * @returns the configuration fixture
  */
-function createConfig(environment: string): WebCoreConfig {
+function createConfig(environment: string): FoundationConfig {
     return {
         api: { baseUrl: 'https://api.example.com', timeout: 30_000 },
         app: { name: 'Test App', environment, version: '1.0.0' },

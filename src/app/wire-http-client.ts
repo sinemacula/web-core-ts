@@ -21,12 +21,12 @@ import type { HttpClient, RequestInterceptor, ResponseErrorHandler, Unauthorized
 import { HttpError, HttpValidationError } from '@sinemacula/foundation/http/http-error';
 import type { ModuleHttpContributions } from '@sinemacula/foundation/http/module-http-contributions';
 import { installApi, reporting, toasts } from './services';
-import type { WebCoreConfig } from './web-core-config';
+import type { FoundationConfig } from '@sinemacula/foundation/app/foundation-config';
 
 /**
  * The resolved construction inputs handed to a client-factory override.
  */
-export interface WireHttpClientTools<C extends WebCoreConfig> {
+export interface WireHttpClientTools<C extends FoundationConfig> {
     /** The frozen application configuration. */
     readonly config: Readonly<C>;
 
@@ -46,7 +46,7 @@ export interface WireHttpClientTools<C extends WebCoreConfig> {
 /**
  * Inputs for {@link wireHttpClient}.
  */
-export interface WireHttpClientOptions<C extends WebCoreConfig> {
+export interface WireHttpClientOptions<C extends FoundationConfig> {
     /** The frozen application configuration. */
     readonly config: Readonly<C>;
 
@@ -75,7 +75,7 @@ export interface WireHttpClientOptions<C extends WebCoreConfig> {
  * @param options - configuration, seams, module contributions, and overrides
  * @returns the installed HTTP client
  */
-export function wireHttpClient<C extends WebCoreConfig>(options: WireHttpClientOptions<C>): HttpClient {
+export function wireHttpClient<C extends FoundationConfig>(options: WireHttpClientOptions<C>): HttpClient {
     const tools: WireHttpClientTools<C> = {
         config: options.config,
         fetchFn: options.fetchFn,
@@ -97,7 +97,7 @@ export function wireHttpClient<C extends WebCoreConfig>(options: WireHttpClientO
  * @param tools - the resolved construction inputs
  * @returns the configured client
  */
-function buildDefaultClient<C extends WebCoreConfig>(tools: WireHttpClientTools<C>): HttpClient {
+function buildDefaultClient<C extends FoundationConfig>(tools: WireHttpClientTools<C>): HttpClient {
     return new FetchHttpClient({
         baseUrl: tools.config.api.baseUrl,
         timeout: tools.config.api.timeout,
@@ -115,7 +115,7 @@ function buildDefaultClient<C extends WebCoreConfig>(tools: WireHttpClientTools<
  * @param options - the wiring inputs carrying the override, key, and handlers
  * @returns the composed response-error handler
  */
-function composeResponseErrorHandler<C extends WebCoreConfig>(options: WireHttpClientOptions<C>): ResponseErrorHandler {
+function composeResponseErrorHandler<C extends FoundationConfig>(options: WireHttpClientOptions<C>): ResponseErrorHandler {
     const preset = options.onResponseError ?? createDefaultResponseErrorHandler(options.unexpectedErrorToastKey);
     const moduleHandlers = options.contributions.responseErrorHandlers;
 

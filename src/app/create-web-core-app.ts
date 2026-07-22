@@ -56,7 +56,7 @@ import {
     installToasts,
     toasts,
 } from './services';
-import type { WebCoreConfig } from './web-core-config';
+import type { FoundationConfig } from '@sinemacula/foundation/app/foundation-config';
 import { wireChunkRecovery } from './wire-chunk-recovery';
 import { wireColorScheme } from './wire-color-scheme';
 import type { WireHttpClientTools } from './wire-http-client';
@@ -128,7 +128,7 @@ function recordPhase(phase: BootPhase): void {
 /**
  * Configuration construction options.
  */
-export interface WebCoreConfigOptions<T extends WebCoreConfig> {
+export interface WebCoreConfigOptions<T extends FoundationConfig> {
     /** Caller-owned environment construction - the only place build-time variables may appear. Receives the fetched runtime document; throw to abort boot. Pair with `createWebEnvironment` for the standard dev-chain and production required-keys behaviour. */
     readonly createEnvironment: (runtime: Readonly<Record<string, string>>) => Environment;
 
@@ -142,7 +142,7 @@ export interface WebCoreConfigOptions<T extends WebCoreConfig> {
 /**
  * HTTP client construction options.
  */
-export interface WebCoreHttpOptions<T extends WebCoreConfig> {
+export interface WebCoreHttpOptions<T extends FoundationConfig> {
     /** Preset-level interceptors; module contributions are appended after these. */
     readonly interceptors?: readonly RequestInterceptor[];
 
@@ -197,7 +197,7 @@ export interface WebCoreColorSchemeOptions {
  * Observability adapter factories; without one the local environment gets
  * console adapters and every other environment gets the null adapters.
  */
-export interface WebCoreObservabilityOptions<T extends WebCoreConfig> {
+export interface WebCoreObservabilityOptions<T extends FoundationConfig> {
     /** Error-reporter factory; wins over the environment default. */
     readonly reporter?: (settings: Readonly<T>) => ErrorReporter;
 
@@ -236,7 +236,7 @@ export interface WebCoreChunkRecoveryOptions {
 /**
  * Release monitoring options.
  */
-export interface WebCoreMonitorOptions<T extends WebCoreConfig> {
+export interface WebCoreMonitorOptions<T extends FoundationConfig> {
     /** Update-monitor options; omit to take the version-derived defaults. */
     readonly updates?: UpdateMonitorWiring<T>;
 
@@ -279,7 +279,7 @@ export interface WebCorePlatformOptions {
 /**
  * Options accepted by {@link createWebCoreApp}.
  */
-export interface WebCoreAppOptions<T extends WebCoreConfig> {
+export interface WebCoreAppOptions<T extends FoundationConfig> {
     /** Root component mounted by {@link WebCoreApp.start}. */
     readonly root: Component;
 
@@ -364,7 +364,7 @@ export interface WebCoreServices<T> {
 /**
  * The assembled application handle returned by {@link createWebCoreApp}.
  */
-export interface WebCoreApp<T extends WebCoreConfig> {
+export interface WebCoreApp<T extends FoundationConfig> {
     /** The Vue application instance. */
     readonly app: App<Element>;
 
@@ -413,7 +413,7 @@ export interface WebCoreApp<T extends WebCoreConfig> {
 /**
  * The kernel services and Vue application produced by the foundation phases.
  */
-interface AppFoundation<T extends WebCoreConfig> {
+interface AppFoundation<T extends FoundationConfig> {
     /** The constructed runtime environment. */
     readonly environment: Environment;
 
@@ -512,7 +512,7 @@ interface ReleaseLayer {
  * @throws {ModuleRegistryError} when the module list fails validation
  * @throws {FoundationBootError} when the monitor options cannot work
  */
-export async function createWebCoreApp<T extends WebCoreConfig>(options: WebCoreAppOptions<T>): Promise<WebCoreApp<T>> {
+export async function createWebCoreApp<T extends FoundationConfig>(options: WebCoreAppOptions<T>): Promise<WebCoreApp<T>> {
     const platform = resolvePlatform(options.platform);
     const runtimeUrl = options.config.runtimeUrl ?? RUNTIME_ENVIRONMENT_URL;
 
@@ -534,7 +534,7 @@ export async function createWebCoreApp<T extends WebCoreConfig>(options: WebCore
  * @param runtimeUrl - the runtime document URL
  * @returns the kernel services and application feeding the later phases
  */
-async function bootFoundation<T extends WebCoreConfig>(
+async function bootFoundation<T extends FoundationConfig>(
     options: WebCoreAppOptions<T>,
     platform: ResolvedPlatform,
     runtimeUrl: string,
@@ -615,7 +615,7 @@ async function bootFoundation<T extends WebCoreConfig>(
  * @param foundation - the services and application from the foundation phases
  * @returns the HTTP client, eager store handles and locale wiring
  */
-async function bootModuleLayer<T extends WebCoreConfig>(
+async function bootModuleLayer<T extends FoundationConfig>(
     options: WebCoreAppOptions<T>,
     platform: ResolvedPlatform,
     foundation: AppFoundation<T>,
@@ -661,7 +661,7 @@ async function bootModuleLayer<T extends WebCoreConfig>(
  * @param moduleLayer - the HTTP client and locale wiring from the module phases
  * @returns the router and the teardown handles installed by these phases
  */
-async function wireAppIntegration<T extends WebCoreConfig>(
+async function wireAppIntegration<T extends FoundationConfig>(
     options: WebCoreAppOptions<T>,
     platform: ResolvedPlatform,
     foundation: AppFoundation<T>,
@@ -723,7 +723,7 @@ async function wireAppIntegration<T extends WebCoreConfig>(
  * @param integration - the router wired by the app-integration phases
  * @returns the chunk-recovery teardown, realtime connection and monitors
  */
-function wireReleaseMonitors<T extends WebCoreConfig>(
+function wireReleaseMonitors<T extends FoundationConfig>(
     options: WebCoreAppOptions<T>,
     platform: ResolvedPlatform,
     runtimeUrl: string,
@@ -768,7 +768,7 @@ function wireReleaseMonitors<T extends WebCoreConfig>(
  * teardown
  * @returns the assembled application handle, ready to start
  */
-function assembleApp<T extends WebCoreConfig>(
+function assembleApp<T extends FoundationConfig>(
     foundation: AppFoundation<T>,
     moduleLayer: ModuleLayer,
     integration: AppIntegration,
@@ -880,7 +880,7 @@ function resolvePlatform(platform: WebCorePlatformOptions | undefined): Resolved
  * @param factories - the caller's adapter factories, when any were provided
  * @returns the installed instances plus the breadcrumb trail
  */
-function resolveObservability<T extends WebCoreConfig>(
+function resolveObservability<T extends FoundationConfig>(
     settings: Readonly<T>,
     factories: WebCoreObservabilityOptions<T> | undefined,
 ): WiredObservability {
@@ -900,7 +900,7 @@ function resolveObservability<T extends WebCoreConfig>(
  * @param options - the full boot options carrying the colour-scheme seams
  * @returns the installed colour-scheme service
  */
-function resolveColorScheme<T extends WebCoreConfig>(
+function resolveColorScheme<T extends FoundationConfig>(
     storage: KeyValueStorage,
     platform: ResolvedPlatform,
     options: WebCoreAppOptions<T>,
@@ -926,7 +926,7 @@ function resolveColorScheme<T extends WebCoreConfig>(
  * @param http - the caller's HTTP options, when any were provided
  * @returns the installed HTTP client
  */
-function resolveHttpClient<T extends WebCoreConfig>(
+function resolveHttpClient<T extends FoundationConfig>(
     settings: Readonly<T>,
     fetchFn: typeof fetch,
     contributions: ModuleHttpContributions,
@@ -955,7 +955,7 @@ function resolveHttpClient<T extends WebCoreConfig>(
  * @param options - the full boot options carrying the i18n and locale seams
  * @returns the i18n instance and the installed locale switcher
  */
-function resolveLocale<T extends WebCoreConfig>(
+function resolveLocale<T extends FoundationConfig>(
     settings: Readonly<T>,
     modules: readonly ModuleDefinition[],
     storage: KeyValueStorage,
@@ -1016,7 +1016,7 @@ function resolveChunkRecovery(
  * @param monitors - the caller's monitor options, when any were provided
  * @returns the started monitors, each null when disabled
  */
-function resolveMonitors<T extends WebCoreConfig>(
+function resolveMonitors<T extends FoundationConfig>(
     settings: Readonly<T>,
     runtimeUrl: string,
     platform: ResolvedPlatform,

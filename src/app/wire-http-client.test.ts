@@ -14,7 +14,7 @@ import type { ModuleHttpContributions } from '@sinemacula/foundation/http/module
 import { ToastService } from '../notifications/toast-service';
 import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import { api, installReporting, installToasts, resetWebCoreServices } from './services';
-import type { WebCoreConfig } from './web-core-config';
+import type { FoundationConfig } from '@sinemacula/foundation/app/foundation-config';
 import type { WireHttpClientOptions, WireHttpClientTools } from './wire-http-client';
 import { wireHttpClient } from './wire-http-client';
 
@@ -23,7 +23,7 @@ import { wireHttpClient } from './wire-http-client';
  *
  * @returns the configuration fixture
  */
-function createConfig(): WebCoreConfig {
+function createConfig(): FoundationConfig {
     return {
         api: { baseUrl: 'https://api.example.com', timeout: 30_000 },
         app: { name: 'Test App', environment: 'production', version: '1.0.0' },
@@ -125,7 +125,7 @@ const failingFetch: typeof fetch = () => Promise.reject(new Error('fetch must no
 /** Optional wiring inputs forwarded by {@link captureTools}. */
 type CaptureOverrides = Partial<
     Pick<
-        WireHttpClientOptions<WebCoreConfig>,
+        WireHttpClientOptions<FoundationConfig>,
         'config' | 'fetchFn' | 'interceptors' | 'contributions' | 'onResponseError' | 'unexpectedErrorToastKey'
     >
 >;
@@ -136,8 +136,8 @@ type CaptureOverrides = Partial<
  * @param overrides - wiring inputs to replace on the minimal base options
  * @returns the construction inputs handed to the factory
  */
-function captureTools(overrides: CaptureOverrides = {}): WireHttpClientTools<WebCoreConfig> {
-    let captured: WireHttpClientTools<WebCoreConfig> | null = null;
+function captureTools(overrides: CaptureOverrides = {}): WireHttpClientTools<FoundationConfig> {
+    let captured: WireHttpClientTools<FoundationConfig> | null = null;
 
     wireHttpClient({
         config: overrides.config ?? createConfig(),
