@@ -8,7 +8,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { computed } from 'vue';
 
-import { NullAnalyticsTracker } from '../analytics/null-analytics-tracker';
+import { NullAnalyticsTracker } from '@sinemacula/foundation/analytics/null-analytics-tracker';
 import { ConfigRepository } from '../config/config-repository';
 import { StaticFeatureFlags } from '../feature-flags/static-feature-flags';
 import type { HttpClient } from '../http/http-client';

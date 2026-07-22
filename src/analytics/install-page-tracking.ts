@@ -12,7 +12,7 @@
 import type { Router } from 'vue-router';
 
 import type { BreadcrumbTrail } from '@sinemacula/foundation/reporting/breadcrumb-trail';
-import type { AnalyticsTracker } from './analytics-tracker';
+import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytics-tracker';
 
 /**
  * Options for installing the page-tracking hook.

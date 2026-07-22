@@ -7,8 +7,8 @@
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { ConsoleAnalyticsTracker } from '../analytics/console-analytics-tracker';
-import { NullAnalyticsTracker } from '../analytics/null-analytics-tracker';
+import { ConsoleAnalyticsTracker } from '@sinemacula/foundation/analytics/console-analytics-tracker';
+import { NullAnalyticsTracker } from '@sinemacula/foundation/analytics/null-analytics-tracker';
 import { ConsoleLogger } from '@sinemacula/foundation/logging/console-logger';
 import { NullLogger } from '@sinemacula/foundation/logging/null-logger';
 import { BreadcrumbTrail } from '@sinemacula/foundation/reporting/breadcrumb-trail';

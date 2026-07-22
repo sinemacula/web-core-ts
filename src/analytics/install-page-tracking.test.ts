@@ -11,7 +11,7 @@ import { createMemoryHistory } from 'vue-router';
 
 import { BreadcrumbTrail } from '@sinemacula/foundation/reporting/breadcrumb-trail';
 import { createApplicationRouter } from '../router/router-factory';
-import type { AnalyticsTracker } from './analytics-tracker';
+import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytics-tracker';
 import { installPageTracking } from './install-page-tracking';
 
 const Empty = defineComponent({ render: () => null });

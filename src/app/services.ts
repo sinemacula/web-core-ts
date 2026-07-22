@@ -10,7 +10,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { AnalyticsTracker } from '../analytics/analytics-tracker';
+import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytics-tracker';
 import type { ConfigRepository } from '../config/config-repository';
 import type { FeatureFlags } from '../feature-flags/feature-flags';
 import type { HttpClient } from '../http/http-client';

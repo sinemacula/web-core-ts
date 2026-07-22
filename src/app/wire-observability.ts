@@ -12,9 +12,9 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { AnalyticsTracker } from '../analytics/analytics-tracker';
-import { ConsoleAnalyticsTracker } from '../analytics/console-analytics-tracker';
-import { NullAnalyticsTracker } from '../analytics/null-analytics-tracker';
+import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytics-tracker';
+import { ConsoleAnalyticsTracker } from '@sinemacula/foundation/analytics/console-analytics-tracker';
+import { NullAnalyticsTracker } from '@sinemacula/foundation/analytics/null-analytics-tracker';
 import { ConsoleLogger } from '@sinemacula/foundation/logging/console-logger';
 import type { Logger } from '@sinemacula/foundation/logging/logger';
 import { NullLogger } from '@sinemacula/foundation/logging/null-logger';

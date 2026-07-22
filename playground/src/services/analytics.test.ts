@@ -5,7 +5,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { AnalyticsTracker } from '@sinemacula/web-core/analytics/analytics-tracker';
+import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytics-tracker';
 import { afterEach, describe, expect, it } from 'vitest';
 import { analytics, initialiseAnalytics, resetAnalytics } from '@/services/analytics';
 

@@ -11,7 +11,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp, defineComponent, nextTick } from 'vue';
 import type { RouteLocationRaw, Router } from 'vue-router';
 
-import type { AnalyticsTracker } from '../analytics/analytics-tracker';
+import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytics-tracker';
 import {
     installAnalytics,
     installApi,

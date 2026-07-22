@@ -22,7 +22,7 @@ import type { App, Component } from 'vue';
 import { createApp } from 'vue';
 import type { Router, RouterHistory } from 'vue-router';
 
-import type { AnalyticsTracker } from '../analytics/analytics-tracker';
+import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytics-tracker';
 import { installPageTracking } from '../analytics/install-page-tracking';
 import { ConfigRepository } from '../config/config-repository';
 import type { Environment } from '../config/environment';

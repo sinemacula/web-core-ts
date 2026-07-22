@@ -12,7 +12,7 @@ import { defineComponent, h, onMounted } from 'vue';
 import type { RouterHistory } from 'vue-router';
 import { createMemoryHistory } from 'vue-router';
 
-import { NullAnalyticsTracker } from '../analytics/null-analytics-tracker';
+import { NullAnalyticsTracker } from '@sinemacula/foundation/analytics/null-analytics-tracker';
 import type { Environment } from '../config/environment';
 import { createWebEnvironment } from '../config/web-environment';
 import { StaticFeatureFlags } from '../feature-flags/static-feature-flags';
