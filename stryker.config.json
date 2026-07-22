@@ -3,6 +3,7 @@
     "testRunner": "vitest",
     "ignorePatterns": [
         ".idea",
+        "repos",
         ".qlty",
         ".sinemacula",
         "build",
