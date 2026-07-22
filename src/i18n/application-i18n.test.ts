@@ -11,7 +11,7 @@ import type { ModuleDefinition } from '../module/module';
 import type { ModuleMessageSource } from '../module/module-registry';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { activateLocale, createApplicationI18n, createLocaleSwitcher } from './application-i18n';
-import { LocaleService } from './locale-service';
+import { LocaleService } from '@sinemacula/foundation/i18n/locale-service';
 
 describe('createApplicationI18n', () => {
     it('returns an i18n instance with legacy set to false', () => {

@@ -19,8 +19,8 @@ import { createI18n } from 'vue-i18n';
 import type { LocaleMessages, ModuleDefinition } from '../module/module';
 import { collectModuleMessages } from '../module/module';
 import type { ModuleMessageSource } from '../module/module-registry';
-import { I18nError } from './i18n-error';
-import type { LocaleService } from './locale-service';
+import { I18nError } from '@sinemacula/foundation/i18n/i18n-error';
+import type { LocaleService } from '@sinemacula/foundation/i18n/locale-service';
 
 /**
  * Datetime and number formats installed on the i18n instance, keyed by locale.
