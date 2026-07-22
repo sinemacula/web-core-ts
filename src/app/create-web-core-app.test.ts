@@ -45,7 +45,7 @@ import {
     resetWebCoreServices,
     toasts,
 } from './services';
-import { WebCoreAppError } from './web-core-app-error';
+import { FoundationBootError } from '@sinemacula/foundation/app/foundation-boot-error';
 import type { WireHttpClientTools } from './wire-http-client';
 
 const BOOT_PHASE_ORDER = [
@@ -881,10 +881,10 @@ describe('createWebCoreApp', () => {
             app.dispose();
         });
 
-        it('rejects with WebCoreAppError when update monitoring is enabled with no way to surface updates', async () => {
+        it('rejects with FoundationBootError when update monitoring is enabled with no way to surface updates', async () => {
             const boot = bootApp({ monitors: { updates: { enabled: true } } });
 
-            await expect(boot).rejects.toBeInstanceOf(WebCoreAppError);
+            await expect(boot).rejects.toBeInstanceOf(FoundationBootError);
             await expect(boot).rejects.toThrow(
                 'Update monitoring is enabled but cannot surface updates: ' +
                     'provide monitors.updates.toastKey or monitors.updates.onUpdate.',

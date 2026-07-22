@@ -510,7 +510,7 @@ interface ReleaseLayer {
  * @param options - the application's modules, configuration and overrides
  * @returns the assembled application handle, ready to start
  * @throws {ModuleRegistryError} when the module list fails validation
- * @throws {WebCoreAppError} when the monitor options cannot work
+ * @throws {FoundationBootError} when the monitor options cannot work
  */
 export async function createWebCoreApp<T extends WebCoreConfig>(options: WebCoreAppOptions<T>): Promise<WebCoreApp<T>> {
     const platform = resolvePlatform(options.platform);

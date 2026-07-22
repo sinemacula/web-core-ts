@@ -16,7 +16,7 @@ import { BrowserConnectivityMonitor } from '../connectivity/browser-connectivity
 import type { ConnectivityMonitor } from '@sinemacula/foundation/connectivity/connectivity-monitor';
 import type { ToastService } from '../notifications/toast-service';
 import { UpdateMonitor } from '../updates/update-monitor';
-import { WebCoreAppError } from './web-core-app-error';
+import { FoundationBootError } from '@sinemacula/foundation/app/foundation-boot-error';
 
 const DEV_VERSION_SENTINEL = 'dev';
 
@@ -99,7 +99,7 @@ export interface WiredMonitors {
  *
  * @param options - the configuration, monitor options and platform seams
  * @returns the started monitors, each null when disabled
- * @throws {WebCoreAppError} when updates are explicitly enabled with neither a
+ * @throws {FoundationBootError} when updates are explicitly enabled with neither a
  * toast key nor an update handler
  */
 export function wireMonitors<T extends MonitorWiringSettings>(options: WireMonitorsOptions<T>): WiredMonitors {
@@ -113,7 +113,7 @@ export function wireMonitors<T extends MonitorWiringSettings>(options: WireMonit
  *
  * @param options - the monitor wiring options
  * @returns the started monitor, or null when it does not run
- * @throws {WebCoreAppError} when updates are explicitly enabled with neither a
+ * @throws {FoundationBootError} when updates are explicitly enabled with neither a
  * toast key nor an update handler
  */
 function wireUpdates<T extends MonitorWiringSettings>(options: WireMonitorsOptions<T>): UpdateMonitor | null {
@@ -123,7 +123,7 @@ function wireUpdates<T extends MonitorWiringSettings>(options: WireMonitorsOptio
 
     if (handler === null) {
         if (wiring?.enabled !== undefined && enabled) {
-            throw new WebCoreAppError(
+            throw new FoundationBootError(
                 'Update monitoring is enabled but cannot surface updates: ' +
                     'provide monitors.updates.toastKey or monitors.updates.onUpdate.',
             );

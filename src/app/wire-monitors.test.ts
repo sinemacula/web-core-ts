@@ -9,7 +9,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ToastService } from '../notifications/toast-service';
 import type { UpdateMonitor } from '../updates/update-monitor';
-import { WebCoreAppError } from './web-core-app-error';
+import { FoundationBootError } from '@sinemacula/foundation/app/foundation-boot-error';
 import type { MonitorWiringSettings, WireMonitorsOptions } from './wire-monitors';
 import { wireMonitors } from './wire-monitors';
 
@@ -241,18 +241,18 @@ describe('wireMonitors update monitoring', () => {
     it('throws when enabled is explicitly true with no way to surface updates', () => {
         const { options } = makeHarness({ updates: { enabled: true } });
 
-        expect(() => wireMonitors(options)).toThrowError(WebCoreAppError);
+        expect(() => wireMonitors(options)).toThrowError(FoundationBootError);
         expect(() => wireMonitors(options)).toThrow(THROW_MESSAGE);
     });
 
-    it('names the error WebCoreAppError', () => {
+    it('names the error FoundationBootError', () => {
         const { options } = makeHarness({ updates: { enabled: true } });
 
         try {
             wireMonitors(options);
             expect.unreachable('wireMonitors must throw');
         } catch (error) {
-            expect((error as Error).name).toBe('WebCoreAppError');
+            expect((error as Error).name).toBe('FoundationBootError');
         }
     });
 
