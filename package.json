@@ -12,7 +12,15 @@
     "bugs": {
         "url": "https://github.com/sinemacula/web-core-ts/issues"
     },
-    "keywords": ["sine macula", "vue", "kernel", "frontend", "framework", "typescript", "modular"],
+    "keywords": [
+        "sine macula",
+        "vue",
+        "kernel",
+        "frontend",
+        "framework",
+        "typescript",
+        "modular"
+    ],
     "type": "module",
     "engines": {
         "node": ">=22"
@@ -38,12 +46,21 @@
         "./session/session-context": "./src/session/session-context.ts",
         "./session/session-store": "./src/session/session-store.ts"
     },
-    "files": ["dist", "eslint", "!eslint/**/__tests__/**", "!eslint/vitest.config.mjs", "README.md", "LICENSE"],
+    "files": [
+        "dist",
+        "eslint",
+        "!eslint/**/__tests__/**",
+        "!eslint/vitest.config.mjs",
+        "README.md",
+        "LICENSE"
+    ],
     "publishConfig": {
         "access": "public",
         "registry": "https://registry.npmjs.org/"
     },
-    "workspaces": ["playground"],
+    "workspaces": [
+        "playground"
+    ],
     "scripts": {
         "dev": "npm run dev --workspace playground",
         "build": "npm run build --workspace playground",
@@ -97,7 +114,7 @@
         "@arethetypeswrong/cli": "^0.18.5",
         "@axe-core/playwright": "^4.11.3",
         "@playwright/test": "^1.60.0",
-        "@sinemacula/coding-standards": "^1.13.0",
+        "@sinemacula/coding-standards": "^1.17.0",
         "@size-limit/file": "^12.1.0",
         "@stryker-mutator/core": "^9.6.1",
         "@stryker-mutator/vitest-runner": "^9.6.1",
