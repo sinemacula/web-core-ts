@@ -20,6 +20,8 @@
 import type { ComputedRef } from 'vue';
 import { computed, ref } from 'vue';
 
+import type { ShowToastOptions, Toaster } from '@sinemacula/foundation/notifications/toaster';
+
 /** The visual emphasis of a toast notification. */
 export type ToastVariant = 'success' | 'error' | 'information' | 'warning';
 
@@ -43,14 +45,6 @@ export interface Toast {
     readonly duration: number;
 }
 
-/**
- * Options accepted by the per-show methods.
- */
-export interface ShowToastOptions {
-    /** Auto-dismiss duration in milliseconds; 0 disables it. */
-    readonly duration?: number;
-}
-
 const DEFAULT_DURATION = 5_000;
 
 /**
@@ -60,7 +54,7 @@ const DEFAULT_DURATION = 5_000;
  * need to be triggered. Mount a single host component that reads {@link toasts}
  * to render the list.
  */
-export class ToastService {
+export class ToastService implements Toaster {
     /** Fallback auto-dismiss duration in milliseconds. */
     readonly #defaultDuration: number;
 

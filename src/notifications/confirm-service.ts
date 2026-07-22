@@ -18,26 +18,7 @@
 import type { ComputedRef } from 'vue';
 import { computed, ref } from 'vue';
 
-/**
- * The data that drives a confirmation dialog.
- *
- * By convention {@link title}, {@link message}, {@link confirmLabel}, and
- * {@link cancelLabel} are translation keys; the rendering host translates them
- * before display.
- */
-export interface ConfirmRequest {
-    /** Translation key for the dialog title. */
-    readonly title: string;
-
-    /** Translation key for the dialog message. */
-    readonly message: string;
-
-    /** Translation key for the confirm button label. */
-    readonly confirmLabel?: string;
-
-    /** Translation key for the cancel button label. */
-    readonly cancelLabel?: string;
-}
+import type { ConfirmRequest, Confirmer } from '@sinemacula/foundation/notifications/confirmer';
 
 /**
  * A {@link ConfirmRequest} that has been assigned an id and is currently active
@@ -63,7 +44,7 @@ interface PendingEntry {
  * destructive action requires explicit user confirmation. Mount a single host
  * component that reads {@link active} to render the modal.
  */
-export class ConfirmService {
+export class ConfirmService implements Confirmer {
     /** Pending confirmations awaiting their turn, in FIFO order. */
     readonly #queue: PendingEntry[] = [];
 
