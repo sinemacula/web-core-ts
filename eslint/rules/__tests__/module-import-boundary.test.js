@@ -10,8 +10,9 @@ import { ruleTester } from './tester.js';
 
 ruleTester.run('module-import-boundary', rule, {
     valid: [
-        // The kernel is reached by subpath.
+        // The kernel packages are reached by subpath.
         { filename: 'src/app.ts', code: "import { httpClient } from '@sinemacula/web-core/http/client';" },
+        { filename: 'src/app.ts', code: "import { Environment } from '@sinemacula/foundation/config/environment';" },
         // Another module is reached through its public surface.
         { filename: 'src/modules/auth/module.ts', code: "import { usersModule } from '@/modules/users';" },
         // A module freely imports its OWN internals.
@@ -42,10 +43,15 @@ ruleTester.run('module-import-boundary', rule, {
         },
     ],
     invalid: [
-        // The bare package barrel is never imported.
+        // Neither bare package barrel is ever imported.
         {
             filename: 'src/app.ts',
             code: "import { httpClient } from '@sinemacula/web-core';",
+            errors: [{ messageId: 'barrel' }],
+        },
+        {
+            filename: 'src/app.ts',
+            code: "import { Environment } from '@sinemacula/foundation';",
             errors: [{ messageId: 'barrel' }],
         },
         // Reaching into another module's internals.

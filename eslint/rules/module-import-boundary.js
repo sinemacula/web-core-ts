@@ -4,8 +4,9 @@
  * A file reaches another feature module only through its public surface
  * (`@/modules/<name>`), never a deep internal path
  * (`@/modules/<name>/<file>`) - but a module may freely import its OWN
- * internals. The kernel is imported by subpath
- * (`@sinemacula/web-core/<area>/<file>`), never the bare package barrel. Test
+ * internals. The kernel packages are imported by subpath
+ * (`@sinemacula/web-core/<area>/<file>`,
+ * `@sinemacula/foundation/<area>/<file>`), never a bare package barrel. Test
  * files are exempt: they may reach across boundaries to assert internals.
  *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
@@ -16,7 +17,7 @@
 
 import { createRule, isTestPath, moduleFolder } from './lib.js';
 
-const KERNEL_BARREL = '@sinemacula/web-core';
+const KERNEL_BARRELS = new Set(['@sinemacula/web-core', '@sinemacula/foundation']);
 
 // `@/modules/<name>/<anything-deeper>` - the deep-internal form.
 // `@/modules/<name>` alone (the public surface) has no trailing segment and is
@@ -33,7 +34,7 @@ export default createRule({
         },
         schema: [],
         messages: {
-            barrel: 'Import a kernel subpath (@sinemacula/web-core/<area>/<file>), not the package barrel.',
+            barrel: 'Import a kernel subpath (@sinemacula/web-core/<area>/<file> or @sinemacula/foundation/<area>/<file>), not a package barrel.',
             crossModule:
                 "Reach module '{{module}}' through its public surface (@/modules/{{module}}), not its internals.",
         },
@@ -57,7 +58,7 @@ export default createRule({
                 return;
             }
 
-            if (source.value === KERNEL_BARREL) {
+            if (KERNEL_BARRELS.has(source.value)) {
                 context.report({ node: source, messageId: 'barrel' });
 
                 return;
