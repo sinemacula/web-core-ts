@@ -1,10 +1,9 @@
 /**
- * Route middleware contract and pipeline.
+ * Route middleware, bound to vue-router.
  *
- * Laravel-style navigation middleware: each route lists middleware in its meta,
- * the pipeline runs them in order, and the first non-`next` result
- * short-circuits navigation. Results are a discriminated union, never an
- * imperative `next()` callback.
+ * Specialises the framework-agnostic pipeline from `@sinemacula/foundation` to
+ * vue-router's route and location types, and pulls in the route-meta
+ * augmentation so middleware are type-checked at the route definition site.
  *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright   2026 Sine Macula Limited
@@ -14,83 +13,25 @@ import './route-meta';
 
 import type { RouteLocationNormalized, RouteLocationRaw } from 'vue-router';
 
-/**
- * The navigation being evaluated by a middleware pipeline.
- */
-export interface MiddlewareContext {
-    /** The route being navigated to. */
-    readonly to: RouteLocationNormalized;
+import type {
+    MiddlewareContext as BaseMiddlewareContext,
+    MiddlewareResult as BaseMiddlewareResult,
+    RouteMiddleware as BaseRouteMiddleware,
+} from '@sinemacula/foundation/router/middleware';
 
-    /** The route being navigated from. */
-    readonly from: RouteLocationNormalized;
-}
+export { next, redirect, runMiddlewarePipeline } from '@sinemacula/foundation/router/middleware';
 
 /**
- * Discriminated union describing a middleware pipeline decision.
+ * The navigation being evaluated, over vue-router routes.
  */
-export type MiddlewareResult =
-    | {
-          /** Discriminant marking a proceed decision. */
-          readonly kind: 'next';
-      }
-    | {
-          /** Discriminant marking a redirect decision. */
-          readonly kind: 'redirect';
-
-          /** The location to redirect the navigation to. */
-          readonly to: RouteLocationRaw;
-      };
+export type MiddlewareContext = BaseMiddlewareContext<RouteLocationNormalized>;
 
 /**
- * A single navigation guard unit.
+ * A middleware pipeline decision, over vue-router locations.
  */
-export interface RouteMiddleware {
-    /**
-     * Inspect a navigation and decide whether it proceeds.
-     *
-     * @param context - the navigation being evaluated
-     * @returns the middleware decision
-     */
-    handle(context: MiddlewareContext): MiddlewareResult | Promise<MiddlewareResult>;
-}
+export type MiddlewareResult = BaseMiddlewareResult<RouteLocationRaw>;
 
 /**
- * Allow the navigation to proceed.
- *
- * @returns the `next` decision
+ * A single navigation guard unit, over vue-router routes and locations.
  */
-export function next(): MiddlewareResult {
-    return { kind: 'next' };
-}
-
-/**
- * Redirect the navigation elsewhere.
- *
- * @param to - the redirect target
- * @returns the `redirect` decision
- */
-export function redirect(to: RouteLocationRaw): MiddlewareResult {
-    return { kind: 'redirect', to };
-}
-
-/**
- * Run middleware in order until one short-circuits.
- *
- * @param middleware - the middleware to run
- * @param context - the navigation being evaluated
- * @returns the first non-`next` decision, or `next` when all pass
- */
-export async function runMiddlewarePipeline(
-    middleware: readonly RouteMiddleware[],
-    context: MiddlewareContext,
-): Promise<MiddlewareResult> {
-    for (const entry of middleware) {
-        const result = await entry.handle(context);
-
-        if (result.kind !== 'next') {
-            return result;
-        }
-    }
-
-    return next();
-}
+export type RouteMiddleware = BaseRouteMiddleware<RouteLocationNormalized, RouteLocationRaw>;
