@@ -9,8 +9,8 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { ConsoleAnalyticsTracker } from '../analytics/console-analytics-tracker';
 import { NullAnalyticsTracker } from '../analytics/null-analytics-tracker';
-import { ConsoleLogger } from '../logging/console-logger';
-import { NullLogger } from '../logging/null-logger';
+import { ConsoleLogger } from '@sinemacula/foundation/logging/console-logger';
+import { NullLogger } from '@sinemacula/foundation/logging/null-logger';
 import { BreadcrumbTrail } from '../reporting/breadcrumb-trail';
 import { ConsoleErrorReporter } from '../reporting/console-error-reporter';
 import { NullErrorReporter } from '../reporting/null-error-reporter';

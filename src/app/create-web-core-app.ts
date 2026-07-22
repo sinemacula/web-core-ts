@@ -32,7 +32,7 @@ import type { FeatureFlags } from '../feature-flags/feature-flags';
 import { StaticFeatureFlags } from '../feature-flags/static-feature-flags';
 import type { HttpClient, RequestInterceptor, ResponseErrorHandler } from '../http/http-client';
 import type { ApplicationI18n, LocaleFormats, LocaleSwitcher } from '../i18n/application-i18n';
-import type { Logger } from '../logging/logger';
+import type { Logger } from '@sinemacula/foundation/logging/logger';
 import type { LocaleMessages, ModuleDefinition, ModuleStoreFactory, ResolvedPlatform } from '../module/module';
 import type { ModuleHttpContributions, ModuleRegistry } from '../module/module-registry';
 import { bootModules, createModuleRegistry, registerModules } from '../module/module-registry';

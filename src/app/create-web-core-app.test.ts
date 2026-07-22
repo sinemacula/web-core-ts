@@ -17,7 +17,7 @@ import type { Environment } from '../config/environment';
 import { createWebEnvironment } from '../config/web-environment';
 import { StaticFeatureFlags } from '../feature-flags/static-feature-flags';
 import type { HttpClient, RequestInterceptor, UnauthorizedHandler } from '../http/http-client';
-import { NullLogger } from '../logging/null-logger';
+import { NullLogger } from '@sinemacula/foundation/logging/null-logger';
 import type { ModuleBootContext, ModuleDefinition, ModuleRegisterContext } from '../module/module';
 import { ModuleRegistryError } from '../module/module-registry';
 import { ConfirmService } from '../notifications/confirm-service';

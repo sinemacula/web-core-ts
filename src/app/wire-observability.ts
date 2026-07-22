@@ -15,9 +15,9 @@
 import type { AnalyticsTracker } from '../analytics/analytics-tracker';
 import { ConsoleAnalyticsTracker } from '../analytics/console-analytics-tracker';
 import { NullAnalyticsTracker } from '../analytics/null-analytics-tracker';
-import { ConsoleLogger } from '../logging/console-logger';
-import type { Logger } from '../logging/logger';
-import { NullLogger } from '../logging/null-logger';
+import { ConsoleLogger } from '@sinemacula/foundation/logging/console-logger';
+import type { Logger } from '@sinemacula/foundation/logging/logger';
+import { NullLogger } from '@sinemacula/foundation/logging/null-logger';
 import { BreadcrumbTrail } from '../reporting/breadcrumb-trail';
 import { ConsoleErrorReporter } from '../reporting/console-error-reporter';
 import type { ErrorReporter } from '../reporting/error-reporter';

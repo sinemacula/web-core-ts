@@ -5,7 +5,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import type { Logger } from '@sinemacula/web-core/logging/logger';
+import type { Logger } from '@sinemacula/foundation/logging/logger';
 import { afterEach, describe, expect, it } from 'vitest';
 import { initialiseLogger, logger, resetLogger } from '@/services/logger';
 

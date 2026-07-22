@@ -13,7 +13,7 @@ import { ConfigRepository } from '../config/config-repository';
 import { StaticFeatureFlags } from '../feature-flags/static-feature-flags';
 import type { HttpClient } from '../http/http-client';
 import type { LocaleSwitcher } from '../i18n/application-i18n';
-import { NullLogger } from '../logging/null-logger';
+import { NullLogger } from '@sinemacula/foundation/logging/null-logger';
 import { ConfirmService } from '../notifications/confirm-service';
 import { ToastService } from '../notifications/toast-service';
 import type { RealtimeConnection } from '../realtime/realtime-connection';

@@ -15,7 +15,7 @@ import type { ConfigRepository } from '../config/config-repository';
 import type { FeatureFlags } from '../feature-flags/feature-flags';
 import type { HttpClient } from '../http/http-client';
 import type { LocaleSwitcher } from '../i18n/application-i18n';
-import type { Logger } from '../logging/logger';
+import type { Logger } from '@sinemacula/foundation/logging/logger';
 import type { ConfirmService } from '../notifications/confirm-service';
 import type { ToastService } from '../notifications/toast-service';
 import type { RealtimeConnection } from '../realtime/realtime-connection';
