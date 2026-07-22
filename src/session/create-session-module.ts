@@ -24,53 +24,24 @@ import type { ModuleBootContext, ModuleDefinition, ModuleRegisterContext, Module
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import { createDefaultSessionApi } from './default-session-api';
 import { appendRedirectTarget, sanitiseRedirectTarget } from './redirect';
-import type { SessionApi, SessionDevice } from './session-api';
+import type { SessionApi, SessionDevice } from '@sinemacula/foundation/session/session-api';
+import type { SessionRoutes as BaseSessionRoutes } from '@sinemacula/foundation/session/session-routes';
+import type { SessionStorageKeys } from '@sinemacula/foundation/session/session-storage-keys';
+import { DEFAULT_SESSION_STORAGE_KEYS } from '@sinemacula/foundation/session/session-storage-keys';
 import { installSessionContext, sessionContext } from './session-context';
 import type { SessionStore } from './session-store';
 import { useSessionStore } from './session-store';
-import type { SessionUser } from './session-user';
+import type { SessionUser } from '@sinemacula/foundation/session/session-user';
+
+export type { SessionStorageKeys } from '@sinemacula/foundation/session/session-storage-keys';
 
 /**
- * The storage keys the session persists under.
- *
- * PUBLIC CONTRACT: live user sessions (and e2e suites) seed these exact
- * localStorage keys, so the defaults are load-bearing and versioned - renaming
- * any of them is a breaking change requiring an explicit migration. Keys are
- * matched RAW against cross-tab storage-event keys, so the storage adapter must
- * persist un-namespaced (namespaced wrapping is unsupported here; applications
- * wanting a prefix set it in these options so event keys still match).
+ * Route identity over vue-router locations. Defaults: login
+ * `{ name: 'auth.login' }`, loginPath '/login', home '/', forbidden
+ * '/forbidden' - the forbidden default is a path string by design: the
+ * application's fallback or errors module owns the page.
  */
-export interface SessionStorageKeys {
-    /** Default 'auth.access_token'. */
-    readonly accessToken: string;
-
-    /** Default 'auth.refresh_token'. */
-    readonly refreshToken: string;
-
-    /** Default 'auth.expires_at'. */
-    readonly expiresAt: string;
-
-    /** Default 'auth.device_uuid'. */
-    readonly deviceUuid: string;
-}
-
-/**
- * Route identity - one configurable source feeding the guards, the session-loss
- * redirect, and the redirect sanitiser's loop guard.
- */
-export interface SessionRoutes {
-    /** Where unauthenticated visitors are sent. Default `{ name: 'auth.login' }`. */
-    readonly login: RouteLocationRaw;
-
-    /** The login-path prefix rejected by the redirect sanitiser as a loop guard. Applications renaming the login path set `login` and `loginPath` together. Default '/login'. */
-    readonly loginPath: string;
-
-    /** Where authenticated visitors leaving guest-only routes are sent. Default '/'. */
-    readonly home: RouteLocationRaw;
-
-    /** Where authenticated-but-unauthorised visitors are sent. Default '/forbidden' - a path string by design: the application's fallback or errors module owns the page. */
-    readonly forbidden: RouteLocationRaw;
-}
+export type SessionRoutes = BaseSessionRoutes<RouteLocationRaw>;
 
 /**
  * Per-channel identity mappings fanned out to the reporting, analytics and
@@ -147,13 +118,6 @@ export interface SessionModuleOptions<
     readonly identity?: false | SessionIdentityMapping<U>;
 }
 
-const DEFAULT_STORAGE_KEYS: SessionStorageKeys = {
-    accessToken: 'auth.access_token',
-    refreshToken: 'auth.refresh_token',
-    expiresAt: 'auth.expires_at',
-    deviceUuid: 'auth.device_uuid',
-};
-
 const DEFAULT_ROUTES: SessionRoutes = {
     login: { name: 'auth.login' },
     loginPath: '/login',
@@ -190,7 +154,7 @@ export function createSessionModule<
         password: string;
     },
 >(options: SessionModuleOptions<U, C> = {}): ModuleDefinition {
-    const storageKeys: SessionStorageKeys = { ...DEFAULT_STORAGE_KEYS, ...options.storageKeys };
+    const storageKeys: SessionStorageKeys = { ...DEFAULT_SESSION_STORAGE_KEYS, ...options.storageKeys };
     const routes: SessionRoutes = { ...DEFAULT_ROUTES, ...options.routes };
     const storeId = options.storeId ?? DEFAULT_STORE_ID;
     const deviceOs = options.deviceOs ?? DEFAULT_DEVICE_OS;

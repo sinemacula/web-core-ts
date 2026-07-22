@@ -9,7 +9,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 import { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
-import type { SessionApi } from './session-api';
+import type { SessionApi } from '@sinemacula/foundation/session/session-api';
 import type { SessionContext } from './session-context';
 import { installSessionContext, resetSessionContext, sessionContext } from './session-context';
 

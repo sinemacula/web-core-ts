@@ -10,11 +10,11 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
-import type { SessionApi, SessionDevice } from './session-api';
+import type { SessionApi, SessionDevice } from '@sinemacula/foundation/session/session-api';
 import { installSessionContext, resetSessionContext } from './session-context';
 import { useSessionStore } from './session-store';
-import type { SessionTokens } from './session-tokens';
-import type { SessionUser } from './session-user';
+import type { SessionTokens } from '@sinemacula/foundation/session/session-tokens';
+import type { SessionUser } from '@sinemacula/foundation/session/session-user';
 
 const ACCESS_TOKEN_KEY = 'auth.access_token';
 const REFRESH_TOKEN_KEY = 'auth.refresh_token';

@@ -31,12 +31,12 @@ import type { ErrorReporter, ReportedUser } from '@sinemacula/foundation/reporti
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import type { SessionModuleOptions } from './create-session-module';
 import { createSessionModule } from './create-session-module';
-import type { SessionApi, SessionDevice } from './session-api';
+import type { SessionApi, SessionDevice } from '@sinemacula/foundation/session/session-api';
 import { resetSessionContext, sessionContext } from './session-context';
 import type { SessionStore } from './session-store';
 import { useSessionStore } from './session-store';
-import type { SessionTokens } from './session-tokens';
-import type { SessionUser } from './session-user';
+import type { SessionTokens } from '@sinemacula/foundation/session/session-tokens';
+import type { SessionUser } from '@sinemacula/foundation/session/session-user';
 
 const EmptyComponent = defineComponent({ render: () => null });
 

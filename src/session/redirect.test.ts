@@ -10,7 +10,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { appendRedirectTarget, REDIRECT_QUERY_KEY, sanitiseRedirectTarget } from './redirect';
-import type { SessionApi } from './session-api';
+import type { SessionApi } from '@sinemacula/foundation/session/session-api';
 import { installSessionContext, resetSessionContext } from './session-context';
 
 /** Build a session API stand-in that fails loudly if any method is invoked. */

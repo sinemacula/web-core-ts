@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { HttpClient, HttpRequestOptions } from '@sinemacula/foundation/http/http-client';
 import { createDefaultSessionApi } from './default-session-api';
-import type { SessionUser } from './session-user';
+import type { SessionUser } from '@sinemacula/foundation/session/session-user';
 
 /** The shape of a single call recorded by {@link FakeHttpClient}. */
 interface RecordedCall {

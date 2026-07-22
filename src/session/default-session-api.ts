@@ -15,10 +15,10 @@
 
 import type { HttpClient } from '@sinemacula/foundation/http/http-client';
 import { isRecord } from '@sinemacula/foundation/support/is-record';
-import type { SessionApi } from './session-api';
+import type { SessionApi } from '@sinemacula/foundation/session/session-api';
 import { SessionError } from './session-error';
-import type { SessionTokens } from './session-tokens';
-import type { SessionUser } from './session-user';
+import type { SessionTokens } from '@sinemacula/foundation/session/session-tokens';
+import type { SessionUser } from '@sinemacula/foundation/session/session-user';
 
 const DEFAULT_SESSION_ENDPOINT = 'auth';
 const DEFAULT_USER_ENDPOINT = 'users/self';

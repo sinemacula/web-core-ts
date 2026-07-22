@@ -15,9 +15,10 @@
 import type { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import { createServiceHolder } from '@sinemacula/foundation/support/service-holder';
-import type { SessionRoutes, SessionStorageKeys } from './create-session-module';
-import type { SessionApi, SessionDevice } from './session-api';
-import type { SessionUser } from './session-user';
+import type { SessionStorageKeys } from '@sinemacula/foundation/session/session-storage-keys';
+import type { SessionRoutes } from './create-session-module';
+import type { SessionApi, SessionDevice } from '@sinemacula/foundation/session/session-api';
+import type { SessionUser } from '@sinemacula/foundation/session/session-user';
 
 /**
  * The resolved collaborators shared across the session module's units.

@@ -17,8 +17,8 @@ import { defineStore } from 'pinia';
 
 import type { SessionContext } from './session-context';
 import { sessionContext } from './session-context';
-import type { SessionTokens } from './session-tokens';
-import type { SessionUser } from './session-user';
+import type { SessionTokens } from '@sinemacula/foundation/session/session-tokens';
+import type { SessionUser } from '@sinemacula/foundation/session/session-user';
 
 /**
  * The session store contract consumed by guards, authorization checks and the

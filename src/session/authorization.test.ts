@@ -11,10 +11,10 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { TokenRefreshCoordinator } from '@sinemacula/foundation/http/token-refresh-coordinator';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
 import { can, useCan } from './authorization';
-import type { SessionApi } from './session-api';
+import type { SessionApi } from '@sinemacula/foundation/session/session-api';
 import { installSessionContext, resetSessionContext } from './session-context';
 import { useSessionStore } from './session-store';
-import type { SessionUser } from './session-user';
+import type { SessionUser } from '@sinemacula/foundation/session/session-user';
 
 /** Build a session API stand-in that fails loudly if any method is invoked. */
 function createSessionApiStub(): SessionApi {
