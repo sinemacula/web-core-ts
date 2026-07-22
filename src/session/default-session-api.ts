@@ -14,7 +14,7 @@
  */
 
 import type { HttpClient } from '../http/http-client';
-import { isRecord } from '../support/is-record';
+import { isRecord } from '@sinemacula/foundation/support/is-record';
 import type { SessionApi } from './session-api';
 import { SessionError } from './session-error';
 import type { SessionTokens } from './session-tokens';

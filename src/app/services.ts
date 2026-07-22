@@ -21,7 +21,7 @@ import type { ToastService } from '../notifications/toast-service';
 import type { RealtimeConnection } from '../realtime/realtime-connection';
 import type { ErrorReporter } from '../reporting/error-reporter';
 import type { KeyValueStorage } from '../storage/key-value-storage';
-import { createServiceHolder } from '../support/service-holder';
+import { createServiceHolder } from '@sinemacula/foundation/support/service-holder';
 import type { ColorSchemeService } from '../theme/color-scheme-service';
 
 const configHolder = createServiceHolder<ConfigRepository<Record<string, unknown>>>('configuration');

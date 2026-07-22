@@ -16,7 +16,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { isRecord } from '../support/is-record';
+import { isRecord } from '@sinemacula/foundation/support/is-record';
 
 export type UpdateHandler = (nextVersion: string) => void;
 

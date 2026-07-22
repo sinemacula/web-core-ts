@@ -9,7 +9,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { deepFreeze } from '../support/deep-freeze';
+import { deepFreeze } from '@sinemacula/foundation/support/deep-freeze';
 
 const MISSING = Symbol('missing');
 

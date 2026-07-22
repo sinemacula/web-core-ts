@@ -19,7 +19,7 @@
  */
 
 import { ExponentialBackoff } from '../realtime/exponential-backoff';
-import { isRecord } from '../support/is-record';
+import { isRecord } from '@sinemacula/foundation/support/is-record';
 import type {
     HttpClient,
     HttpMethod,

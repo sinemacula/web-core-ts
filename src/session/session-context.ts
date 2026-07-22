@@ -14,7 +14,7 @@
 
 import type { TokenRefreshCoordinator } from '../http/token-refresh-coordinator';
 import type { KeyValueStorage } from '../storage/key-value-storage';
-import { createServiceHolder } from '../support/service-holder';
+import { createServiceHolder } from '@sinemacula/foundation/support/service-holder';
 import type { SessionRoutes, SessionStorageKeys } from './create-session-module';
 import type { SessionApi, SessionDevice } from './session-api';
 import type { SessionUser } from './session-user';

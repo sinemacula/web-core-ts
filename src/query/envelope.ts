@@ -11,7 +11,7 @@
  * @copyright   2026 Sine Macula Limited
  */
 
-import { isRecord } from '../support/is-record';
+import { isRecord } from '@sinemacula/foundation/support/is-record';
 import { QueryError } from './query-error';
 
 /** A raw wire-format record, prior to mapping onto a domain type. */
