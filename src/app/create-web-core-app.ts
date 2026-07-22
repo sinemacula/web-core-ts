@@ -26,7 +26,8 @@ import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytic
 import { installPageTracking } from '@sinemacula/foundation/analytics/install-page-tracking';
 import { ConfigRepository } from '@sinemacula/foundation/config/config-repository';
 import type { Environment } from '@sinemacula/foundation/config/environment';
-import { RUNTIME_ENVIRONMENT_URL, fetchRuntimeEnvironment } from '../config/runtime-environment';
+import { RUNTIME_ENVIRONMENT_URL } from '../config/runtime-environment';
+import { fetchRuntimeEnvironment } from '@sinemacula/foundation/config/runtime-environment';
 import type { ConnectivityMonitor } from '@sinemacula/foundation/connectivity/connectivity-monitor';
 import type { FeatureFlags } from '@sinemacula/foundation/feature-flags/feature-flags';
 import { StaticFeatureFlags } from '@sinemacula/foundation/feature-flags/static-feature-flags';
