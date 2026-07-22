@@ -2,9 +2,9 @@
  * Colour-scheme wiring for the bootstrap preset.
  *
  * Builds the colour-scheme service from the configured default preference and
- * the resolved platform seams, applies the resolved scheme and begins tracking
- * OS changes, then installs the service singleton so components and later boot
- * phases read one shared instance.
+ * the resolved platform seams (a matchMedia source and a DOM applier), applies
+ * the resolved scheme, tracks OS changes while on system, and installs the
+ * service singleton so later boot phases and components share it.
  *
  * @author      Ben Carey <bdmc@sinemacula.co.uk>
  * @copyright   2026 Sine Macula Limited
@@ -12,8 +12,9 @@
 
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import type { ColorSchemePreference } from '@sinemacula/foundation/theme/color-scheme';
-import type { ThemeColors } from '../theme/color-scheme-service';
-import { ColorSchemeService } from '../theme/color-scheme-service';
+import { ColorSchemeService } from '@sinemacula/foundation/theme/color-scheme-service';
+import { DomColorSchemeApplier, type ThemeColors } from '../theme/dom-color-scheme-applier';
+import { MatchMediaColorSchemeSource } from '../theme/matchmedia-color-scheme-source';
 import { installColorScheme } from './services';
 
 /**
@@ -61,13 +62,17 @@ export interface WireColorSchemeOptions {
  */
 export function wireColorScheme(options: WireColorSchemeOptions): ColorSchemeService {
     const config = options.config;
+    const source = new MatchMediaColorSchemeSource(options.targetWindow);
+    const applier = new DomColorSchemeApplier({
+        ...(options.targetDocument === undefined ? {} : { targetDocument: options.targetDocument }),
+        ...(options.themeColors === undefined ? {} : { themeColors: options.themeColors }),
+    });
     const service = new ColorSchemeService({
         storage: options.storage,
+        source,
+        applier,
         defaultPreference: config.colorScheme.default,
-        targetWindow: options.targetWindow,
-        ...(options.targetDocument === undefined ? {} : { targetDocument: options.targetDocument }),
         ...(options.colorSchemeStorageKey === undefined ? {} : { storageKey: options.colorSchemeStorageKey }),
-        ...(options.themeColors === undefined ? {} : { themeColors: options.themeColors }),
     });
 
     service.start();

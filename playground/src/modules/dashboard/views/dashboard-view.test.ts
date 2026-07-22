@@ -13,7 +13,7 @@ import { Environment } from '@sinemacula/foundation/config/environment';
 import { ObjectEnvironmentSource } from '@sinemacula/foundation/config/object-environment-source';
 import type { LocaleSwitcher } from '@sinemacula/web-core/i18n/application-i18n';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
-import type { ColorSchemeService } from '@sinemacula/web-core/theme/color-scheme-service';
+import type { ColorSchemeService } from '@sinemacula/foundation/theme/color-scheme-service';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { computed, createApp } from 'vue';

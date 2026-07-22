@@ -19,7 +19,7 @@ import { ToastService } from '../notifications/toast-service';
 import type { RealtimeConnection } from '@sinemacula/foundation/realtime/realtime-connection';
 import { NullErrorReporter } from '@sinemacula/foundation/reporting/null-error-reporter';
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
-import type { ColorSchemeService } from '../theme/color-scheme-service';
+import type { ColorSchemeService } from '@sinemacula/foundation/theme/color-scheme-service';
 import {
     analytics,
     api,

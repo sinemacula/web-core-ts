@@ -22,7 +22,7 @@ import type { RealtimeConnection } from '@sinemacula/foundation/realtime/realtim
 import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-reporter';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import { createServiceHolder } from '@sinemacula/foundation/support/service-holder';
-import type { ColorSchemeService } from '../theme/color-scheme-service';
+import type { ColorSchemeService } from '@sinemacula/foundation/theme/color-scheme-service';
 
 const configHolder = createServiceHolder<ConfigRepository<Record<string, unknown>>>('configuration');
 const httpHolder = createServiceHolder<HttpClient>('http client');

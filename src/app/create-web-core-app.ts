@@ -44,7 +44,7 @@ import { installGlobalErrorHandling } from '../reporting/install-global-error-ha
 import { BrowserStorage } from '../storage/browser-storage';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
 import type { ColorSchemePreference } from '@sinemacula/foundation/theme/color-scheme';
-import type { ColorSchemeService } from '../theme/color-scheme-service';
+import type { ColorSchemeService } from '@sinemacula/foundation/theme/color-scheme-service';
 import type { UpdateMonitor } from '../updates/update-monitor';
 import {
     installConfig,
