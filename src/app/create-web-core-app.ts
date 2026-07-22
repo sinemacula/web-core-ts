@@ -43,7 +43,7 @@ import type { ErrorReporter } from '@sinemacula/foundation/reporting/error-repor
 import { installGlobalErrorHandling } from '../reporting/install-global-error-handling';
 import { BrowserStorage } from '../storage/browser-storage';
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
-import type { ColorSchemePreference } from '../theme/color-scheme';
+import type { ColorSchemePreference } from '@sinemacula/foundation/theme/color-scheme';
 import type { ColorSchemeService } from '../theme/color-scheme-service';
 import type { UpdateMonitor } from '../updates/update-monitor';
 import {

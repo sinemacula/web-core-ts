@@ -8,7 +8,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { MemoryStorage } from '@sinemacula/foundation/storage/memory-storage';
-import type { ColorSchemePreference } from './color-scheme';
+import type { ColorSchemePreference } from '@sinemacula/foundation/theme/color-scheme';
 import { ColorSchemeService, type ThemeColors } from './color-scheme-service';
 
 interface FakeMql {

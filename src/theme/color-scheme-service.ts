@@ -15,7 +15,7 @@ import {
     COLOR_SCHEME_STORAGE_KEY,
     type ColorSchemePreference,
     type ResolvedColorScheme,
-} from './color-scheme';
+} from '@sinemacula/foundation/theme/color-scheme';
 
 const DEFAULT_PREFERENCE: ColorSchemePreference = 'system';
 

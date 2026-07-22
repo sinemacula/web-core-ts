@@ -11,7 +11,7 @@
  */
 
 import type { KeyValueStorage } from '@sinemacula/foundation/storage/key-value-storage';
-import type { ColorSchemePreference } from '../theme/color-scheme';
+import type { ColorSchemePreference } from '@sinemacula/foundation/theme/color-scheme';
 import type { ThemeColors } from '../theme/color-scheme-service';
 import { ColorSchemeService } from '../theme/color-scheme-service';
 import { installColorScheme } from './services';
