@@ -20,7 +20,23 @@
     "packageManager": "npm@11.11.0",
     "exports": {
         "./eslint": "./eslint/index.js",
-        "./*": "./src/*.ts"
+        "./app/create-web-core-app": "./src/app/create-web-core-app.ts",
+        "./app/services": "./src/app/services.ts",
+        "./composables/use-focus-trap": "./src/composables/use-focus-trap.ts",
+        "./config/web-environment": "./src/config/web-environment.ts",
+        "./i18n/application-i18n": "./src/i18n/application-i18n.ts",
+        "./module/module": "./src/module/module.ts",
+        "./notifications/confirm-service": "./src/notifications/confirm-service.ts",
+        "./notifications/toast-service": "./src/notifications/toast-service.ts",
+        "./query/use-list-query": "./src/query/use-list-query.ts",
+        "./query/use-resource": "./src/query/use-resource.ts",
+        "./router/navigation-progress": "./src/router/navigation-progress.ts",
+        "./session/authorization": "./src/session/authorization.ts",
+        "./session/create-session-module": "./src/session/create-session-module.ts",
+        "./session/middleware": "./src/session/middleware.ts",
+        "./session/redirect": "./src/session/redirect.ts",
+        "./session/session-context": "./src/session/session-context.ts",
+        "./session/session-store": "./src/session/session-store.ts"
     },
     "files": ["dist", "eslint", "!eslint/**/__tests__/**", "!eslint/vitest.config.mjs", "README.md", "LICENSE"],
     "publishConfig": {
@@ -47,7 +63,7 @@
         "deadcode": "knip",
         "lint:structure": "eslint --no-config-lookup --no-inline-config --config eslint.structure.mjs src playground/src e2e",
         "test:eslint": "vitest run --config eslint/vitest.config.mjs",
-        "check:pkg": "rm -rf .pack && mkdir -p .pack && npm pack --pack-destination .pack --silent && publint .pack/*.tgz && attw .pack/*.tgz --exclude-entrypoints ./eslint",
+        "check:pkg": "rm -rf .pack && mkdir -p .pack && npm pack --pack-destination .pack --silent && publint .pack/*.tgz && attw .pack/*.tgz --profile esm-only --exclude-entrypoints ./eslint",
         "test:e2e": "playwright test",
         "test:e2e:ui": "playwright test --ui",
         "size": "npm run size --workspace playground",
