@@ -23,7 +23,7 @@ import { createApp } from 'vue';
 import type { Router, RouterHistory } from 'vue-router';
 
 import type { AnalyticsTracker } from '@sinemacula/foundation/analytics/analytics-tracker';
-import { installPageTracking } from '../analytics/install-page-tracking';
+import { installPageTracking } from '@sinemacula/foundation/analytics/install-page-tracking';
 import { ConfigRepository } from '@sinemacula/foundation/config/config-repository';
 import type { Environment } from '@sinemacula/foundation/config/environment';
 import { RUNTIME_ENVIRONMENT_URL, fetchRuntimeEnvironment } from '../config/runtime-environment';
