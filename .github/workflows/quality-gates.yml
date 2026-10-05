@@ -45,7 +45,7 @@ jobs:
     # Knip, bundle size, and mutation (scoped on PRs, full on schedule) - all
     # from the shared reusable workflow.
     gates:
-        uses: sinemacula/.github/.github/workflows/node-quality-gates.yml@v1.6.1
+        uses: sinemacula/.github/.github/workflows/node-quality-gates.yml@v1.9.1
 
     # ==========================================================================
     # JOB: STRUCTURE
@@ -68,7 +68,7 @@ jobs:
             # changes. The structure lint validates all source and runs always.
             -   name: Detect preset changes
                 id: changes
-                uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590  # v3.0.3
+                uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad  # v3.0.4
                 with:
                     filters: |
                         preset:
