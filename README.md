@@ -1,4 +1,6 @@
-# Web Core
+<h1 align="center">Web Core</h1>
+
+<div align="center">
 
 [![Latest Stable Version](https://img.shields.io/npm/v/@sinemacula/web-core.svg)](https://www.npmjs.com/package/@sinemacula/web-core)
 [![Build Status](https://github.com/sinemacula/web-core-ts/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/sinemacula/web-core-ts/actions/workflows/tests.yml)
@@ -6,6 +8,8 @@
 [![Maintainability](https://qlty.sh/gh/sinemacula/projects/web-core-ts/maintainability.svg)](https://qlty.sh/gh/sinemacula/projects/web-core-ts)
 [![Code Coverage](https://qlty.sh/gh/sinemacula/projects/web-core-ts/coverage.svg)](https://qlty.sh/gh/sinemacula/projects/web-core-ts)
 [![Total Downloads](https://img.shields.io/npm/dt/@sinemacula/web-core.svg)](https://www.npmjs.com/package/@sinemacula/web-core)
+
+</div>
 
 `@sinemacula/web-core` is the framework-agnostic kernel on which Sine Macula web applications are built. It
 provides the cross-cutting concerns every frontend needs - configuration, HTTP, routing, modules, i18n, storage
