@@ -3,11 +3,13 @@
 <div align="center">
 
 [![Latest Stable Version](https://img.shields.io/npm/v/@sinemacula/web-core.svg)](https://www.npmjs.com/package/@sinemacula/web-core)
+[![Node Version](https://img.shields.io/node/v/@sinemacula/web-core.svg)](https://www.npmjs.com/package/@sinemacula/web-core)
 [![Build Status](https://github.com/sinemacula/web-core-ts/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/sinemacula/web-core-ts/actions/workflows/tests.yml)
 [![Quality Gates](https://github.com/sinemacula/web-core-ts/actions/workflows/quality-gates.yml/badge.svg?branch=master)](https://github.com/sinemacula/web-core-ts/actions/workflows/quality-gates.yml)
 [![Maintainability](https://qlty.sh/gh/sinemacula/projects/web-core-ts/maintainability.svg)](https://qlty.sh/gh/sinemacula/projects/web-core-ts)
 [![Code Coverage](https://qlty.sh/gh/sinemacula/projects/web-core-ts/coverage.svg)](https://qlty.sh/gh/sinemacula/projects/web-core-ts)
 [![Total Downloads](https://img.shields.io/npm/dt/@sinemacula/web-core.svg)](https://www.npmjs.com/package/@sinemacula/web-core)
+[![License](https://img.shields.io/github/license/sinemacula/web-core-ts.svg)](LICENSE)
 
 </div>
 
