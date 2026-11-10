@@ -29,6 +29,8 @@ jobs:
     # and the Playwright e2e suite - all from the shared reusable workflow.
     tests:
         uses: sinemacula/.github/.github/workflows/node-tests.yml@v1.6.1
+        # Shared workflows from v2 ask for packages: read, which callers grant.
         permissions:
             contents: read
             id-token: write
+            packages: read
